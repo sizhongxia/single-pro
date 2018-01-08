@@ -1,0 +1,75 @@
+<template>
+<div class="page">
+	<div class="navbar">
+		<div class="navbar-inner sliding">
+			<div class="title">Types</div>
+		</div>
+	</div>
+	<!-- Toolbar -->
+	<div class="toolbar tabbar-labels">
+		<div class="toolbar-inner">
+			<a href="/home/" class="tab-link"> <i class="f7-icons size-22">home</i> <span
+				class="tabbar-label">主页</span>
+			</a> <a href="/types/" class="tab-link tab-link-active"> <i
+				class="f7-icons size-22">data</i> <span class="tabbar-label">分类</span>
+			</a> <a href="/my/" class="tab-link"> <i class="f7-icons size-22">person</i>
+				<span class="tabbar-label">我的</span>
+			</a>
+		</div>
+	</div>
+	<div class="page-content">
+		<div class="block block-strong">
+			<p>Types</p>
+
+			<div class="row">
+				{{#each list}}
+					<div class="col-33 tablet-15">{{this.name}}</div>
+				{{/each}}
+			</div>
+			<hr/>
+			<div class="row">
+				<#list list as item>
+					<div class="col-33 tablet-15">${item}</div>
+					<div class="col-33 tablet-15">${item}</div>
+				</#list>
+			</div>
+			
+
+			<div class="block">
+				<p class="row">
+					<a href="/somepage/" class="col button button-raised">Some Page</a>
+					<button @click="skip" class="col button button-raised">跳转</button>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+</template>
+
+<script>
+	return {
+		data : function() {
+			return {
+				list : [ {
+					name : "sizx"
+				}, {
+					name : "wt"
+				} ],
+			}
+		},
+		methods : {
+			skip : function() {
+				app.dialog.alert('Hello World!');
+
+				console.info(this.list)
+				this.list = [{
+					name : "sizhongxia"
+				},{
+					name : "wangting"
+				}];
+				
+				// app.router.navigate('/somepage/');
+			}
+		}
+	}
+</script>

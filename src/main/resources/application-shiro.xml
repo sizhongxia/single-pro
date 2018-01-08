@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        classpath:/org/springframework/beans/factory/xml/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-3.0.xsd
+        http://www.springframework.org/schema/context
+        classpath:/org/springframework/context/config/spring-context-3.0.xsd">
+
+	<bean id="realm" class="com.single.pro.shiro.realm.JDBCRealm" />
+
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+	<bean id="redisManager" class="org.crazycake.shiro.RedisManager">
+		<property name="host" value="${redis.host}" />
+		<property name="port" value="${redis.port}" />
+		<property name="expire" value="${redis.expire}" />
+		<property name="timeout" value="${redis.timeout}" />
+		<property name="password" value="${redis.auth}" />
+	</bean>
+
+	<!-- 自定义ID生成 -->
+	<bean id="sessionIdGenerator" class="com.single.pro.shiro.SingleSessionIdGenerator"/>
+	
+	<bean id="redisSessionDAO" class="org.crazycake.shiro.RedisSessionDAO">
+		<property name="sessionIdGenerator" ref="sessionIdGenerator"></property>
+		<property name="redisManager" ref="redisManager" />
+	</bean>
+
+	<bean id="sessionManager"
+		class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<property name="sessionDAO" ref="redisSessionDAO" />
+		<property name="sessionIdCookie.name" value="single_token_sid" />
+		<property name="sessionIdCookie.path" value="/" />
+	</bean>
+
+	<bean id="cacheManager" class="org.crazycake.shiro.RedisCacheManager">
+		<property name="redisManager" ref="redisManager" />
+	</bean>
+
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="realm" />
+		<property name="sessionManager" ref="sessionManager" />
+		<property name="cacheManager" ref="cacheManager" />
+	</bean>
+
+	<bean id="systemLogoutFilter" class="com.single.pro.filter.SystemLogoutFilter">
+		<property name="redirectUrl" value="/login.do" />
+	</bean>
+
+	<bean id="shiroFilter" class="com.single.pro.shiro.SingleShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/login.do" />
+		<property name="unauthorizedUrl" value="/un_authorized.do" />
+		<property name="filters">
+			<map>
+				<entry key="logout" value-ref="systemLogoutFilter" />
+			</map>
+		</property>
+		<property name="filterChainDefinitions" value="/logout.do=logout" />
+	</bean>
+
+</beans>

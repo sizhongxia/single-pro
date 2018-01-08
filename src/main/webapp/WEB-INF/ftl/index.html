@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>${application.title} - ${application.subtitle}</title>
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;${rc.contextPath}/ie.do" />
+    <![endif]-->
+    <link href="${rc.contextPath}/statics/ui-frame/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="${rc.contextPath}/statics/ui-frame/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="${rc.contextPath}/statics/ui-frame/css/animate.min.css" rel="stylesheet">
+    <link href="${rc.contextPath}/statics/ui-frame/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <style>
+    	.dropdown .active{background: #a7b1c2;color:#F5F5F5 !important;}
+    	.navbar-minimalize{background-color: #273a4a;border: none;}
+    	#currentTime {width: 200px;height: 50px; line-height: 50px;text-align: center;color: #efefef;}
+    </style>
+</head>
+
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+
+	<div id="wrapper">
+        <!--左侧导航开始-->
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="nav-close"><i class="fa fa-times-circle"></i>
+            </div>
+            <div class="sidebar-collapse">
+                <ul class="nav" id="side-menu">
+                	<!-- 系统信息 -->
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <span>
+                           		<img alt="${application.title}" title="${application.title}" src="${application.logoUrl}"/>
+                            </span>
+                            <span class="clear" style="margin-top: 22px;">
+	                            <span class="text-muted text-xs block">${application.subtitle}</span>
+                            </span>
+                        </div>
+                        <div class="logo-element"><i class="fa fa-th-large"></i></div>
+                    </li>
+                    
+                    <!-- 菜单列表 -->
+                    <#list menuList  as menu>
+					 <li>
+					 	<#if menu.hadChilds>
+                       	<a href="${menu.url}">
+                        <#else>
+                       	<a class="J_menuItem" href="${rc.contextPath}/${menu.url}">
+                        </#if>
+                        	<i class="${menu.icon}"></i> <span class="nav-label">${menu.title}</span><#if menu.hadChilds> <span class="fa arrow"></span></#if>
+                        </a>
+                        <#if menu.hadChilds>
+                        <ul class="nav nav-second-level">
+                        	<#list menu.childs as child>
+                            <li>
+                                <a class="J_menuItem" href="${rc.contextPath}/${child.url}"><i class="${child.icon}"></i> ${child.title}</a>
+                            </li>
+                            </#list>
+                        </ul>
+                        </#if>
+                    </li>
+					</#list>
+                </ul>
+            </div>
+        </nav>
+        <!--左侧导航结束-->
+        
+        <!--右侧部分开始-->
+        <div id="page-wrapper" class="gray-bg dashbard-1">
+       		<!-- 折叠导航栏 -->
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                    	<a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="javascript:;"><i class="fa fa-outdent"></i> </a>
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li id="currentTime"></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="row content-tabs">
+            	<!-- 向左滚动 -->
+                <button class="roll-nav roll-left J_tabLeft"><i class="fa fa-backward"></i></button>
+                <!-- 主页面 -->
+                <nav class="page-tabs J_menuTabs">
+                    <div class="page-tabs-content">
+                        <a href="javascript:;" class="active J_menuTab" data-id="${rc.contextPath}/welcome.do">主面板</a>
+                    </div>
+                </nav>
+                <!-- 向右滚动 -->
+                <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i></button>
+                
+                <!-- Tab操作 -->
+                <div class="btn-group roll-nav roll-right">
+                    <button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<span class="caret"></span></button>
+                    <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                        <li class="J_tabShowActive"><a>定位当前选项卡</a></li>
+                        <li class="divider"></li>
+                        <li class="J_tabCloseAll"><a>关闭全部选项卡</a></li>
+                        <li class="J_tabCloseOther"><a>关闭其他选项卡</a></li>
+                    </ul>
+                </div>
+                <!-- 退出 -->
+                <a href="${rc.contextPath}/logout.do" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
+            </div>
+            <!-- iFrame -->
+            <div class="row J_mainContent" id="content-main">
+                <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="${rc.contextPath}/welcome.do" frameborder="0" data-id="${rc.contextPath}/welcome.do" seamless></iframe>
+            </div>
+            <!-- Footer -->
+            <div class="footer">
+                <div class="pull-right"> ${application.copyright}</div>
+            </div>
+        </div>
+        <!--右侧部分结束-->
+    </div>
+    
+    <script src="${rc.contextPath}/statics/ui-frame/js/jquery.min.js?v=2.1.4"></script>
+    <script src="${rc.contextPath}/statics/ui-frame/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="${rc.contextPath}/statics/ui-frame/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="${rc.contextPath}/statics/ui-frame/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="${rc.contextPath}/statics/ui-frame/js/plugins/layer/layer.min.js"></script>
+    <script src="${rc.contextPath}/statics/ui-frame/js/hplus.min.js?v=4.1.0"></script>
+    <script src="${rc.contextPath}/statics/ui-frame/js/contabs.min.js"></script>
+	<!-- 日期格式化插件 -->
+	<script src="${rc.contextPath}/statics/ui-frame/plugins/moment/moment.min.js"></script>
+    <script type="text/javascript">
+    	setInterval(function() {$("#currentTime").html(moment(new Date()).format("YYYY-MM-DD HH:mm:ss"));}, 1000);
+    </script>
+</body>
+</html>

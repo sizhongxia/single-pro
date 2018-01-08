@@ -1,0 +1,1 @@
+var indexUrl="http://127.0.0.1:8088/index.do";if(self.frameElement&&self.frameElement.tagName!="IFRAME"){window.location.href=indexUrl}else{if(window.frames.length==parent.frames.length){window.location.href=indexUrl}else{if(self==top){window.location.href=indexUrl}}};

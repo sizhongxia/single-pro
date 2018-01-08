@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: tm-pro-web
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: sizho
+Specification-Title: tm-pro-web
+Implementation-Vendor-Id: com.tm.pro
+Created-By: Apache Maven 3.3.9
+Build-Jdk: 1.8.0_144
+Specification-Version: 0.0
+Implementation-URL: http://www.team-union.com
