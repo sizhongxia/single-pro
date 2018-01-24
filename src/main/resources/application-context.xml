@@ -92,7 +92,7 @@
 	<bean id="sqlSessionFactory"
 		class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
 		<property name="dataSource" ref="manyDataSource" />
-		<property name="mapperLocations" value="classpath*:com/single/pro/mybatis/**/*.xml" />
+		<property name="mapperLocations" value="classpath*:mybatis/*Mapper.xml" />
 		<property name="configLocation" value="classpath:mybatis-config.xml" />
 		<property name="typeAliasesPackage" value="com.single.pro.entity" />
 		<property name="plugins">

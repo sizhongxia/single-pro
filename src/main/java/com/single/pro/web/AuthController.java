@@ -52,24 +52,26 @@ public class AuthController extends BaseController {
 			return "redirect:" + referer;
 		}
 
-		Session session = subject.getSession(true);
+		Session session = subject.getSession();
+		
+		System.out.println(request.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY));
 
 		String verifyCode = request.getParameter("verifyCode");
 		if (StringUtils.isBlank(verifyCode)) {
-			session.setAttribute("login_fail_msg", "请输入图片验证码");
+			// session.setAttribute("login_fail_msg", "请输入图片验证码");
 			return "redirect:/login.do";
 		}
 
-		Object KAPTCHA_verifyCode = session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
-		if (KAPTCHA_verifyCode == null) {
-			session.setAttribute("login_fail_msg", "无效的图片验证码");
-			return "redirect:/login.do";
-		}
+//		Object KAPTCHA_verifyCode = session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
+//		if (KAPTCHA_verifyCode == null) {
+//			session.setAttribute("login_fail_msg", "无效的图片验证码");
+//			return "redirect:/login.do";
+//		}
 
-		if (!verifyCode.equalsIgnoreCase(KAPTCHA_verifyCode.toString())) {
-			session.setAttribute("login_fail_msg", "图片验证码输入错误");
-			return "redirect:/login.do";
-		}
+//		if (!verifyCode.equalsIgnoreCase(KAPTCHA_verifyCode.toString())) {
+//			session.setAttribute("login_fail_msg", "图片验证码输入错误");
+//			return "redirect:/login.do";
+//		}
 
 		String username = request.getParameter("loginName");
 		if (StringUtils.isBlank(username)) {
