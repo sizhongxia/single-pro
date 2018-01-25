@@ -12,7 +12,8 @@
 
 	<!-- 扫描Controller -->
 	<context:component-scan base-package="com.single.pro.web">
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 
 	<!-- 启用Spring mvc 注解 -->
@@ -119,6 +120,10 @@
 		</property>
 	</bean>
 
+	<!-- 静态资源映射 -->
+	<mvc:resources mapping="/statics/**" location="/statics/"
+		cache-period="31536000" />
+
 	<!-- 文件上传配置 -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -174,13 +179,10 @@
 						<prop key="kaptcha.background.clear.from">225,230,246</prop>
 						<!-- 背景颜色渐变， 结束颜色 -->
 						<prop key="kaptcha.background.clear.to">235,235,235</prop>
-						<!-- 干扰线颜色 -->
-						<prop key="kaptcha.noise.color">255,255,255</prop>
 						<!-- 干扰线实现类 -->
-						<prop key="kaptcha.noise.impl">com.google.code.kaptcha.impl.DefaultNoise</prop>
+						<prop key="kaptcha.noise.impl">com.google.code.kaptcha.impl.NoNoise</prop>
 						<!-- 文本实现类 -->
-						<prop key="kaptcha.textproducer.impl">com.google.code.kaptcha.text.impl.DefaultTextCreator
-						</prop>
+						<prop key="kaptcha.textproducer.impl">com.single.pro.kaptcha.SingleTextCreator</prop>
 					</props>
 				</constructor-arg>
 			</bean>

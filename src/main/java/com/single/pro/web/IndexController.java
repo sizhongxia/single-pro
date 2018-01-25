@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.code.kaptcha.Producer;
 import com.single.pro.cache.BaseDataCacheUtil;
+import com.single.pro.cache.CacheUtil;
 
 /**
  * <p>
@@ -82,9 +83,12 @@ public class IndexController extends BaseController {
 	@RequestMapping(value = "/login")
 	public ModelAndView login(HttpServletRequest request, RedirectAttributes attr) {
 		ModelAndView mav = new ModelAndView("login");
+		
+		CacheUtil.set("user", "name", "sizhongxia");
+		
 		Subject subject = SecurityUtils.getSubject();
 		if (subject.isAuthenticated()) {
-			mav.setViewName("redirect:/index.do");
+			mav.setViewName("redirect:/index");
 			return mav;
 		}
 		Session session = subject.getSession(true);

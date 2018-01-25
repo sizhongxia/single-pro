@@ -4,11 +4,11 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans
-        classpath:/org/springframework/beans/factory/xml/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/util
-        http://www.springframework.org/schema/util/spring-util-3.0.xsd
+        http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/context
-        classpath:/org/springframework/context/config/spring-context-3.0.xsd">
+        http://www.springframework.org/schema/context/spring-context.xsd ">
 
 	<bean id="realm" class="com.single.pro.shiro.realm.JDBCRealm" />
 
@@ -48,19 +48,19 @@
 	</bean>
 
 	<bean id="systemLogoutFilter" class="com.single.pro.filter.SystemLogoutFilter">
-		<property name="redirectUrl" value="/login.do" />
+		<property name="redirectUrl" value="/login" />
 	</bean>
 
 	<bean id="shiroFilter" class="com.single.pro.shiro.SingleShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
-		<property name="loginUrl" value="/login.do" />
-		<property name="unauthorizedUrl" value="/un_authorized.do" />
+		<property name="loginUrl" value="/login" />
+		<property name="unauthorizedUrl" value="/un_authorized" />
 		<property name="filters">
 			<map>
 				<entry key="logout" value-ref="systemLogoutFilter" />
 			</map>
 		</property>
-		<property name="filterChainDefinitions" value="/logout.do=logout" />
+		<property name="filterChainDefinitions" value="/logout=logout" />
 	</bean>
 
 </beans>

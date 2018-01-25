@@ -35,7 +35,7 @@ public class BaseController {
 			writeJson(map, response);
 			return null;
 		} else {
-			return "redirect:/login.do";
+			return "redirect:/login";
 		}
 	}
 
@@ -55,7 +55,7 @@ public class BaseController {
 			writeJson(map, response);
 			return null;
 		} else {
-			return "redirect:/un_authorized.do";
+			return "redirect:/un_authorized";
 		}
 	}
 

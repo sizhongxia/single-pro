@@ -42,14 +42,14 @@
 			routes : [ {
 				name : 'home',
 				path : '/home/',
-				url : '${rc.contextPath}/wap/home.do',
+				url : '${rc.contextPath}/wap/home',
 				options : {
 					animate : false,
 				},
 			}, {
 				name : 'types',
 				path : '/types/',
-				componentUrl : '${rc.contextPath}/wap/types.do',
+				componentUrl : '${rc.contextPath}/wap/types',
 				options : {
 					animate : false,
 					ignoreCache : true
@@ -57,7 +57,7 @@
 			}, {
 				name : 'my',
 				path : '/my/',
-				templateUrl : '${rc.contextPath}/wap/my.do',
+				templateUrl : '${rc.contextPath}/wap/my',
 				options : {
 					animate : false
 				},
@@ -71,7 +71,7 @@
 				}
 			}, {
 				path : '(.*)',
-				url : '${rc.contextPath}/wap/notFount.do',
+				url : '${rc.contextPath}/wap/notFount',
 			}, ],
 			on : {
 				pageInit : function(page) {

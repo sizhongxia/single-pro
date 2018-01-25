@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>海居派 - 电话销售智能外呼管理系统 - 登录</title>
     <!--[if lt IE 9]>
-    <meta http-equiv="refresh" content="0;${rc.contextPath}/ie.do" />
+    <meta http-equiv="refresh" content="0;${rc.contextPath}/ie" />
     <![endif]-->
     <link href="${rc.contextPath}/statics/ui-frame/css/bootstrap.min.css" rel="stylesheet">
     <link href="${rc.contextPath}/statics/ui-frame/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
@@ -31,12 +31,12 @@
                 </div>
             </div>
             <div class="col-sm-5">
-                <form method="post" action="${rc.contextPath}/auth/login.do">
+                <form method="post" action="${rc.contextPath}/auth/login">
                     <h4 class="no-margins">登录 - ${application.title}</h4>
 					<input name="referer" type="hidden" value="${referer!}"/>
                     <input style="height: 44px;" type="text" class="form-control uname" name="loginName" placeholder="用户名" value="sizhongxia"/>
                     <input style="height: 44px;" type="password" class="form-control pword m-b" name="password" placeholder="密码" value="123456"/>
-                    <img onclick="this.src='${rc.contextPath}/image-verify.do?_t='+Math.random();" style="width: 45%;height: 44px;" src="${rc.contextPath}/image-verify.do" />
+                    <img onclick="this.src='${rc.contextPath}/image-verify?_t='+Math.random();" style="width: 45%;height: 44px;" src="${rc.contextPath}/image-verify" />
                     <input type="text" name="verifyCode" class="form-control" maxlength="4" style="width: 45%;float: right; height: 44px;margin-top: -1px; color: #000; text-align: center;" placeholder="验证码" />
 					<button class="btn btn-success btn-block">登录</button>
 					<div style="color:red;line-height: 40px">&nbsp;${msg!}</div>

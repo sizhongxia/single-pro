@@ -23,17 +23,21 @@ public class BaseDataCacheUtil implements InitializingBean {
 	@Autowired
 	private ApplicationService applicationService;
 
-	// 菜单信息
-	private List<Map<String, Object>> menuList = null;
-	// 应用信息
-	private Application application = null;
-
+	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getMenuList() {
-		return menuList;
+		Object obj = CacheUtil.get("single:system", "menu").getValue();
+		if (obj == null) {
+			throw new RuntimeException("初始化系统菜单失败！！！");
+		}
+		return (List<Map<String, Object>>) obj;
 	}
 
 	public Application getApplication() {
-		return application;
+		Object obj = CacheUtil.get("single:system", "application").getValue();
+		if (obj == null) {
+			throw new RuntimeException("初始化系统基本信息失败！！！");
+		}
+		return (Application) obj;
 	}
 
 	// 初始化菜单信息
@@ -67,7 +71,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 				root.put("hadChilds", true);
 			}
 		}
-		this.menuList = roots;
+		CacheUtil.set("single:system", "menu", roots);
 	}
 
 	// 初始化应用信息
@@ -75,7 +79,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 		Application entity = new Application();
 		entity.setStatus("Y");
 		Wrapper<Application> wrapper = new EntityWrapper<Application>(entity);
-		this.application = applicationService.selectOne(wrapper);
+		CacheUtil.set("single:system", "application", applicationService.selectOne(wrapper));
 	}
 
 	// 类初始化时加载执行
@@ -93,7 +97,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 		map.put("icon", menu.getIcon());
 		map.put("url", menu.getUrl());
 		if (menu.getUrl() == null || StringUtils.isEmpty(menu.getUrl())) {
-			map.put("url", "no_config_url.do");
+			map.put("url", "no_config_url");
 		}
 		if (isRoot) {
 			map.put("childs", new ArrayList<Map<String, Object>>());

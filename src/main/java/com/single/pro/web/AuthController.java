@@ -37,12 +37,12 @@ public class AuthController extends BaseController {
 
 		String referer = request.getParameter("referer");
 		if (StringUtils.isBlank(referer)) {
-			referer = "/index.do";
+			referer = "/index";
 		}
 
 		String[] rm = referer.split("[?]");
 		if (rm.length > 1) {
-			referer = "/operation_timeout.do";
+			referer = "/operation_timeout";
 		} else {
 			referer = rm[0];
 		}
@@ -53,36 +53,34 @@ public class AuthController extends BaseController {
 		}
 
 		Session session = subject.getSession();
-		
-		System.out.println(request.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY));
 
 		String verifyCode = request.getParameter("verifyCode");
 		if (StringUtils.isBlank(verifyCode)) {
-			// session.setAttribute("login_fail_msg", "请输入图片验证码");
-			return "redirect:/login.do";
+			session.setAttribute("login_fail_msg", "请输入图片验证码");
+			return "redirect:/login";
 		}
 
-//		Object KAPTCHA_verifyCode = session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
-//		if (KAPTCHA_verifyCode == null) {
-//			session.setAttribute("login_fail_msg", "无效的图片验证码");
-//			return "redirect:/login.do";
-//		}
+		Object KAPTCHA_verifyCode = session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
+		if (KAPTCHA_verifyCode == null) {
+			session.setAttribute("login_fail_msg", "无效的图片验证码");
+			return "redirect:/login";
+		}
 
-//		if (!verifyCode.equalsIgnoreCase(KAPTCHA_verifyCode.toString())) {
-//			session.setAttribute("login_fail_msg", "图片验证码输入错误");
-//			return "redirect:/login.do";
-//		}
+		if (!verifyCode.equalsIgnoreCase(KAPTCHA_verifyCode.toString())) {
+			session.setAttribute("login_fail_msg", "图片验证码输入错误");
+			return "redirect:/login";
+		}
 
 		String username = request.getParameter("loginName");
 		if (StringUtils.isBlank(username)) {
 			session.setAttribute("login_fail_msg", "请输入登录名称");
-			return "redirect:/login.do";
+			return "redirect:/login";
 		}
 
 		String password = request.getParameter("password");
 		if (StringUtils.isBlank(password)) {
 			session.setAttribute("login_fail_msg", "请输入登录密码");
-			return "redirect:/login.do";
+			return "redirect:/login";
 		}
 
 		UsernamePasswordToken token = new UsernamePasswordToken(username, Md5Util.md5(password, username));
@@ -111,7 +109,7 @@ public class AuthController extends BaseController {
 			return "redirect:" + referer;
 		} else {
 			session.setAttribute("login_fail_msg", msg);
-			return "redirect:/login.do";
+			return "redirect:/login";
 		}
 	}
 }
