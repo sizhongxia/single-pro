@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-01-08
+ * @since 2018-02-28
  */
 @TableName("sp_menu")
 public class Menu implements Serializable {
@@ -24,12 +24,17 @@ public class Menu implements Serializable {
      * 主键
      */
 	@TableId(value="id", type= IdType.AUTO)
-	private Integer id;
+	private Long id;
     /**
      * 父级ID
      */
 	@TableField("parent_id")
-	private Integer parentId;
+	private Long parentId;
+    /**
+     * 应用ID
+     */
+	@TableField("app_id")
+	private Long appId;
     /**
      * 排序编号
      */
@@ -63,20 +68,28 @@ public class Menu implements Serializable {
 	private Date updateTime;
 
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Integer getParentId() {
+	public Long getParentId() {
 		return parentId;
 	}
 
-	public void setParentId(Integer parentId) {
+	public void setParentId(Long parentId) {
 		this.parentId = parentId;
+	}
+
+	public Long getAppId() {
+		return appId;
+	}
+
+	public void setAppId(Long appId) {
+		this.appId = appId;
 	}
 
 	public Integer getSortNumber() {
@@ -140,6 +153,7 @@ public class Menu implements Serializable {
 		return "Menu{" +
 			", id=" + id +
 			", parentId=" + parentId +
+			", appId=" + appId +
 			", sortNumber=" + sortNumber +
 			", title=" + title +
 			", icon=" + icon +

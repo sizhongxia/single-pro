@@ -12,8 +12,7 @@
 
 	<!-- 扫描Controller -->
 	<context:component-scan base-package="com.single.pro.web">
-		<context:include-filter type="annotation"
-			expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 
 	<!-- 启用Spring mvc 注解 -->
@@ -22,7 +21,7 @@
 
 	<!-- 配置FreeMarker的模板路径 -->
 	<bean class="com.single.pro.shiro.tag.SingleShiroTagConfigurer">
-		<property name="templateLoaderPath" value="WEB-INF/ftl/" />
+		<property name="templateLoaderPath" value="WEB-INF/html/" />
 		<property name="defaultEncoding" value="UTF-8" />
 		<property name="freemarkerSettings">
 			<props>
@@ -121,12 +120,10 @@
 	</bean>
 
 	<!-- 静态资源映射 -->
-	<mvc:resources mapping="/statics/**" location="/statics/"
-		cache-period="31536000" />
+	<mvc:resources mapping="/statics/**" location="/statics/" cache-period="31536000" />
 
 	<!-- 文件上传配置 -->
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="209715200" />
 	</bean>
 
@@ -150,43 +147,6 @@
 	<bean
 		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
 		<property name="securityManager" ref="securityManager" />
-	</bean>
-
-	<!--图片验证码配置 -->
-	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
-		<property name="config">
-			<bean class="com.google.code.kaptcha.util.Config">
-				<constructor-arg>
-					<props>
-						<!-- 是否有边框 -->
-						<prop key="kaptcha.border">no</prop>
-						<prop key="kaptcha.session.key">kaptcha_code</prop>
-						<!-- 验证码字体大小 -->
-						<prop key="kaptcha.textproducer.font.size">24</prop>
-						<!-- 验证码个数 -->
-						<prop key="kaptcha.textproducer.char.length">4</prop>
-						<!-- 验证码字体颜色 -->
-						<prop key="kaptcha.textproducer.font.color">73,73,73</prop>
-						<!-- 验证码所属字体样式 -->
-						<prop key="kaptcha.textproducer.font.names">宋体,楷体,微软雅黑</prop>
-						<!-- 验证码文本字符间距 -->
-						<prop key="kaptcha.textproducer.char.space">3</prop>
-						<!-- 验证码宽度 -->
-						<prop key="kaptcha.image.width">120</prop>
-						<!-- 验证码高度 -->
-						<prop key="kaptcha.image.height">42</prop>
-						<!-- 背景颜色渐变， 开始颜色 -->
-						<prop key="kaptcha.background.clear.from">225,230,246</prop>
-						<!-- 背景颜色渐变， 结束颜色 -->
-						<prop key="kaptcha.background.clear.to">235,235,235</prop>
-						<!-- 干扰线实现类 -->
-						<prop key="kaptcha.noise.impl">com.google.code.kaptcha.impl.NoNoise</prop>
-						<!-- 文本实现类 -->
-						<prop key="kaptcha.textproducer.impl">com.single.pro.kaptcha.SingleTextCreator</prop>
-					</props>
-				</constructor-arg>
-			</bean>
-		</property>
 	</bean>
 
 </beans>

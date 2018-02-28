@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @RequestMapping("/application")
-public class ApplicationController {
+public class ApplicationController extends BaseController {
 
 }
 

@@ -9,6 +9,7 @@
     <resultMap id="BaseResultMap" type="com.single.pro.entity.Menu">
         <id column="id" property="id" />
         <result column="parent_id" property="parentId" />
+        <result column="app_id" property="appId" />
         <result column="sort_number" property="sortNumber" />
         <result column="title" property="title" />
         <result column="icon" property="icon" />

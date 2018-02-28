@@ -152,16 +152,14 @@
 
 	<aop:config>
 		<!--把事务控制在Service层 -->
-		<aop:pointcut id="pc"
-			expression="execution(public * com.single.pro.service.*.*(..))" />
+		<aop:pointcut id="pc" expression="execution(public * com.single.pro.service.*.*(..))" />
 		<aop:advisor pointcut-ref="pc" advice-ref="userTxAdvice" />
 	</aop:config>
 
 	<bean id="manyDataSourceAspect" class="com.single.pro.holder.ManyDataSourceAspect" />
 	<aop:config>
 		<aop:aspect id="cds" ref="manyDataSourceAspect">
-			<aop:pointcut id="tx"
-				expression="execution(public * com.single.pro.service.*.*(..))" />
+			<aop:pointcut id="tx" expression="execution(public * com.single.pro.service.*.*(..))" />
 			<aop:before pointcut-ref="tx" method="switchDB" />
 		</aop:aspect>
 	</aop:config>

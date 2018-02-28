@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @RequestMapping("/jobGroup")
-public class JobGroupController {
+public class JobGroupController extends BaseController {
 
 }
 

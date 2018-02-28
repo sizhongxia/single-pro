@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @RequestMapping("/authorization")
-public class AuthorizationController {
+public class AuthorizationController extends BaseController {
 
 }
 

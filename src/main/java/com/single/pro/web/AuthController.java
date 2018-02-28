@@ -1,5 +1,8 @@
 package com.single.pro.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,14 +14,13 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.UnauthorizedException;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.code.kaptcha.Constants;
 import com.single.pro.service.UserService;
 import com.single.pro.util.Md5Util;
 
@@ -32,8 +34,10 @@ public class AuthController extends BaseController {
 	public AuthController() {
 	}
 
+	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request, HttpServletResponse response) {
+	public Map<String, Object> login(HttpServletRequest request, HttpServletResponse response) {
+		Map<String, Object> res = new HashMap<>();
 
 		String referer = request.getParameter("referer");
 		if (StringUtils.isBlank(referer)) {
@@ -47,45 +51,24 @@ public class AuthController extends BaseController {
 			referer = rm[0];
 		}
 
-		Subject subject = SecurityUtils.getSubject();
-		if (subject.isAuthenticated()) {
-			return "redirect:" + referer;
-		}
-
-		Session session = subject.getSession();
-
-		String verifyCode = request.getParameter("verifyCode");
-		if (StringUtils.isBlank(verifyCode)) {
-			session.setAttribute("login_fail_msg", "请输入图片验证码");
-			return "redirect:/login";
-		}
-
-		Object KAPTCHA_verifyCode = session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
-		if (KAPTCHA_verifyCode == null) {
-			session.setAttribute("login_fail_msg", "无效的图片验证码");
-			return "redirect:/login";
-		}
-
-		if (!verifyCode.equalsIgnoreCase(KAPTCHA_verifyCode.toString())) {
-			session.setAttribute("login_fail_msg", "图片验证码输入错误");
-			return "redirect:/login";
-		}
-
-		String username = request.getParameter("loginName");
+		String username = request.getParameter("loginame");
 		if (StringUtils.isBlank(username)) {
-			session.setAttribute("login_fail_msg", "请输入登录名称");
-			return "redirect:/login";
+			res.put("statusCode", -1);
+			res.put("errMsg", "请输入登录名");
+			return res;
 		}
 
 		String password = request.getParameter("password");
 		if (StringUtils.isBlank(password)) {
-			session.setAttribute("login_fail_msg", "请输入登录密码");
-			return "redirect:/login";
+			res.put("statusCode", -1);
+			res.put("errMsg", "请输入密码");
+			return res;
 		}
 
 		UsernamePasswordToken token = new UsernamePasswordToken(username, Md5Util.md5(password, username));
 		token.setRememberMe(false);
 
+		Subject subject = SecurityUtils.getSubject();
 		String msg = "";
 		try {
 			subject.login(token);
@@ -102,14 +85,13 @@ public class AuthController extends BaseController {
 		} catch (Exception e) {
 			msg = "请稍后重试.";
 		}
-		if (StringUtils.isBlank(msg)) {
-			msg = "登录成功";
-		}
 		if (subject.isAuthenticated()) {
-			return "redirect:" + referer;
+			res.put("statusCode", 200);
 		} else {
-			session.setAttribute("login_fail_msg", msg);
-			return "redirect:/login";
+			res.put("statusCode", -1);
+			res.put("errMsg", msg);
 		}
+
+		return res;
 	}
 }

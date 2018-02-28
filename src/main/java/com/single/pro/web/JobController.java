@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @RequestMapping("/job")
-public class JobController {
+public class JobController extends BaseController {
 
 }
 
