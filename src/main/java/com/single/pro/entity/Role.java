@@ -1,19 +1,20 @@
 package com.single.pro.entity;
 
-import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * 角色
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-01-08
+ * @since 2018-03-01
  */
 @TableName("sp_role")
 public class Role implements Serializable {
@@ -23,8 +24,8 @@ public class Role implements Serializable {
     /**
      * 主键
      */
-	@TableId(value="id", type= IdType.AUTO)
-	private Integer id;
+    @TableId(value = "id", type = IdType.INPUT)
+	private String id;
     /**
      * 角色名称
      */
@@ -33,6 +34,11 @@ public class Role implements Serializable {
      * 角色编码
      */
 	private String code;
+    /**
+     * 状态（Y:系统角色，N:自定义角色）
+     */
+	@TableField("is_system")
+	private String isSystem;
     /**
      * 状态（Y:启用，N:禁用）
      */
@@ -49,11 +55,11 @@ public class Role implements Serializable {
 	private Date updateTime;
 
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -71,6 +77,14 @@ public class Role implements Serializable {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public String getIsSystem() {
+		return isSystem;
+	}
+
+	public void setIsSystem(String isSystem) {
+		this.isSystem = isSystem;
 	}
 
 	public String getStatus() {
@@ -103,6 +117,7 @@ public class Role implements Serializable {
 			", id=" + id +
 			", name=" + name +
 			", code=" + code +
+			", isSystem=" + isSystem +
 			", status=" + status +
 			", createTime=" + createTime +
 			", updateTime=" + updateTime +

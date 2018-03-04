@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="renderer" content="webkit">
+<link type="text/css" href="${rc.contextPath}/statics/ui/topjui/css/topjui.core.min.css?v=1.1" rel="stylesheet">
+<link type="text/css"
+      href="${rc.contextPath}/statics/ui/topjui/themes/default/topjui.black.css"
+      rel="stylesheet"/>
+<!-- FontAwesome字体图标 -->
+<link type="text/css" href="${rc.contextPath}/statics/ui/static/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+<!-- layui框架样式 -->
+<link type="text/css" href="${rc.contextPath}/statics/ui/static/plugins/layui/css/layui.css" rel="stylesheet"/>
+<!-- jQuery相关引用 -->
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/static/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/static/plugins/jquery/jquery.cookie.js"></script>
+<!-- TopJUI框架配置 -->
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/static/public/js/topjui.config.js"></script>
+<!-- TopJUI框架核心 -->
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/topjui/js/topjui.core.min.js?v=1.1"></script>
+<!-- TopJUI中文支持 -->
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/topjui/js/locale/topjui.lang.zh_CN.js"></script>
+<!-- layui框架js -->
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/static/plugins/layui/layui.js"></script>
+
+<script type="text/javascript">
+    $(window).load(function () {
+        $("#loading").fadeOut();
+    });
+</script>
+</head>
+
+<body>
+	<div data-toggle="topjui-layout" data-options="fit:true">
+	    <div data-options="region:'west',title:'选择菜单',split:true,border:false,width:'20%',iconCls:'fa fa-sitemap',headerCls:'border_right',bodyCls:'border_right'">
+	        <!-- treegrid表格 -->
+	        <table data-toggle="topjui-treegrid"
+	               data-options="id: 'orgnizationDatagrid',
+				    idField: 'id',
+				    treeField: 'text',
+				    rownumbers: !0,
+			   	    singleSelect: !0,
+				    url: remoteHost + '/system/menu/rootSelect',
+				    expandUrl: remoteHost+'/system/menu/list?id={id}',
+				    childGrid:{
+				   	   param:'id:id',
+	                   grids:[
+	                       {type:'datagrid',id:'systemAuthwordDg'},
+	                   ]
+				   }">
+	            <thead>
+	            <tr>
+	                <th data-options="field:'text',title:'菜单名称'"></th>
+	            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	    <div data-options="region:'center',iconCls:'icon-reload',title:'',split:true,border:false,bodyCls:'border_left'">
+	        <!-- datagrid表格 -->
+	        <table data-toggle="topjui-edatagrid" data-options="id:'systemAuthwordDg',
+			            rownumbers: !0,
+			            pagination: !0,
+	                    method: 'post',
+			            editable: !1,
+				   	    singleSelect: !0,
+			            checkOnSelect: !0,
+			            selectOnCheck: !0,
+	                    url:remoteHost + '/system/authword/list'">
+	            <thead>
+	            <tr>
+	                <th data-options="field:'id',title:'ID',checkbox:true"></th>
+	                <th data-options="field:'name',title:'名称'"></th>
+	                <th data-options="field:'code',title:'编码',sortable:true"></th>
+	                <th data-options="field:'desc',title:'描述'"></th>
+	            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	</div>
+	
+	
+	<!-- 表格工具栏开始 -->
+	<div id="systemAuthwordDg-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'datagrid',
+           id:'systemAuthwordDg'}" style="display:none">
+           
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'openDialog',
+	       extend: '#systemAuthwordDg-toolbar',
+	       iconCls: 'fa fa-plus',
+	       dialog:{
+               title: '新增权限字',
+	           width: 520,
+	           height: 320,
+	           href: remoteHost + '/system/authword/form',
+	           buttonsGroup:[
+	               {text:'保存', url: remoteHost + '/system/authword/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	           ]
+	       }">新增权限字</a>
+	    
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#systemAuthwordDg-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '编辑权限字',
+		           width: 520,
+		           height: 320,
+	               href: remoteHost + '/system/authword/form',
+	               url: remoteHost + '/system/authword/detail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/system/authword/update',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">编辑</a>
+
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'doAjax',
+	       extend: '#systemAuthwordDg-toolbar',
+	       btnCls:'topjui-btn-normal',
+	       iconCls:'fa fa-trash',
+	       url: remoteHost + '/system/authword/delete',
+	       grid: {uncheckedMsg:'请先勾选要删除的数据',param:'id:id'}">删除</a>
+	       
+	</div>
+	<!-- 表格工具栏结束 -->
+	
+</body>
+</html>

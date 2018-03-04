@@ -1,0 +1,40 @@
+<input type="hidden" id="id" name="id"/>
+<table class="editTable" style="width: 90%">
+    <tr>
+         <td class="label" width="120">所属菜单：</td>
+         <td>
+               <input name="menuId" data-toggle="topjui-combotreegrid" data-options="width:258,required:true,
+                    prompt: '请选择一个菜单',
+                    labelPosition:'top',
+				    idField: 'id',
+				    treeField: 'text',
+				    rownumbers: !0,
+				    panelWidth:258,
+			   	    singleSelect: !0,
+			   	    expandAll: !0,
+				    url: remoteHost + '/system/menu/rootSelect',
+				    expandUrl: remoteHost+'/system/menu/list?id={id}',
+                   columns:[[
+                       {field:'text',title:'菜单名称'}
+                   ]]">
+         </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">名称：</td>
+        <td>
+            <input type="text" name="name" data-toggle="topjui-textbox" data-options="width:258,required:true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">编码：</td>
+        <td>
+            <input type="text" name="code" data-toggle="topjui-textbox" data-options="width:258,required:true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">描述：</td>
+        <td>
+            <input type="text" name="desc" data-toggle="topjui-textbox" data-options="width:258,required:true">
+        </td>
+    </tr>
+</table>

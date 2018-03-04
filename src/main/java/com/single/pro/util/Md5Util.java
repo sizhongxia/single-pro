@@ -15,10 +15,6 @@ public class Md5Util {
 		return md5.digestHex(file);
 	}
 
-	public static String md5(String str) {
-		return md5.digestHex(str);
-	}
-
 	public static String md5(byte[] bytes) {
 		return md5.digestHex(bytes);
 	}
@@ -27,9 +23,13 @@ public class Md5Util {
 		return md5.digestHex(is);
 	}
 
-	public static String md5(String str, String key) {
-		HMac mac = new HMac(HmacAlgorithm.HmacMD5, key.getBytes());
+	public static String md5(String str) {
+		HMac mac = new HMac(HmacAlgorithm.HmacMD5, "zhongxia_Nwvxske67MfT5Y2t".getBytes());
 		return mac.digestHex(str);
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(md5("123456"));
 	}
 
 }

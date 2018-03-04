@@ -1,9 +1,10 @@
 package com.single.pro.entity;
 
-import com.baomidou.mybatisplus.enums.IdType;
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+
 import java.io.Serializable;
 
 /**
@@ -12,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-01-08
+ * @since 2018-03-01
  */
 @TableName("sp_job_group")
 public class JobGroup implements Serializable {
@@ -22,13 +23,13 @@ public class JobGroup implements Serializable {
     /**
      * 主键ID
      */
-	@TableId(value="id", type= IdType.AUTO)
-	private Integer id;
+    @TableId(value = "id", type = IdType.INPUT)
+	private String id;
     /**
-     * 任务（作业）组ID
+     * 任务（作业）组编码
      */
-	@TableField("group_id")
-	private String groupId;
+	@TableField("group_code")
+	private String groupCode;
     /**
      * 任务（作业）组名称
      */
@@ -36,20 +37,20 @@ public class JobGroup implements Serializable {
 	private String groupName;
 
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getGroupId() {
-		return groupId;
+	public String getGroupCode() {
+		return groupCode;
 	}
 
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
+	public void setGroupCode(String groupCode) {
+		this.groupCode = groupCode;
 	}
 
 	public String getGroupName() {
@@ -64,7 +65,7 @@ public class JobGroup implements Serializable {
 	public String toString() {
 		return "JobGroup{" +
 			", id=" + id +
-			", groupId=" + groupId +
+			", groupCode=" + groupCode +
 			", groupName=" + groupName +
 			"}";
 	}

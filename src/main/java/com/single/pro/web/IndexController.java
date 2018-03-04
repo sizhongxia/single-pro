@@ -6,11 +6,14 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.single.pro.cache.BaseDataCacheUtil;
 
 /**
  * <p>
@@ -24,10 +27,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/")
 public class IndexController extends BaseController {
 
+	@Autowired
+	BaseDataCacheUtil baseDataCacheUtil;
+
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
 	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("index");
+		mav.addObject("system", baseDataCacheUtil.getSystemInfo());
 		return mav;
 	}
 
@@ -37,6 +44,7 @@ public class IndexController extends BaseController {
 	 * @param request
 	 * @return
 	 */
+	@RequiresAuthentication
 	@RequestMapping(value = "/welcome")
 	public ModelAndView welcome(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("welcome");
@@ -44,17 +52,18 @@ public class IndexController extends BaseController {
 	}
 
 	/***
-	 * 不兼容提示
+	 * 空页面
 	 * 
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/ie")
-	public ModelAndView ie(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("ie");
+	@RequiresAuthentication
+	@RequestMapping(value = "/empty")
+	public ModelAndView empty(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("empty");
 		return mav;
 	}
-
+	
 	/***
 	 * 登录页面
 	 * 
@@ -81,42 +90,25 @@ public class IndexController extends BaseController {
 
 	@RequestMapping(value = "/un_authorized")
 	public ModelAndView unAuthorized(HttpServletRequest request) {
-		ModelAndView view = new ModelAndView("un_authorized");
+		ModelAndView view = new ModelAndView("error/un_authorized");
 		return view;
 	}
 
 	@RequestMapping(value = "/page_not_found")
 	public ModelAndView pageNotFound(HttpServletRequest request) {
-		ModelAndView view = new ModelAndView();
-		if (request.getHeader("Referer") != null) {
-			view.setViewName("page_not_found");
-		} else {
-			view.setViewName("to_skip_index");
-		}
+		ModelAndView view = new ModelAndView("error/page_not_found");
 		return view;
 	}
 
 	@RequestMapping(value = "/server_busy")
 	public ModelAndView serverBusy(HttpServletRequest request) {
-		ModelAndView view = new ModelAndView("server_busy");
+		ModelAndView view = new ModelAndView("error/server_busy");
 		return view;
 	}
 
 	@RequestMapping(value = "/operation_timeout")
 	public ModelAndView operationTimeout(HttpServletRequest request) {
-		ModelAndView view = new ModelAndView("operation_timeout");
-		return view;
-	}
-
-	/**
-	 * 菜单未配置访问路径
-	 * 
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value = "/no_config_url")
-	public ModelAndView noConfigUrl(HttpServletRequest request) {
-		ModelAndView view = new ModelAndView("no_config_url");
+		ModelAndView view = new ModelAndView("error/operation_timeout");
 		return view;
 	}
 }

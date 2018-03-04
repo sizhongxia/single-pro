@@ -1,0 +1,42 @@
+<style>
+    .editTable .label {
+        min-width: 80px;
+        width: 80px;
+    }
+</style>
+<table class="editTable">
+    <tr>
+        <td class="label">原密码</td>
+        <td><input type="text" id="opassword" name="opassword">
+        </td>
+    </tr>
+    <tr>
+        <td class="label">新密码</td>
+        <td><input type="text" id="password" name="password">
+        </td>
+    </tr>
+    <tr>
+        <td class="label">重复新密码</td>
+        <td><input type="text" id="password2" name="password2"></td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    $(function () {
+        $('#opassword').iPasswordbox({
+            width: 200,
+            required: true,
+            validType: 'minLength[5]'
+        });
+        $('#password').iPasswordbox({
+            width: 200,
+            required: true,
+            validType: 'minLength[5]'
+        });
+        $('#password2').iPasswordbox({
+            width: 200,
+            required: true,
+            validType: "equals['#password']"
+        });
+    });
+</script>

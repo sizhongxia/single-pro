@@ -127,15 +127,42 @@ $(function () {
         border: false
     });
 
-    // 绑定横向导航菜单点击事件
-    $(".systemName").on("click", function (e) {
-        generateMenu($(this).attr("id"), $(this).attr("title"));
-        $(".systemName").removeClass("selected");
-        $(this).addClass("selected");
+    // 加载应用
+    $.ajax({
+        url: remoteHost + '/system/apps',
+        type: 'get',
+        cache: false,
+        beforeSend: function () {
+            $.iMessager.progress({
+                text: '正在加载用户授权应用数据.。。'
+            });
+        },
+        success: function (data, response, status) {
+            if (data.statusCode == 200) {
+            	var tds = '';
+            	data.data.forEach(function(value,index,array){
+            		 tds += '<td id="' + value.id + '" title="' + value.name + '" class="topmenu ' + (index == 0 ? 'selected' : '') + ' systemName"><a class="l-btn-text bannerMenu" href="javascript:void(0)"><p><lable class="' + value.icon + '"></lable></p><p><span style="white-space:nowrap;">' + value.name + '</span></p></a></td>';
+            	});
+            	$("#topmenucontent").html(tds);
+            	setTimeout(function(){
+            		 // 绑定横向导航菜单点击事件
+            	    $(".systemName").on("click", function (e) {
+            	        generateMenu($(this).attr("id"), $(this).attr("title"));
+            	        $(".systemName").removeClass("selected");
+            	        $(this).addClass("selected");
+            	    });
+            	    // 主页打开初始化时显示第一个系统的菜单（切记要放在上面那个绑定事件之后，不然模拟点击也是无效的）
+            	    $('.systemName').eq('0').trigger('click');
+            	    
+            	    $.iMessager.progress('close');
+            	}, 50)
+            } else {
+        	    $.iMessager.progress('close');
+                $.iMessager.alert('操作失败！', '未知错误，请重试！', 'messager-error');
+            }
+        }
     });
-
-    // 主页打开初始化时显示第一个系统的菜单（切记要放在上面那个绑定事件之后，不然模拟点击也是无效的）
-    $('.systemName').eq('0').trigger('click');
+    
 
     // 显示系统首页
     /*setTimeout(function () {
@@ -151,51 +178,49 @@ $(function () {
      }, 1);*/
 
 
-    // 修改密码窗口
-    $('#pwdDialog').iDialog({
-        buttons: [{
-            text: '确定',
-            iconCls: 'fa fa-save',
-            btnCls: 'topjui-btn-green',
-            handler: function () {
-                if ($('#pwdDialog').form('validate')) {
-                    if ($("#password").val().length < 6) {
-                        $.iMessager.alert('警告', '密码长度不能小于6位', 'messager-warning');
-                    } else {
-                        var formData = $("#pwdDialog").serialize();
-                        $.ajax({
-                            url: remoteHost + '/statics/ui/static/json/response/success.json',
-                            type: 'get',
-                            cache: false,
-                            data: formData,
-                            beforeSend: function () {
-                                $.iMessager.progress({
-                                    text: '正在操作...'
-                                });
-                            },
-                            success: function (data, response, status) {
-                                $.iMessager.progress('close');
-                                if (data.statusCode == 200) {
-                                    $.iMessager.show({
-                                        title: '提示',
-                                        msg: '操作成功'
-                                    });
-                                    $("#pwdDialog").iDialog('close').form('reset');
-
-                                } else {
-                                    $.iMessager.alert('操作失败！', '未知错误或没有任何修改，请重试！', 'messager-error');
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        }],
-        onOpen: function () {
-            $(this).panel('refresh');
-        }
-    });
-    
+	  //修改密码窗口
+	  $('#pwdDialog').iDialog({buttons: [{
+	      text: '提交修改',
+	      iconCls: 'fa fa-save',
+	      btnCls: 'topjui-btn-green',
+	      handler: function () {
+	          if ($('#pwdDialog').form('validate')) {
+                  var formData = $("#pwdDialog").serialize();
+                  $.ajax({
+                      url: remoteHost + '/user/updatePwd',
+                      type: 'post',
+                      cache: false,
+                      data: formData,
+                      beforeSend: function () {
+                          $.iMessager.progress({
+                              text: '正在操作...'
+                          });
+                      },
+                      success: function (data, response, status) {
+                          $.iMessager.progress('close');
+                          if (data.statusCode == 200) {
+                              $.iMessager.show({
+                                  title: '提示',
+                                  msg: '操作成功'
+                              });
+                              $("#pwdDialog").iDialog('close').form('reset');
+                          } else if (data.statusCode == 0) {
+                        	  $.iMessager.show({
+                                  title: '提示',
+                                  msg: '操作成功，新密码和原密码相同未做修改'
+                              });
+                              $("#pwdDialog").iDialog('close').form('reset');
+                          } else {
+                              $.iMessager.alert('操作失败！', data.errMsg , 'messager-error');
+                          }
+                      }
+                  });
+	          }
+	      }}],
+	      onOpen: function () {
+	          $(this).panel('refresh');
+	      }
+	  });
 });
 
 // 右键菜单对应操作
@@ -341,7 +366,9 @@ function logout() {
             $.iMessager.progress({
                 text: '正在退出中...'
             });
-            window.location.href = remoteHost + '/logout';
+            setTimeout(function(){
+            	window.location.href = remoteHost + '/logout';
+            }, 200)
         }
     });
 }
@@ -351,7 +378,8 @@ function generateMenu(appId, systemName) {
     if (appId == "") {
         $.iMessager.show({title: '操作提示', msg: '还未设置该系统对应的菜单ID！'});
     } else {
-        $(".webname").children('span').eq(1).html(systemName); //设置显示系统名称标题
+        // $(".webname").children('span').eq(1).html(systemName); //设置显示系统名称标题
+        $(".panel-header .panel-title:first").html(systemName);
         // 获取现有的菜单panel，并循环删除
         var allPanel = $("#RightAccordion").iAccordion('panels');
         var size = allPanel.length;
@@ -362,7 +390,7 @@ function generateMenu(appId, systemName) {
             }
         }
         // 定义新增菜单panel的数据json地址，并循环添加
-        var url = remoteHost + "/menu/list";
+        var url = remoteHost + "/system/menus";
         $.get(
             url, {"appId": appId}, // 获取第一层目录
             function (data) {
@@ -433,13 +461,13 @@ function addTab(params) {
     } else {
         var lastMenuClickTime = $.cookie("menuClickTime");
         var nowTime = new Date().getTime();
-        if ((nowTime - lastMenuClickTime) >= 500) {
+        if ((nowTime - lastMenuClickTime) >= 600) {
             $.cookie("menuClickTime", new Date().getTime());
             t.iTabs('add', opts);
         } else {
             $.iMessager.show({
                 title: '温馨提示',
-                msg: '操作过快，请稍后重试！'
+                msg: '操作过快，请重新打开' + opts.title + '标签页！'
             });
         }
     }
@@ -459,6 +487,7 @@ function addParentTab(options) {
         border: true
     });
 }
+
 
 function modifyPwd() {
     $("#pwdDialog").iDialog('open');

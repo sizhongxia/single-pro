@@ -4,24 +4,23 @@
  * topJUI.language: 消息提示框的中文提示，可根据情况调整
  *
  */
-var contextPath = "";
 var remoteHost = "http://127.0.0.1:8901";
-
-var firstPathName = window.location.pathname.split("/")[1];
-if (!(firstPathName == "html" || firstPathName == "json" || firstPathName == "topjui")) {
-    contextPath = "/" + firstPathName;
-}
 
 var myConfig = {
     config: {
         pkName: 'id', //数据表主键名
-        singleQuotesParam: true, //是否对批量提交表格选中记录的参数值使用单引号，默认为false，true:'123','456'，false:123,456
+        singleQuotesParam: false, //是否对批量提交表格选中记录的参数值使用单引号，默认为false，true:'123','456'，false:123,456
         aloneUse: false,
         datagrid: {
             size: 'rows', //提交到后台的每页显示多少条记录
             page: 'page', //提交到后台的显示第几页的数据
             rows: 'rows', //后台返回的数据行对象参数名
             total: 'total' //后台返回的总记录数参数名
+        },
+        postJson: false,
+        statusCode: {
+            success: 200, //执行成功返回状态码
+            failure: -1 //执行失败返回状态码
         }
     },
     language: {
@@ -42,6 +41,5 @@ var myConfig = {
                 confirmMsg: "确定要执行该操作吗？"
             }
         }
-    },
-    l: '894f3586f9d7150f9a6f75f724b7c957879376ff53dc66278fe97587dfe984e638a92783ba04a596ea59aa1dcff9506bdb8f8c862906d059'
+    }
 }

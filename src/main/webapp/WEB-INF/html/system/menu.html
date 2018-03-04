@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="renderer" content="webkit">
+<link type="text/css" href="${rc.contextPath}/statics/ui/topjui/css/topjui.core.min.css" rel="stylesheet">
+<link type="text/css"
+      href="${rc.contextPath}/statics/ui/topjui/themes/default/topjui.black.css"
+      rel="stylesheet"/>
+<!-- FontAwesome字体图标 -->
+<link type="text/css" href="${rc.contextPath}/statics/ui/static/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+<!-- layui框架样式 -->
+<link type="text/css" href="${rc.contextPath}/statics/ui/static/plugins/layui/css/layui.css" rel="stylesheet"/>
+<!-- jQuery相关引用 -->
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/static/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/static/plugins/jquery/jquery.cookie.js"></script>
+<!-- TopJUI框架配置 -->
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/static/public/js/topjui.config.js"></script>
+<!-- TopJUI框架核心 -->
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/topjui/js/topjui.core.min.js"></script>
+<!-- TopJUI中文支持 -->
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/topjui/js/locale/topjui.lang.zh_CN.js"></script>
+<!-- layui框架js -->
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/static/plugins/layui/layui.js"></script>
+
+<script type="text/javascript">
+    $(window).load(function () {
+        $(".layout-button-left").hide();
+        $("#loading").fadeOut();
+    });
+</script>
+</head>
+
+<body>
+	<div data-toggle="topjui-layout" data-options="fit:true">
+	    <div data-options="region:'west',iconCls:'fa fa-caret-right',title:'系统应用',split:true,border:false,width:'26%',headerCls:'border_right',bodyCls:'border_right'">
+	        <!-- treegrid表格 -->
+	        <table data-toggle="topjui-edatagrid"
+	               data-options="id:'systemAppGrid',
+		            rownumbers: !0,
+		            pagination: !1,
+                    method: 'post',
+		            pageSize: 0,
+		            editable: !1,
+			   	    singleSelect: !0,
+		            checkOnSelect: !0,
+		            selectOnCheck: !0,
+				    url: remoteHost+'/system/app/allSelect',
+				    childGrid:{
+				   	   param:'id:id',
+	                   grids:[
+	                       {type:'datagrid',id:'systemMenuTg'},
+	                   ]}">
+	            <thead>
+		            <tr>
+		                <th data-options="field:'name',title:'名称'"></th>
+				        <th data-options="field:'icon',title:'图标',width:100"></th>
+				        <th data-options="field:'sortNo',title:'排序',width:100"></th>
+		            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	    <div data-options="region:'center',iconCls:'icon-reload',title:'',split:true,border:false,bodyCls:'border_left'">
+	    
+	    	<div data-toggle="topjui-layout" data-options="fit:true">
+	        	<div data-options="region:'west',iconCls:'fa fa-caret-right',title:'一级菜单',split:true,border:false,width:'45%',headerCls:'border_right',bodyCls:'border_right'">
+	        		<!-- datagrid表格 -->
+			        <table data-toggle="topjui-edatagrid" data-options="id:'systemMenuTg',
+					            rownumbers: !0,
+					            pagination: !1,
+                                method: 'post',
+					            pageSize: 0,
+					            editable: !1,
+						   	    singleSelect: !0,
+					            checkOnSelect: !0,
+					            selectOnCheck: !0,
+			                    url: remoteHost+'/system/menu/list',
+							    childGrid:{
+							   	   param:'id:id',
+				                   grids:[
+				                       {type:'datagrid',id:'systemChildMenuTg'},
+				                   ]}">
+			            <thead>
+			            <tr>
+					        <th data-options="field:'text',title:'名称'"></th>
+					        <th data-options="field:'icon',title:'图标',width:100"></th>
+					        <th data-options="field:'sortNo',title:'排序',width:100"></th>
+			            </tr>
+			            </thead>
+			        </table>
+	        	</div>
+	        	
+	        	<div data-options="region:'center',iconCls:'fa fa-caret-right',title:'二级菜单',split:true,border:false,headerCls:'border_left',bodyCls:'border_left'">
+	        		<!-- datagrid表格 -->
+			        <table data-toggle="topjui-edatagrid"
+			               data-options="id:'systemChildMenuTg',
+						   	    rownumbers: !1,
+						   	    pagination: !1,
+					            rownumbers: !0,
+					            pagination: !1,
+					            pageSize: 0,
+					            editable: !1,
+						   	    singleSelect: !0,
+					            checkOnSelect: !0,
+					            selectOnCheck: !0,
+			                    url: remoteHost+'/system/menu/list'">
+			            <thead>
+			            <tr>
+					        <th data-options="field:'text',title:'名称'"></th>
+					        <th data-options="field:'icon',title:'图标',width:100"></th>
+					        <th data-options="field:'url',title:'URL',width:100"></th>
+					        <th data-options="field:'sortNo',title:'排序',width:100"></th>
+			            </tr>
+			            </thead>
+			        </table>
+	        	</div>
+	        </div>
+	        
+	    </div>
+	</div>
+	
+	
+	<!-- 表格工具栏开始 -->
+	
+	<div id="systemAppGrid-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'datagrid',
+           id:'systemAppGrid'}" style="display:none">
+	          
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'openDialog',
+	       extend: '#systemAppGrid-toolbar',
+	       iconCls: 'fa fa-plus',
+	       dialog:{
+               title: '新增系统应用',
+	           width: 520,
+	           height: 320,
+	           href: remoteHost + '/system/app/form',
+	           buttonsGroup:[
+	               {text:'保存', url: remoteHost + '/system/app/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	           ]
+	       }">新增应用</a>
+	    
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#systemAppGrid-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '编辑系统应用',
+		           width: 520,
+		           height: 320,
+	               href: remoteHost + '/system/app/form',
+	               url: remoteHost + '/system/app/detail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/system/app/update',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">编辑</a>
+
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'doAjax',
+	       extend: '#systemAppGrid-toolbar',
+	       btnCls:'topjui-btn-normal',
+	       iconCls:'fa fa-trash',
+	       url: remoteHost + '/system/app/delete',
+	       grid: {uncheckedMsg:'请先勾选要删除的数据',param:'id:id'}">删除</a>
+	</div>
+	
+	<div id="systemMenuTg-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'datagrid',
+           id:'systemMenuTg'}" style="display:none">
+	          
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'openDialog',
+	       extend: '#systemMenuTg-toolbar',
+	       iconCls: 'fa fa-plus',
+	       dialog:{
+               title: '新增一级菜单',
+	           width: 520,
+	           height: 320,
+	           href: remoteHost + '/system/menu/level1form',
+	           buttonsGroup:[
+	               {text:'保存', url: remoteHost + '/system/menu/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	           ]
+	       }">新增一级</a>
+	    
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#systemMenuTg-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '编辑一级菜单',
+		           width: 520,
+		           height: 320,
+	               href: remoteHost + '/system/menu/level1form',
+	               url: remoteHost + '/system/menu/detail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/system/menu/update',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">编辑</a>
+
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'doAjax',
+	       extend: '#systemMenuTg-toolbar',
+	       btnCls:'topjui-btn-normal',
+	       iconCls:'fa fa-trash',
+	       url: remoteHost + '/system/menu/delete',
+	       grid: {uncheckedMsg:'请先勾选要删除的数据',param:'id:id'}">删除</a>
+	</div>
+	
+	<div id="systemChildMenuTg-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'datagrid',
+           id:'systemChildMenuTg'}" style="display:none">
+	          
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'openDialog',
+	       extend: '#systemChildMenuTg-toolbar',
+	       iconCls: 'fa fa-plus',
+	       dialog:{
+               title: '新增菜单',
+	           width: 520,
+	           height: 320,
+	           href: remoteHost + '/system/menu/level2form',
+	           buttonsGroup:[
+	               {text:'保存', url: remoteHost + '/system/menu/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	           ]
+	       }">新增二级</a>
+	    
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#systemChildMenuTg-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '编辑菜单',
+		           width: 520,
+		           height: 320,
+	               href: remoteHost + '/system/menu/level2form',
+	               url: remoteHost + '/system/menu/detail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/system/menu/update',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">编辑</a>
+
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'doAjax',
+	       extend: '#systemChildMenuTg-toolbar',
+	       btnCls:'topjui-btn-normal',
+	       iconCls:'fa fa-trash',
+	       url: remoteHost + '/system/menu/delete',
+	       grid: {uncheckedMsg:'请先勾选要删除的数据',param:'id:id'}">删除</a>
+	       
+	</div>
+	<!-- 表格工具栏结束 -->
+	
+	
+	<script>
+	    function iconFormatter(row) {
+	        return '<i class="' + row.text + '"></i> &nbsp; <span>' + row.text + '</span><br/>';
+	    }
+	</script>
+</body>
+</html>

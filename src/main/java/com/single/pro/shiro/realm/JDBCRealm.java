@@ -1,6 +1,5 @@
 package com.single.pro.shiro.realm;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -19,31 +18,42 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.single.pro.entity.Authorization;
 import com.single.pro.entity.Role;
-import com.single.pro.entity.RoleAuthorization;
-import com.single.pro.entity.User;
-import com.single.pro.service.AuthorizationService;
-import com.single.pro.service.RoleAuthorizationService;
+import com.single.pro.entity.RoleApp;
+import com.single.pro.entity.RoleAuthword;
+import com.single.pro.entity.RoleMenu;
+import com.single.pro.entity.SystemUser;
+import com.single.pro.service.RoleAppService;
+import com.single.pro.service.RoleAuthwordService;
+import com.single.pro.service.RoleMenuService;
 import com.single.pro.service.RoleService;
-import com.single.pro.service.UserService;
+import com.single.pro.service.SystemAuthwordService;
+import com.single.pro.service.SystemUserService;
 
 public class JDBCRealm extends AuthorizingRealm {
 
+	public static final String USER_ROLE_APP_AUTH_KEY = "current_user_role_apps";
+	public static final String USER_ROLE_MENU_AUTH_KEY = "current_user_role_menus";
+
 	@Autowired
-	UserService userService;
+	SystemUserService systemUserService;
 	@Autowired
 	RoleService roleService;
 	@Autowired
-	AuthorizationService authorizationService;
+	SystemAuthwordService systemAuthwordService;
 	@Autowired
-	RoleAuthorizationService roleAuthorizationService;
+	RoleAuthwordService roleAuthwordService;
+	@Autowired
+	RoleAppService roleAppService;
+	@Autowired
+	RoleMenuService roleMenuService;
 
 	/***
 	 * 权限验证判断
@@ -53,32 +63,26 @@ public class JDBCRealm extends AuthorizingRealm {
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 		// 登陆成功，记录Session
 		Subject subject = SecurityUtils.getSubject();
-		User user = (User) subject.getPrincipal();
+		SystemUser user = (SystemUser) subject.getPrincipal();
+
 		Role role = roleService.selectById(user.getRoleId());
 		if ("Y".equals(role.getStatus())) {
+
+			// 获取角色授权
 			Set<String> roleCodes = new HashSet<String>();
 			roleCodes.add(role.getCode());
 			authorizationInfo.setRoles(roleCodes);
 
-			RoleAuthorization entity = new RoleAuthorization();
-			entity.setRoleId(role.getId());
-			Wrapper<RoleAuthorization> wrapper = new EntityWrapper<RoleAuthorization>(entity);
-			List<RoleAuthorization> roleAuths = roleAuthorizationService.selectList(wrapper);
+			Wrapper<RoleAuthword> roleAuthwordWrapper = new EntityWrapper<RoleAuthword>();
+			roleAuthwordWrapper.eq("role_id", role.getId());
+			List<RoleAuthword> roleAuths = roleAuthwordService.selectList(roleAuthwordWrapper);
 
 			if (roleAuths != null && !roleAuths.isEmpty()) {
-				List<Integer> authIds = new ArrayList<>();
-				for (RoleAuthorization ra : roleAuths) {
-					authIds.add(ra.getAuthwordId());
+				Set<String> permissions = new HashSet<>();
+				for (RoleAuthword ra : roleAuths) {
+					permissions.add(ra.getAuthword());
 				}
-				// 查询角色授权
-				List<Authorization> auths = authorizationService.selectBatchIds(authIds);
-				if (auths != null && !auths.isEmpty()) {
-					Set<String> permissions = new HashSet<>();
-					for (Authorization a : auths) {
-						permissions.add(a.getCode());
-					}
-					authorizationInfo.setStringPermissions(permissions);
-				}
+				authorizationInfo.setStringPermissions(permissions);
 			}
 		}
 
@@ -95,10 +99,10 @@ public class JDBCRealm extends AuthorizingRealm {
 		UsernamePasswordToken upToken = (UsernamePasswordToken) authenticationToken;
 		String loginName = upToken.getUsername();
 
-		User entity = new User();
+		SystemUser entity = new SystemUser();
 		entity.setLoginName(loginName);
-		Wrapper<User> wrapper = new EntityWrapper<User>(entity);
-		User user = userService.selectOne(wrapper);
+		Wrapper<SystemUser> wrapper = new EntityWrapper<SystemUser>(entity);
+		SystemUser user = systemUserService.selectOne(wrapper);
 		if (user == null) {
 			// 未知账号
 			throw new UnknownAccountException();
@@ -117,10 +121,44 @@ public class JDBCRealm extends AuthorizingRealm {
 			throw new IncorrectCredentialsException();
 		}
 		user.setLastLoginTime(new Date());
-		if (!userService.updateById(user)) {
+		if (!systemUserService.updateById(user)) {
 			// 未知账号
 			throw new RuntimeException();
 		}
+
+		Role role = roleService.selectById(user.getRoleId());
+		if ("Y".equals(role.getStatus())) {
+
+			// 获取角色授权
+			Wrapper<RoleApp> roleAppWrapper = new EntityWrapper<>();
+			roleAppWrapper.eq("role_id", role.getId());
+			List<RoleApp> roleApps = roleAppService.selectList(roleAppWrapper);
+			Subject subject = SecurityUtils.getSubject();
+
+			// 授权应用
+			if (roleApps != null && !roleApps.isEmpty()) {
+				Session session = subject.getSession();
+
+				session.setAttribute(USER_ROLE_APP_AUTH_KEY, roleApps);
+
+				Wrapper<RoleMenu> roleMenuWrapper = new EntityWrapper<>();
+				roleMenuWrapper.eq("role_id", role.getId());
+				List<RoleMenu> roleMenus = roleMenuService.selectList(roleMenuWrapper);
+
+				// 授权菜单
+				if (roleMenus != null && !roleMenus.isEmpty()) {
+
+					Set<String> menuIds = new HashSet<>();
+					for (RoleMenu menu : roleMenus) {
+						menuIds.add(menu.getMenuId());
+					}
+					session.setAttribute(USER_ROLE_MENU_AUTH_KEY, menuIds);
+
+				}
+
+			}
+		}
+
 		return new SimpleAuthenticationInfo(user, password.toCharArray(), getName());
 	}
 

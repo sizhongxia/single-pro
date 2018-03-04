@@ -121,7 +121,7 @@ public class JobManager implements InitializingBean {
 				jb.setJobId(job.getJobId());
 				jb.setJobName(job.getJobName());
 				JobGroup jobGroup = jobGroupService.selectById(job.getGroupId());
-				jb.setJobGroup(jobGroup.getGroupId());
+				jb.setJobGroup(jobGroup.getGroupCode());
 				jb.setJobGroupName(jobGroup.getGroupName());
 				jb.setJobStatus(job.getStatus());
 				jb.setJobClassName(job.getClazzName());
@@ -224,7 +224,7 @@ public class JobManager implements InitializingBean {
 				QuartzJob jb = new QuartzJob();
 				jb.setJobId(job.getJobId());
 				JobGroup jobGroup = jobGroupService.selectById(job.getGroupId());
-				jb.setJobGroup(jobGroup.getGroupId());
+				jb.setJobGroup(jobGroup.getGroupCode());
 				jb.setJobClassName(job.getClazzName());
 				jb.setCronExpression(job.getCron());
 				jb.setConcurrent(job.getIsConcurrent() == 1 ? "Y" : "N");

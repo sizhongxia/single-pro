@@ -1,0 +1,38 @@
+<input type="hidden" id="id" name="id"/>
+<input type="hidden" name="pid" value="0"/>
+
+<table class="editTable" style="width: 90%">
+     <tr>
+         <td class="label" width="120">系统应用：</td>
+         <td>
+			<input type="text" name="appId"
+                data-toggle="topjui-combobox"
+                data-options="required:true,
+			        prompt: '请选择一个系统应用',
+			        width: 258,
+			        panelHeight: 158,
+                    valueField: 'id',
+                    textField: 'name',
+                    url: remoteHost+'/system/app/allSelect'">
+         </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">排序：</td>
+        <td>
+            <input type="text" name="sortNo" data-toggle="topjui-numberspinner" data-options="width:258,required:true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">名称：</td>
+        <td>
+            <input type="text" name="text" data-toggle="topjui-textbox" data-options="width:258,required:true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">图标：</td>
+        <td>
+        	<input type="text" name="icon" data-toggle="topjui-combobox"
+                       data-options="width:258,required:true,panelHeight:250,valueField:'text',method:'get',url: remoteHost + '/statics/json/icon.json',formatter:iconFormatter">
+        </td>
+    </tr>
+</table>

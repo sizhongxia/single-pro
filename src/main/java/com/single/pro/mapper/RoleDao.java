@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**
  * <p>
- *  Mapper 接口
+ * 角色 Mapper 接口
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-01-08
+ * @since 2018-03-01
  */
 public interface RoleDao extends BaseMapper<Role> {
 

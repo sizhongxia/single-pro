@@ -15,44 +15,24 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.single.pro.service.UserService;
 import com.single.pro.util.Md5Util;
 
 @Controller
 @RequestMapping("auth")
 public class AuthController extends BaseController {
 
-	@Autowired
-	UserService userService;
-
-	public AuthController() {
-	}
-
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public Map<String, Object> login(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, Object> res = new HashMap<>();
 
-		String referer = request.getParameter("referer");
-		if (StringUtils.isBlank(referer)) {
-			referer = "/index";
-		}
-
-		String[] rm = referer.split("[?]");
-		if (rm.length > 1) {
-			referer = "/operation_timeout";
-		} else {
-			referer = rm[0];
-		}
-
-		String username = request.getParameter("loginame");
-		if (StringUtils.isBlank(username)) {
+		String loginame = request.getParameter("loginame");
+		if (StringUtils.isBlank(loginame)) {
 			res.put("statusCode", -1);
 			res.put("errMsg", "请输入登录名");
 			return res;
@@ -65,7 +45,7 @@ public class AuthController extends BaseController {
 			return res;
 		}
 
-		UsernamePasswordToken token = new UsernamePasswordToken(username, Md5Util.md5(password, username));
+		UsernamePasswordToken token = new UsernamePasswordToken(loginame, Md5Util.md5(password));
 		token.setRememberMe(false);
 
 		Subject subject = SecurityUtils.getSubject();
