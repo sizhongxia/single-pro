@@ -15,10 +15,11 @@
 <!-- jQuery相关引用 -->
 <script type="text/javascript" src="${rc.contextPath}/statics/ui/static/plugins/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="${rc.contextPath}/statics/ui/static/plugins/jquery/jquery.cookie.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/static/plugins/moment/moment.min.js"></script>
 <!-- TopJUI框架配置 -->
 <script type="text/javascript" src="${rc.contextPath}/statics/ui/static/public/js/topjui.config.js"></script>
 <!-- TopJUI框架核心 -->
-<script type="text/javascript" src="${rc.contextPath}/statics/ui/topjui/js/topjui.core.min.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/statics/ui/topjui/js/topjui.core.min.js?v=1.52"></script>
 <!-- TopJUI中文支持 -->
 <script type="text/javascript" src="${rc.contextPath}/statics/ui/topjui/js/locale/topjui.lang.zh_CN.js"></script>
 <!-- layui框架js -->
@@ -38,17 +39,15 @@
 	                    method: 'post',
 			            pageSize: 10,
 			            editable: !1,
-				   	    singleSelect: !0,
-			            checkOnSelect: !0,
-			            selectOnCheck: !0,
 		                url: remoteHost+ '/systemFile/list'">
 	            <thead>
 		            <tr>
+	                	<th data-options="field:'id',title:'ID',checkbox:true"></th>
 		                <th data-options="field:'originalName',title:'原名称'"></th>
 		                <th data-options="field:'path',title:'访问路径'"></th>
 		                <th data-options="field:'type',title:'类别',sortable:true"></th>
 		                <th data-options="field:'size',title:'大小',sortable:true"></th>
-		                <th data-options="field:'uploadTime',title:'上传时间'"></th>
+		                <th data-options="field:'uploadTime',title:'上传时间',formatter:timeFormatter"></th>
 		            </tr>
 	            </thead>
 	        </table>
@@ -69,8 +68,8 @@
 	       uploadUrl: remoteHost + '/systemFile/saveFile',
 	       dialog:{
                title: '上传文件',
-	           width: 720,
-	           height: 420
+	           width: 620,
+	           height: 320
 	       }">上传</a>
 	       
 	   <a href="javascript:void(0)"
@@ -83,6 +82,13 @@
 	       grid: {uncheckedMsg:'请先勾选要删除的数据',param:'id:id'}">删除</a>
 	</div>
 	<!-- 表格工具栏结束 -->
-
+	<script>
+	    function timeFormatter(value, rowData, rowIndex) {
+	        var htmlstr = '<div>';
+	        htmlstr += moment(value).format('YYYY-MM-DD HH:mm:ss');
+	        htmlstr += '</div>';
+	        return htmlstr;
+	    }
+	</script>
 </body>
 </html>
