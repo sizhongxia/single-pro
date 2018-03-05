@@ -1,15 +1,19 @@
 package com.single.pro.cache;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
@@ -26,6 +30,31 @@ public class BaseDataCacheUtil implements InitializingBean {
 	private SystemService systemService;
 	@Autowired
 	private SystemAppService systemAppService;
+
+	private static String UPLOAD_SAVE_PATH = "";
+	private static String UPLOAD_REQ_PATH = "";
+
+	public String getUploadSavePath() {
+		if (StringUtils.isBlank(UPLOAD_SAVE_PATH)) {
+			try {
+				loadUploadProperties();
+			} catch (IOException e) {
+				throw new RuntimeException("load upload.properties faile!!!");
+			}
+		}
+		return UPLOAD_SAVE_PATH;
+	}
+
+	public String getUploadReqPath() {
+		if (StringUtils.isBlank(UPLOAD_REQ_PATH)) {
+			try {
+				loadUploadProperties();
+			} catch (IOException e) {
+				throw new RuntimeException("load upload.properties faile!!!");
+			}
+		}
+		return UPLOAD_REQ_PATH;
+	}
 
 	public System getSystemInfo() {
 		System system = getCacheSystemInfo();
@@ -143,11 +172,18 @@ public class BaseDataCacheUtil implements InitializingBean {
 		CacheUtil.set("single:system", "apps", apps);
 	}
 
+	private void loadUploadProperties() throws IOException {
+		Properties props = PropertiesLoaderUtils.loadAllProperties("upload.properties");
+		UPLOAD_SAVE_PATH = props.getProperty("save_path");
+		UPLOAD_REQ_PATH = props.getProperty("req_path");
+	}
+
 	// 类初始化时加载执行
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		initSystemInfo();
 		initSystemApps();
+		loadUploadProperties();
 	}
 
 }

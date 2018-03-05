@@ -53,7 +53,7 @@ public class MpGenerator {
 		StrategyConfig strategy = new StrategyConfig();
 		strategy.setTablePrefix(new String[] { "sp_" });// 此处可以修改为您的表前缀
 		strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-		strategy.setInclude(new String[] { "sp_role", "sp_role_app", "sp_role_authword", "sp_role_menu", "sp_system", "sp_system_app", "sp_system_authword", "sp_system_menu", "sp_system_user", "sp_job", "sp_job_group" }); // 需要生成的表
+		strategy.setInclude(new String[] { "sp_system_file" }); // 需要生成的表
 		// strategy.setExclude(new String[] { "" }); // 排除生成的表
 		// 自定义实体，公共字段
 		strategy.setSuperEntityColumns(new String[] {});
@@ -61,11 +61,11 @@ public class MpGenerator {
 
 		// 包配置
 		PackageConfig pc = new PackageConfig();
-		pc.setParent("com.single.pro");
-		pc.setEntity("entity");
-		pc.setMapper("mapper");
-		pc.setService("service");
-		pc.setServiceImpl("service.impl");
+		pc.setParent(null);
+		pc.setEntity("com.single.pro.entity");
+		pc.setMapper("com.single.pro.mapper");
+		pc.setService("com.single.pro.service");
+		pc.setServiceImpl("com.single.pro.service.impl");
 		pc.setXml("mybatis.xml");
 		pc.setController(null);
 		

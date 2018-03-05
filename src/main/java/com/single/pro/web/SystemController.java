@@ -21,8 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
-import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.cache.CacheUtil;
 import com.single.pro.entity.System;
@@ -73,6 +73,11 @@ public class SystemController extends BaseController {
 		if (system == null) {
 			system = new System();
 		}
+
+		if (StringUtils.isNotBlank(system.getLogoUrl()) && !system.getLogoUrl().startsWith("http")) {
+			system.setLogoUrl(baseDataCacheUtil.getUploadReqPath() + system.getLogoUrl());
+		}
+
 		mav.addObject("system", system);
 		return mav;
 	}
@@ -106,7 +111,9 @@ public class SystemController extends BaseController {
 
 		config.setTitle(request.getParameter("title"));
 		config.setSubtitle(request.getParameter("subtitle"));
-		config.setLogoUrl(request.getParameter("logoUrl"));
+		String logoUrl = request.getParameter("logoUrl");
+		logoUrl.replaceAll(baseDataCacheUtil.getUploadReqPath(), "");
+		config.setLogoUrl(logoUrl);
 		config.setCopyright(request.getParameter("copyright"));
 
 		if (!systemService.updateById(config)) {
@@ -121,19 +128,6 @@ public class SystemController extends BaseController {
 		CacheUtil.set("single:system", "info", config);
 
 		return res;
-	}
-
-	/***
-	 * 系统权限字配置
-	 * 
-	 * @param request
-	 * @return
-	 */
-	@RequiresAuthentication
-	@RequestMapping(value = "/authword")
-	public ModelAndView authword(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("system/authword");
-		return mav;
 	}
 
 	/***
@@ -734,6 +728,19 @@ public class SystemController extends BaseController {
 		return menuList;
 	}
 
+	/***
+	 * 系统权限字配置
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequiresAuthentication
+	@RequestMapping(value = "/authword")
+	public ModelAndView authword(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("system/authword");
+		return mav;
+	}
+
 	// 权限字列表
 	@ResponseBody
 	@RequiresAuthentication
@@ -766,12 +773,9 @@ public class SystemController extends BaseController {
 			wrapper.orderBy(sort, "asc".equals(order));
 		}
 
-		List<SystemAuthword> systemAuthwords = null;
-
 		PageHelper.startPage(new Integer(pageStr), new Integer(rowsStr));
-		systemAuthwords = systemAuthwordService.selectList(wrapper);
-		Pagination pagination = PageHelper.getPagination();
-		PageHelper.remove();
+		List<SystemAuthword> systemAuthwords = systemAuthwordService.selectList(wrapper);
+		PageInfo<SystemAuthword> pageInfo = new PageInfo<SystemAuthword>(systemAuthwords);
 
 		List<Map<String, Object>> menuList = new ArrayList<>();
 		if (systemAuthwords != null && !systemAuthwords.isEmpty()) {
@@ -788,12 +792,12 @@ public class SystemController extends BaseController {
 
 		res.put("rows", menuList);
 
-		res.put("currentPage", pagination.getCurrent());
-		res.put("firstPage", 1 == pagination.getCurrent());
-		res.put("lastPage", pagination.getCurrent() == pagination.getPages());
-		res.put("numPerPage", pagination.getSize());
-		res.put("totalPage", pagination.getPages());
-		res.put("total", pagination.getTotal());
+		res.put("currentPage", pageInfo.getPageNum());
+		res.put("firstPage", pageInfo.isIsFirstPage());
+		res.put("lastPage", pageInfo.isIsLastPage());
+		res.put("numPerPage", pageInfo.getPrePage());
+		res.put("totalPage", pageInfo.getPages());
+		res.put("total", pageInfo.getTotal());
 
 		return res;
 	}

@@ -106,10 +106,6 @@
 		<property name="plugins">
 			<array>
 				<!-- 分页插件配置 -->
-				<bean id="paginationInterceptor"
-					class="com.baomidou.mybatisplus.plugins.PaginationInterceptor">
-					<property name="dialectType" value="mysql" />
-				</bean>
 				<bean class="com.baomidou.mybatisplus.plugins.OptimisticLockerInterceptor" />
 			</array>
 		</property>

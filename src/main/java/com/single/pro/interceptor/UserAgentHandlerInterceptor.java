@@ -1,21 +1,13 @@
 package com.single.pro.interceptor;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
-import com.alibaba.fastjson.JSON;
-import com.single.pro.model.VisitUserAgent;
-import com.single.pro.util.RequestUtil;
 
 public class UserAgentHandlerInterceptor extends HandlerInterceptorAdapter {
 
-	private static final Logger logger = LoggerFactory.getLogger(RequestUtil.class);
+	// private static final Logger logger = LoggerFactory.getLogger(RequestUtil.class);
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
