@@ -1,15 +1,9 @@
 [
 	{
-		"text": "fa fa-address-book"
-	},
-	{
 		"text": "fa fa-gg-circle"
 	},
 	{
 		"text": "fa fa-shield"
-	},
-	{
-		"text": "fa fa-address-card"
 	},
 	{
 		"text": "fa fa-adjust"
@@ -25,9 +19,6 @@
 	},
 	{
 		"text": "fa fa-arrows"
-	},
-	{
-		"text": "fa fa-asl-interpreting"
 	},
 	{
 		"text": "fa fa-asterisk"

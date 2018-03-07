@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../common/public.html">
+</head>
+<body>
+	<div data-toggle="topjui-layout" data-options="fit:true">
+	    <div data-options="region:'center',iconCls:'icon-reload',title:'',split:true,border:false,bodyCls:'border_left'">
+	    
+       		<!-- datagrid表格 -->
+	        <table data-toggle="topjui-edatagrid"
+	               data-options="id:'systemRoleTg',
+				   	    rownumbers: !0,
+				   	    pagination: !0,
+			            pageSize: 10,
+			            editable: !1,
+				   	    singleSelect: !0,
+			            checkOnSelect: !0,
+			            selectOnCheck: !0,
+	                    url: remoteHost+'/role/list'">
+	            <thead>
+	            <tr>
+			        <th data-options="field:'name',title:'名称'"></th>
+			        <th data-options="field:'code',title:'编码',width:100,sortable:true"></th>
+			        <th data-options="field:'is_system',title:'系统角色',width:100,sortable:true,
+	                    formatter:function(value,row,index){
+	                        if (value) {
+	                            return '<div style=\'text-align:center;color:green\'>√</div>';
+	                        } else {
+	                            return '';
+	                        }
+	                    }"></th>
+			        <th data-options="field:'status',title:'状态',width:100,sortable:true,
+	                    formatter:function(value,row,index){
+	                        if (value) {
+	                            return '<div style=\'text-align:center\'>启用</div>';
+	                        } else {
+	                            return '<div style=\'text-align:center\'>禁用</div>';
+	                        }
+	                    }"></th>
+			        <th data-options="field:'create_time',title:'创建时间',width:200,sortable:true,formatter:timeFormatter"></th>
+			        <th data-options="field:'update_time',title:'更新时间',width:200,sortable:true,formatter:timeFormatter"></th>
+	            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	</div>
+	
+	
+	<!-- 表格工具栏开始 -->
+	<div id="systemRoleTg-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'datagrid',
+           id:'systemRoleTg'}" style="display:none">
+           
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'openDialog',
+	       extend: '#systemRoleTg-toolbar',
+	       iconCls: 'fa fa-plus',
+	       dialog:{
+               title: '新增角色',
+	           width: 520,
+	           height: 320,
+	           href: remoteHost + '/role/form',
+	           buttonsGroup:[
+	               {text:'保存', url: remoteHost + '/role/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	           ]
+	       }">新增角色</a>
+	    
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#systemRoleTg-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '编辑角色',
+		           width: 520,
+		           height: 320,
+	               href: remoteHost + '/role/form',
+	               url: remoteHost + '/role/detail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/role/update',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">编辑</a>
+	       
+	</div>
+	<!-- 表格工具栏结束 -->
+	<script>
+	    function timeFormatter(value, rowData, rowIndex) {
+	        var htmlstr = '<div>';
+	        htmlstr += moment(value).format('YYYY-MM-DD HH:mm:ss');
+	        htmlstr += '</div>';
+	        return htmlstr;
+	    }
+	</script>
+	
+</body>
+</html>

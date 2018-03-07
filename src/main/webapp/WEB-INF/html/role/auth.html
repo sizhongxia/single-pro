@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../common/public.html">
+</head>
+<body>
+	<div data-toggle="topjui-layout" data-options="fit:true">
+	    <div data-options="region:'west',iconCls:'fa fa-caret-right',title:'选择角色',split:false,border:false,width:'26%',headerCls:'border_right',bodyCls:'border_right'">
+	        <!-- treegrid表格 -->
+	        <table data-toggle="topjui-edatagrid"
+	               data-options="id:'systemRoleGrid',
+		            rownumbers: !0,
+		            pagination: !1,
+                    method: 'post',
+		            pageSize: 0,
+		            editable: !1,
+			   	    singleSelect: !0,
+		            checkOnSelect: !0,
+		            selectOnCheck: !0,
+				    url: remoteHost+'/role/allSelect',
+				    childGrid:{
+				   	   param:'role_id:id',
+	                   grids:[
+	                       {type:'treegrid',id:'authAccessTreegrid'}
+	                   ]}">
+	            <thead>
+		            <tr>
+		                <th data-options="field:'name',title:'名称'"></th>
+		                <th data-options="field:'code',title:'编码'"></th>
+		            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	    <div data-options="region:'center',iconCls:'icon-reload',title:'',split:false,border:false,bodyCls:'border_left'">
+		        <!-- datagrid表格 -->
+		        <table data-toggle="topjui-treegrid"
+		               data-options="id:'authAccessTreegrid',
+		               idField:'id',
+				       treeField: 'name',
+		               rownumbers: !0,
+			   	   	   expandAll: !0,
+		               editable: !1,
+			   	       singleSelect: !1,
+		               checkOnSelect: !0,
+		               selectOnCheck: !0,
+				       url: remoteHost+'/role/authAuths',
+					   expandUrl: remoteHost+'/role/authChilds'">
+		            <thead>
+		            <tr>
+	                	<th data-options="field:'id',title:'ID',checkbox:true"></th>
+		                <th data-options="field:'name',title:'名称'"></th>
+		                <th data-options="field:'type',title:'类别',
+							formatter: function(value,row,index) {
+								if (value == 1){
+									return '<span>应用</span>';
+								} else if (value == 2) {
+									return '<span>菜单</span>';
+								}  else if (value == 3) {
+									return '<span>权限字</span>';
+								} else {
+									return '<span></span>';
+								}
+		                    }"></th>
+		                <th data-options="field:'auth',title:'授权状态',
+							formatter: function(value,row,index){
+								if(row.type > 0) {
+									if (value){
+										return '<span style=\'color:green\'>已授权</span>';
+									} else {
+										return '<span style=\'color:red\'>未授权</span>';
+									}
+								} else {
+									return '<span></span>';
+								}
+		                    }"></th>
+		            </tr>
+		            </thead>
+		        </table>
+	    </div>
+	</div>
+	<!-- 表格工具栏开始 -->
+	<div id="authAccessTreegrid-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'treegrid',
+           id:'authAccessTreegrid'}" style="display:none">
+           
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'doAjax',
+	       extend: '#authAccessTreegrid-toolbar',
+	       btnCls:'topjui-btn-normal',
+	       iconCls:'fa fa-pencil',
+	       url: remoteHost + '/role/toAuth',
+	       grid: {uncheckedMsg:'请先选择要授权/取消授权的项',param:'id:id,role_id:role_id,type:type,auth:auth'}">授权/取消授权</a>
+	       
+	</div>
+	<!-- 表格工具栏结束 -->
+</body>
+</html>
