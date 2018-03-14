@@ -102,6 +102,7 @@ public class SystemFileController extends BaseController {
 				item.put("type", systemFile.getType());
 				item.put("size", systemFile.getSize());
 				item.put("path", systemFile.getPath());
+				item.put("url", baseDataCacheUtil.getUploadReqPath() + systemFile.getPath());
 				item.put("desc", systemFile.getDesc());
 				item.put("uploadTime", systemFile.getUploadTime());
 				systemFileList.add(item);

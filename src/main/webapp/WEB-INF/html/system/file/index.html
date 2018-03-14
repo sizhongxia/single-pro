@@ -22,7 +22,9 @@
 		            <tr>
 	                	<th data-options="field:'id',title:'ID',checkbox:true"></th>
 		                <th data-options="field:'originalName',title:'原名称'"></th>
-		                <th data-options="field:'path',title:'访问路径'"></th>
+		                <th data-options="field:'path',title:'访问路径',formatter:function(value, rowData, rowIndex){
+		                	 return '<a href=\'' + rowData.url + '\' target=\'_blank\'>' + value + '</a>';
+		                }"></th>
 		                <th data-options="field:'type',title:'类别',sortable:true"></th>
 		                <th data-options="field:'size',title:'大小',sortable:true"></th>
 		                <th data-options="field:'uploadTime',title:'上传时间',formatter:timeFormatter"></th>

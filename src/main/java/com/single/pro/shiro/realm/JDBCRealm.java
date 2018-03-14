@@ -111,7 +111,7 @@ public class JDBCRealm extends AuthorizingRealm {
 			// 账号锁定
 			throw new LockedAccountException();
 		}
-		if ("D".equals(user.getStatus())) {
+		if ("N".equals(user.getStatus())) {
 			// 账号禁用
 			throw new DisabledAccountException();
 		}

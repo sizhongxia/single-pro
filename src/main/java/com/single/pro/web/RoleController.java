@@ -93,7 +93,7 @@ public class RoleController extends BaseController {
 		List<Role> roles = roleService.selectList(wrapper);
 		PageInfo<Role> pageInfo = new PageInfo<Role>(roles);
 
-		List<Map<String, Object>> systemFileList = new ArrayList<>();
+		List<Map<String, Object>> systemRoleList = new ArrayList<>();
 		if (roles != null && !roles.isEmpty()) {
 			Map<String, Object> item = null;
 			for (Role role : roles) {
@@ -105,11 +105,11 @@ public class RoleController extends BaseController {
 				item.put("status", "Y".equals(role.getStatus()));
 				item.put("create_time", role.getCreateTime());
 				item.put("update_time", role.getUpdateTime());
-				systemFileList.add(item);
+				systemRoleList.add(item);
 			}
 		}
 
-		res.put("rows", systemFileList);
+		res.put("rows", systemRoleList);
 
 		res.put("currentPage", pageInfo.getPageNum());
 		res.put("firstPage", pageInfo.isIsFirstPage());

@@ -25,7 +25,7 @@
 			        <th data-options="field:'is_system',title:'系统角色',width:100,sortable:true,
 	                    formatter:function(value,row,index){
 	                        if (value) {
-	                            return '<div style=\'text-align:center;color:green\'>√</div>';
+	                            return '<div style=\'color:green\'>√</div>';
 	                        } else {
 	                            return '';
 	                        }
@@ -33,9 +33,9 @@
 			        <th data-options="field:'status',title:'状态',width:100,sortable:true,
 	                    formatter:function(value,row,index){
 	                        if (value) {
-	                            return '<div style=\'text-align:center\'>启用</div>';
+	                            return '<div>启用</div>';
 	                        } else {
-	                            return '<div style=\'text-align:center\'>禁用</div>';
+	                            return '<div>禁用</div>';
 	                        }
 	                    }"></th>
 			        <th data-options="field:'create_time',title:'创建时间',width:200,sortable:true,formatter:timeFormatter"></th>

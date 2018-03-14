@@ -55,6 +55,7 @@
            type:'datagrid',
            id:'systemJobTg'}" style="display:none">
 
+		<@shiro.hasPermission name="authword:edit">
 	    <a href="javascript:void(0)"
 	       data-toggle="topjui-menubutton"
 	       data-options="method: 'openDialog',
@@ -75,7 +76,8 @@
 	       				btnCls: 'topjui-btn-red',
 	               }]
 	       }">编辑</a>
-	       
+	       </@shiro.hasPermission>
+	       <@shiro.hasPermission name="authword:start">
 	       <a href="javascript:void(0)"
 		       data-toggle="topjui-menubutton"
 		       data-options="method:'doAjax',
@@ -84,7 +86,8 @@
 		       iconCls:'fa fa-play-circle',
 		       url: remoteHost + '/timedTask/start',
 		       grid: {uncheckedMsg:'请先勾选要操作的数据',param:'id:id'}">启动</a>
-	       
+	       </@shiro.hasPermission>
+	       <@shiro.hasPermission name="authword:stop">
 	       <a href="javascript:void(0)"
 		       data-toggle="topjui-menubutton"
 		       data-options="method:'doAjax',
@@ -93,7 +96,8 @@
 		       iconCls:'fa fa-pause-circle',
 		       url: remoteHost + '/timedTask/stop',
 		       grid: {uncheckedMsg:'请先勾选要操作的数据',param:'id:id'}">停止</a>
-		       
+	       </@shiro.hasPermission>
+	       <@shiro.hasPermission name="authword:run">
 	       <a href="javascript:void(0)"
 		       data-toggle="topjui-menubutton"
 		       data-options="method:'doAjax',
@@ -102,7 +106,7 @@
 		       iconCls:'fa fa-play',
 		       url: remoteHost + '/timedTask/run',
 		       grid: {uncheckedMsg:'请先勾选要操作的数据',param:'id:id'}">立刻执行(单次)</a>
-	       
+	       </@shiro.hasPermission>
 	</div>
 	<!-- 表格工具栏结束 -->
 	
