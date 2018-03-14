@@ -444,7 +444,9 @@ public class RoleController extends BaseController {
 
 		int size = authArr.length;
 		for (int i = 0; i < size; i++) {
-			toAuth(role.getId(), objIdArr[i], typeArr[i], authArr[i]);
+			if (!"0".equals(typeArr[i])) {
+				toAuth(role.getId(), objIdArr[i], typeArr[i], authArr[i]);
+			}
 		}
 		res.put("statusCode", 200);
 		res.put("message", "操作成功");
