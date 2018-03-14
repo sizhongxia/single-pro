@@ -159,6 +159,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 		if (system == null) {
 			throw new RuntimeException("请先配置系统应用基本信息");
 		}
+		system.setLogoUrl(UPLOAD_REQ_PATH + system.getLogoUrl());
 		CacheUtil.set("single:system", "info", system);
 	}
 
@@ -181,9 +182,10 @@ public class BaseDataCacheUtil implements InitializingBean {
 	// 类初始化时加载执行
 	@Override
 	public void afterPropertiesSet() throws Exception {
+		loadUploadProperties();
+		
 		initSystemInfo();
 		initSystemApps();
-		loadUploadProperties();
 	}
 
 }

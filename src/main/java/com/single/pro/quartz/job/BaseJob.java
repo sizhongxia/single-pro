@@ -9,7 +9,12 @@ public class BaseJob implements RunJob {
 
 	@Override
 	public void run() {
-		System.out.println("Now Time: " + System.currentTimeMillis());
+		System.out.println("Run Time: " + System.currentTimeMillis());
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -10,15 +10,6 @@ public class IdUtil {
 	public static void main(String[] args) {
 		System.out.println(id());
 		System.out.println(id());
-		System.out.println(id());
-		System.out.println(id());
-		System.out.println(id());
-		System.out.println(id());
-		System.out.println(id());
-		System.out.println(id());
-		System.out.println(id());
-		System.out.println(id());
-		System.out.println(id());
 		System.out.println(id().length());
 	}
 }

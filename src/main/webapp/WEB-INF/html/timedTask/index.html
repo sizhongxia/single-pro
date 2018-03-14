@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../common/public.html">
+</head>
+<body>
+	<div data-toggle="topjui-layout" data-options="fit:true">
+	    <div data-options="region:'center',iconCls:'icon-reload',title:'',split:true,border:false,bodyCls:'border_left'">
+	       <!-- datagrid表格 -->
+	        <table data-toggle="topjui-edatagrid"
+	               data-options="id:'systemJobTg',
+				   	    rownumbers: !0,
+				   	    pagination: !0,
+			            pageSize: 10,
+			            editable: !1,
+				   	    singleSelect: !0,
+			            checkOnSelect: !0,
+			            selectOnCheck: !0,
+	                    url: remoteHost+'/timedTask/list'">
+	            <thead>
+	            <tr>
+			        <th data-options="field:'name',title:'名称'"></th>
+			        <th data-options="field:'group',title:'组',width:100,sortable:true"></th>
+			        <th data-options="field:'cron',title:'执行周期',width:120"></th>
+			        <th data-options="field:'run_status',title:'状态',width:90"></th>
+			        <th data-options="field:'next_execure_time',title:'下次运行时间',width:160"></th>
+			        <th data-options="field:'clazz_name',title:'类名',width:100,sortable:true"></th>
+			        <th data-options="field:'is_concurrent',title:'并发执行',width:80,sortable:true,
+	                    formatter:function(value,row,index){
+	                        if (value == 1) {
+	                            return '<div>允许</div>';
+	                        } else {
+	                            return '<div>禁止</div>';
+	                        }
+	                    }"></th>
+			        <th data-options="field:'is_startup_execution',title:'自启动',width:80,sortable:true,
+	                    formatter:function(value,row,index){
+	                        if (value == 1) {
+	                            return '<div>自动</div>';
+	                        } else {
+	                            return '<div>手动</div>';
+	                        }
+	                    }"></th>
+			        <th data-options="field:'description',title:'描述',width:200"></th>
+			        <th data-options="field:'create_time',title:'创建时间',width:160,sortable:true,formatter:timeFormatter"></th>
+			        <th data-options="field:'update_time',title:'更新时间',width:160,sortable:true,formatter:timeFormatter"></th>
+	            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	</div>
+	
+	<!-- 表格工具栏开始 -->
+	<div id="systemJobTg-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'datagrid',
+           id:'systemJobTg'}" style="display:none">
+
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#systemJobTg-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '编辑任务',
+		           width: 520,
+		           height: 320,
+	               href: remoteHost + '/timedTask/form',
+	               url: remoteHost + '/timedTask/detail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/timedTask/update',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">编辑</a>
+	       
+	       <a href="javascript:void(0)"
+		       data-toggle="topjui-menubutton"
+		       data-options="method:'doAjax',
+		       extend: '#systemJobTg-toolbar',
+		       btnCls:'topjui-btn-normal',
+		       iconCls:'fa fa-play-circle',
+		       url: remoteHost + '/timedTask/start',
+		       grid: {uncheckedMsg:'请先勾选要操作的数据',param:'id:id'}">启动</a>
+	       
+	       <a href="javascript:void(0)"
+		       data-toggle="topjui-menubutton"
+		       data-options="method:'doAjax',
+		       extend: '#systemJobTg-toolbar',
+		       btnCls:'topjui-btn-normal',
+		       iconCls:'fa fa-pause-circle',
+		       url: remoteHost + '/timedTask/stop',
+		       grid: {uncheckedMsg:'请先勾选要操作的数据',param:'id:id'}">停止</a>
+		       
+	       <a href="javascript:void(0)"
+		       data-toggle="topjui-menubutton"
+		       data-options="method:'doAjax',
+		       extend: '#systemJobTg-toolbar',
+		       btnCls:'topjui-btn-normal',
+		       iconCls:'fa fa-play',
+		       url: remoteHost + '/timedTask/run',
+		       grid: {uncheckedMsg:'请先勾选要操作的数据',param:'id:id'}">立刻执行(单次)</a>
+	       
+	</div>
+	<!-- 表格工具栏结束 -->
+	
+	<script>
+	    function timeFormatter(value, rowData, rowIndex) {
+	        var htmlstr = '<div>';
+	        htmlstr += moment(value).format('YYYY-MM-DD HH:mm:ss');
+	        htmlstr += '</div>';
+	        return htmlstr;
+	    }
+	</script>
+</body>
+</html>

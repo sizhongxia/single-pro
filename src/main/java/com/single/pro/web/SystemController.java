@@ -112,7 +112,8 @@ public class SystemController extends BaseController {
 		config.setTitle(request.getParameter("title"));
 		config.setSubtitle(request.getParameter("subtitle"));
 		String logoUrl = request.getParameter("logoUrl");
-		logoUrl.replaceAll(baseDataCacheUtil.getUploadReqPath(), "");
+		String reqLogoUrl = logoUrl;
+		logoUrl = logoUrl.replaceAll(baseDataCacheUtil.getUploadReqPath(), "");
 		config.setLogoUrl(logoUrl);
 		config.setCopyright(request.getParameter("copyright"));
 
@@ -121,11 +122,12 @@ public class SystemController extends BaseController {
 			return res;
 		}
 
+		// 更新缓存信息
+		config.setLogoUrl(reqLogoUrl);
+		CacheUtil.set("single:system", "info", config);
+
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
-
-		// 更新缓存信息
-		CacheUtil.set("single:system", "info", config);
 
 		return res;
 	}

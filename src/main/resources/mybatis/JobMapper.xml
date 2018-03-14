@@ -8,10 +8,8 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.single.pro.entity.Job">
         <id column="id" property="id" />
-        <result column="job_id" property="jobId" />
-        <result column="job_name" property="jobName" />
-        <result column="group_id" property="groupId" />
-        <result column="status" property="status" />
+        <result column="name" property="name" />
+        <result column="group" property="group" />
         <result column="cron" property="cron" />
         <result column="clazz_name" property="clazzName" />
         <result column="is_concurrent" property="isConcurrent" />

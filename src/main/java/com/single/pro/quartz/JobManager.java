@@ -2,7 +2,6 @@ package com.single.pro.quartz;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,8 +23,6 @@ import org.springframework.scheduling.support.CronSequenceGenerator;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.single.pro.entity.Job;
-import com.single.pro.entity.JobGroup;
-import com.single.pro.service.JobGroupService;
 import com.single.pro.service.JobService;
 import com.single.pro.util.JsonUtil;
 
@@ -36,10 +33,6 @@ public class JobManager implements InitializingBean {
 
 	@Autowired
 	private JobService jobService;
-	@Autowired
-	private JobGroupService jobGroupService;
-
-	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	// 调度名称
 	public static final String SCHEDULER_NAME = "scheduler";
@@ -90,53 +83,56 @@ public class JobManager implements InitializingBean {
 	 * @return
 	 * @throws SchedulerException
 	 **/
-	public List<QuartzJob> getAllJobs() throws SchedulerException {
-		List<QuartzJob> jobs = transformationJobs();
+//	public List<QuartzJob> getAllJobs() throws SchedulerException {
+//		List<QuartzJob> jobs = transformationJobs();
+//		if (jobs == null || jobs.isEmpty()) {
+//			return null;
+//		}
+//		for (QuartzJob job : jobs) {
+//			job.setJobStatus(getJobStatus(job));
+//			CronSequenceGenerator cronGenerator = new CronSequenceGenerator(job.getCronExpression());
+//			if (job.getJobStatus().equals("NORMAL") || job.getJobStatus().equals("BLOCKED")
+//					|| job.getJobStatus().equals("COMPLETE")) {
+//				job.setNextExecureTime(dateFormat.format(cronGenerator.next(new Date()).getTime()));
+//			} else {
+//				job.setNextExecureTime("-");
+//			}
+//		}
+//		return jobs;
+//	}
 
-		if (jobs == null || jobs.isEmpty()) {
-			return null;
-		}
-		CronSequenceGenerator cronGenerator = null;
-		for (QuartzJob job : jobs) {
-			job.setJobStatus(getJobStatus(job));
-			cronGenerator = new CronSequenceGenerator(job.getCronExpression());
-			if (job.getJobStatus().equals("NORMAL") || job.getJobStatus().equals("BLOCKED")
-					|| job.getJobStatus().equals("COMPLETE")) {
-				job.setNextExecureTime(dateFormat.format(cronGenerator.next(new Date()).getTime()));
-			} else {
-				job.setNextExecureTime("-");
-			}
-		}
-		return jobs;
+	public String nextExecureTime(String cronExpression) {
+		CronSequenceGenerator cronGenerator = new CronSequenceGenerator(cronExpression);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return dateFormat.format(cronGenerator.next(new Date()).getTime());
 	}
 
-	private List<QuartzJob> transformationJobs() {
-		List<QuartzJob> jobs = new ArrayList<>();
-		List<Job> _jobs = jobService.selectList(null);
-		if (_jobs != null && !_jobs.isEmpty()) {
-			CronSequenceGenerator cronGenerator = null;
-			for (Job job : _jobs) {
-				QuartzJob jb = new QuartzJob();
-				jb.setDescription(job.getDescription());
-				jb.setJobId(job.getJobId());
-				jb.setJobName(job.getJobName());
-				JobGroup jobGroup = jobGroupService.selectById(job.getGroupId());
-				jb.setJobGroup(jobGroup.getGroupCode());
-				jb.setJobGroupName(jobGroup.getGroupName());
-				jb.setJobStatus(job.getStatus());
-				jb.setJobClassName(job.getClazzName());
-				jb.setCronExpression(job.getCron());
-				cronGenerator = new CronSequenceGenerator(job.getCron());
-				jb.setNextExecureTime(dateFormat.format(cronGenerator.next(new Date())));
-				jb.setConcurrent(job.getIsConcurrent() == 1 ? "Y" : "N");
-				jb.setStartupExecution(job.getIsStartupExecution() == 1 ? "Y" : "N");
-				jb.setCreateTime(dateFormat.format(new Date(job.getCreateTime())));
-				jb.setUpdateTime(dateFormat.format(new Date(job.getUpdateTime())));
-				jobs.add(jb);
-			}
-		}
-		return jobs;
-	}
+//	private List<QuartzJob> transformationJobs() {
+//		List<QuartzJob> jobs = new ArrayList<>();
+//		List<Job> _jobs = jobService.selectList(null);
+//		if (_jobs != null && !_jobs.isEmpty()) {
+//			CronSequenceGenerator cronGenerator = null;
+//			for (Job job : _jobs) {
+//				QuartzJob jb = new QuartzJob();
+//				jb.setDescription(job.getDescription());
+//				jb.setJobId(job.getId());
+//				jb.setJobName(job.getName());
+//				jb.setJobGroup(job.getGroup());
+//				jb.setJobGroupName(job.getGroup());
+//				jb.setJobStatus(job.getStatus());
+//				jb.setJobClassName(job.getClazzName());
+//				jb.setCronExpression(job.getCron());
+//				cronGenerator = new CronSequenceGenerator(job.getCron());
+//				jb.setNextExecureTime(dateFormat.format(cronGenerator.next(new Date())));
+//				jb.setConcurrent(job.getIsConcurrent() == 1 ? "Y" : "N");
+//				jb.setStartupExecution(job.getIsStartupExecution() == 1 ? "Y" : "N");
+//				jb.setCreateTime(dateFormat.format(job.getCreateTime()));
+//				jb.setUpdateTime(dateFormat.format(job.getUpdateTime()));
+//				jobs.add(jb);
+//			}
+//		}
+//		return jobs;
+//	}
 
 	// 更新调度任务的调度时间
 	public boolean updateJobCron(QuartzJob job) throws SchedulerException {
@@ -150,6 +146,7 @@ public class JobManager implements InitializingBean {
 			_job.setCron(job.getCronExpression());
 			_job.setIsConcurrent("Y".equals(job.getConcurrent()) ? 1 : 0);
 			_job.setIsStartupExecution("Y".equals(job.getStartupExecution()) ? 1 : 0);
+			_job.setUpdateTime(new Date());
 			if (jobService.updateById(_job)) {
 				return true;
 			}
@@ -167,6 +164,13 @@ public class JobManager implements InitializingBean {
 		return false;
 	}
 
+	public boolean pauseJob(String jobId, String jobGroup) throws SchedulerException {
+		QuartzJob quartzJob = new QuartzJob();
+		quartzJob.setJobId(jobId);
+		quartzJob.setJobGroup(jobGroup);
+		return pauseJob(quartzJob);
+	}
+
 	// 恢复一个调度任务
 	public boolean resumeJob(QuartzJob job) throws SchedulerException {
 		JobKey jobKey = JobKey.jobKey(job.getJobId(), job.getJobGroup());
@@ -178,9 +182,18 @@ public class JobManager implements InitializingBean {
 			}
 			Job _job = jobService.selectById(job.getJobId());
 			job.setJobClassName(_job.getClazzName());
+			job.setConcurrent(_job.getIsConcurrent() == 1 ? "Y" : "N");
 			addJob(job);
 		}
 		return true;
+	}
+
+	public boolean resumeJob(String jobId, String jobGroup, String cronExpression) throws SchedulerException {
+		QuartzJob quartzJob = new QuartzJob();
+		quartzJob.setJobId(jobId);
+		quartzJob.setJobGroup(jobGroup);
+		quartzJob.setCronExpression(cronExpression);
+		return resumeJob(quartzJob);
 	}
 
 	// 删除一个调度任务
@@ -193,6 +206,13 @@ public class JobManager implements InitializingBean {
 		return false;
 	}
 
+	public boolean deleteJob(String jobId, String jobGroup) throws SchedulerException {
+		QuartzJob quartzJob = new QuartzJob();
+		quartzJob.setJobId(jobId);
+		quartzJob.setJobGroup(jobGroup);
+		return deleteJob(quartzJob);
+	}
+
 	// 立即执行默个调度任务
 	public boolean triggerJob(QuartzJob job) throws SchedulerException {
 		JobKey jobKey = JobKey.jobKey(job.getJobId(), job.getJobGroup());
@@ -203,28 +223,45 @@ public class JobManager implements InitializingBean {
 		return false;
 	}
 
+	public boolean triggerJob(String jobId, String jobGroup) throws SchedulerException {
+		QuartzJob quartzJob = new QuartzJob();
+		quartzJob.setJobId(jobId);
+		quartzJob.setJobGroup(jobGroup);
+		return triggerJob(quartzJob);
+	}
+
 	// 获取Job状态
-	public String getJobStatus(QuartzJob job) throws SchedulerException {
+	public String getJobStatus(QuartzJob job) {
 		TriggerKey triggerKey = new TriggerKey(job.getJobId(), job.getJobGroup());
-		if (scheduler.checkExists(triggerKey)) {
-			TriggerState state = scheduler.getTriggerState(triggerKey);
-			return state.name();
+		try {
+			if (scheduler.checkExists(triggerKey)) {
+				TriggerState state = scheduler.getTriggerState(triggerKey);
+				return state.name();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return TriggerState.NONE.name();
+	}
+
+	public String getJobStatus(String jobId, String jobGroup) {
+		QuartzJob quartzJob = new QuartzJob();
+		quartzJob.setJobId(jobId);
+		quartzJob.setJobGroup(jobGroup);
+		return getJobStatus(quartzJob);
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		Job entity = new Job();
 		entity.setIsStartupExecution(1);
-		Wrapper<Job> wrapper = new EntityWrapper<Job>(entity);
+		Wrapper<Job> wrapper = new EntityWrapper<>(entity);
 		List<Job> jobs = jobService.selectList(wrapper);
 		if (jobs != null && !jobs.isEmpty()) {
 			for (Job job : jobs) {
 				QuartzJob jb = new QuartzJob();
-				jb.setJobId(job.getJobId());
-				JobGroup jobGroup = jobGroupService.selectById(job.getGroupId());
-				jb.setJobGroup(jobGroup.getGroupCode());
+				jb.setJobId(job.getId());
+				jb.setJobGroup(job.getGroup());
 				jb.setJobClassName(job.getClazzName());
 				jb.setCronExpression(job.getCron());
 				jb.setConcurrent(job.getIsConcurrent() == 1 ? "Y" : "N");

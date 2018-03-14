@@ -1,11 +1,9 @@
 package com.single.pro.entity;
 
-import java.io.Serializable;
-
+import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
+import java.io.Serializable;
 
 /**
  * <p>
@@ -13,7 +11,7 @@ import com.baomidou.mybatisplus.enums.IdType;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-01
+ * @since 2018-03-07
  */
 @TableName("sp_job")
 public class Job implements Serializable {
@@ -23,27 +21,15 @@ public class Job implements Serializable {
     /**
      * 主键ID
      */
-    @TableId(value = "id", type = IdType.INPUT)
 	private String id;
-    /**
-     * 任务ID
-     */
-	@TableField("job_id")
-	private String jobId;
     /**
      * 任务（作业）名称
      */
-	@TableField("job_name")
-	private String jobName;
+	private String name;
     /**
      * 所在组
      */
-	@TableField("group_id")
-	private String groupId;
-    /**
-     * 任务状态
-     */
-	private String status;
+	private String group;
     /**
      * 定时任务时间表达式
      */
@@ -71,12 +57,12 @@ public class Job implements Serializable {
      * 创建时间
      */
 	@TableField("create_time")
-	private Long createTime;
+	private Date createTime;
     /**
      * 修改时间
      */
 	@TableField("update_time")
-	private Long updateTime;
+	private Date updateTime;
 
 
 	public String getId() {
@@ -87,36 +73,20 @@ public class Job implements Serializable {
 		this.id = id;
 	}
 
-	public String getJobId() {
-		return jobId;
+	public String getName() {
+		return name;
 	}
 
-	public void setJobId(String jobId) {
-		this.jobId = jobId;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getJobName() {
-		return jobName;
+	public String getGroup() {
+		return group;
 	}
 
-	public void setJobName(String jobName) {
-		this.jobName = jobName;
-	}
-
-	public String getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
+	public void setGroup(String group) {
+		this.group = group;
 	}
 
 	public String getCron() {
@@ -159,19 +129,19 @@ public class Job implements Serializable {
 		this.description = description;
 	}
 
-	public Long getCreateTime() {
+	public Date getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Long createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 
-	public Long getUpdateTime() {
+	public Date getUpdateTime() {
 		return updateTime;
 	}
 
-	public void setUpdateTime(Long updateTime) {
+	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
 
@@ -179,10 +149,8 @@ public class Job implements Serializable {
 	public String toString() {
 		return "Job{" +
 			", id=" + id +
-			", jobId=" + jobId +
-			", jobName=" + jobName +
-			", groupId=" + groupId +
-			", status=" + status +
+			", name=" + name +
+			", group=" + group +
 			", cron=" + cron +
 			", clazzName=" + clazzName +
 			", isConcurrent=" + isConcurrent +
