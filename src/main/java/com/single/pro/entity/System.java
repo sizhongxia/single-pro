@@ -34,6 +34,10 @@ public class System implements Serializable {
      */
 	private String subtitle;
     /**
+     * 站点
+     */
+	private String website;
+    /**
      * 网站Logo地址
      */
 	@TableField("logo_url")
@@ -68,6 +72,14 @@ public class System implements Serializable {
 		this.subtitle = subtitle;
 	}
 
+	public String getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+
 	public String getLogoUrl() {
 		return logoUrl;
 	}
@@ -90,6 +102,7 @@ public class System implements Serializable {
 			", id=" + id +
 			", title=" + title +
 			", subtitle=" + subtitle +
+			", website=" + website +
 			", logoUrl=" + logoUrl +
 			", copyright=" + copyright +
 			"}";

@@ -21,10 +21,16 @@
 	                    <td><input type="text" name="title" value="${system.title!}" 
 	                    			data-toggle="topjui-textbox"
 	                               data-options="required:true,width:168,prompt:'必填'"></td>
-	                    <td class="label">系统名称</td>
-	                    <td><input type="text" name="subtitle" value="${system.subtitle!}" 
+	                    <td class="label"><!-- 副标题 --></td>
+	                    <td><!-- <input type="text" name="subtitle" value="${system.subtitle!}" 
 	                    			data-toggle="topjui-textbox"
-	                               data-options="required:true,width:168,prompt:'必填'"></td>
+	                               data-options="required:true,width:168,prompt:'必填'"> --></td>
+	                </tr>
+	                <tr>
+	                    <td class="label">网站主页</td>
+	                    <td colspan="3"><input type="text" name="website" value="${system.website!}" 
+				                   data-toggle="topjui-textbox"
+				                   data-options="required:true,width:476,prompt:'必填'"></td>
 	                </tr>
 	                <tr>
 	                    <td class="label">LOGO URL</td>

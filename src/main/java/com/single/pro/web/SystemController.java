@@ -110,7 +110,8 @@ public class SystemController extends BaseController {
 		}
 
 		config.setTitle(request.getParameter("title"));
-		config.setSubtitle(request.getParameter("subtitle"));
+		// config.setSubtitle(request.getParameter("subtitle"));
+		config.setWebsite(request.getParameter("website"));
 		String logoUrl = request.getParameter("logoUrl");
 		String reqLogoUrl = logoUrl;
 		logoUrl = logoUrl.replaceAll(baseDataCacheUtil.getUploadReqPath(), "");
