@@ -413,7 +413,7 @@ public class RoleController extends BaseController {
 	}
 
 	/***
-	 * 角色授权/取消授权
+	 * 角色授权
 	 * 
 	 * @param request
 	 * @return
@@ -444,8 +444,9 @@ public class RoleController extends BaseController {
 
 		int size = authArr.length;
 		for (int i = 0; i < size; i++) {
-			if (!"0".equals(typeArr[i])) {
-				toAuth(role.getId(), objIdArr[i], typeArr[i], authArr[i]);
+			Boolean authBool = new Boolean(authArr[i]);
+			if (!"0".equals(typeArr[i]) && !authBool) {
+				toAuth(role.getId(), objIdArr[i], typeArr[i], authBool);
 			}
 		}
 		res.put("statusCode", 200);
@@ -453,8 +454,49 @@ public class RoleController extends BaseController {
 		return res;
 	}
 
-	private boolean toAuth(String roleId, String objId, String type, String auth) {
-		Boolean authBool = new Boolean(auth);
+	/***
+	 * 取消授权
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/toUnAuth")
+	public Map<String, Object> toUnAuth(HttpServletRequest request) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String roleId = request.getParameter("role_id");
+		String roles[] = roleId.split("[,]");
+
+		Role role = roleService.selectById(roles[0]);
+		if (role == null || !"Y".equals(role.getStatus())) {
+			res.put("message", "无效的授权角色，或者角色已禁用");
+			return res;
+		}
+		String auths = request.getParameter("auth");
+		String types = request.getParameter("type");
+		String objIds = request.getParameter("id");
+
+		String authArr[] = auths.split("[,]");
+		String typeArr[] = types.split("[,]");
+		String objIdArr[] = objIds.split("[,]");
+
+		int size = authArr.length;
+		for (int i = 0; i < size; i++) {
+			Boolean authBool = new Boolean(authArr[i]);
+			if (!"0".equals(typeArr[i]) && authBool) {
+				toAuth(role.getId(), objIdArr[i], typeArr[i], authBool);
+			}
+		}
+		res.put("statusCode", 200);
+		res.put("message", "操作成功");
+		return res;
+	}
+
+	private boolean toAuth(String roleId, String objId, String type, Boolean authBool) {
 		if ("1".equals(type)) {
 			SystemApp systemApp = systemAppService.selectById(objId);
 			if (systemApp == null) {

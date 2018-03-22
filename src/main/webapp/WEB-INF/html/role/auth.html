@@ -88,9 +88,18 @@
 	       data-options="method:'doAjax',
 	       extend: '#authAccessTreegrid-toolbar',
 	       btnCls:'topjui-btn-normal',
-	       iconCls:'fa fa-pencil',
+	       iconCls:'fa fa-user-plus',
 	       url: remoteHost + '/role/toAuth',
-	       grid: {uncheckedMsg:'请先选择要授权/取消授权的项',param:'id:id,role_id:role_id,type:type,auth:auth'}">授权/取消授权</a>
+	       grid: {uncheckedMsg:'请先选择要授权的项',param:'id:id,role_id:role_id,type:type,auth:auth'}">授权选择</a>
+	       
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'doAjax',
+	       extend: '#authAccessTreegrid-toolbar',
+	       btnCls:'topjui-btn-normal',
+	       iconCls:'fa fa-user-times',
+	       url: remoteHost + '/role/toUnAuth',
+	       grid: {uncheckedMsg:'请先选择要取消授权的项',param:'id:id,role_id:role_id,type:type,auth:auth'}">取消选择</a>
 	       
 	</div>
 	<!-- 表格工具栏结束 -->

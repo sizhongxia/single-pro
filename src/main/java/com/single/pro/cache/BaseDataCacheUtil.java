@@ -66,6 +66,9 @@ public class BaseDataCacheUtil implements InitializingBean {
 	}
 
 	public List<SystemApp> getSystemApps() {
+		// Wrapper<SystemApp> wrapper = new EntityWrapper<>();
+		// wrapper.orderBy("sort_no", true);
+		// List<SystemApp> systemApps = systemAppService.selectList(wrapper);
 		List<SystemApp> systemApps = getCacheSystemApps();
 		if (systemApps == null) {
 			initSystemApps();
@@ -183,7 +186,6 @@ public class BaseDataCacheUtil implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		loadUploadProperties();
-		
 		initSystemInfo();
 		initSystemApps();
 	}

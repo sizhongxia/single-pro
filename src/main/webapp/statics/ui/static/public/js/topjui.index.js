@@ -82,10 +82,6 @@ $(function () {
                 var refresh_tab = $('#index_tabs').iTabs('getSelected');
                 var refresh_iframe = refresh_tab.find('iframe')[0];
                 refresh_iframe.contentWindow.location.href = refresh_iframe.src;
-                //$('#index_tabs').trigger(TOPJUI.eventType.initUI.base);
-                //var index = $('#index_tabs').iTabs('getTabIndex', $('#index_tabs').iTabs('getSelected'));
-                //console.log(index);
-                //$('#index_tabs').iTabs('getTab', index).iPanel('refresh');
             }
         }, { //关闭当前页的图标和执行方法
             iconCls: 'fa fa-close',
@@ -391,15 +387,14 @@ function generateMenu(appId, systemName) {
         }
         // 定义新增菜单panel的数据json地址，并循环添加
         var url = remoteHost + "/system/menus";
-        $.get(
-            url, {"appId": appId}, // 获取第一层目录
+        $.get(url, {"appId": appId}, // 获取第一层目录
             function (data) {
                 if (data.statusCode == -1) {
                 	console.error('提示', '菜单:' + systemName + ', ' + data.errMsg);
                 } else if (data.statusCode == 200) {
 	                $.each(data.data, function (i, e) {// 循环创建手风琴的项
 	                    var pid = e.pid;
-	                    var isSelected = i == 0 ? true : false; //索引为0的默认展开
+	                    var isSelected = i == 0 ? true : false; // 索引为0的默认展开
 	                    $('#RightAccordion').iAccordion('add', {
 	                        fit: false,
 	                        title: e.text,
@@ -409,7 +404,7 @@ function generateMenu(appId, systemName) {
 	                        iconCls: e.iconCls
 	                    });
 	                    $.parser.parse();
-	                    $.get(url,{menuId: e.id}, function (data) {// 循环创建树的项\
+	                    $.get(url, {menuId: e.id}, function (data) {// 循环创建树的项
 	                    	if(data.statusCode == 200) {
 		                        $("#tree" + e.id).tree({
 		                            data: data.data,

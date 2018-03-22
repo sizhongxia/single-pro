@@ -48,11 +48,15 @@ public class UserController extends BaseController {
 	@RequestMapping(value = { "/list" }, method = { RequestMethod.POST })
 	public Map<String, Object> list(HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<>();
+		List<Map<String, Object>> systemUserList = new ArrayList<>();
 
 		Wrapper<SystemUser> wrapper = new EntityWrapper<>();
 
 		String roleId = request.getParameter("role_id");
+		
 		if (StringUtils.isBlank(roleId)) {
+			res.put("rows", systemUserList);
+			res.put("total", 0);
 			return res;
 		}
 
@@ -77,7 +81,6 @@ public class UserController extends BaseController {
 		List<SystemUser> users = systemUserService.selectList(wrapper);
 		PageInfo<SystemUser> pageInfo = new PageInfo<SystemUser>(users);
 
-		List<Map<String, Object>> systemUserList = new ArrayList<>();
 		if (users != null && !users.isEmpty()) {
 			Map<String, Object> item = null;
 			for (SystemUser user : users) {

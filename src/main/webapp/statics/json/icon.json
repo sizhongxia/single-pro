@@ -1,38 +1,25 @@
 [
-	{
-		"text": "fa fa-gg-circle"
-	},
-	{
-		"text": "fa fa-shield"
-	},
-	{
-		"text": "fa fa-adjust"
-	},
-	{
-		"text": "fa fa-anchor"
-	},
-	{
-		"text": "fa fa-archive"
-	},
-	{
-		"text": "fa fa-area-chart"
-	},
-	{
-		"text": "fa fa-arrows"
-	},
-	{
-		"text": "fa fa-asterisk"
-	},
-	{
-		"text": "fa fa-automobile"
-	},
-	{
-		"text": "fa fa-balance-scale"
-	},
-	{
-		"text": "fa fa-bank"
-	},
-	{
-		"text": "fa fa-bar-chart"
-	}
+	{"text": "fa fa-gg-circle"},
+	{"text": "fa fa-shield"},
+	{"text": "fa fa-adjust"},
+	{"text": "fa fa-anchor"},
+	{"text": "fa fa-archive"},
+	{"text": "fa fa-area-chart"},
+	{"text": "fa fa-arrows"},
+	{"text": "fa fa-asterisk"},
+	{"text": "fa fa-automobile"},
+	{"text": "fa fa-balance-scale"},
+	{"text": "fa fa-bank"},
+	{"text": "fa fa-bar-chart"},
+	{"text": "fa fa-sitemap"},
+	{"text": "fa fa-server"},
+	{"text": "fa fa-suitcase"},
+	{"text": "fa fa-th-large"},
+	{"text": "fa fa-upload"},
+	{"text": "fa fa-caret-right"},
+	{"text": "fa fa-users"},
+	{"text": "fa fa-user"},
+	{"text": "fa fa-trash"},
+	{"text": "fa fa-lock"},
+	{"text": "fa fa-image"}
 ]

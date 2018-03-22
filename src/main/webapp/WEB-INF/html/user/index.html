@@ -32,12 +32,13 @@
 	        </table>
 	    </div>
 	    <div data-options="region:'center',iconCls:'icon-reload',title:'',split:true,border:false,bodyCls:'border_left'">
-		        <!-- datagrid表格 -->
+	    
+	    	<!-- datagrid表格 -->
 	        <table data-toggle="topjui-edatagrid"
 	               data-options="id:'systemUserTg',
-				   	    rownumbers: !0,
-				   	    pagination: !0,
-			            pageSize: 10,
+			            rownumbers: !0,
+			            pagination: !1,
+			            pageSize: 0,
 			            editable: !1,
 				   	    singleSelect: !0,
 			            checkOnSelect: !0,
@@ -48,8 +49,7 @@
 			        <th data-options="field:'nick_name',title:'昵称',width:120"></th>
 			        <th data-options="field:'login_name',title:'登录名称',width:120,sortable:true"></th>
 			        <th data-options="field:'phone_no',title:'手机号',width:160,sortable:true"></th>
-			        <th data-options="field:'status',title:'状态',width:100,sortable:true,
-	                    formatter:function(value,row,index){
+			        <th data-options="field:'status',title:'状态',width:100,sortable:true,formatter:function(value,row,index){
 	                        if (value == 'Y') {
 	                            return '<div>正常</div>';
 	                        } else if (value == 'L') {
