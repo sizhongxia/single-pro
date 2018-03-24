@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../../common/public.html">
+</head>
+<body>
+	<div data-toggle="topjui-layout" data-options="fit:true">
+	    <div data-options="region:'center',iconCls:'icon-reload',title:'',split:true,border:false,bodyCls:'border_left'">
+	    
+       		<!-- datagrid表格 -->
+	        <table data-toggle="topjui-edatagrid"
+	               data-options="id:'mpBannerTg',
+				   	    rownumbers: !0,
+				   	    pagination: !0,
+			            pageSize: 10,
+			            editable: !1,
+				   	    singleSelect: !0,
+			            checkOnSelect: !0,
+			            selectOnCheck: !0,
+	                    url: remoteHost+'/mp/banner/list'">
+	            <thead>
+	            <tr>
+			        <th data-options="field:'name',title:'名称'"></th>
+			        <th data-options="field:'pic_url',title:'图片'"></th>
+			        <th data-options="field:'status',title:'状态',width:100,sortable:true,
+	                    formatter:function(value,row,index){
+	                        if (value == 0) {
+	                            return '<div>启用</div>';
+	                        } else {
+	                            return '<div>禁用</div>';
+	                        }
+	                    }"></th>
+			        <th data-options="field:'sort_weight',title:'排序权重',sortable:true"></th>
+			        <th data-options="field:'create_time',title:'创建时间',width:200,sortable:true,formatter:timeFormatter"></th>
+			        <th data-options="field:'update_time',title:'更新时间',width:200,sortable:true,formatter:timeFormatter"></th>
+	            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	</div>
+	
+	
+	<!-- 表格工具栏开始 -->
+	<div id="mpBannerTg-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'datagrid',
+           id:'mpBannerTg'}" style="display:none">
+           
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'openDialog',
+	       extend: '#mpBannerTg-toolbar',
+	       iconCls: 'fa fa-plus',
+	       dialog:{
+               title: '新增Banner',
+	           width: 520,
+	           height: 320,
+	           href: remoteHost + '/mp/banner/form',
+	           buttonsGroup:[
+	               {text:'保存', url: remoteHost + '/mp/banner/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	           ]
+	       }">新增Banner</a>
+	    
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#mpBannerTg-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '编辑Banner',
+		           width: 520,
+		           height: 320,
+	               href: remoteHost + '/mp/banner/form',
+	               url: remoteHost + '/mp/banner/detail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/mp/banner/update',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">编辑</a>
+	       
+	</div>
+	<!-- 表格工具栏结束 -->
+	<script>
+	    function timeFormatter(value, rowData, rowIndex) {
+	        var htmlstr = '<div>';
+	        htmlstr += moment(value).format('YYYY-MM-DD HH:mm:ss');
+	        htmlstr += '</div>';
+	        return htmlstr;
+	    }
+	</script>
+	
+</body>
+</html>
