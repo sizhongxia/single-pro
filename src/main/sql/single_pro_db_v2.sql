@@ -10,10 +10,47 @@ Target Server Type    : MYSQL
 Target Server Version : 50637
 File Encoding         : 65001
 
-Date: 2018-03-14 17:20:52
+Date: 2018-03-24 22:57:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for sp_dictionary_item
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_dictionary_item`;
+CREATE TABLE `sp_dictionary_item` (
+  `id` char(32) NOT NULL COMMENT '字典ID',
+  `type_id` char(32) NOT NULL COMMENT '字典类型ID',
+  `name` varchar(30) NOT NULL COMMENT '字典名称',
+  `code` varchar(50) NOT NULL COMMENT '字典编码',
+  `status` char(1) NOT NULL COMMENT '状态（Y:正常，N:禁用）',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='字典类型项';
+
+-- ----------------------------
+-- Records of sp_dictionary_item
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_dictionary_type
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_dictionary_type`;
+CREATE TABLE `sp_dictionary_type` (
+  `id` char(32) NOT NULL COMMENT '字典ID',
+  `name` varchar(30) NOT NULL COMMENT '字典名称',
+  `code` varchar(50) NOT NULL COMMENT '字典编码',
+  `status` char(1) NOT NULL COMMENT '状态（Y:正常，N:禁用）',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统字典表';
+
+-- ----------------------------
+-- Records of sp_dictionary_type
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for sp_job
@@ -37,6 +74,46 @@ CREATE TABLE `sp_job` (
 -- Records of sp_job
 -- ----------------------------
 INSERT INTO `sp_job` VALUES ('1F0AA9AE4E064DFCA71D5788E2538621', 'DEMO', 'Z_GROUP_1', '*/10 * * * * ?', 'com.single.pro.quartz.job.BaseJob', '0', '0', '每10秒执行一次。', '2018-03-07 15:57:46', '2018-03-14 17:09:26');
+
+-- ----------------------------
+-- Table structure for sp_mp_banner
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_mp_banner`;
+CREATE TABLE `sp_mp_banner` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `name` varchar(50) NOT NULL COMMENT '名称描述',
+  `pic_url` varchar(200) NOT NULL COMMENT '图标地址',
+  `sort_weight` int(11) NOT NULL COMMENT '排序权重',
+  `status` char(1) NOT NULL COMMENT '状态（Y:正常，N:禁用）',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='小程序banner模块';
+
+-- ----------------------------
+-- Records of sp_mp_banner
+-- ----------------------------
+INSERT INTO `sp_mp_banner` VALUES ('ACD1C576C8DE4901A4EF85403A5C3EFA', '2', '2018/03/14/80C34C1FB6064E4CB54F869FD426DFB6.png', '2', '1', '2018-03-24 20:40:38', '2018-03-24 20:44:46');
+
+-- ----------------------------
+-- Table structure for sp_mp_channel
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_mp_channel`;
+CREATE TABLE `sp_mp_channel` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `name` varchar(50) NOT NULL COMMENT '名称',
+  `icon_url` varchar(200) NOT NULL COMMENT '图标地址',
+  `sort_weight` int(11) NOT NULL COMMENT '排序权重',
+  `status` char(1) NOT NULL COMMENT '状态（Y:正常，N:禁用）',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='小程序channel模块';
+
+-- ----------------------------
+-- Records of sp_mp_channel
+-- ----------------------------
+INSERT INTO `sp_mp_channel` VALUES ('02362EEB786949D6BA1EECA3B6A3A58E', '2', '2', '2', '1', '2018-03-24 20:52:23', '2018-03-24 20:52:31');
 
 -- ----------------------------
 -- Table structure for sp_role
@@ -124,6 +201,7 @@ INSERT INTO `sp_role_menu` VALUES ('B3207D8F6D134F80B3976584A06816C0', '6E749C60
 INSERT INTO `sp_role_menu` VALUES ('B3207D8F6D134F80B3976584A06816C0', '80BF1CAB24F74B67A2C04141FC9D7E3D', '2018-03-07 14:27:58');
 INSERT INTO `sp_role_menu` VALUES ('B3207D8F6D134F80B3976584A06816C0', 'A68D10B6CBF54600B079A34BA173B90E', '2018-03-07 14:27:58');
 INSERT INTO `sp_role_menu` VALUES ('B3207D8F6D134F80B3976584A06816C0', 'B3CFAFACB12F4A298983651794ECA98D', '2018-03-07 15:10:17');
+INSERT INTO `sp_role_menu` VALUES ('B3207D8F6D134F80B3976584A06816C0', 'C05923B4168E446984956A7056FACAF7', '2018-03-23 16:41:43');
 INSERT INTO `sp_role_menu` VALUES ('B3207D8F6D134F80B3976584A06816C0', 'DE47A7717B774DCD9C8AEBDF4124651B', '2018-03-07 14:27:58');
 INSERT INTO `sp_role_menu` VALUES ('B3207D8F6D134F80B3976584A06816C0', 'E26663B00591407F8F441A18ACA3E96A', '2018-03-07 15:09:51');
 INSERT INTO `sp_role_menu` VALUES ('B3207D8F6D134F80B3976584A06816C0', 'F8AEDD4107BE4820BED3BA9CABCD5F84', '2018-03-14 15:53:08');
@@ -136,6 +214,7 @@ CREATE TABLE `sp_system` (
   `id` char(32) NOT NULL COMMENT '主键',
   `title` varchar(32) NOT NULL COMMENT '网站标题',
   `subtitle` varchar(80) NOT NULL COMMENT '副标题',
+  `website` varchar(200) NOT NULL COMMENT '网站主页',
   `logo_url` varchar(200) NOT NULL COMMENT '网站Logo地址',
   `copyright` varchar(120) NOT NULL COMMENT '版权信息',
   PRIMARY KEY (`id`)
@@ -144,7 +223,7 @@ CREATE TABLE `sp_system` (
 -- ----------------------------
 -- Records of sp_system
 -- ----------------------------
-INSERT INTO `sp_system` VALUES ('CC5172B4918546328542CEAB45163E44', '后台管理系统', '后台管理系统', '2018/03/14/80C34C1FB6064E4CB54F869FD426DFB6.png', '版权所有 © 2017-2018 夏风飞舞  豫ICP备15021339号-1');
+INSERT INTO `sp_system` VALUES ('CC5172B4918546328542CEAB45163E44', '后台管理系统', '后台管理系统', 'http://www.team-union.com/index', '2018/03/14/80C34C1FB6064E4CB54F869FD426DFB6.png', '版权所有 © 2017-2018 豫ICP备15021339号-1');
 
 -- ----------------------------
 -- Table structure for sp_system_app
@@ -161,9 +240,9 @@ CREATE TABLE `sp_system_app` (
 -- ----------------------------
 -- Records of sp_system_app
 -- ----------------------------
-INSERT INTO `sp_system_app` VALUES ('0069E3F00F684E6284756D0D7BB0C743', '业务菜单', 'fa fa-gg-circle', '1');
-INSERT INTO `sp_system_app` VALUES ('53BA97935D824733856E4F3655883039', '用户权限', 'fa fa-gg-circle', '2');
-INSERT INTO `sp_system_app` VALUES ('F5683D5AFB22403BAC8B7CB83CE04689', '系统管理', 'fa fa-gg-circle', '3');
+INSERT INTO `sp_system_app` VALUES ('0069E3F00F684E6284756D0D7BB0C743', '业务菜单', 'fa fa-sitemap', '1');
+INSERT INTO `sp_system_app` VALUES ('53BA97935D824733856E4F3655883039', '用户权限', 'fa fa-users', '2');
+INSERT INTO `sp_system_app` VALUES ('F5683D5AFB22403BAC8B7CB83CE04689', '系统管理', 'fa fa-server', '3');
 
 -- ----------------------------
 -- Table structure for sp_system_authword
@@ -202,7 +281,7 @@ CREATE TABLE `sp_system_file` (
   `desc` varchar(255) NOT NULL COMMENT '文件描述',
   `upload_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '上传时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统文件（内部上传）';
 
 -- ----------------------------
 -- Records of sp_system_file
@@ -228,19 +307,20 @@ CREATE TABLE `sp_system_menu` (
 -- Records of sp_system_menu
 -- ----------------------------
 INSERT INTO `sp_system_menu` VALUES ('11ED187B6A254FF485FA8A97A13D8C67', 'F8AEDD4107BE4820BED3BA9CABCD5F84', '53BA97935D824733856E4F3655883039', '1', '用户管理', 'fa fa-gg-circle', 'user/index');
-INSERT INTO `sp_system_menu` VALUES ('1591CACECD964ED7B39FBD9836EB6773', 'B3CFAFACB12F4A298983651794ECA98D', 'F5683D5AFB22403BAC8B7CB83CE04689', '2', '系统权限字', 'fa fa-gg-circle', 'system/authword');
-INSERT INTO `sp_system_menu` VALUES ('1AF2BD180C514CF3B0217DC6958C14D4', '0', '0069E3F00F684E6284756D0D7BB0C743', '1', '房源管理', 'fa fa-gg-circle', '');
-INSERT INTO `sp_system_menu` VALUES ('332711F151F848559A2421ECEDDBE4A8', 'DE47A7717B774DCD9C8AEBDF4124651B', 'F5683D5AFB22403BAC8B7CB83CE04689', '1', '图片资源', 'fa fa-gg-circle', 'systemFile/index');
-INSERT INTO `sp_system_menu` VALUES ('3EAD7806D81448509A6103D0B485D51D', '6E749C60FF1B4A8F80496AE367AF3FC8', '53BA97935D824733856E4F3655883039', '2', '角色授权', 'fa fa-gg-circle', 'role/auth');
-INSERT INTO `sp_system_menu` VALUES ('42D0C74564274CA081096FFB895B3CAA', '1AF2BD180C514CF3B0217DC6958C14D4', '0069E3F00F684E6284756D0D7BB0C743', '1', '项目管理', 'fa fa-gg-circle', 'house/project');
-INSERT INTO `sp_system_menu` VALUES ('57E5CB7728614328A07D96C407F1CA96', '6E749C60FF1B4A8F80496AE367AF3FC8', '53BA97935D824733856E4F3655883039', '1', '角色管理', 'fa fa-gg-circle', 'role/index');
-INSERT INTO `sp_system_menu` VALUES ('6E749C60FF1B4A8F80496AE367AF3FC8', '0', '53BA97935D824733856E4F3655883039', '2', '用户权限', 'fa fa-gg-circle', '');
-INSERT INTO `sp_system_menu` VALUES ('80BF1CAB24F74B67A2C04141FC9D7E3D', 'B3CFAFACB12F4A298983651794ECA98D', 'F5683D5AFB22403BAC8B7CB83CE04689', '1', '基本配置', 'fa fa-gg-circle', 'system/config');
-INSERT INTO `sp_system_menu` VALUES ('A68D10B6CBF54600B079A34BA173B90E', 'B3CFAFACB12F4A298983651794ECA98D', 'F5683D5AFB22403BAC8B7CB83CE04689', '3', '系统应用菜单', 'fa fa-gg-circle', 'system/menu');
-INSERT INTO `sp_system_menu` VALUES ('B3CFAFACB12F4A298983651794ECA98D', '0', 'F5683D5AFB22403BAC8B7CB83CE04689', '1', '系统管理', 'fa fa-gg-circle', '');
-INSERT INTO `sp_system_menu` VALUES ('DE47A7717B774DCD9C8AEBDF4124651B', '0', 'F5683D5AFB22403BAC8B7CB83CE04689', '2', '系统资源', 'fa fa-gg-circle', '');
-INSERT INTO `sp_system_menu` VALUES ('E26663B00591407F8F441A18ACA3E96A', 'B3CFAFACB12F4A298983651794ECA98D', 'F5683D5AFB22403BAC8B7CB83CE04689', '4', '定时任务', 'fa fa-gg-circle', 'timedTask/index');
-INSERT INTO `sp_system_menu` VALUES ('F8AEDD4107BE4820BED3BA9CABCD5F84', '0', '53BA97935D824733856E4F3655883039', '1', '用户管理', 'fa fa-gg-circle', '');
+INSERT INTO `sp_system_menu` VALUES ('1591CACECD964ED7B39FBD9836EB6773', 'B3CFAFACB12F4A298983651794ECA98D', 'F5683D5AFB22403BAC8B7CB83CE04689', '2', '系统权限字', 'fa fa-caret-right', 'system/authword');
+INSERT INTO `sp_system_menu` VALUES ('1AF2BD180C514CF3B0217DC6958C14D4', '0', '0069E3F00F684E6284756D0D7BB0C743', '1', '小程序', 'fa fa-gg-circle', '');
+INSERT INTO `sp_system_menu` VALUES ('332711F151F848559A2421ECEDDBE4A8', 'DE47A7717B774DCD9C8AEBDF4124651B', 'F5683D5AFB22403BAC8B7CB83CE04689', '1', '图片资源', 'fa fa-caret-right', 'systemFile/index');
+INSERT INTO `sp_system_menu` VALUES ('3EAD7806D81448509A6103D0B485D51D', '6E749C60FF1B4A8F80496AE367AF3FC8', '53BA97935D824733856E4F3655883039', '2', '角色授权', 'fa fa-caret-right', 'role/auth');
+INSERT INTO `sp_system_menu` VALUES ('42D0C74564274CA081096FFB895B3CAA', '1AF2BD180C514CF3B0217DC6958C14D4', '0069E3F00F684E6284756D0D7BB0C743', '1', '横幅轮播', 'fa fa-gg-circle', 'mp/banner/index');
+INSERT INTO `sp_system_menu` VALUES ('57E5CB7728614328A07D96C407F1CA96', '6E749C60FF1B4A8F80496AE367AF3FC8', '53BA97935D824733856E4F3655883039', '1', '角色管理', 'fa fa-caret-right', 'role/index');
+INSERT INTO `sp_system_menu` VALUES ('6E749C60FF1B4A8F80496AE367AF3FC8', '0', '53BA97935D824733856E4F3655883039', '2', '用户权限', 'fa fa-lock', '');
+INSERT INTO `sp_system_menu` VALUES ('80BF1CAB24F74B67A2C04141FC9D7E3D', 'B3CFAFACB12F4A298983651794ECA98D', 'F5683D5AFB22403BAC8B7CB83CE04689', '1', '基本配置', 'fa fa-caret-right', 'system/config');
+INSERT INTO `sp_system_menu` VALUES ('A68D10B6CBF54600B079A34BA173B90E', 'B3CFAFACB12F4A298983651794ECA98D', 'F5683D5AFB22403BAC8B7CB83CE04689', '3', '系统应用菜单', 'fa fa-caret-right', 'system/menu');
+INSERT INTO `sp_system_menu` VALUES ('B3CFAFACB12F4A298983651794ECA98D', '0', 'F5683D5AFB22403BAC8B7CB83CE04689', '1', '系统管理', 'fa fa-server', '');
+INSERT INTO `sp_system_menu` VALUES ('C05923B4168E446984956A7056FACAF7', '1AF2BD180C514CF3B0217DC6958C14D4', '0069E3F00F684E6284756D0D7BB0C743', '2', 'Channel', 'fa fa-gg-circle', 'mp/channel/index');
+INSERT INTO `sp_system_menu` VALUES ('DE47A7717B774DCD9C8AEBDF4124651B', '0', 'F5683D5AFB22403BAC8B7CB83CE04689', '2', '系统资源', 'fa fa-upload', '');
+INSERT INTO `sp_system_menu` VALUES ('E26663B00591407F8F441A18ACA3E96A', 'B3CFAFACB12F4A298983651794ECA98D', 'F5683D5AFB22403BAC8B7CB83CE04689', '4', '定时任务', 'fa fa-caret-right', 'timedTask/index');
+INSERT INTO `sp_system_menu` VALUES ('F8AEDD4107BE4820BED3BA9CABCD5F84', '0', '53BA97935D824733856E4F3655883039', '1', '用户管理', 'fa fa-user', '');
 
 -- ----------------------------
 -- Table structure for sp_system_user
@@ -265,5 +345,89 @@ CREATE TABLE `sp_system_user` (
 -- ----------------------------
 -- Records of sp_system_user
 -- ----------------------------
-INSERT INTO `sp_system_user` VALUES ('3E8657B0E9B84023A3C16AF91E13E620', '司仲夏', 'sizhongxia', '18518436862', '2410042aea633697cff3e2e19a7dd726', 'B3207D8F6D134F80B3976584A06816C0', '管理员', 'Y', '2017-12-27 11:29:22', '2018-03-14 16:30:39', '2018-03-14 16:55:09');
+INSERT INTO `sp_system_user` VALUES ('3E8657B0E9B84023A3C16AF91E13E620', '司仲夏', 'sizhongxia', '18518436862', '2410042aea633697cff3e2e19a7dd726', 'B3207D8F6D134F80B3976584A06816C0', '管理员', 'Y', '2017-12-27 11:29:22', '2018-03-14 16:30:39', '2018-03-24 21:59:28');
 INSERT INTO `sp_system_user` VALUES ('DD97288F1C5347629D15B84221892D9F', '1', '1', '1', '2410042aea633697cff3e2e19a7dd726', 'B4E3A62B31EF4699A0D13774ACB39E72', '1', 'N', '2018-03-14 16:31:22', '2018-03-14 16:43:35', '2018-03-14 16:43:41');
+
+-- ----------------------------
+-- Table structure for sp_user
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_user`;
+CREATE TABLE `sp_user` (
+  `id` char(32) NOT NULL COMMENT '主键ID',
+  `user_name` varchar(20) NOT NULL,
+  `head_pic_url` varchar(200) NOT NULL,
+  `phone_no` varchar(20) NOT NULL,
+  `password` varchar(128) NOT NULL,
+  `create_time` datetime NOT NULL COMMENT '注册时间',
+  `delete_flag` char(1) NOT NULL COMMENT '账号状态（Y:已移除，N:未移除）',
+  `delete_time` datetime NOT NULL COMMENT '移除时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='城市合伙人';
+
+-- ----------------------------
+-- Records of sp_user
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_user_city_partner
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_user_city_partner`;
+CREATE TABLE `sp_user_city_partner` (
+  `id` char(32) NOT NULL COMMENT '主键ID',
+  `user_id` char(32) NOT NULL COMMENT '用户ID',
+  `apply_reason` varchar(200) NOT NULL COMMENT '申请理由',
+  `apply_time` datetime NOT NULL COMMENT '申请时间',
+  `status` char(1) NOT NULL COMMENT '账号状态（Y:正常，N:禁用，D:申请中）',
+  `create_time` datetime NOT NULL COMMENT '注册时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='城市合伙人';
+
+-- ----------------------------
+-- Records of sp_user_city_partner
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_user_identity_card
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_user_identity_card`;
+CREATE TABLE `sp_user_identity_card` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `user_id` char(32) NOT NULL COMMENT '用户ID',
+  `identity_card` varchar(30) NOT NULL,
+  `identity_card_front_pic` varchar(200) NOT NULL,
+  `identity_card_back_pic` varchar(200) NOT NULL,
+  `audit_state` char(1) NOT NULL COMMENT '审核状态（Y:审核通过，N:审核未通过，D:审核中）',
+  `audit_time` datetime NOT NULL COMMENT '审核时间',
+  `upload_time` datetime NOT NULL COMMENT '上传时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sp_user_identity_card
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_user_wxoauth
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_user_wxoauth`;
+CREATE TABLE `sp_user_wxoauth` (
+  `id` char(32) NOT NULL COMMENT '主键ID',
+  `user_id` char(32) NOT NULL COMMENT '用户ID',
+  `open_id` varchar(50) NOT NULL,
+  `nick_name` varchar(50) NOT NULL,
+  `avatar_url` varchar(200) NOT NULL,
+  `gender` int(11) NOT NULL COMMENT '性别',
+  `city` varchar(50) NOT NULL,
+  `country` varchar(50) NOT NULL,
+  `status` char(1) NOT NULL COMMENT '状态（Y:正常，N:取消绑定）',
+  `create_time` datetime NOT NULL COMMENT '关联时间',
+  `unbind_time` datetime NOT NULL COMMENT '取消绑定时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户oAuth验证登录';
+
+-- ----------------------------
+-- Records of sp_user_wxoauth
+-- ----------------------------
