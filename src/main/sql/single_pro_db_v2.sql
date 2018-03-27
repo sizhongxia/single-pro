@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50637
 File Encoding         : 65001
 
-Date: 2018-03-27 13:53:26
+Date: 2018-03-27 20:30:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -303,7 +303,7 @@ CREATE TABLE `sp_platform_order` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='劳务工人资质申请';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='转至平台订单';
 
 -- ----------------------------
 -- Records of sp_platform_order
@@ -470,12 +470,31 @@ CREATE TABLE `sp_project_draw` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for sp_project_job
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_project_job`;
+CREATE TABLE `sp_project_job` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `project_id` char(32) NOT NULL COMMENT '项目关联ID',
+  `job_name` varchar(50) NOT NULL,
+  `job_description` varchar(200) NOT NULL,
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目任务（批次）';
+
+-- ----------------------------
+-- Records of sp_project_job
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for sp_project_product
 -- ----------------------------
 DROP TABLE IF EXISTS `sp_project_product`;
 CREATE TABLE `sp_project_product` (
   `id` char(32) NOT NULL COMMENT '主键',
   `project_id` char(32) NOT NULL COMMENT '项目关联ID',
+  `project_job_id` char(32) NOT NULL COMMENT '任务批次ID关联',
   `product_id` char(32) NOT NULL COMMENT '关联产品',
   `model` varchar(50) NOT NULL COMMENT '产品型号',
   `detail_list_url` varchar(200) NOT NULL COMMENT '清单文件链接',
@@ -490,7 +509,7 @@ CREATE TABLE `sp_project_product` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目图纸';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目关联产品';
 
 -- ----------------------------
 -- Records of sp_project_product
@@ -503,8 +522,9 @@ DROP TABLE IF EXISTS `sp_project_worker`;
 CREATE TABLE `sp_project_worker` (
   `id` char(32) NOT NULL COMMENT '主键',
   `project_id` char(32) NOT NULL COMMENT '项目关联ID',
-  `worker_id` char(32) NOT NULL COMMENT '关联产品',
+  `project_job_id` char(32) NOT NULL COMMENT '任务批次ID关联',
   `product_id` int(11) NOT NULL COMMENT '产品ID',
+  `worker_id` char(32) NOT NULL COMMENT '关联产品',
   `re_cost` decimal(10,2) NOT NULL COMMENT '参考日劳务费',
   `remarks` varchar(200) NOT NULL COMMENT '施工备注',
   `create_time` datetime NOT NULL COMMENT '创建时间',
@@ -897,8 +917,7 @@ CREATE TABLE `sp_worker_aptitude` (
   `apply_time` datetime NOT NULL COMMENT '申请时间',
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
   PRIMARY KEY (`id`),
-  KEY `worker_id` (`worker_id`),
-  CONSTRAINT `sp_worker_aptitude_ibfk_1` FOREIGN KEY (`worker_id`) REFERENCES `sp_user_worker` (`id`)
+  KEY `worker_id` (`worker_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='劳务工人资质申请';
 
 -- ----------------------------
@@ -921,8 +940,7 @@ CREATE TABLE `sp_worker_balance_log` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `handle_time` datetime NOT NULL COMMENT '处理时间',
   PRIMARY KEY (`id`),
-  KEY `worker_id` (`worker_id`),
-  CONSTRAINT `sp_worker_balance_log_ibfk_1` FOREIGN KEY (`worker_id`) REFERENCES `sp_user_worker` (`id`)
+  KEY `worker_id` (`worker_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='劳务工人余额变更表';
 
 -- ----------------------------
@@ -965,9 +983,8 @@ CREATE TABLE `sp_worker_order` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
   PRIMARY KEY (`id`),
-  KEY `worker_id` (`worker_id`),
-  CONSTRAINT `sp_worker_order_ibfk_1` FOREIGN KEY (`worker_id`) REFERENCES `sp_user_worker` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='劳务工人资质申请';
+  KEY `worker_id` (`worker_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='劳务工人项目关联订单';
 
 -- ----------------------------
 -- Records of sp_worker_order
