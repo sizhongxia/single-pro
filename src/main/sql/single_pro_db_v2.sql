@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
-Source Server Version : 50637
+Source Server Version : 50631
 Source Host           : localhost:3306
 Source Database       : single_pro_db_v2
 
 Target Server Type    : MYSQL
-Target Server Version : 50637
+Target Server Version : 50631
 File Encoding         : 65001
 
-Date: 2018-03-27 20:30:58
+Date: 2018-03-27 22:25:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -412,6 +412,7 @@ CREATE TABLE `sp_product_type` (
   `ser_construct` varchar(255) NOT NULL COMMENT '施工',
   `ser_train` varchar(255) NOT NULL COMMENT '培训',
   `ser_accept` varchar(255) NOT NULL COMMENT '验收',
+  `unit` varchar(10) NOT NULL COMMENT '数量单位',
   `difficulty` decimal(2,1) NOT NULL COMMENT '施工难度',
   `status` char(1) NOT NULL COMMENT '状态（Y:正常，N:禁用）',
   `create_time` datetime NOT NULL COMMENT '创建时间',
@@ -433,7 +434,6 @@ CREATE TABLE `sp_project` (
   `pinyin` varchar(200) NOT NULL,
   `type` varchar(50) NOT NULL COMMENT '项目类别',
   `covered_area` varchar(20) NOT NULL COMMENT '建筑面积',
-  `worker_number` int(11) NOT NULL COMMENT '劳务人数',
   `provincial` varchar(20) NOT NULL COMMENT '省',
   `city` varchar(20) NOT NULL COMMENT '市',
   `country` varchar(20) NOT NULL COMMENT '区县',
@@ -470,36 +470,19 @@ CREATE TABLE `sp_project_draw` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for sp_project_job
--- ----------------------------
-DROP TABLE IF EXISTS `sp_project_job`;
-CREATE TABLE `sp_project_job` (
-  `id` char(32) NOT NULL COMMENT '主键',
-  `project_id` char(32) NOT NULL COMMENT '项目关联ID',
-  `job_name` varchar(50) NOT NULL,
-  `job_description` varchar(200) NOT NULL,
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目任务（批次）';
-
--- ----------------------------
--- Records of sp_project_job
--- ----------------------------
-
--- ----------------------------
 -- Table structure for sp_project_product
 -- ----------------------------
 DROP TABLE IF EXISTS `sp_project_product`;
 CREATE TABLE `sp_project_product` (
   `id` char(32) NOT NULL COMMENT '主键',
   `project_id` char(32) NOT NULL COMMENT '项目关联ID',
-  `project_job_id` char(32) NOT NULL COMMENT '任务批次ID关联',
+  `project_work_id` char(32) NOT NULL COMMENT '项目工作ID关联',
   `product_id` char(32) NOT NULL COMMENT '关联产品',
   `model` varchar(50) NOT NULL COMMENT '产品型号',
   `detail_list_url` varchar(200) NOT NULL COMMENT '清单文件链接',
   `number` int(11) NOT NULL COMMENT '产品数量',
-  `number_desc` varchar(80) NOT NULL COMMENT '产品数量描述',
+  `expect_stime` datetime NOT NULL COMMENT '预计施工开始时间',
+  `expect_days` int(11) NOT NULL COMMENT '预计施工天数',
   `ser_survey_choice` char(1) NOT NULL COMMENT '勘测服务选择（Y:选择，N:未选择）',
   `ser_check_choice` char(1) NOT NULL COMMENT '验货服务选择（Y:选择，N:未选择）',
   `ser_construct_choice` char(1) NOT NULL COMMENT '施工服务选择（Y:选择，N:未选择）',
@@ -516,24 +499,22 @@ CREATE TABLE `sp_project_product` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for sp_project_worker
+-- Table structure for sp_project_work
 -- ----------------------------
-DROP TABLE IF EXISTS `sp_project_worker`;
-CREATE TABLE `sp_project_worker` (
+DROP TABLE IF EXISTS `sp_project_work`;
+CREATE TABLE `sp_project_work` (
   `id` char(32) NOT NULL COMMENT '主键',
   `project_id` char(32) NOT NULL COMMENT '项目关联ID',
-  `project_job_id` char(32) NOT NULL COMMENT '任务批次ID关联',
-  `product_id` int(11) NOT NULL COMMENT '产品ID',
-  `worker_id` char(32) NOT NULL COMMENT '关联产品',
-  `re_cost` decimal(10,2) NOT NULL COMMENT '参考日劳务费',
-  `remarks` varchar(200) NOT NULL COMMENT '施工备注',
+  `work_order_no` varchar(20) NOT NULL COMMENT '工作订单号',
+  `work_name` varchar(50) NOT NULL COMMENT '工作项目名称',
+  `work_description` varchar(200) NOT NULL COMMENT '工作项目描述',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目工人预约';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目任务（批次）';
 
 -- ----------------------------
--- Records of sp_project_worker
+-- Records of sp_project_work
 -- ----------------------------
 
 -- ----------------------------
@@ -975,9 +956,11 @@ CREATE TABLE `sp_worker_order` (
   `id` char(32) NOT NULL COMMENT '主键',
   `worker_id` char(32) NOT NULL COMMENT '工人ID',
   `project_id` char(32) NOT NULL COMMENT '项目ID',
+  `project_work_id` char(32) NOT NULL COMMENT '项目工作ID关联',
   `product_id` char(32) NOT NULL COMMENT '产品关联ID',
-  `order_source` char(1) NOT NULL COMMENT '订单来源类型（C:客户直接选择，W:劳务工人转接，P:平台转接，U:个人接单）',
+  `order_source` char(1) NOT NULL COMMENT '订单来源类型（C:系统派单，W:劳务工人转接，P:平台转接，U:个人接单）',
   `source_id` char(32) NOT NULL COMMENT '来源关联ID',
+  `reference_cost` decimal(10,2) NOT NULL COMMENT '参考人天费用',
   `order_status` char(1) NOT NULL COMMENT '订单状态（Y:已接收，P:已取消（转平台），W:已取消（转工人），D:待处理）',
   `remarks` varchar(200) NOT NULL COMMENT '备注说明',
   `create_time` datetime NOT NULL COMMENT '创建时间',
