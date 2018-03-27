@@ -10,10 +10,75 @@ Target Server Type    : MYSQL
 Target Server Version : 50637
 File Encoding         : 65001
 
-Date: 2018-03-24 22:57:01
+Date: 2018-03-27 13:53:26
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for sp_basic_city
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_basic_city`;
+CREATE TABLE `sp_basic_city` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `name` varchar(50) NOT NULL,
+  `parent_code` varchar(50) NOT NULL,
+  `code` varchar(50) NOT NULL,
+  `create_time` datetime NOT NULL COMMENT '注册时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='城市基础数据';
+
+-- ----------------------------
+-- Records of sp_basic_city
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_basic_cost
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_basic_cost`;
+CREATE TABLE `sp_basic_cost` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `city_code` varchar(50) NOT NULL COMMENT '城市编码',
+  `city_name` varchar(50) NOT NULL COMMENT '城市名称',
+  `basic_cost` decimal(10,2) NOT NULL COMMENT '基础劳务费',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='基础劳务费';
+
+-- ----------------------------
+-- Records of sp_basic_cost
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_company
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_company`;
+CREATE TABLE `sp_company` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `name` varchar(80) NOT NULL COMMENT '公司名称',
+  `short_name` varchar(10) NOT NULL COMMENT '名称简称',
+  `company_id` char(32) NOT NULL COMMENT '所属组织',
+  `mechanism_type` varchar(50) NOT NULL COMMENT '机构类型',
+  `business_regist_no` varchar(50) NOT NULL COMMENT '工商注册号',
+  `organization_code` varchar(50) NOT NULL COMMENT '组织机构代码',
+  `tax_no` varchar(50) NOT NULL COMMENT '纳税人识别号',
+  `provincial` varchar(20) NOT NULL COMMENT '省',
+  `city` varchar(20) NOT NULL COMMENT '市',
+  `country` varchar(20) NOT NULL COMMENT '区县',
+  `address` varchar(200) NOT NULL COMMENT '地址',
+  `contacts` varchar(50) NOT NULL COMMENT '联系人',
+  `contact_number` varchar(30) NOT NULL COMMENT '联系电话',
+  `remarks` varchar(200) NOT NULL COMMENT '备注',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='公司、企业基础信息表';
+
+-- ----------------------------
+-- Records of sp_company
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for sp_dictionary_item
@@ -114,6 +179,342 @@ CREATE TABLE `sp_mp_channel` (
 -- Records of sp_mp_channel
 -- ----------------------------
 INSERT INTO `sp_mp_channel` VALUES ('02362EEB786949D6BA1EECA3B6A3A58E', '2', '2', '2', '1', '2018-03-24 20:52:23', '2018-03-24 20:52:31');
+
+-- ----------------------------
+-- Table structure for sp_order
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_order`;
+CREATE TABLE `sp_order` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `order_no` varchar(40) NOT NULL COMMENT '订单编号',
+  `worker_id` char(32) NOT NULL COMMENT '劳务工人ID',
+  `project_id` char(32) NOT NULL COMMENT '项目关联ID',
+  `project_name` varchar(50) NOT NULL COMMENT '项目名称',
+  `product_id` char(32) NOT NULL COMMENT '产品关联ID',
+  `product_name` varchar(50) NOT NULL COMMENT '产品名称',
+  `product_kind` varchar(50) NOT NULL COMMENT '产品种类',
+  `product_type` varchar(50) NOT NULL COMMENT '产品类别',
+  `product_model` varchar(50) NOT NULL COMMENT '产品型号',
+  `order_cost` decimal(10,2) NOT NULL COMMENT '订单金额',
+  `deposit_cost` decimal(10,2) NOT NULL COMMENT '托管金额',
+  `paid_cost` decimal(10,2) NOT NULL COMMENT '已支付金额',
+  `order_status` char(1) NOT NULL COMMENT '订单状态（Y:已完成，R:进行中，N:已取消，D:待施工）',
+  `remarks` varchar(200) NOT NULL COMMENT '备注说明',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单';
+
+-- ----------------------------
+-- Records of sp_order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_order_invoice
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_order_invoice`;
+CREATE TABLE `sp_order_invoice` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `order_no` varchar(40) NOT NULL COMMENT '订单编号',
+  `company_name` varchar(80) NOT NULL COMMENT '公司名称',
+  `company_tax_no` varchar(50) NOT NULL COMMENT '纳税人识别号',
+  `invoice_cost` decimal(10,2) NOT NULL COMMENT '发票金额',
+  `email` varchar(100) NOT NULL COMMENT '电子邮箱',
+  `remarks` varchar(200) NOT NULL COMMENT '备注说明',
+  `status` char(1) NOT NULL COMMENT '发票状态（Y:已完成）',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单发票';
+
+-- ----------------------------
+-- Records of sp_order_invoice
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_order_schedule
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_order_schedule`;
+CREATE TABLE `sp_order_schedule` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `project_id` char(32) NOT NULL COMMENT '项目管理ID',
+  `order_no` varchar(40) NOT NULL COMMENT '订单编号',
+  `worker_id` char(32) NOT NULL COMMENT '劳务工人ID',
+  `stage` varchar(50) NOT NULL COMMENT '施工阶段',
+  `worker_status` char(1) NOT NULL COMMENT '工作状态（Y:已完成，D:进行中）',
+  `remarks` varchar(200) NOT NULL COMMENT '备注说明',
+  `ack_status` char(1) NOT NULL COMMENT '确认状态（Y:已确认，N:已驳回，D:待确认）',
+  `ack_time` datetime NOT NULL COMMENT '确认时间',
+  `ack_customer_id` char(32) NOT NULL COMMENT '确认客户',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单进度表';
+
+-- ----------------------------
+-- Records of sp_order_schedule
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_order_schedule_pic
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_order_schedule_pic`;
+CREATE TABLE `sp_order_schedule_pic` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `schedule_id` char(32) NOT NULL COMMENT '订单进度ID',
+  `image_url` varchar(200) NOT NULL COMMENT '图片访问路径',
+  `upload_time` datetime NOT NULL COMMENT '上传时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单进度表图片资源';
+
+-- ----------------------------
+-- Records of sp_order_schedule_pic
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_partner_worker
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_partner_worker`;
+CREATE TABLE `sp_partner_worker` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `partner_id` char(32) NOT NULL COMMENT '城市合伙人',
+  `worker_id` char(32) NOT NULL COMMENT '劳务工人',
+  PRIMARY KEY (`id`),
+  KEY `partner_id` (`partner_id`),
+  KEY `worker_id` (`worker_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='城市合伙人和工人关联信息表';
+
+-- ----------------------------
+-- Records of sp_partner_worker
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_platform_order
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_platform_order`;
+CREATE TABLE `sp_platform_order` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `project_id` char(32) NOT NULL COMMENT '项目关联ID',
+  `product_id` char(32) NOT NULL COMMENT '产品关联ID',
+  `order_source` char(1) NOT NULL COMMENT '订单来源类型（C:客户转平台，W:劳务工人转平台）',
+  `source_id` char(32) NOT NULL COMMENT '来源关联ID',
+  `order_status` char(1) NOT NULL COMMENT '订单状态（Y:已转接至工人，N:已取消，D:待处理）',
+  `remarks` varchar(200) NOT NULL COMMENT '备注说明',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='劳务工人资质申请';
+
+-- ----------------------------
+-- Records of sp_platform_order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_product
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_product`;
+CREATE TABLE `sp_product` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `name` varchar(50) NOT NULL,
+  `kind_id` char(32) NOT NULL COMMENT '所属设备种类',
+  `type_id` char(32) NOT NULL COMMENT '产品类别',
+  `company_id` char(32) NOT NULL COMMENT '所属公司',
+  `model` varchar(50) NOT NULL COMMENT '产品型号',
+  `describe` text NOT NULL COMMENT '产品描述',
+  `constituent` text NOT NULL COMMENT '产品组成',
+  `survey_items` text NOT NULL COMMENT '勘测事项',
+  `install_debug` text NOT NULL COMMENT '安装调试',
+  `plant_maintenance` text NOT NULL COMMENT '设备维护',
+  `common_problem` text NOT NULL COMMENT '常见问题',
+  `doc_url` varchar(200) NOT NULL COMMENT '文档访问链接',
+  `manual_url` varchar(200) NOT NULL COMMENT '操作手册访问链接',
+  `apply_user_id` char(32) NOT NULL COMMENT '申请人ID',
+  `show_status` char(1) NOT NULL COMMENT '上下架（展示）状态（Y:上架，N:下架，D:待发布）',
+  `create_time` datetime NOT NULL COMMENT '注册时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品表';
+
+-- ----------------------------
+-- Records of sp_product
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_product_clue
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_product_clue`;
+CREATE TABLE `sp_product_clue` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `product_name` varchar(80) NOT NULL COMMENT '产品名称',
+  `company` varchar(100) NOT NULL COMMENT '所属公司',
+  `contacts` varchar(50) NOT NULL COMMENT '联系人',
+  `contact_number` varchar(30) NOT NULL COMMENT '联系电话',
+  `summary` varchar(500) NOT NULL COMMENT '概述',
+  `file_name` varchar(100) NOT NULL COMMENT '产品类别',
+  `file_path` varchar(200) NOT NULL,
+  `user_id` char(32) NOT NULL COMMENT '申请人、关联用户',
+  `apply_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '申请时间',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品（申请）线索记录表';
+
+-- ----------------------------
+-- Records of sp_product_clue
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_product_kind
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_product_kind`;
+CREATE TABLE `sp_product_kind` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `name` varchar(50) NOT NULL COMMENT '名称',
+  `pic_url` varchar(200) NOT NULL COMMENT '图标',
+  `kind_id` char(32) NOT NULL,
+  `summary` text NOT NULL COMMENT '概述',
+  `status` char(1) NOT NULL COMMENT '状态（Y:正常，N:禁用）',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品类别';
+
+-- ----------------------------
+-- Records of sp_product_kind
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_product_qualification
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_product_qualification`;
+CREATE TABLE `sp_product_qualification` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `type_id` char(32) NOT NULL COMMENT '产品类别关联ID',
+  `qualification` varchar(50) NOT NULL COMMENT '关联资质',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品资质关联';
+
+-- ----------------------------
+-- Records of sp_product_qualification
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_product_type
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_product_type`;
+CREATE TABLE `sp_product_type` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `name` varchar(50) NOT NULL COMMENT '名称',
+  `pic_url` varchar(200) NOT NULL COMMENT '产品图片',
+  `summary` text NOT NULL COMMENT '概述',
+  `sgsq_condition` text NOT NULL COMMENT '施工申请条件',
+  `ser_survey` varchar(255) NOT NULL COMMENT '勘测',
+  `ser_check` varchar(255) NOT NULL COMMENT '验货',
+  `ser_construct` varchar(255) NOT NULL COMMENT '施工',
+  `ser_train` varchar(255) NOT NULL COMMENT '培训',
+  `ser_accept` varchar(255) NOT NULL COMMENT '验收',
+  `difficulty` decimal(2,1) NOT NULL COMMENT '施工难度',
+  `status` char(1) NOT NULL COMMENT '状态（Y:正常，N:禁用）',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品种类';
+
+-- ----------------------------
+-- Records of sp_product_type
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_project
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_project`;
+CREATE TABLE `sp_project` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `name` varchar(50) NOT NULL COMMENT '项目名称',
+  `pinyin` varchar(200) NOT NULL,
+  `type` varchar(50) NOT NULL COMMENT '项目类别',
+  `covered_area` varchar(20) NOT NULL COMMENT '建筑面积',
+  `worker_number` int(11) NOT NULL COMMENT '劳务人数',
+  `provincial` varchar(20) NOT NULL COMMENT '省',
+  `city` varchar(20) NOT NULL COMMENT '市',
+  `country` varchar(20) NOT NULL COMMENT '区县',
+  `address` varchar(200) NOT NULL COMMENT '详细地址',
+  `longitude` varchar(26) NOT NULL COMMENT '经度',
+  `latitude` varchar(26) NOT NULL COMMENT '纬度',
+  `company_id` char(32) NOT NULL COMMENT '所属组织公司',
+  `branch_company_id` char(32) NOT NULL COMMENT '分公司',
+  `remarks` varchar(200) NOT NULL COMMENT '备注',
+  `create_user_id` char(32) NOT NULL COMMENT '创建人',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='施工项目表';
+
+-- ----------------------------
+-- Records of sp_project
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_project_draw
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_project_draw`;
+CREATE TABLE `sp_project_draw` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `project_id` char(32) NOT NULL COMMENT '项目关联ID',
+  `drawing_url` varchar(255) NOT NULL COMMENT '图纸地址',
+  `upload_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '上传时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目图纸';
+
+-- ----------------------------
+-- Records of sp_project_draw
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_project_product
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_project_product`;
+CREATE TABLE `sp_project_product` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `project_id` char(32) NOT NULL COMMENT '项目关联ID',
+  `product_id` char(32) NOT NULL COMMENT '关联产品',
+  `model` varchar(50) NOT NULL COMMENT '产品型号',
+  `detail_list_url` varchar(200) NOT NULL COMMENT '清单文件链接',
+  `number` int(11) NOT NULL COMMENT '产品数量',
+  `number_desc` varchar(80) NOT NULL COMMENT '产品数量描述',
+  `ser_survey_choice` char(1) NOT NULL COMMENT '勘测服务选择（Y:选择，N:未选择）',
+  `ser_check_choice` char(1) NOT NULL COMMENT '验货服务选择（Y:选择，N:未选择）',
+  `ser_construct_choice` char(1) NOT NULL COMMENT '施工服务选择（Y:选择，N:未选择）',
+  `ser_train_choice` char(1) NOT NULL COMMENT '培训服务选择（Y:选择，N:未选择）',
+  `ser_accept_choice` char(1) NOT NULL COMMENT '验收服务选择（Y:选择，N:未选择）',
+  `remarks` varchar(200) NOT NULL COMMENT '施工备注',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目图纸';
+
+-- ----------------------------
+-- Records of sp_project_product
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_project_worker
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_project_worker`;
+CREATE TABLE `sp_project_worker` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `project_id` char(32) NOT NULL COMMENT '项目关联ID',
+  `worker_id` char(32) NOT NULL COMMENT '关联产品',
+  `product_id` int(11) NOT NULL COMMENT '产品ID',
+  `re_cost` decimal(10,2) NOT NULL COMMENT '参考日劳务费',
+  `remarks` varchar(200) NOT NULL COMMENT '施工备注',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目工人预约';
+
+-- ----------------------------
+-- Records of sp_project_worker
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for sp_role
@@ -358,34 +759,41 @@ CREATE TABLE `sp_user` (
   `head_pic_url` varchar(200) NOT NULL,
   `phone_no` varchar(20) NOT NULL,
   `password` varchar(128) NOT NULL,
-  `create_time` datetime NOT NULL COMMENT '注册时间',
+  `gender` int(11) NOT NULL COMMENT '性别（1:男，0:女）',
+  `age` int(11) NOT NULL COMMENT '年龄',
+  `province` varchar(20) NOT NULL COMMENT '省',
+  `city` varchar(20) NOT NULL COMMENT '市',
+  `county` varchar(20) NOT NULL COMMENT '区县',
+  `account_status` char(1) NOT NULL COMMENT '账号状态（Y:正常，N:禁用，D:申请中）',
+  `user_type` char(1) NOT NULL COMMENT '用户类别（P:城市合伙人，W:劳务工人，C:客户）',
+  `regist_time` datetime NOT NULL COMMENT '注册时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `delete_flag` char(1) NOT NULL COMMENT '账号状态（Y:已移除，N:未移除）',
   `delete_time` datetime NOT NULL COMMENT '移除时间',
-  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='城市合伙人';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户基础信息表';
 
 -- ----------------------------
 -- Records of sp_user
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for sp_user_city_partner
+-- Table structure for sp_user_customer
 -- ----------------------------
-DROP TABLE IF EXISTS `sp_user_city_partner`;
-CREATE TABLE `sp_user_city_partner` (
+DROP TABLE IF EXISTS `sp_user_customer`;
+CREATE TABLE `sp_user_customer` (
   `id` char(32) NOT NULL COMMENT '主键ID',
   `user_id` char(32) NOT NULL COMMENT '用户ID',
-  `apply_reason` varchar(200) NOT NULL COMMENT '申请理由',
-  `apply_time` datetime NOT NULL COMMENT '申请时间',
+  `company_id` char(32) NOT NULL COMMENT '关联平台公司基础库',
+  `industry` varchar(50) NOT NULL COMMENT '行业',
   `status` char(1) NOT NULL COMMENT '账号状态（Y:正常，N:禁用，D:申请中）',
   `create_time` datetime NOT NULL COMMENT '注册时间',
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='城市合伙人';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户';
 
 -- ----------------------------
--- Records of sp_user_city_partner
+-- Records of sp_user_customer
 -- ----------------------------
 
 -- ----------------------------
@@ -395,17 +803,60 @@ DROP TABLE IF EXISTS `sp_user_identity_card`;
 CREATE TABLE `sp_user_identity_card` (
   `id` char(32) NOT NULL COMMENT '主键',
   `user_id` char(32) NOT NULL COMMENT '用户ID',
-  `identity_card` varchar(30) NOT NULL,
-  `identity_card_front_pic` varchar(200) NOT NULL,
-  `identity_card_back_pic` varchar(200) NOT NULL,
+  `identity_card` varchar(30) NOT NULL COMMENT '身份证号',
+  `identity_card_front_pic` varchar(200) NOT NULL COMMENT '身份证正面图片',
+  `identity_card_back_pic` varchar(200) NOT NULL COMMENT '身份证背面图片',
   `audit_state` char(1) NOT NULL COMMENT '审核状态（Y:审核通过，N:审核未通过，D:审核中）',
   `audit_time` datetime NOT NULL COMMENT '审核时间',
   `upload_time` datetime NOT NULL COMMENT '上传时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户身份证信息表';
 
 -- ----------------------------
 -- Records of sp_user_identity_card
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_user_partner
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_user_partner`;
+CREATE TABLE `sp_user_partner` (
+  `id` char(32) NOT NULL COMMENT '主键ID',
+  `user_id` char(32) NOT NULL COMMENT '用户ID',
+  `apply_reason` varchar(200) NOT NULL COMMENT '申请理由',
+  `apply_time` datetime NOT NULL COMMENT '申请时间',
+  `apply_status` char(1) NOT NULL COMMENT '账号状态（Y:已通过，N:未通过，D:申请中）',
+  `create_time` datetime NOT NULL COMMENT '注册时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='城市合伙人';
+
+-- ----------------------------
+-- Records of sp_user_partner
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_user_worker
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_user_worker`;
+CREATE TABLE `sp_user_worker` (
+  `id` char(32) NOT NULL COMMENT '主键ID',
+  `user_id` char(32) NOT NULL COMMENT '用户ID',
+  `worker_no` int(11) NOT NULL COMMENT '工号ID',
+  `grade_level` decimal(2,1) NOT NULL DEFAULT '3.5' COMMENT '用户评分',
+  `address_detail` varchar(200) NOT NULL COMMENT '详细地址',
+  `account_status` char(1) NOT NULL COMMENT '账号状态（Y:正常，N:禁用，D:申请中）',
+  `margin_state` char(1) NOT NULL COMMENT '施工保证金缴纳状态（Y:已缴纳，N:未缴纳）',
+  `balance` decimal(10,2) NOT NULL COMMENT '余额',
+  `remarks` varchar(500) NOT NULL COMMENT '描述',
+  `last_order_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后接单时间',
+  `create_time` datetime NOT NULL COMMENT '注册时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='劳务工人';
+
+-- ----------------------------
+-- Records of sp_user_worker
 -- ----------------------------
 
 -- ----------------------------
@@ -430,4 +881,94 @@ CREATE TABLE `sp_user_wxoauth` (
 
 -- ----------------------------
 -- Records of sp_user_wxoauth
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_worker_aptitude
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_worker_aptitude`;
+CREATE TABLE `sp_worker_aptitude` (
+  `id` char(32) NOT NULL,
+  `worker_id` char(32) NOT NULL COMMENT '工人ID',
+  `product_id` char(32) NOT NULL COMMENT '学习产品关联ID',
+  `model` varchar(50) NOT NULL COMMENT '产品型号',
+  `apply_info` varchar(200) NOT NULL COMMENT '申请说明',
+  `apply_status` char(1) NOT NULL COMMENT '申请状态（Y:申请通过，N:申请驳回，D:待处理）',
+  `apply_time` datetime NOT NULL COMMENT '申请时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  PRIMARY KEY (`id`),
+  KEY `worker_id` (`worker_id`),
+  CONSTRAINT `sp_worker_aptitude_ibfk_1` FOREIGN KEY (`worker_id`) REFERENCES `sp_user_worker` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='劳务工人资质申请';
+
+-- ----------------------------
+-- Records of sp_worker_aptitude
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_worker_balance_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_worker_balance_log`;
+CREATE TABLE `sp_worker_balance_log` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `worker_id` char(32) NOT NULL COMMENT '工人ID',
+  `order_no` varchar(40) NOT NULL COMMENT '订单编号',
+  `bef_balance` decimal(10,2) NOT NULL COMMENT '之前余额',
+  `change_money` decimal(10,2) NOT NULL COMMENT '变更金额',
+  `aft_balance` decimal(10,2) NOT NULL COMMENT '之后余额',
+  `status` char(1) NOT NULL COMMENT '变更状态（Y:已入账，N:已取消，D:未入账）',
+  `remarks` varchar(200) NOT NULL COMMENT '提现备注',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `handle_time` datetime NOT NULL COMMENT '处理时间',
+  PRIMARY KEY (`id`),
+  KEY `worker_id` (`worker_id`),
+  CONSTRAINT `sp_worker_balance_log_ibfk_1` FOREIGN KEY (`worker_id`) REFERENCES `sp_user_worker` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='劳务工人余额变更表';
+
+-- ----------------------------
+-- Records of sp_worker_balance_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_worker_cash_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_worker_cash_log`;
+CREATE TABLE `sp_worker_cash_log` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `cash_cost` decimal(10,2) NOT NULL COMMENT '提现金额',
+  `serial_number` varchar(80) NOT NULL COMMENT '提现流水号',
+  `cash_status` char(1) NOT NULL COMMENT '提现状态（Y:已到账，D:进行中，N:已撤销）',
+  `cash_remarks` varchar(200) NOT NULL COMMENT '提现备注',
+  `worker_id` char(32) NOT NULL COMMENT '工人ID',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `handle_time` datetime NOT NULL COMMENT '处理时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='劳务工人提现记录表';
+
+-- ----------------------------
+-- Records of sp_worker_cash_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_worker_order
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_worker_order`;
+CREATE TABLE `sp_worker_order` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `worker_id` char(32) NOT NULL COMMENT '工人ID',
+  `project_id` char(32) NOT NULL COMMENT '项目ID',
+  `product_id` char(32) NOT NULL COMMENT '产品关联ID',
+  `order_source` char(1) NOT NULL COMMENT '订单来源类型（C:客户直接选择，W:劳务工人转接，P:平台转接，U:个人接单）',
+  `source_id` char(32) NOT NULL COMMENT '来源关联ID',
+  `order_status` char(1) NOT NULL COMMENT '订单状态（Y:已接收，P:已取消（转平台），W:已取消（转工人），D:待处理）',
+  `remarks` varchar(200) NOT NULL COMMENT '备注说明',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  PRIMARY KEY (`id`),
+  KEY `worker_id` (`worker_id`),
+  CONSTRAINT `sp_worker_order_ibfk_1` FOREIGN KEY (`worker_id`) REFERENCES `sp_user_worker` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='劳务工人资质申请';
+
+-- ----------------------------
+-- Records of sp_worker_order
 -- ----------------------------
