@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 小程序channel模块 服务实现类
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-23
+ * @since 2018-03-29
  */
 @Service
 public class MpChannelServiceImpl extends ServiceImpl<MpChannelDao, MpChannel> implements MpChannelService {

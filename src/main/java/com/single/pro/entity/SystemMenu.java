@@ -1,10 +1,7 @@
 package com.single.pro.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
-
 import java.io.Serializable;
 
 /**
@@ -13,7 +10,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-01
+ * @since 2018-03-29
  */
 @TableName("sp_system_menu")
 public class SystemMenu implements Serializable {
@@ -23,7 +20,6 @@ public class SystemMenu implements Serializable {
     /**
      * 主键
      */
-    @TableId(value = "id", type = IdType.INPUT)
 	private String id;
     /**
      * 父级ID

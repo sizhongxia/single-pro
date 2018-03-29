@@ -1,5 +1,6 @@
 package com.single.pro.shiro.realm;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -30,11 +31,13 @@ import com.single.pro.entity.RoleApp;
 import com.single.pro.entity.RoleAuthword;
 import com.single.pro.entity.RoleMenu;
 import com.single.pro.entity.SystemUser;
+import com.single.pro.entity.SystemUserRole;
 import com.single.pro.service.RoleAppService;
 import com.single.pro.service.RoleAuthwordService;
 import com.single.pro.service.RoleMenuService;
 import com.single.pro.service.RoleService;
 import com.single.pro.service.SystemAuthwordService;
+import com.single.pro.service.SystemUserRoleService;
 import com.single.pro.service.SystemUserService;
 
 public class JDBCRealm extends AuthorizingRealm {
@@ -46,6 +49,8 @@ public class JDBCRealm extends AuthorizingRealm {
 	SystemUserService systemUserService;
 	@Autowired
 	RoleService roleService;
+	@Autowired
+	SystemUserRoleService systemUserRoleService;
 	@Autowired
 	SystemAuthwordService systemAuthwordService;
 	@Autowired
@@ -65,26 +70,33 @@ public class JDBCRealm extends AuthorizingRealm {
 		Subject subject = SecurityUtils.getSubject();
 		SystemUser user = (SystemUser) subject.getPrincipal();
 
-		Role role = roleService.selectById(user.getRoleId());
-		if ("Y".equals(role.getStatus())) {
+		Wrapper<SystemUserRole> userRoleWrapper = new EntityWrapper<>();
+		userRoleWrapper.eq("user_id", user.getId());
+		List<SystemUserRole> userRoles = systemUserRoleService.selectList(userRoleWrapper);
 
-			// 获取角色授权
-			Set<String> roleCodes = new HashSet<String>();
-			roleCodes.add(role.getCode());
-			authorizationInfo.setRoles(roleCodes);
+		Set<String> roleCodes = new HashSet<String>();
+		Set<String> permissions = new HashSet<>();
+		if (userRoles != null && userRoles.size() > 0)
+			for (SystemUserRole userRole : userRoles) {
+				Role role = roleService.selectById(userRole.getRoleId());
+				if ("Y".equals(role.getStatus())) {
+					// 获取角色授权
+					roleCodes.add(role.getCode());
 
-			Wrapper<RoleAuthword> roleAuthwordWrapper = new EntityWrapper<RoleAuthword>();
-			roleAuthwordWrapper.eq("role_id", role.getId());
-			List<RoleAuthword> roleAuths = roleAuthwordService.selectList(roleAuthwordWrapper);
+					Wrapper<RoleAuthword> roleAuthwordWrapper = new EntityWrapper<RoleAuthword>();
+					roleAuthwordWrapper.eq("role_id", role.getId());
+					List<RoleAuthword> roleAuths = roleAuthwordService.selectList(roleAuthwordWrapper);
 
-			if (roleAuths != null && !roleAuths.isEmpty()) {
-				Set<String> permissions = new HashSet<>();
-				for (RoleAuthword ra : roleAuths) {
-					permissions.add(ra.getAuthword());
+					if (roleAuths != null && !roleAuths.isEmpty()) {
+						for (RoleAuthword ra : roleAuths) {
+							permissions.add(ra.getAuthword());
+						}
+					}
 				}
-				authorizationInfo.setStringPermissions(permissions);
 			}
-		}
+
+		authorizationInfo.setRoles(roleCodes);
+		authorizationInfo.setStringPermissions(permissions);
 
 		return authorizationInfo;
 	}
@@ -126,38 +138,49 @@ public class JDBCRealm extends AuthorizingRealm {
 			throw new RuntimeException();
 		}
 
-		Role role = roleService.selectById(user.getRoleId());
-		if ("Y".equals(role.getStatus())) {
+		Wrapper<SystemUserRole> userRoleWrapper = new EntityWrapper<>();
+		userRoleWrapper.eq("user_id", user.getId());
+		List<SystemUserRole> userRoles = systemUserRoleService.selectList(userRoleWrapper);
 
-			// 获取角色授权
-			Wrapper<RoleApp> roleAppWrapper = new EntityWrapper<>();
-			roleAppWrapper.eq("role_id", role.getId());
-			List<RoleApp> roleApps = roleAppService.selectList(roleAppWrapper);
-			Subject subject = SecurityUtils.getSubject();
+		Subject subject = SecurityUtils.getSubject();
+		Session session = subject.getSession();
 
-			// 授权应用
-			if (roleApps != null && !roleApps.isEmpty()) {
-				Session session = subject.getSession();
+		List<RoleApp> roleApps = new ArrayList<>();
+		Set<String> menuIds = new HashSet<>();
 
-				session.setAttribute(USER_ROLE_APP_AUTH_KEY, roleApps);
+		if (userRoles != null && userRoles.size() > 0) {
+			for (SystemUserRole userRole : userRoles) {
+				Role role = roleService.selectById(userRole.getRoleId());
 
-				Wrapper<RoleMenu> roleMenuWrapper = new EntityWrapper<>();
-				roleMenuWrapper.eq("role_id", role.getId());
-				List<RoleMenu> roleMenus = roleMenuService.selectList(roleMenuWrapper);
+				if ("Y".equals(role.getStatus())) {
 
-				// 授权菜单
-				if (roleMenus != null && !roleMenus.isEmpty()) {
+					// 获取角色授权
+					Wrapper<RoleApp> roleAppWrapper = new EntityWrapper<>();
+					roleAppWrapper.eq("role_id", role.getId());
+					List<RoleApp> _roleApps = roleAppService.selectList(roleAppWrapper);
 
-					Set<String> menuIds = new HashSet<>();
-					for (RoleMenu menu : roleMenus) {
-						menuIds.add(menu.getMenuId());
+					// 授权应用
+					if (_roleApps != null && !_roleApps.isEmpty()) {
+						roleApps.addAll(_roleApps);
+
+						Wrapper<RoleMenu> roleMenuWrapper = new EntityWrapper<>();
+						roleMenuWrapper.eq("role_id", role.getId());
+						List<RoleMenu> roleMenus = roleMenuService.selectList(roleMenuWrapper);
+
+						// 授权菜单
+						if (roleMenus != null && !roleMenus.isEmpty()) {
+							for (RoleMenu menu : roleMenus) {
+								menuIds.add(menu.getMenuId());
+							}
+						}
+
 					}
-					session.setAttribute(USER_ROLE_MENU_AUTH_KEY, menuIds);
-
 				}
 
 			}
 		}
+		session.setAttribute(USER_ROLE_APP_AUTH_KEY, roleApps);
+		session.setAttribute(USER_ROLE_MENU_AUTH_KEY, menuIds);
 
 		return new SimpleAuthenticationInfo(user, password.toCharArray(), getName());
 	}

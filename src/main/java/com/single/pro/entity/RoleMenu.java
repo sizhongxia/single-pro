@@ -1,10 +1,10 @@
 package com.single.pro.entity;
 
-import java.io.Serializable;
 import java.util.Date;
-
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
+import java.io.Serializable;
 
 /**
  * <p>
@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-01
+ * @since 2018-03-29
  */
 @TableName("sp_role_menu")
 public class RoleMenu implements Serializable {
@@ -22,7 +22,7 @@ public class RoleMenu implements Serializable {
     /**
      * 角色ID
      */
-    @TableField("role_id")
+    @TableId("role_id")
 	private String roleId;
     /**
      * 菜单关联

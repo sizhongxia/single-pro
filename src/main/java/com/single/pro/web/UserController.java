@@ -53,7 +53,7 @@ public class UserController extends BaseController {
 		Wrapper<SystemUser> wrapper = new EntityWrapper<>();
 
 		String roleId = request.getParameter("role_id");
-		
+
 		if (StringUtils.isBlank(roleId)) {
 			res.put("rows", systemUserList);
 			res.put("total", 0);
@@ -90,7 +90,6 @@ public class UserController extends BaseController {
 				item.put("login_name", user.getLoginName());
 				item.put("phone_no", user.getPhoneNo());
 				item.put("password", user.getPassword());
-				item.put("role_id", user.getRoleId());
 				item.put("info", user.getInfo());
 				item.put("status", user.getStatus());
 				item.put("create_time", user.getCreateTime());
@@ -174,7 +173,6 @@ public class UserController extends BaseController {
 			return res;
 		}
 		user.setPhoneNo(phoneNo);
-		user.setRoleId(request.getParameter("roleId"));
 		user.setPassword(Md5Util.md5(request.getParameter("password")));
 		user.setStatus(request.getParameter("status"));
 		user.setInfo(request.getParameter("info"));
@@ -238,7 +236,6 @@ public class UserController extends BaseController {
 			return res;
 		}
 		user.setPhoneNo(phoneNo);
-		user.setRoleId(request.getParameter("roleId"));
 		String nPassword = request.getParameter("password");
 		if (!nPassword.equals(user.getPassword())) {
 			user.setPassword(Md5Util.md5(nPassword));

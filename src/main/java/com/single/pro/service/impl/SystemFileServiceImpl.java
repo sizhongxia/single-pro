@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 系统文件（内部上传） 服务实现类
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-05
+ * @since 2018-03-29
  */
 @Service
 public class SystemFileServiceImpl extends ServiceImpl<SystemFileDao, SystemFile> implements SystemFileService {

@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.service.IService;
 
 /**
  * <p>
- *  服务类
+ * 系统文件（内部上传） 服务类
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-05
+ * @since 2018-03-29
  */
 public interface SystemFileService extends IService<SystemFile> {
 

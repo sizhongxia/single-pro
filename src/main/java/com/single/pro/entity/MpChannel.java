@@ -7,11 +7,11 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * 小程序channel模块
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-23
+ * @since 2018-03-29
  */
 @TableName("sp_mp_channel")
 public class MpChannel implements Serializable {

@@ -7,11 +7,11 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * 系统文件（内部上传）
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-05
+ * @since 2018-03-29
  */
 @TableName("sp_system_file")
 public class SystemFile implements Serializable {
@@ -43,6 +43,8 @@ public class SystemFile implements Serializable {
      * 文件描述
      */
 	private String desc;
+	@TableField("upload_user_id")
+	private String uploadUserId;
     /**
      * 上传时间
      */
@@ -98,6 +100,14 @@ public class SystemFile implements Serializable {
 		this.desc = desc;
 	}
 
+	public String getUploadUserId() {
+		return uploadUserId;
+	}
+
+	public void setUploadUserId(String uploadUserId) {
+		this.uploadUserId = uploadUserId;
+	}
+
 	public Date getUploadTime() {
 		return uploadTime;
 	}
@@ -115,6 +125,7 @@ public class SystemFile implements Serializable {
 			", type=" + type +
 			", size=" + size +
 			", desc=" + desc +
+			", uploadUserId=" + uploadUserId +
 			", uploadTime=" + uploadTime +
 			"}";
 	}

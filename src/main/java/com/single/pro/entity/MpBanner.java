@@ -7,11 +7,11 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * 小程序banner模块
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-23
+ * @since 2018-03-29
  */
 @TableName("sp_mp_banner")
 public class MpBanner implements Serializable {

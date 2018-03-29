@@ -2,10 +2,7 @@ package com.single.pro.entity;
 
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
-
 import java.io.Serializable;
 
 /**
@@ -14,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-01
+ * @since 2018-03-29
  */
 @TableName("sp_system_user")
 public class SystemUser implements Serializable {
@@ -24,7 +21,6 @@ public class SystemUser implements Serializable {
     /**
      * 主键
      */
-    @TableId(value = "id", type = IdType.INPUT)
 	private String id;
     /**
      * 用户名称
@@ -45,11 +41,6 @@ public class SystemUser implements Serializable {
      * 登录密码
      */
 	private String password;
-    /**
-     * 关联角色
-     */
-	@TableField("role_id")
-	private String roleId;
     /**
      * 备注
      */
@@ -115,14 +106,6 @@ public class SystemUser implements Serializable {
 		this.password = password;
 	}
 
-	public String getRoleId() {
-		return roleId;
-	}
-
-	public void setRoleId(String roleId) {
-		this.roleId = roleId;
-	}
-
 	public String getInfo() {
 		return info;
 	}
@@ -171,7 +154,6 @@ public class SystemUser implements Serializable {
 			", loginName=" + loginName +
 			", phoneNo=" + phoneNo +
 			", password=" + password +
-			", roleId=" + roleId +
 			", info=" + info +
 			", status=" + status +
 			", createTime=" + createTime +

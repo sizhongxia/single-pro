@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.single.pro.mapper.PlatformOrderDao">
+
+    <!-- 开启二级缓存 -->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.single.pro.entity.PlatformOrder">
+        <id column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="order_source" property="orderSource" />
+        <result column="source_id" property="sourceId" />
+        <result column="order_status" property="orderStatus" />
+        <result column="destination_id" property="destinationId" />
+        <result column="remarks" property="remarks" />
+        <result column="create_time" property="createTime" />
+        <result column="operator_id" property="operatorId" />
+        <result column="operate_time" property="operateTime" />
+    </resultMap>
+
+</mapper>

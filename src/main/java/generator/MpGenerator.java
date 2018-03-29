@@ -53,8 +53,7 @@ public class MpGenerator {
 		StrategyConfig strategy = new StrategyConfig();
 		strategy.setTablePrefix(new String[] { "sp_" });// 此处可以修改为您的表前缀
 		strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-		strategy.setInclude(new String[] { "sp_job" }); // 需要生成的表
-		// strategy.setExclude(new String[] { "" }); // 排除生成的表
+		strategy.setInclude(new String[] { "sp_basic_city", "sp_basic_cost", "sp_bond_record", "sp_company", "sp_dictionary_item", "sp_dictionary_type", "sp_login_log", "sp_mp_banner", "sp_mp_channel", "sp_operation_log", "sp_order", "sp_order_invoice", "sp_order_schedule", "sp_order_schedule_pic", "sp_partner_worker", "sp_platform_order", "sp_product", "sp_product_clue", "sp_product_kind", "sp_product_qualification", "sp_product_type", "sp_project", "sp_project_draw", "sp_project_product", "sp_project_work", "sp_role", "sp_role_app", "sp_role_authword", "sp_role_menu", "sp_system", "sp_system_app", "sp_system_authword", "sp_system_file", "sp_system_menu", "sp_system_user", "sp_system_user_role", "sp_user", "sp_user_customer", "sp_user_identity_card", "sp_user_partner", "sp_user_worker", "sp_user_wxoauth", "sp_worker_aptitude", "sp_worker_balance_log", "sp_worker_cash_log", "sp_worker_order" }); // 需要生成的表
 		// 自定义实体，公共字段
 		strategy.setSuperEntityColumns(new String[] {});
 		mpg.setStrategy(strategy);
