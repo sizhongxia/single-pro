@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../../common/public.html">
+<script type="text/javascript">
+    $(window).load(function () {
+        $("#loading").fadeOut();
+    });
+</script>
+</head>
+
+<body>
+	<div data-toggle="topjui-layout" data-options="fit:true">
+	    <div data-options="region:'center',title:'城市基础数据',split:true,border:false,iconCls:'fa fa-sitemap'">
+	        <!-- treegrid表格 -->
+	        <table data-toggle="topjui-treegrid"
+	               data-options="id: 'basticCityTreegrid',
+				    idField: 'id',
+				    treeField: 'code',
+				    rownumbers: !0,
+			   	    singleSelect: !0,
+				    url: remoteHost + '/basic/city/data',
+				    expandUrl: remoteHost+'/basic/city/data?pcode={code}'">
+	            <thead>
+		            <tr>
+		                <th data-options="field:'code',title:'城市编码'"></th>
+		                <th data-options="field:'name',title:'城市名称'"></th>
+		                <th data-options="field:'jianpin',title:'名称简拼'"></th>
+		                <th data-options="field:'pinyin',title:'名称拼音'"></th>
+		            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	</div>
+	
+	<!-- 表格工具栏开始 -->
+	<div id="basticCityTreegrid-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'treegrid',
+           id:'basticCityTreegrid'}" style="display:none">
+           
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'openDialog',
+	       extend: '#basticCityTreegrid-toolbar',
+	       iconCls: 'fa fa-plus',
+	       dialog:{
+               title: '新增城市',
+	           width: 520,
+	           height: 320,
+	           href: remoteHost + '/basic/city/form',
+	           buttonsGroup:[
+	               {text:'保存', url: remoteHost + '/basic/city/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	           ]
+	       }">新增城市</a>
+	    
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#basticCityTreegrid-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '编辑城市',
+		           width: 520,
+		           height: 320,
+	               href: remoteHost + '/basic/city/form',
+	               url: remoteHost + '/basic/city/detail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/basic/city/update',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">编辑</a>
+
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'doAjax',
+	       extend: '#basticCityTreegrid-toolbar',
+	       btnCls:'topjui-btn-normal',
+	       iconCls:'fa fa-trash',
+	       url: remoteHost + '/basic/city/delete',
+	       grid: {uncheckedMsg:'请先勾选要删除的城市',param:'id:id'}">删除</a>
+	       
+	</div>
+	<!-- 表格工具栏结束 -->
+	
+</body>
+</html>

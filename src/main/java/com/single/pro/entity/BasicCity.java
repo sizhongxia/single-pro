@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-29
+ * @since 2018-03-30
  */
 @TableName("sp_basic_city")
 public class BasicCity implements Serializable {
@@ -22,8 +22,25 @@ public class BasicCity implements Serializable {
      * 主键
      */
 	private String id;
+    /**
+     * 城市名称
+     */
 	private String name;
+    /**
+     * 拼音
+     */
+	private String pinyin;
+    /**
+     * 简拼
+     */
+	private String jianpin;
+    /**
+     * 父级编码
+     */
 	private String pcode;
+    /**
+     * 城市编码
+     */
 	private String code;
     /**
      * 创建时间
@@ -51,6 +68,22 @@ public class BasicCity implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getPinyin() {
+		return pinyin;
+	}
+
+	public void setPinyin(String pinyin) {
+		this.pinyin = pinyin;
+	}
+
+	public String getJianpin() {
+		return jianpin;
+	}
+
+	public void setJianpin(String jianpin) {
+		this.jianpin = jianpin;
 	}
 
 	public String getPcode() {
@@ -90,6 +123,8 @@ public class BasicCity implements Serializable {
 		return "BasicCity{" +
 			", id=" + id +
 			", name=" + name +
+			", pinyin=" + pinyin +
+			", jianpin=" + jianpin +
 			", pcode=" + pcode +
 			", code=" + code +
 			", createTime=" + createTime +

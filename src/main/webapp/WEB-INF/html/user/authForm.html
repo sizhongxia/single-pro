@@ -1,0 +1,17 @@
+<input type="hidden" id="userId" name="userId"/>
+<table class="editTable" style="width: 90%">
+	<tr>
+       <td class="label" width="120">授权角色：</td>
+       <td>
+           <div class="topjui-col-sm12">
+		        <div class="topjui-input-block">
+		            <div data-toggle="topjui-checkbox">
+		            	<#list roles as item>
+		            		<input type="checkbox" name="roleId" label="${item.name}" value="${item.id}">
+		            	</#list>
+		            </div>
+		        </div>
+		    </div>
+       </td>
+   </tr>
+</table>

@@ -7,7 +7,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.single.pro.entity.RoleApp">
-        <id column="role_id" property="roleId" />
+        <result column="role_id" property="roleId" />
         <result column="app_id" property="appId" />
         <result column="create_time" property="createTime" />
     </resultMap>

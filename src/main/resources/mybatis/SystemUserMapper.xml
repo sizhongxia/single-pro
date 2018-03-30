@@ -12,7 +12,6 @@
         <result column="login_name" property="loginName" />
         <result column="phone_no" property="phoneNo" />
         <result column="password" property="password" />
-        <result column="role_id" property="roleId" />
         <result column="info" property="info" />
         <result column="status" property="status" />
         <result column="create_time" property="createTime" />

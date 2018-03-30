@@ -3,8 +3,10 @@ package com.single.pro.web;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,8 +26,15 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.single.pro.entity.Role;
 import com.single.pro.entity.SystemUser;
+import com.single.pro.entity.SystemUserRole;
+import com.single.pro.model.SystemUserModel;
+import com.single.pro.service.RoleService;
+import com.single.pro.service.SystemUserRoleService;
 import com.single.pro.service.SystemUserService;
+import com.single.pro.service.custom.SystemUserCustomService;
+import com.single.pro.util.AdvanceFilterUtil;
 import com.single.pro.util.IdUtil;
 import com.single.pro.util.Md5Util;
 
@@ -35,6 +44,12 @@ public class UserController extends BaseController {
 
 	@Autowired
 	SystemUserService systemUserService;
+	@Autowired
+	SystemUserCustomService systemUserCustomService;
+	@Autowired
+	RoleService roleService;
+	@Autowired
+	SystemUserRoleService systemUserRoleService;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -50,18 +65,6 @@ public class UserController extends BaseController {
 		Map<String, Object> res = new HashMap<>();
 		List<Map<String, Object>> systemUserList = new ArrayList<>();
 
-		Wrapper<SystemUser> wrapper = new EntityWrapper<>();
-
-		String roleId = request.getParameter("role_id");
-
-		if (StringUtils.isBlank(roleId)) {
-			res.put("rows", systemUserList);
-			res.put("total", 0);
-			return res;
-		}
-
-		wrapper.eq("role_id", roleId);
-
 		String pageStr = request.getParameter("page");
 		if (!NumberUtils.isDigits(pageStr)) {
 			pageStr = "1";
@@ -73,17 +76,26 @@ public class UserController extends BaseController {
 		String sort = request.getParameter("sort");
 		String order = request.getParameter("order");
 
+		String advanceFilter = request.getParameter("advanceFilter");
+
+		Map<String, Object> params = new HashMap<>();
 		if (StringUtils.isNotBlank(sort) && StringUtils.isNotBlank(order)) {
-			wrapper.orderBy(sort, "asc".equals(order));
+			params.put("orderByClause", "su." + sort + " " + order);
+		} else {
+			params.put("orderByClause", "su.create_time asc");
 		}
 
+		Set<String> exclusionFields = new HashSet<>();
+		exclusionFields.add("role_names");
+		params = AdvanceFilterUtil.initSerachParams(advanceFilter, exclusionFields , "su.", params);
+
 		PageHelper.startPage(new Integer(pageStr), new Integer(rowsStr));
-		List<SystemUser> users = systemUserService.selectList(wrapper);
-		PageInfo<SystemUser> pageInfo = new PageInfo<SystemUser>(users);
+		List<SystemUserModel> users = systemUserCustomService.findSystemUsersWithRole(params);
+		PageInfo<SystemUserModel> pageInfo = new PageInfo<SystemUserModel>(users);
 
 		if (users != null && !users.isEmpty()) {
 			Map<String, Object> item = null;
-			for (SystemUser user : users) {
+			for (SystemUserModel user : users) {
 				item = new HashMap<>();
 				item.put("id", user.getId());
 				item.put("nick_name", user.getNickName());
@@ -91,6 +103,7 @@ public class UserController extends BaseController {
 				item.put("phone_no", user.getPhoneNo());
 				item.put("password", user.getPassword());
 				item.put("info", user.getInfo());
+				item.put("role_names", user.getRoleNames() == null ? "未授权" : user.getRoleNames());
 				item.put("status", user.getStatus());
 				item.put("create_time", user.getCreateTime());
 				item.put("update_time", user.getUpdateTime());
@@ -116,6 +129,40 @@ public class UserController extends BaseController {
 	public ModelAndView form(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("user/form");
 		return mav;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/authForm" }, method = { RequestMethod.GET })
+	public ModelAndView authForm(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("user/authForm");
+		Wrapper<Role> roleWrapper = new EntityWrapper<>();
+		roleWrapper.eq("status", "Y");
+		mav.addObject("roles", roleService.selectList(roleWrapper));
+		return mav;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/roles")
+	public Map<String, Object> roles(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<>();
+		String id = request.getParameter("id");
+		map.put("userId", id);
+
+		Wrapper<SystemUserRole> userRoleWrapper = new EntityWrapper<>();
+		userRoleWrapper.eq("user_id", id);
+		List<SystemUserRole> userRoles = systemUserRoleService.selectList(userRoleWrapper);
+		if (userRoles != null && userRoles.size() > 0) {
+			String[] roleIds = new String[userRoles.size()];
+			int i = 0;
+			for (SystemUserRole userRole : userRoles) {
+				roleIds[i++] = userRole.getRoleId();
+			}
+			map.put("roleId", String.join(",", roleIds));
+		} else {
+			map.put("roleId", "");
+		}
+		return map;
 	}
 
 	/***
@@ -247,6 +294,57 @@ public class UserController extends BaseController {
 		if (!systemUserService.updateById(user)) {
 			res.put("message", "未知错误");
 			return res;
+		}
+
+		res.put("statusCode", 200);
+		res.put("message", "更新成功");
+		return res;
+	}
+
+	/***
+	 * 更新用户角色授权
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/updateRoles")
+	public Map<String, Object> updateRoles(HttpServletRequest request) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String userId = request.getParameter("userId");
+
+		if (StringUtils.isBlank(userId)) {
+			res.put("message", "无效的参数");
+			return res;
+		}
+
+		SystemUser user = systemUserService.selectById(userId);
+		if (user == null) {
+			res.put("message", "无效的参数");
+			return res;
+		}
+
+		String[] roleIds = request.getParameterValues("roleId");
+
+		Wrapper<SystemUserRole> userRoleWrapper = new EntityWrapper<>();
+		userRoleWrapper.eq("user_id", userId);
+		if (systemUserRoleService.delete(userRoleWrapper)) {
+			if (roleIds != null && roleIds.length > 0) {
+				List<SystemUserRole> entityList = new ArrayList<>();
+				SystemUserRole userRole = null;
+				for (String roleId : roleIds) {
+					userRole = new SystemUserRole();
+					userRole.setUserId(userId);
+					userRole.setRoleId(roleId);
+					userRole.setCreateTime(new Date());
+					entityList.add(userRole);
+				}
+				systemUserRoleService.insertBatch(entityList);
+			}
 		}
 
 		res.put("statusCode", 200);

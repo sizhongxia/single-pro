@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-29
+ * @since 2018-03-30
  */
 @Service
 public class BasicCityServiceImpl extends ServiceImpl<BasicCityDao, BasicCity> implements BasicCityService {

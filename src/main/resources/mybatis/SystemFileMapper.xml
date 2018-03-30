@@ -13,6 +13,7 @@
         <result column="type" property="type" />
         <result column="size" property="size" />
         <result column="desc" property="desc" />
+        <result column="upload_user_id" property="uploadUserId" />
         <result column="upload_time" property="uploadTime" />
     </resultMap>
 

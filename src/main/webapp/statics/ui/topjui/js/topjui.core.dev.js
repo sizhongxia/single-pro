@@ -209,7 +209,7 @@ function bindMenuClickEvent(a, b) {
     c.length > 0 && (d = getOptionsJson(c)),
     b = $.extend(!0, d, b);
     var e = {};
-    return "openDialog" == b.method ? (e = {}, b.dialog.width = b.dialog.width ? b.dialog.width : 700, b.dialog.height = b.dialog.height ? b.dialog.height : 450, b = $.extend({}, b, e)) : "openTab" == b.method ? (e = {
+    return "openDialog" == b.method ? (e = {}, b.dialog.width = b.dialog.width ? b.dialog.width : 430, b.dialog.height = b.dialog.height ? b.dialog.height : 450, b = $.extend({}, b, e)) : "openTab" == b.method ? (e = {
             iconCls: "fa fa-th"
         }, b = $.extend(e, b)) : "openWindow" == b.method ? (e = {
             iconCls: "fa fa-link"
@@ -477,21 +477,15 @@ function searchHandler(a) {
     "object" == typeof b.grid && getColumnsNameAndField(b.grid.type, b.grid.id);
     var c = '<table id="advanceSearchTable" class="editTable">';
     c += "<tr>",
-    c += '<td style="font-weight: bold;">方式</td>',
-    c += '<td style="font-weight: bold;">左括号</td>',
     c += '<td style="font-weight: bold;">字段</td>',
     c += '<td style="font-weight: bold;">条件</td>',
     c += '<td style="font-weight: bold;">数值</td>',
-    c += '<td style="font-weight: bold;">右括号</td>',
     c += '<td style="font-weight: bold;">操作</td>',
     c += "</tr>",
     c += "<tr>",
-    c += '<td><input type="text" class="join" name="join"></td>',
-    c += '<td><input type="text" class="lb" name="lb"></td>',
     c += '<td><input type="text" class="field" name="field"></td>',
     c += '<td><input type="text" class="op" name="op"></td>',
     c += '<td><input type="text" class="value" name="value"></td>',
-    c += '<td><input type="text" class="rb" name="rb"></td>',
     c += '<td><a id="addCondition" href="javascript:void(0)"></a>',
     c += "</td>",
     c += "</tr>",
@@ -500,7 +494,7 @@ function searchHandler(a) {
         dialog: {
             id: "advanceSearchDialog",
             title: "组合查询",
-            width: 700,
+            width: 530,
             height: 300,
             modal: !1,
             collapsible: !0,
@@ -539,20 +533,14 @@ function searchHandler(a) {
         iconCls: "fa fa-search",
         btnCls: "topjui-btn-orange",
         onClick: function () {
-            for (var a = [], c = $("#" + b.dialog.id).serializeArray(), d = c.length / 6, e = 0; e < d; e++) {
-                var f = (c[6 * e + 0].name, c[6 * e + 0].value),
-                    g = (c[6 * e + 1].name, c[6 * e + 1].value),
-                    h = (c[6 * e + 2].name, c[6 * e + 2].value),
-                    i = (c[6 * e + 3].name, c[6 * e + 3].value),
-                    j = (c[6 * e + 4].name, c[6 * e + 4].value),
-                    k = (c[6 * e + 5].name, c[6 * e + 5].value);
+            for (var a = [], c = $("#" + b.dialog.id).serializeArray(), d = c.length / 3, e = 0; e < d; e++) {
+                var f = (c[3 * e + 0].name, c[3 * e + 0].value),
+                    g = (c[3 * e + 1].name, c[3 * e + 1].value),
+                    h = (c[3 * e + 2].name, c[3 * e + 2].value);
                 a.push({
-                        join: f,
-                        lb: g,
-                        field: h,
-                        op: i,
-                        value: j,
-                        rb: k
+                        field: f,
+                        op: g,
+                        value: h
                     })
             }
             loadGrid(a)
@@ -565,12 +553,9 @@ function searchHandler(a) {
         }
     });
     var g = "<tr>";
-    g += '<td><input type="text" class="join" name="join"></td>',
-    g += '<td><input type="text" class="lb" name="lb"></td>',
     g += '<td><input type="text" class="field" name="field"></td>',
     g += '<td><input type="text" class="op" name="op"></td>',
     g += '<td><input type="text" class="value" name="value"></td>',
-    g += '<td><input type="text" class="rb" name="rb"></td>',
     g += '<td><a class="deleteCondition" href="javascript:void(0)"></a></td></tr>',
     $("#addCondition").on("click", function () {
         $("#advanceSearchTable").append(g),
@@ -13425,6 +13410,7 @@ function (a) {
                             var j = d[i],
                                 k = (j[f.valueField] + "", j[f.textField]),
                                 l = j[f.groupField];
+                                
                             l ? h != l ? (h = l, e.groups.push({
                                     value: l,
                                     startIndex: i,

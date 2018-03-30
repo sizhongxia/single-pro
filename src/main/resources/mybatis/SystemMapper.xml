@@ -10,6 +10,7 @@
         <id column="id" property="id" />
         <result column="title" property="title" />
         <result column="subtitle" property="subtitle" />
+        <result column="website" property="website" />
         <result column="logo_url" property="logoUrl" />
         <result column="copyright" property="copyright" />
     </resultMap>

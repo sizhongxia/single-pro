@@ -9,6 +9,8 @@
     <resultMap id="BaseResultMap" type="com.single.pro.entity.BasicCity">
         <id column="id" property="id" />
         <result column="name" property="name" />
+        <result column="pinyin" property="pinyin" />
+        <result column="jianpin" property="jianpin" />
         <result column="pcode" property="pcode" />
         <result column="code" property="code" />
         <result column="create_time" property="createTime" />
