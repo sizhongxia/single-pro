@@ -1,0 +1,70 @@
+<!-- treegrid表格 -->
+<table class="editTable" style="width: 100%;margin:10px auto 10px">
+    <tr>
+        <td class="label" width="120">当前字典类型：</td>
+        <td>
+        	<input type="text" name="name" readonly="readonly" data-toggle="topjui-textbox" data-options="width:258,required: true">
+        </td>
+    </tr>
+</table>
+<table data-toggle="topjui-edatagrid"
+	data-options="id: 'dictionaryItemDatagrid',
+	    idField: 'id',
+	    rownumbers: !0,
+   	    singleSelect: !0,
+        checkOnSelect: !0,
+        selectOnCheck: !0,
+	    url: remoteHost + '/dictionary/itemList?typeId=${typeId}'">
+	<thead>
+		<tr>
+			<th data-options="field:'name',title:'名称'"></th>
+			<th data-options="field:'code',title:'编码'"></th>
+			<th data-options="field:'status',title:'状态'"></th>
+			<th data-options="field:'create_time',title:'创建时间'"></th>
+			<th data-options="field:'update_time',title:'更新时间'"></th>
+		</tr>
+	</thead>
+</table>
+<!-- 表格工具栏开始 -->
+<div id="dictionaryItemDatagrid-toolbar" class="topjui-toolbar"
+	data-options="grid:{
+           type:'datagrid',
+           id:'dictionaryItemDatagrid'}"
+	style="display: none">
+
+	<a href="javascript:void(0)" data-toggle="topjui-menubutton"
+		data-options="method:'openDialog',
+	       extend: '#dictionaryItemDatagrid-toolbar',
+	       iconCls: 'fa fa-plus',
+	       dialog:{
+               title: '新增字典',
+	           width: 520,
+	           height: 320,
+	           href: remoteHost + '/dictionary/itemForm?typeId=${typeId}',
+	           buttonsGroup:[
+	               {text:'保存', url: remoteHost + '/dictionary/saveItem', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	           ]
+	       }">新增字典项</a>
+
+	<a href="javascript:void(0)" data-toggle="topjui-menubutton"
+		data-options="method: 'openDialog',
+	      		extend: '#dictionaryItemDatagrid-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '编辑字典项',
+		           width: 520,
+		           height: 320,
+	           	   href: remoteHost + '/dictionary/itemForm?typeId=${typeId}',
+	               url: remoteHost + '/dictionary/itemDetail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/dictionary/updateItem',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">编辑</a>
+
+</div>
+<!-- 表格工具栏结束 -->

@@ -1,0 +1,31 @@
+<input type="hidden" id="id" name="id"/>
+<table class="editTable" style="width: 90%">
+    <tr>
+        <td class="label" width="120">选择城市：</td>
+        <td>
+        	<input type="text" name="city_code"
+                   data-toggle="topjui-autocomplete"
+                   data-options="required: true,
+		           url: remoteHost+'/basic/city/select?s={code}',
+                   textField: 'name',
+                   formatter: cityFormatter,
+                   valueField: 'code',
+                   width: 258,
+                   prompt: '请输入城市名称、拼音、编码等检索',
+                   param: 'code:code,name:name'">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">基础服务费：</td>
+        <td>
+        	<input type="text" name="basic_cost" data-toggle="topjui-numberbox" data-options="precision:2,width:258,required: true">
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+	function cityFormatter(row) {
+	    var s = '<span>' + row.name + '</span><br/>';
+	    return s;
+	}
+</script>

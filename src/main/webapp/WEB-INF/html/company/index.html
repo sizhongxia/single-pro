@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../common/public.html">
+<script type="text/javascript">
+    $(window).load(function () {
+        $("#loading").fadeOut();
+    });
+</script>
+</head>
+
+<body>
+	<div data-toggle="topjui-layout" data-options="fit:true">
+	    <div data-options="region:'center',title:'公司企业',split:true,border:false,iconCls:'fa fa-sitemap'">
+	        <!-- treegrid表格 -->
+	        <table data-toggle="topjui-edatagrid"
+	               data-options="id: 'companyDatagrid',
+				    idField: 'id',
+				    rownumbers: !0,
+			   	    singleSelect: !0,
+				    url: remoteHost + '/company/list'">
+	            <thead>
+		            <tr>
+		                <th data-options="field:'name',title:'公司名称'"></th>
+		                <th data-options="field:'short_name',title:'公司简称'"></th>
+		                <th data-options="field:'mechanism_type',title:'结构类型'"></th>
+		                <th data-options="field:'tax_no',title:'纳税人识别号'"></th>
+		                <th data-options="field:'contacts',title:'联系人'"></th>
+		                <th data-options="field:'contact_tel',title:'联系电话'"></th>
+		                <th data-options="field:'address',title:'注册地址'"></th>
+		                <th data-options="field:'remarks',title:'备注'"></th>
+		                <th data-options="field:'create_time',title:'创建时间'"></th>
+		            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	</div>
+	
+	<!-- 表格工具栏开始 -->
+	<div id="companyDatagrid-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'datagrid',
+           id:'companyDatagrid'}" style="display:none">
+           
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'openDialog',
+	       extend: '#companyDatagrid-toolbar',
+	       iconCls: 'fa fa-plus',
+	       dialog:{
+               title: '新增企业',
+	           width: 520,
+	           height: 320,
+	           href: remoteHost + '/company/form',
+	           buttonsGroup:[
+	               {text:'保存', url: remoteHost + '/company/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	           ]
+	       }">新增企业</a>
+	    
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#companyDatagrid-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '编辑企业',
+		           width: 520,
+		           height: 320,
+	               href: remoteHost + '/company/edit',
+	               url: remoteHost + '/company/detail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/company/update',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">编辑</a>
+
+	</div>
+	<!-- 表格工具栏结束 -->
+	
+</body>
+</html>

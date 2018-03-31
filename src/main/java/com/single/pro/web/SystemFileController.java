@@ -64,7 +64,7 @@ public class SystemFileController extends BaseController {
 		return mav;
 	}
 
-	// 权限字列表
+	// 文件列表
 	@ResponseBody
 	@RequiresAuthentication
 	@RequestMapping(value = "/list")
@@ -122,7 +122,7 @@ public class SystemFileController extends BaseController {
 	}
 
 	/***
-	 * 更新系统菜单
+	 * 保存
 	 * 
 	 * @param request
 	 * @return
@@ -211,7 +211,7 @@ public class SystemFileController extends BaseController {
 	@ResponseBody
 	@RequiresAuthentication
 	@RequestMapping(value = "/delete")
-	public Map<String, Object> authwordDelete(HttpServletRequest request) {
+	public Map<String, Object> delete(HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("title", "操作提示");
 

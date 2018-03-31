@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../common/public.html">
+<script type="text/javascript">
+    $(window).load(function () {
+        $("#loading").fadeOut();
+    });
+</script>
+</head>
+
+<body>
+	<div data-toggle="topjui-layout" data-options="fit:true">
+	    <div data-options="region:'center',title:'数据字典',split:true,border:false,iconCls:'fa fa-sitemap'">
+	        <!-- treegrid表格 -->
+	        <table data-toggle="topjui-edatagrid"
+	               data-options="id: 'dictionaryTypeDatagrid',
+				    idField: 'id',
+				    rownumbers: !0,
+			   	    singleSelect: !0,
+		            checkOnSelect: !0,
+		            selectOnCheck: !0,
+				    url: remoteHost + '/dictionary/list'">
+	            <thead>
+		            <tr>
+		                <th data-options="field:'name',title:'类型名称'"></th>
+		                <th data-options="field:'code',title:'字典编码'"></th>
+		                <th data-options="field:'status',title:'状态'"></th>
+		                <th data-options="field:'create_time',title:'创建时间'"></th>
+		                <th data-options="field:'update_time',title:'更新时间'"></th>
+		            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	</div>
+	
+	<!-- 表格工具栏开始 -->
+	<div id="dictionaryTypeDatagrid-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'datagrid',
+           id:'dictionaryTypeDatagrid'}" style="display:none">
+           
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'openDialog',
+	       extend: '#dictionaryTypeDatagrid-toolbar',
+	       iconCls: 'fa fa-plus',
+	       dialog:{
+               title: '新增字典',
+	           width: 520,
+	           height: 320,
+	           href: remoteHost + '/dictionary/form',
+	           buttonsGroup:[
+	               {text:'保存', url: remoteHost + '/dictionary/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	           ]
+	       }">新增字典</a>
+	    
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#dictionaryTypeDatagrid-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '编辑字典',
+		           width: 520,
+		           height: 320,
+	               href: remoteHost + '/dictionary/form',
+	               url: remoteHost + '/dictionary/detail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/dictionary/update',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">编辑</a>
+	       
+	        <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#dictionaryTypeDatagrid-toolbar',
+	            iconCls: 'fa fa-list',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '字典项',
+		           width: 680,
+		           height: 460,
+	               href: remoteHost + '/dictionary/items?id={id}',
+	               url: remoteHost + '/dictionary/detail?id={id}'
+	       }">字典项</a>
+
+	</div>
+	<!-- 表格工具栏结束 -->
+	
+</body>
+</html>

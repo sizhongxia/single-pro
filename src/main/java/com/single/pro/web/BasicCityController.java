@@ -1,5 +1,6 @@
 package com.single.pro.web;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,7 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.single.pro.entity.BasicCity;
+import com.single.pro.model.BasicCityModel;
 import com.single.pro.service.BasicCityService;
+import com.single.pro.service.custom.BasicCityCustomService;
 import com.single.pro.util.IdUtil;
 
 @Controller
@@ -29,6 +32,8 @@ public class BasicCityController extends BaseController {
 
 	@Autowired
 	BasicCityService basicCityService;
+	@Autowired
+	BasicCityCustomService basicCityCustomService;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -69,6 +74,43 @@ public class BasicCityController extends BaseController {
 		}
 
 		return cityList;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = { "/select" }, method = { RequestMethod.POST })
+	public List<Map<String, String>> select(HttpServletRequest request) throws Exception {
+		List<Map<String, String>> list = new ArrayList<>();
+
+		String s = request.getParameter("s");
+		if (StringUtils.isBlank(s)) {
+			return list;
+		}
+		try {
+			s = URLDecoder.decode(s, "utf-8");
+		} catch (Exception e) {
+			return list;
+		}
+
+		List<BasicCityModel> citys = basicCityCustomService.findBasicCityWithParent(s);
+		if (citys != null && !citys.isEmpty()) {
+			Map<String, String> item = null;
+			for (BasicCityModel cm : citys) {
+				item = new HashMap<>();
+				item.put("code", cm.getCode());
+				StringBuffer sb = new StringBuffer();
+				if (StringUtils.isNotBlank(cm.getLv1())) {
+					sb.append(cm.getLv1() + " - ");
+				}
+				if (StringUtils.isNotBlank(cm.getLv2())) {
+					sb.append(cm.getLv2() + " - ");
+				}
+				sb.append(cm.getLv3());
+				item.put("name", sb.toString());
+				list.add(item);
+			}
+		}
+		return list;
 	}
 
 	@RequiresAuthentication
