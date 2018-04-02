@@ -1,6 +1,9 @@
 package com.single.pro.model;
 
-public class DictionaryItemModel {
+import java.io.Serializable;
+
+public class DictionaryItemModel implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String code;
 

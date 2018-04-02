@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.single.pro.service.custom.UserWorkerCustomService">
+
+	<select id="findUserWorkers" parameterType="java.util.Map" resultType="com.single.pro.model.UserWorkerModel">
+	
+		select 
+			u.`id`,
+			u.`user_name` as userName,
+			u.`head_pic_url` as headPicUrl,
+			u.`phone_no` as phoneNo,
+			u.`password` as password,
+			u.`gender` as gender,
+			u.`age` as age,
+			u.`province` as province,
+			u.`city` as city,
+			u.`county` as county,
+			u.`address_detail` as addressDetail,
+			u.`account_status` as accountStatus,
+			u.`user_type` as userType,
+			u.`regist_time` as registTime,
+			u.`update_time` as updateTime,
+			uw.`id` as workerId,
+			uw.`worker_no` as workerNo,
+			uw.`grade_level` as gradeLevel,
+			uw.`bond_status` as bondStatus,
+			uw.`balance` as balance,
+			uw.`remarks` as remarks,
+			uw.`last_order_time` as lastOrderTime
+			
+		from sp_user_worker uw
+			left join sp_user u on uw.user_id = u.id
+		<if test="searchParams != null">
+			<where>
+				<foreach collection="searchParams" item="item" separator="and">
+					<![CDATA[ ${item.field} ${item.operator} #{item.value} ]]>
+				</foreach>
+			</where>
+		</if>
+			order by ${orderByClause}
+	</select>
+
+</mapper>

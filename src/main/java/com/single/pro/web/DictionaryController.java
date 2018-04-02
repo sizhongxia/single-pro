@@ -174,7 +174,8 @@ public class DictionaryController extends BaseController {
 				item = new HashMap<>();
 				item.put("id", dictionaryItem.getId());
 				item.put("name", dictionaryItem.getName());
-				item.put("code", dictionaryItem.getCode());
+				String[] itemCodes = dictionaryItem.getCode().split("_");
+				item.put("code", itemCodes[itemCodes.length - 1]);
 				item.put("status", dictionaryItem.getStatus().equals("Y") ? "正常" : "禁用");
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				item.put("create_time", dateFormat.format(dictionaryItem.getCreateTime()));
@@ -229,7 +230,8 @@ public class DictionaryController extends BaseController {
 		if (dictionaryItem == null) {
 			dictionaryItem = new DictionaryItem();
 		}
-
+		String[] itemCodes = dictionaryItem.getCode().split("_");
+		dictionaryItem.setCode(itemCodes[itemCodes.length - 1]);
 		return dictionaryItem;
 	}
 
@@ -344,8 +346,14 @@ public class DictionaryController extends BaseController {
 		String code = request.getParameter("code");
 		String typeId = request.getParameter("typeId");
 
+		DictionaryType dictionaryType = dictionaryTypeService.selectById(typeId);
+		if (dictionaryType == null) {
+			res.put("message", "无效的字典类型");
+			return res;
+		}
+
 		Wrapper<DictionaryItem> wrapper = new EntityWrapper<>();
-		wrapper.eq("code", code);
+		wrapper.eq("code", dictionaryType.getCode() + "_" + code);
 		wrapper.eq("type_id", typeId);
 		DictionaryItem dictionaryItem = dictionaryItemService.selectOne(wrapper);
 		if (dictionaryItem != null) {
@@ -357,7 +365,7 @@ public class DictionaryController extends BaseController {
 		dictionaryItem.setId(IdUtil.id());
 		dictionaryItem.setTypeId(typeId);
 		dictionaryItem.setName(request.getParameter("name"));
-		dictionaryItem.setCode(code);
+		dictionaryItem.setCode(dictionaryType.getCode() + "_" + code);
 		dictionaryItem.setStatus(request.getParameter("status"));
 		dictionaryItem.setCreateTime(new Date());
 		dictionaryItem.setUpdateTime(new Date());
@@ -392,11 +400,16 @@ public class DictionaryController extends BaseController {
 			res.put("message", "无效的参数");
 			return res;
 		}
+		DictionaryType dictionaryType = dictionaryTypeService.selectById(dictionaryItem.getTypeId());
+		if (dictionaryType == null) {
+			res.put("message", "无效的字典类型");
+			return res;
+		}
 
 		String code = request.getParameter("code");
 
 		Wrapper<DictionaryItem> wrapper = new EntityWrapper<>();
-		wrapper.eq("code", code);
+		wrapper.eq("code", dictionaryType.getCode() + "_" + code);
 		wrapper.eq("type_id", dictionaryItem.getTypeId());
 		DictionaryItem _dictionaryItem = dictionaryItemService.selectOne(wrapper);
 		if (_dictionaryItem != null && !_dictionaryItem.getId().equals(id)) {
@@ -405,7 +418,7 @@ public class DictionaryController extends BaseController {
 		}
 
 		dictionaryItem.setName(request.getParameter("name"));
-		dictionaryItem.setCode(code);
+		dictionaryItem.setCode(dictionaryType.getCode() + "_" + code);
 		dictionaryItem.setStatus(request.getParameter("status"));
 		dictionaryItem.setUpdateTime(new Date());
 

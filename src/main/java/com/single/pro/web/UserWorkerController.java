@@ -28,36 +28,33 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
-import com.single.pro.entity.Company;
 import com.single.pro.entity.User;
-import com.single.pro.entity.UserCustomer;
-import com.single.pro.model.UserCustomerModel;
-import com.single.pro.service.CompanyService;
-import com.single.pro.service.UserCustomerService;
+import com.single.pro.entity.UserWorker;
+import com.single.pro.model.UserWorkerModel;
 import com.single.pro.service.UserService;
-import com.single.pro.service.custom.UserCustomerCustomService;
+import com.single.pro.service.UserWorkerService;
+import com.single.pro.service.custom.UserWorkerCustomService;
 import com.single.pro.util.AdvanceFilterUtil;
 import com.single.pro.util.IdUtil;
+import com.xiaoleilu.hutool.util.RandomUtil;
 
 @Controller
-@RequestMapping("user/customer")
-public class UserCustomerController extends BaseController {
+@RequestMapping("user/worker")
+public class UserWorkerController extends BaseController {
 
 	@Autowired
-	UserCustomerCustomService userCustomerCustomService;
+	UserWorkerCustomService userWorkerCustomService;
 	@Autowired
 	UserService userService;
 	@Autowired
-	UserCustomerService userCustomerService;
+	UserWorkerService userWorkerService;
 	@Autowired
 	BaseDataCacheUtil baseDataCacheUtil;
-	@Autowired
-	CompanyService companyService;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
 	public ModelAndView index(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("user/customer/index");
+		ModelAndView mav = new ModelAndView("user/worker/index");
 		return mav;
 	}
 
@@ -66,6 +63,7 @@ public class UserCustomerController extends BaseController {
 	@RequestMapping(value = { "/list" }, method = { RequestMethod.POST })
 	public Map<String, Object> list(HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<>();
+		List<Map<String, Object>> systemUserList = new ArrayList<>();
 
 		String pageStr = request.getParameter("page");
 		if (!NumberUtils.isDigits(pageStr)) {
@@ -86,59 +84,53 @@ public class UserCustomerController extends BaseController {
 		}
 
 		Set<String> exclusionFields = new HashSet<>();
-		exclusionFields.add("is_platform");
-		exclusionFields.add("apply_status");
-		exclusionFields.add("apply_time");
-		exclusionFields.add("apply_reason");
+		exclusionFields.add("worker_no");
+		exclusionFields.add("grade_level");
+		exclusionFields.add("bond_status");
+		exclusionFields.add("balance");
+		exclusionFields.add("remarks");
+		exclusionFields.add("last_order_time");
 		exclusionFields.add("province");
 		exclusionFields.add("city");
 		exclusionFields.add("county");
-		exclusionFields.add("industry");
-		exclusionFields.add("grade_level");
-		exclusionFields.add("bond_status");
 
 		String advanceFilter = request.getParameter("advanceFilter");
 		params = AdvanceFilterUtil.initSerachParams(advanceFilter, exclusionFields, "u.", params);
 
 		PageHelper.startPage(new Integer(pageStr), new Integer(rowsStr));
-		List<UserCustomerModel> userCustomers = userCustomerCustomService.findUserCustomers(params);
-		PageInfo<UserCustomerModel> pageInfo = new PageInfo<UserCustomerModel>(userCustomers);
+		List<UserWorkerModel> userWorkers = userWorkerCustomService.findUserWorkers(params);
+		PageInfo<UserWorkerModel> pageInfo = new PageInfo<UserWorkerModel>(userWorkers);
 
-		List<Map<String, Object>> rows = new ArrayList<>();
-
-		if (userCustomers != null && !userCustomers.isEmpty()) {
+		if (userWorkers != null && !userWorkers.isEmpty()) {
 			Map<String, Object> item = null;
 
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-			for (UserCustomerModel userCustomer : userCustomers) {
+			for (UserWorkerModel userWorker : userWorkers) {
 				item = new HashMap<>();
-				item.put("id", userCustomer.getId());
-				item.put("user_name", userCustomer.getUserName());
-				item.put("phone_no", userCustomer.getPhoneNo());
-				item.put("gender", userCustomer.getGender());
-				item.put("age", userCustomer.getAge());
+				item.put("id", userWorker.getId());
+				item.put("user_name", userWorker.getUserName());
+				item.put("phone_no", userWorker.getPhoneNo());
+				item.put("gender", userWorker.getGender());
+				item.put("age", userWorker.getAge());
 
-				item.put("province", baseDataCacheUtil.getCityName(userCustomer.getProvince()));
-				item.put("city", baseDataCacheUtil.getCityName(userCustomer.getCity()));
-				item.put("county", baseDataCacheUtil.getCityName(userCustomer.getCounty()));
-				item.put("address_detail", userCustomer.getAddressDetail());
+				item.put("province", baseDataCacheUtil.getCityName(userWorker.getProvince()));
+				item.put("city", baseDataCacheUtil.getCityName(userWorker.getCity()));
+				item.put("county", baseDataCacheUtil.getCityName(userWorker.getCounty()));
+				item.put("address_detail", userWorker.getAddressDetail());
 
-				item.put("customer_id", userCustomer.getCustomerId());
-				item.put("company_id", userCustomer.getCompanyId());
-				item.put("company_name", userCustomer.getCompanyName());
-				item.put("industry", baseDataCacheUtil.getDictItemName(userCustomer.getIndustry()));
-				item.put("grade_level", userCustomer.getGradeLevel());
-				item.put("bond_status", userCustomer.getBondStatus());
+				item.put("grade_level", userWorker.getGradeLevel());
+				item.put("worker_no", userWorker.getWorkerNo());
+				item.put("bond_status", userWorker.getBondStatus());
 
-				item.put("account_status", userCustomer.getAccountStatus());
-				item.put("regist_time", df.format(userCustomer.getRegistTime()));
-				item.put("update_time", df.format(userCustomer.getUpdateTime()));
-				rows.add(item);
+				item.put("account_status", userWorker.getAccountStatus());
+				item.put("regist_time", df.format(userWorker.getRegistTime()));
+				item.put("update_time", df.format(userWorker.getUpdateTime()));
+				systemUserList.add(item);
 			}
 		}
 
-		res.put("rows", rows);
+		res.put("rows", systemUserList);
 
 		res.put("currentPage", pageInfo.getPageNum());
 		res.put("firstPage", pageInfo.isIsFirstPage());
@@ -153,28 +145,21 @@ public class UserCustomerController extends BaseController {
 	@RequiresAuthentication
 	@RequestMapping(value = { "/form" }, method = { RequestMethod.GET })
 	public ModelAndView form(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("user/customer/form");
+		ModelAndView mav = new ModelAndView("user/worker/form");
 		return mav;
 	}
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/editForm" }, method = { RequestMethod.GET })
 	public ModelAndView editForm(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("user/customer/editForm");
+		ModelAndView mav = new ModelAndView("user/worker/editForm");
 		return mav;
 	}
 
 	@RequiresAuthentication
-	@RequestMapping(value = { "/changeAreaIndustryForm" }, method = { RequestMethod.GET })
+	@RequestMapping(value = { "/changeAreaForm" }, method = { RequestMethod.GET })
 	public ModelAndView changeAreaForm(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("user/customer/changeAreaIndustryForm");
-		return mav;
-	}
-
-	@RequiresAuthentication
-	@RequestMapping(value = { "/customerDetailForm" }, method = { RequestMethod.GET })
-	public ModelAndView customerDetailForm(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("user/customer/customerDetailForm");
+		ModelAndView mav = new ModelAndView("user/worker/changeAreaform");
 		return mav;
 	}
 
@@ -195,11 +180,11 @@ public class UserCustomerController extends BaseController {
 			return map;
 		}
 
-		Wrapper<UserCustomer> wrapper = new EntityWrapper<>();
+		Wrapper<UserWorker> wrapper = new EntityWrapper<>();
 		wrapper.eq("user_id", user.getId());
-		UserCustomer userCustomer = userCustomerService.selectOne(wrapper);
+		UserWorker userWorker = userWorkerService.selectOne(wrapper);
 
-		if (userCustomer == null) {
+		if (userWorker == null) {
 			return map;
 		}
 		map.put("id", user.getId());
@@ -209,14 +194,15 @@ public class UserCustomerController extends BaseController {
 		map.put("phoneNo", user.getPhoneNo());
 		map.put("addressDetail", user.getAddressDetail());
 		map.put("accountStatus", user.getAccountStatus());
-		map.put("partnerId", userCustomer.getId());
+		map.put("workerId", userWorker.getId());
+		map.put("remarks", userWorker.getRemarks());
 		return map;
 	}
 
 	@ResponseBody
 	@RequiresAuthentication
-	@RequestMapping(value = "/areaIndustryDetail")
-	public Map<String, Object> areaIndustryDetail(HttpServletRequest request) {
+	@RequestMapping(value = "/areaDetail")
+	public Map<String, Object> areaDetail(HttpServletRequest request) {
 		String id = request.getParameter("id");
 		User user = userService.selectById(id);
 		Map<String, Object> map = new HashMap<>();
@@ -230,23 +216,13 @@ public class UserCustomerController extends BaseController {
 		map.put("city", baseDataCacheUtil.getCityName(user.getCity()));
 		map.put("county", baseDataCacheUtil.getCityName(user.getCounty()));
 
-		Wrapper<UserCustomer> wrapper = new EntityWrapper<>();
-		wrapper.eq("user_id", user.getId());
-		UserCustomer userCustomer = userCustomerService.selectOne(wrapper);
-
-		if (userCustomer == null) {
-			return map;
-		}
-
-		map.put("industry", baseDataCacheUtil.getDictItemName(userCustomer.getIndustry()));
-
 		return map;
 	}
 
 	@ResponseBody
 	@RequiresAuthentication
-	@RequestMapping(value = "/customerDetail")
-	public Map<String, Object> customerDetail(HttpServletRequest request) {
+	@RequestMapping(value = "/apllyDetail")
+	public Map<String, Object> apllyDetail(HttpServletRequest request) {
 		String id = request.getParameter("id");
 		User user = userService.selectById(id);
 		Map<String, Object> map = new HashMap<>();
@@ -254,26 +230,14 @@ public class UserCustomerController extends BaseController {
 			return map;
 		}
 
-		Wrapper<UserCustomer> wrapper = new EntityWrapper<>();
+		Wrapper<UserWorker> wrapper = new EntityWrapper<>();
 		wrapper.eq("user_id", user.getId());
-		UserCustomer userCustomer = userCustomerService.selectOne(wrapper);
+		UserWorker userWorker = userWorkerService.selectOne(wrapper);
 
-		if (userCustomer == null) {
+		if (userWorker == null) {
 			return map;
 		}
 		map.put("id", user.getId());
-		map.put("companyName", "");
-		String companyId = userCustomer.getCompanyId();
-		if (StringUtils.isNotBlank(companyId)) {
-			Company company = companyService.selectById(companyId);
-			if (company != null) {
-				map.put("companyName", company.getName());
-			}
-		}
-
-		map.put("industry", baseDataCacheUtil.getDictItemName(userCustomer.getIndustry()));
-		map.put("gradeLevel", userCustomer.getGradeLevel());
-		map.put("bondStatus", "Y".equals(userCustomer.getBondStatus()) ? "已缴纳" : "未缴纳");
 
 		return map;
 	}
@@ -308,12 +272,12 @@ public class UserCustomerController extends BaseController {
 		user.setPassword("");
 		user.setGender(1);
 		user.setAge(0);
-		user.setProvince("");
-		user.setCity("");
-		user.setCounty("");
+		user.setProvince(request.getParameter("province"));
+		user.setCity(request.getParameter("city"));
+		user.setCounty(request.getParameter("county"));
 		user.setAddressDetail("");
 		user.setAccountStatus("Y");
-		user.setUserType("C");
+		user.setUserType("P");
 		Date now = new Date();
 		user.setRegistTime(now);
 		user.setUpdateTime(now);
@@ -325,17 +289,30 @@ public class UserCustomerController extends BaseController {
 			return res;
 		}
 
-		UserCustomer userCustomer = new UserCustomer();
-		userCustomer.setId(IdUtil.id());
-		userCustomer.setUserId(user.getId());
-		userCustomer.setGradeLevel(new BigDecimal("3.0"));
-		userCustomer.setCompanyId(request.getParameter("groupId"));
-		userCustomer.setBondStatus("N");
-		userCustomer.setIndustry(request.getParameter("industry"));
-		userCustomer.setCreateTime(now);
-		userCustomer.setUpdateTime(now);
+		UserWorker userWorker = new UserWorker();
+		userWorker.setId(IdUtil.id());
+		int workerNo = 0;
+		Wrapper<UserWorker> userWorkerWrapper = null;
+		while (true) {
+			workerNo = RandomUtil.randomInt(100001, 999999);
+			userWorkerWrapper = new EntityWrapper<>();
+			userWorkerWrapper.eq("worker_no", workerNo);
+			if (userWorkerService.selectOne(userWorkerWrapper) == null) {
+				break;
+			}
+		}
+		userWorker.setId(IdUtil.id());
+		userWorker.setWorkerNo(workerNo);
+		userWorker.setUserId(user.getId());
+		userWorker.setBondStatus("N");
+		userWorker.setBalance(new BigDecimal(0));
+		userWorker.setGradeLevel(new BigDecimal(3));
+		userWorker.setRemarks("");
+		userWorker.setLastOrderTime(null);
+		userWorker.setCreateTime(now);
+		userWorker.setUpdateTime(now);
 
-		if (!userCustomerService.insert(userCustomer)) {
+		if (!userWorkerService.insert(userWorker)) {
 			res.put("message", "未知错误");
 			return res;
 		}
@@ -395,6 +372,23 @@ public class UserCustomerController extends BaseController {
 			return res;
 		}
 
+		UserWorker userWorker = userWorkerService.selectById(request.getParameter("workerId"));
+		if (userWorker == null) {
+			res.put("message", "无效的合作伙伴ID");
+			return res;
+		}
+		String remarks = request.getParameter("remarks");
+		if (StringUtils.isBlank(remarks)) {
+			remarks = "";
+		}
+		userWorker.setRemarks(remarks);
+		userWorker.setUpdateTime(now);
+
+		if (!userWorkerService.updateById(userWorker)) {
+			res.put("message", "未知错误");
+			return res;
+		}
+
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
 		return res;
@@ -402,8 +396,8 @@ public class UserCustomerController extends BaseController {
 
 	@ResponseBody
 	@RequiresAuthentication
-	@RequestMapping(value = "/updateAreaIndustry")
-	public Map<String, Object> updateAreaIndustry(HttpServletRequest request) {
+	@RequestMapping(value = "/updateArea")
+	public Map<String, Object> updateArea(HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("title", "操作提示");
 		res.put("statusCode", 300);
@@ -428,22 +422,6 @@ public class UserCustomerController extends BaseController {
 		user.setUpdateTime(new Date());
 
 		if (!userService.updateById(user)) {
-			res.put("message", "未知错误");
-			return res;
-		}
-		Wrapper<UserCustomer> wrapper = new EntityWrapper<>();
-		wrapper.eq("user_id", user.getId());
-		UserCustomer userCustomer = userCustomerService.selectOne(wrapper);
-
-		if (userCustomer == null) {
-			res.put("message", "更新行业失败");
-			return res;
-		}
-
-		userCustomer.setIndustry(request.getParameter("n-industry"));
-		userCustomer.setUpdateTime(new Date());
-
-		if (!userCustomerService.updateById(userCustomer)) {
 			res.put("message", "未知错误");
 			return res;
 		}

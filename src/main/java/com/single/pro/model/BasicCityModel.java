@@ -1,6 +1,9 @@
 package com.single.pro.model;
 
-public class BasicCityModel {
+import java.io.Serializable;
+
+public class BasicCityModel implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private String code;
 	private String lv1;

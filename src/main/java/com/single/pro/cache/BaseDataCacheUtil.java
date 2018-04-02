@@ -4,14 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -38,6 +34,8 @@ import com.single.pro.service.SystemAppService;
 import com.single.pro.service.SystemService;
 import com.single.pro.shiro.realm.JDBCRealm;
 
+import net.oschina.j2cache.CacheObject;
+
 public class BaseDataCacheUtil implements InitializingBean {
 
 	@Autowired
@@ -51,24 +49,25 @@ public class BaseDataCacheUtil implements InitializingBean {
 	@Autowired
 	private BasicCityService basicCityService;
 
-	private String UPLOAD_SAVE_PATH = "";
-	private String UPLOAD_REQ_PATH = "";
+	private final String region = "single:system";
 
-	private ConcurrentMap<String, List<DictionaryItem>> dictItems = new ConcurrentHashMap<>();
-	private Vector<CityModel> cityModels = new Vector<>();
+	// private ConcurrentMap<String, List<DictionaryItem>> dictItems = new
+	// ConcurrentHashMap<>();
 
 	public String getUploadSavePath() {
-		if (StringUtils.isBlank(UPLOAD_SAVE_PATH)) {
+		CacheObject cacheObject = CacheUtil.get(region, "uploadSavePath");
+		if (cacheObject == null || StringUtils.isBlank(cacheObject.asString())) {
 			loadUploadProperties();
 		}
-		return UPLOAD_SAVE_PATH;
+		return cacheObject.asString();
 	}
 
 	public String getUploadReqPath() {
-		if (StringUtils.isBlank(UPLOAD_REQ_PATH)) {
+		CacheObject cacheObject = CacheUtil.get(region, "uploadReqPath");
+		if (cacheObject == null || StringUtils.isBlank(cacheObject.asString())) {
 			loadUploadProperties();
 		}
-		return UPLOAD_REQ_PATH;
+		return cacheObject.asString();
 	}
 
 	public System getSystemInfo() {
@@ -131,9 +130,19 @@ public class BaseDataCacheUtil implements InitializingBean {
 		return apps;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<DictionaryItemModel> getDictItems(String typeCode) {
 		List<DictionaryItemModel> itemModels = new ArrayList<>();
-		List<DictionaryItem> items = dictItems.get(typeCode);
+		List<DictionaryItem> items = null;
+
+		CacheObject cacheObject = CacheUtil.get(region + ":dict:type", typeCode);
+		if (cacheObject != null) {
+			Object obj = cacheObject.getValue();
+			if (obj != null) {
+				items = (List<DictionaryItem>) obj;
+			}
+		}
+
 		if (items == null || items.isEmpty()) {
 			return itemModels;
 		}
@@ -148,30 +157,35 @@ public class BaseDataCacheUtil implements InitializingBean {
 	}
 
 	public String getDictItemName(String code) {
-		for (Entry<String, List<DictionaryItem>> entity : dictItems.entrySet()) {
-			for (DictionaryItem di : entity.getValue()) {
-				if (di.getCode().equals(code)) {
-					return di.getName();
-				}
+		DictionaryItem item = null;
+		CacheObject cacheObject = CacheUtil.get(region + ":dict:item", code);
+		if (cacheObject != null) {
+			Object obj = cacheObject.getValue();
+			if (obj != null) {
+				item = (DictionaryItem) obj;
 			}
+		}
+		if (item != null) {
+			return item.getName();
 		}
 		return "";
 	}
 
 	public CityModel getCityModel(String code) {
-		for (CityModel cityModel : cityModels) {
-			if (cityModel.getCode().equals(code)) {
-				return cityModel;
+		CacheObject cacheObject = CacheUtil.get(region + ":city", code);
+		if (cacheObject != null) {
+			Object obj = cacheObject.getValue();
+			if (obj != null) {
+				return (CityModel) obj;
 			}
 		}
 		return null;
 	}
 
 	public String getCityName(String code) {
-		for (CityModel cityModel : cityModels) {
-			if (cityModel.getCode().equals(code)) {
-				return cityModel.getName();
-			}
+		CityModel cityModel = getCityModel(code);
+		if (cityModel != null) {
+			return cityModel.getName();
 		}
 		return "";
 	}
@@ -199,7 +213,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 	}
 
 	private System getCacheSystemInfo() {
-		Object obj = CacheUtil.get("single:system", "info").getValue();
+		Object obj = CacheUtil.get(region, "info").getValue();
 		if (obj != null) {
 			return (System) obj;
 		}
@@ -208,7 +222,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 
 	@SuppressWarnings("unchecked")
 	private List<SystemApp> getCacheSystemApps() {
-		Object obj = CacheUtil.get("single:system", "apps").getValue();
+		Object obj = CacheUtil.get(region, "apps").getValue();
 		if (obj != null) {
 			return (List<SystemApp>) obj;
 		}
@@ -222,8 +236,15 @@ public class BaseDataCacheUtil implements InitializingBean {
 		if (system == null) {
 			throw new RuntimeException("请先配置系统应用基本信息");
 		}
-		system.setLogoUrl(UPLOAD_REQ_PATH + system.getLogoUrl());
-		CacheUtil.set("single:system", "info", system);
+
+		CacheObject cacheObject = CacheUtil.get(region, "uploadReqPath");
+		if (cacheObject == null) {
+			loadUploadProperties();
+			cacheObject = CacheUtil.get(region, "uploadReqPath");
+		}
+
+		system.setLogoUrl(cacheObject.asString() + system.getLogoUrl());
+		CacheUtil.set(region, "info", system);
 	}
 
 	private void initSystemApps() {
@@ -233,14 +254,14 @@ public class BaseDataCacheUtil implements InitializingBean {
 		if (apps == null || apps.isEmpty()) {
 			throw new RuntimeException("无系统应用");
 		}
-		CacheUtil.set("single:system", "apps", apps);
+		CacheUtil.set(region, "apps", apps);
 	}
 
 	private void loadUploadProperties() {
 		try {
 			Properties props = PropertiesLoaderUtils.loadAllProperties("upload.properties");
-			UPLOAD_SAVE_PATH = props.getProperty("save_path");
-			UPLOAD_REQ_PATH = props.getProperty("req_path");
+			CacheUtil.set(region, "uploadSavePath", props.getProperty("save_path"));
+			CacheUtil.set(region, "uploadReqPath", props.getProperty("req_path"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -258,7 +279,10 @@ public class BaseDataCacheUtil implements InitializingBean {
 				wrapper.orderBy("code asc");
 				List<DictionaryItem> items = dictionaryItemService.selectList(wrapper);
 				if (items != null && !items.isEmpty()) {
-					dictItems.put(type.getCode(), items);
+					CacheUtil.set(region + ":dict:type", type.getCode(), items);
+					for (DictionaryItem item : items) {
+						CacheUtil.set(region + ":dict:item", item.getCode(), item);
+					}
 				}
 			}
 		}
@@ -274,7 +298,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 			cm.setName(bc.getName());
 			cm.setPinyin(bc.getPinyin());
 			cm.setJianpin(bc.getJianpin());
-			cityModels.add(cm);
+			CacheUtil.set("single:system:city", bc.getCode(), cm);
 		}
 	}
 
@@ -284,11 +308,8 @@ public class BaseDataCacheUtil implements InitializingBean {
 		loadUploadProperties();
 		initSystemInfo();
 		initSystemApps();
-
 		loadDictItems();
-
 		loadCityDatas();
-
 		new Timer().schedule(new TimerTask() {
 			@Override
 			public void run() {

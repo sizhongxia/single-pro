@@ -1,8 +1,10 @@
 package com.single.pro.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class UserCustomerModel extends UserModel {
+public class UserCustomerModel extends UserModel implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private String customerId;
 	private String companyId;

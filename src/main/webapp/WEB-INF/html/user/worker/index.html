@@ -8,7 +8,7 @@
 	    <div data-options="region:'center',iconCls:'icon-reload',title:'',split:true,border:false,bodyCls:'border_left'">
 	    	<!-- datagrid表格 -->
 	        <table data-toggle="topjui-edatagrid"
-	               data-options="id:'userCustomerTg',
+	               data-options="id:'userWorkerTg',
 			            rownumbers: !0,
 			            pagination: !1,
 			            pageSize: 0,
@@ -16,14 +16,11 @@
 				   	    singleSelect: !0,
 			            checkOnSelect: !0,
 			            selectOnCheck: !0,
-	                    url: remoteHost+'/user/customer/list'">
+	                    url: remoteHost+'/user/worker/list'">
 	            <thead>
 		            <tr>
 				        <th data-options="field:'user_name',title:'用户名称'"></th>
 				        <th data-options="field:'phone_no',title:'手机号'"></th>
-				        <th data-options="field:'industry',title:'行业'"></th>
-				        <th data-options="field:'company_name',title:'所在公司'"></th>
-				        <th data-options="field:'grade_level',title:'评分'"></th>
 				        <th data-options="field:'province',title:'省'"></th>
 				        <th data-options="field:'city',title:'市'"></th>
 				        <th data-options="field:'county',title:'区（县）'"></th>
@@ -38,6 +35,15 @@
 		                        }
 		                    }"></th>
 				        <th data-options="field:'age',title:'年龄'"></th>
+				        <th data-options="field:'bond_status',title:'保证金',formatter:function(value,row,index){
+		                        if (value == 'Y') {
+		                            return '<div>已缴纳</div>';
+		                        } else if (value == 'N') {
+		                            return '<div>未缴纳</div>';
+		                        } else {
+		                            return '<div>-</div>';
+		                        }
+		                    }"></th>
 				        <th data-options="field:'account_status',title:'账号状态',formatter:function(value,row,index){
 		                        if (value == 'Y') {
 		                            return '<div>正常</div>';
@@ -56,40 +62,40 @@
 	</div>
 	
 	<!-- 表格工具栏开始 -->
-	<div id="userCustomerTg-toolbar" class="topjui-toolbar" data-options="grid:{
+	<div id="userWorkerTg-toolbar" class="topjui-toolbar" data-options="grid:{
            type:'datagrid',
-           id:'userCustomerTg'}" style="display:none">
+           id:'userWorkerTg'}" style="display:none">
            
 	    <a href="javascript:void(0)"
 	       data-toggle="topjui-menubutton"
 	       data-options="method:'openDialog',
-	       extend: '#userCustomerTg-toolbar',
+	       extend: '#userWorkerTg-toolbar',
 	       iconCls: 'fa fa-plus',
 	       dialog:{
-               title: '新增合伙人',
+               title: '新增工人',
 	           width: 520,
 	           height: 320,
-	           href: remoteHost + '/user/customer/form',
+	           href: remoteHost + '/user/worker/form',
 	           buttonsGroup:[
-	               {text:'保存', url: remoteHost + '/user/customer/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	               {text:'保存', url: remoteHost + '/user/worker/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
 	           ]
-	       }">新增客户</a>
+	       }">新增工人</a>
 	    
 	    <a href="javascript:void(0)"
 	       data-toggle="topjui-menubutton"
 	       data-options="method: 'openDialog',
-	      		extend: '#userCustomerTg-toolbar',
+	      		extend: '#userWorkerTg-toolbar',
 	            iconCls: 'fa fa-pencil',
 	       		btnCls: 'topjui-btn-normal',
 	            dialog: {
 	               title: '编辑基本信息',
 		           width: 520,
 		           height: 320,
-	               href: remoteHost + '/user/customer/editForm',
-	               url: remoteHost + '/user/customer/detail?id={id}',
+	               href: remoteHost + '/user/worker/editForm',
+	               url: remoteHost + '/user/worker/detail?id={id}',
 	               buttonsGroup: [{
 	                   	text: '更新',
-	                   	url: remoteHost + '/user/customer/updateBase',
+	                   	url: remoteHost + '/user/worker/updateBase',
 	                   	iconCls: 'fa fa-save',
 	                   	handler: 'ajaxForm',
 	       				btnCls: 'topjui-btn-red',
@@ -99,42 +105,28 @@
 	    <a href="javascript:void(0)"
 	       data-toggle="topjui-menubutton"
 	       data-options="method: 'openDialog',
-	      		extend: '#userCustomerTg-toolbar',
+	      		extend: '#userWorkerTg-toolbar',
 	            iconCls: 'fa fa-exchange',
 	       		btnCls: 'topjui-btn-normal',
 	            dialog: {
-	               title: '变更客户区域',
+	               title: '变更所在区域',
 		           width: 520,
 		           height: 320,
-	           	   href: remoteHost + '/user/customer/changeAreaIndustryForm',
-	               url: remoteHost + '/user/customer/areaIndustryDetail?id={id}',
+	           	   href: remoteHost + '/user/worker/changeAreaform',
+	               url: remoteHost + '/user/worker/areaDetail?id={id}',
 	               buttonsGroup: [{
 	                   	text: '更新',
-	                   	url: remoteHost + '/user/customer/updateAreaIndustry',
+	                   	url: remoteHost + '/user/worker/updateArea',
 	                   	iconCls: 'fa fa-save',
 	                   	handler: 'ajaxForm',
 	       				btnCls: 'topjui-btn-red',
 	               }]
-	       }">变更区域行业</a>
+	       }">变更所在区域</a>
 	       
-	    <a href="javascript:void(0)"
-	       data-toggle="topjui-menubutton"
-	       data-options="method: 'openDialog',
-	      		extend: '#userCustomerTg-toolbar',
-	            iconCls: 'fa fa-tasks',
-	       		btnCls: 'topjui-btn-normal',
-	            dialog: {
-	               title: '其他信息',
-		           width: 520,
-		           height: 320,
-	           	   href: remoteHost + '/user/customer/customerDetailForm',
-	               url: remoteHost + '/user/customer/customerDetail?id={id}'
-	       }">其他信息</a>
-	    
 	       <a href="javascript:void(0)"
 	       data-toggle="topjui-menubutton"
 	       data-options="method:'search',
-	       extend: '#userCustomerTg-toolbar'">查询</a>
+	       extend: '#userWorkerTg-toolbar'">查询</a>
 	       
 	</div>
 	<!-- 表格工具栏结束 -->

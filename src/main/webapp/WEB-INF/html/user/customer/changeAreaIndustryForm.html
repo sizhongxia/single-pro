@@ -1,0 +1,73 @@
+<input type="hidden" id="id" name="id"/>
+<table class="editTable" style="width: 90%">
+    <tr>
+        <td colspan="2">
+            <div class="divider">
+                <span>原数据</span>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">原区域：</td>
+        <td>
+        	 <input type="text" name="province" readonly="readonly" data-toggle="topjui-textbox" data-options="width:83">
+             <input type="text" name="city" readonly="readonly" data-toggle="topjui-textbox" data-options="width:83">
+             <input type="text" name="county" readonly="readonly" data-toggle="topjui-textbox" data-options="width:83">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">原行业：</td>
+        <td>
+        <input type="text" name="industry" readonly="readonly" data-toggle="topjui-textbox" data-options="width:258">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div class="divider">
+                <span>新数据</span>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">新区域：</td>
+        <td>
+        	<input type="text" name="n-province" data-toggle="topjui-combobox" data-options="
+                           	width:83,
+                       		panelHeight:120,
+                       		valueField: 'code',
+		                    textField:'name',
+                       		url: remoteHost + '/basic/city/cities',
+                       		childCombobox:{
+	                           id:'city-1804011427',
+	                           url:remoteHost+'/basic/city/cities?pcode={parentValue}'
+	                       	}">
+             <input type="text" name="n-city" data-toggle="topjui-combobox" data-options="
+             				id:'city-1804011427',
+                          	width:83,
+                      		panelHeight:120,
+	                       	valueField:'code',
+	                       	textField:'name',
+                      		childCombobox:{
+                           		id:'county-1804011427',
+                          		url:remoteHost+'/basic/city/cities?pcode={parentValue}'
+                      		}">
+              <input type="text" name="n-county" data-toggle="topjui-combobox" data-options="
+              				id:'county-1804011427',
+                           	width:83,
+                       		panelHeight:120,
+                       		valueField: 'code',
+		                    textField:'name'">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">新行业：</td>
+        <td>
+        <input type="text" name="n-industry" data-toggle="topjui-combobox" 
+        		data-options="width:258,
+                       required: true,
+                       valueField:'code',
+                       textField:'name',
+                       url: remoteHost + '/dictionary/dictionaryItems?typeCode=HY'">
+        </td>
+    </tr>
+</table>

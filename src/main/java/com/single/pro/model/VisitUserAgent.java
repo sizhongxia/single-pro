@@ -1,6 +1,9 @@
 package com.single.pro.model;
 
-public class VisitUserAgent {
+import java.io.Serializable;
+
+public class VisitUserAgent  implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String userAgent;
 	private String operatingSystem;
 	private String browser;
