@@ -23,8 +23,10 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.entity.DictionaryItem;
 import com.single.pro.entity.DictionaryType;
+import com.single.pro.model.DictionaryItemModel;
 import com.single.pro.service.DictionaryItemService;
 import com.single.pro.service.DictionaryTypeService;
 import com.single.pro.util.IdUtil;
@@ -38,6 +40,8 @@ public class DictionaryController extends BaseController {
 	DictionaryTypeService dictionaryTypeService;
 	@Autowired
 	DictionaryItemService dictionaryItemService;
+	@Autowired
+	BaseDataCacheUtil baseDataCacheUtil;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -338,9 +342,11 @@ public class DictionaryController extends BaseController {
 		res.put("statusCode", 300);
 
 		String code = request.getParameter("code");
+		String typeId = request.getParameter("typeId");
 
 		Wrapper<DictionaryItem> wrapper = new EntityWrapper<>();
 		wrapper.eq("code", code);
+		wrapper.eq("type_id", typeId);
 		DictionaryItem dictionaryItem = dictionaryItemService.selectOne(wrapper);
 		if (dictionaryItem != null) {
 			res.put("message", "字典编码已存在");
@@ -349,7 +355,7 @@ public class DictionaryController extends BaseController {
 
 		dictionaryItem = new DictionaryItem();
 		dictionaryItem.setId(IdUtil.id());
-		dictionaryItem.setTypeId(request.getParameter("typeId"));
+		dictionaryItem.setTypeId(typeId);
 		dictionaryItem.setName(request.getParameter("name"));
 		dictionaryItem.setCode(code);
 		dictionaryItem.setStatus(request.getParameter("status"));
@@ -391,6 +397,7 @@ public class DictionaryController extends BaseController {
 
 		Wrapper<DictionaryItem> wrapper = new EntityWrapper<>();
 		wrapper.eq("code", code);
+		wrapper.eq("type_id", dictionaryItem.getTypeId());
 		DictionaryItem _dictionaryItem = dictionaryItemService.selectOne(wrapper);
 		if (_dictionaryItem != null && !_dictionaryItem.getId().equals(id)) {
 			res.put("message", "字典项编码已存在");
@@ -410,6 +417,14 @@ public class DictionaryController extends BaseController {
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
 		return res;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/dictionaryItems")
+	public List<DictionaryItemModel> dictionaryItems(HttpServletRequest request) {
+		String typeCode = request.getParameter("typeCode");
+		return baseDataCacheUtil.getDictItems(typeCode);
 	}
 
 }

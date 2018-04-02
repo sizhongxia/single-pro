@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.single.pro.service.custom.CompanyCustomService">
+
+	<select id="selectCompanyList" resultType="com.single.pro.entity.Company">
+		select c.id, c.name, c.short_name as shortName from sp_company c
+		<where>
+			<if test="groupId != null">
+				and c.group_id = #{groupId}
+			</if>
+			<if test="sq != null">
+				and (c.`name` like concat('%', #{sq}, '%') or c.pinyin like concat('%', #{sq}, '%') or c.short_name like concat('%', #{sq}, '%'))
+			</if>
+		</where>
+		order by c.name asc
+		limit 0, 20
+	</select>
+
+</mapper>

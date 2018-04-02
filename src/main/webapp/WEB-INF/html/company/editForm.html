@@ -13,19 +13,6 @@
         </td>
     </tr>
     <tr>
-        <td class="label" width="120">所属组织：</td>
-        <td>
-        	<input type="text" data-toggle="topjui-autocomplete" 
-        		data-options="width:258,
-        				required:true,
-                        textField:'companyName',
-                        valueField:'companyName',
-                   		formatter:itemFormatter,
-                       url: remoteHost + '/company/groups?q={name}'">
-             <input type="hidden" name="groupId">
-        </td>
-    </tr>
-    <tr>
         <td class="label" width="120">机构类型：</td>
         <td>
         <input type="text" name="mechanismType" data-toggle="topjui-combobox" 
@@ -57,38 +44,15 @@
     <tr>
         <td class="label" width="120">区域：</td>
         <td>
-        	<input type="text" name="provincial" data-toggle="topjui-combobox" data-options="
-                           	width:83,
-                       		panelHeight:120,
-                       		valueField: 'code',
-		                    textField:'name',
-                       		url: remoteHost + '/basic/city/cities',
-                       		childCombobox:{
-	                           id:'city-1804011226',
-	                           url:remoteHost+'/basic/city/cities?pcode={parentValue}'
-	                       	}">
-             <input type="text" name="city" data-toggle="topjui-combobox" data-options="
-             				id:'city-1804011226',
-                          	width:83,
-                      		panelHeight:120,
-	                       	valueField:'code',
-	                       	textField:'name',
-                      		childCombobox:{
-                           		id:'county-1804011226',
-                          		url:remoteHost+'/basic/city/cities?pcode={parentValue}'
-                      		}">
-              <input type="text" name="county" data-toggle="topjui-combobox" data-options="
-              				id:'county-1804011226',
-                           	width:83,
-                       		panelHeight:120,
-                       		valueField: 'code',
-		                    textField:'name'">
+        	<input type="text" name="provincial" readonly="readonly" data-toggle="topjui-textbox" data-options="width:83">
+             <input type="text" name="city" readonly="readonly" data-toggle="topjui-textbox" data-options="width:83">
+              <input type="text" name="county" readonly="readonly" data-toggle="topjui-textbox" data-options="width:83">
         </td>
     </tr>
     <tr>
         <td class="label" width="120">地址：</td>
         <td>
-        	<input type="text" name="address" data-toggle="topjui-textbox" data-options="width:258,required: true">
+        	<input type="text" name="address" readonly="readonly" data-toggle="topjui-textbox" data-options="width:258,required: true">
         </td>
     </tr>
     <tr>

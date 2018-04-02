@@ -13417,7 +13417,7 @@ function (a) {
                                     count: 1
                                 }), g.push('<div id="' + (e.groupIdPrefix + "_" + (e.groups.length - 1)) + '" class="combobox-group">'), g.push(f.groupFormatter ? f.groupFormatter.call(b, l) : l), g.push("</div>")) : e.groups[e.groups.length - 1].count++ : h = void 0;
                             var m = "combobox-item" + (j.disabled ? " combobox-item-disabled" : "") + (l ? " combobox-gitem" : "");
-                            g.push('<div id="' + (e.itemIdPrefix + "_" + i) + '" class="' + m + '">'),
+                            g.push('<div id="' + (e.itemIdPrefix + "_" + i) + '" class="' + m + '" style="word-break: keep-all">'),
                             f.showItemIcon && j.iconCls && g.push('<span class="combobox-icon ' + j.iconCls + '"></span>'),
                             g.push(f.formatter ? f.formatter.call(b, j) : k),
                             g.push("</div>")

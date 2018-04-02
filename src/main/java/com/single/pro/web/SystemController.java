@@ -659,7 +659,7 @@ public class SystemController extends BaseController {
 			wrapper.eq("app_id", appId);
 		}
 		wrapper.eq("pid", "0");
-		wrapper.orderBy("sort_no", true);
+		wrapper.orderBy("app_id asc, sort_no asc");
 		List<SystemMenu> systemMenus = systemMenuService.selectList(wrapper);
 
 		List<Map<String, Object>> menuList = new ArrayList<>();

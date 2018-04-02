@@ -24,12 +24,18 @@
 		                <th data-options="field:'name',title:'公司名称'"></th>
 		                <th data-options="field:'short_name',title:'公司简称'"></th>
 		                <th data-options="field:'mechanism_type',title:'结构类型'"></th>
+		                <th data-options="field:'provincial',title:'省'"></th>
+		                <th data-options="field:'city',title:'市'"></th>
+		                <th data-options="field:'county',title:'区（县）'"></th>
+		                <th data-options="field:'address',title:'注册地址'"></th>
+		                <th data-options="field:'organization_code',title:'组织机构'"></th>
+		                <th data-options="field:'business_regist_no',title:'工商注册号'"></th>
 		                <th data-options="field:'tax_no',title:'纳税人识别号'"></th>
 		                <th data-options="field:'contacts',title:'联系人'"></th>
 		                <th data-options="field:'contact_tel',title:'联系电话'"></th>
-		                <th data-options="field:'address',title:'注册地址'"></th>
 		                <th data-options="field:'remarks',title:'备注'"></th>
 		                <th data-options="field:'create_time',title:'创建时间'"></th>
+		                <th data-options="field:'update_time',title:'更新时间'"></th>
 		            </tr>
 	            </thead>
 	        </table>
@@ -66,7 +72,7 @@
 	               title: '编辑企业',
 		           width: 520,
 		           height: 320,
-	               href: remoteHost + '/company/edit',
+	           	   href: remoteHost + '/company/editForm',
 	               url: remoteHost + '/company/detail?id={id}',
 	               buttonsGroup: [{
 	                   	text: '更新',
@@ -76,6 +82,27 @@
 	       				btnCls: 'topjui-btn-red',
 	               }]
 	       }">编辑</a>
+	       
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#companyDatagrid-toolbar',
+	            iconCls: 'fa fa-exchange',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '变更企业区域',
+		           width: 520,
+		           height: 320,
+	           	   href: remoteHost + '/company/changeAreaform?id={id}',
+	               url: remoteHost + '/company/detail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/company/updateArea',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">变更区域</a>
 
 	</div>
 	<!-- 表格工具栏结束 -->

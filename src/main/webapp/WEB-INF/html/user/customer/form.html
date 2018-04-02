@@ -1,0 +1,46 @@
+<input type="hidden" id="id" name="id"/>
+<table class="editTable" style="width: 90%">
+    <tr>
+        <td class="label" width="120">用户名称：</td>
+        <td>
+            <input type="text" name="userName" data-toggle="topjui-textbox" data-options="width:258,required:true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">手机号：</td>
+        <td>
+            <input type="text" name="phoneNo" data-toggle="topjui-textbox" data-options="width:258,required:true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">所属公司：</td>
+        <td>
+        	<input type="text" data-toggle="topjui-autocomplete" 
+        		data-options="width:258,
+        				required:true,
+        				textField:'companyName',
+                        valueField:'companyName',
+                   		formatter:itemFormatter,
+                       url: remoteHost + '/company/groups?q={name}',
+                       param:'groupId:groupId,companyName:companyName'">
+            <input  type="hidden" name="groupId">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">行业：</td>
+        <td>
+        <input type="text" name="industry" data-toggle="topjui-combobox" 
+        		data-options="width:258,
+                       required: true,
+                       valueField:'code',
+                       textField:'name',
+                       url: remoteHost + '/dictionary/dictionaryItems?typeCode=HY'">
+        </td>
+    </tr>
+</table>
+
+<script>
+    function itemFormatter(row) {
+        return '<i class="fa fa-caret-right"></i> &nbsp; <span>' + row.companyName + '</span><br/>';
+    }
+</script>

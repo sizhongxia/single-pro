@@ -78,6 +78,41 @@ public class BasicCityController extends BaseController {
 
 	@ResponseBody
 	@RequiresAuthentication
+	@RequestMapping(value = { "/cities" }, method = { RequestMethod.POST })
+	public List<Map<String, Object>> cities(HttpServletRequest request) {
+		String pcode = request.getParameter("pcode");
+		if (StringUtils.isBlank(pcode)) {
+			pcode = "1";
+		}
+
+		Wrapper<BasicCity> wrapper = new EntityWrapper<>();
+		wrapper.eq("pcode", pcode);
+		wrapper.orderBy("code", true);
+		List<BasicCity> citys = basicCityService.selectList(wrapper);
+
+		List<Map<String, Object>> cityList = new ArrayList<>();
+
+		boolean isFirst = true;
+
+		Map<String, Object> item = null;
+		if (citys != null && !citys.isEmpty()) {
+			for (BasicCity city : citys) {
+				item = new HashMap<>();
+				item.put("code", city.getCode());
+				item.put("name", city.getName());
+				if (isFirst) {
+					item.put("selected", "selected");
+					isFirst = false;
+				}
+				cityList.add(item);
+			}
+		}
+
+		return cityList;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
 	@RequestMapping(value = { "/select" }, method = { RequestMethod.POST })
 	public List<Map<String, String>> select(HttpServletRequest request) throws Exception {
 		List<Map<String, String>> list = new ArrayList<>();
@@ -88,6 +123,7 @@ public class BasicCityController extends BaseController {
 		}
 		try {
 			s = URLDecoder.decode(s, "utf-8");
+			s = s.toLowerCase();
 		} catch (Exception e) {
 			return list;
 		}

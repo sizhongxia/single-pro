@@ -4,8 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -17,9 +23,17 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.single.pro.entity.BasicCity;
+import com.single.pro.entity.DictionaryItem;
+import com.single.pro.entity.DictionaryType;
 import com.single.pro.entity.RoleApp;
 import com.single.pro.entity.System;
 import com.single.pro.entity.SystemApp;
+import com.single.pro.model.CityModel;
+import com.single.pro.model.DictionaryItemModel;
+import com.single.pro.service.BasicCityService;
+import com.single.pro.service.DictionaryItemService;
+import com.single.pro.service.DictionaryTypeService;
 import com.single.pro.service.SystemAppService;
 import com.single.pro.service.SystemService;
 import com.single.pro.shiro.realm.JDBCRealm;
@@ -30,28 +44,29 @@ public class BaseDataCacheUtil implements InitializingBean {
 	private SystemService systemService;
 	@Autowired
 	private SystemAppService systemAppService;
+	@Autowired
+	private DictionaryTypeService dictionaryTypeService;
+	@Autowired
+	private DictionaryItemService dictionaryItemService;
+	@Autowired
+	private BasicCityService basicCityService;
 
-	private static String UPLOAD_SAVE_PATH = "";
-	private static String UPLOAD_REQ_PATH = "";
+	private String UPLOAD_SAVE_PATH = "";
+	private String UPLOAD_REQ_PATH = "";
+
+	private ConcurrentMap<String, List<DictionaryItem>> dictItems = new ConcurrentHashMap<>();
+	private Vector<CityModel> cityModels = new Vector<>();
 
 	public String getUploadSavePath() {
 		if (StringUtils.isBlank(UPLOAD_SAVE_PATH)) {
-			try {
-				loadUploadProperties();
-			} catch (IOException e) {
-				throw new RuntimeException("load upload.properties faile!!!");
-			}
+			loadUploadProperties();
 		}
 		return UPLOAD_SAVE_PATH;
 	}
 
 	public String getUploadReqPath() {
 		if (StringUtils.isBlank(UPLOAD_REQ_PATH)) {
-			try {
-				loadUploadProperties();
-			} catch (IOException e) {
-				throw new RuntimeException("load upload.properties faile!!!");
-			}
+			loadUploadProperties();
 		}
 		return UPLOAD_REQ_PATH;
 	}
@@ -116,6 +131,51 @@ public class BaseDataCacheUtil implements InitializingBean {
 		return apps;
 	}
 
+	public List<DictionaryItemModel> getDictItems(String typeCode) {
+		List<DictionaryItemModel> itemModels = new ArrayList<>();
+		List<DictionaryItem> items = dictItems.get(typeCode);
+		if (items == null || items.isEmpty()) {
+			return itemModels;
+		}
+		DictionaryItemModel itemModel = null;
+		for (DictionaryItem item : items) {
+			itemModel = new DictionaryItemModel();
+			itemModel.setName(item.getName());
+			itemModel.setCode(item.getCode());
+			itemModels.add(itemModel);
+		}
+		return itemModels;
+	}
+
+	public String getDictItemName(String code) {
+		for (Entry<String, List<DictionaryItem>> entity : dictItems.entrySet()) {
+			for (DictionaryItem di : entity.getValue()) {
+				if (di.getCode().equals(code)) {
+					return di.getName();
+				}
+			}
+		}
+		return "";
+	}
+
+	public CityModel getCityModel(String code) {
+		for (CityModel cityModel : cityModels) {
+			if (cityModel.getCode().equals(code)) {
+				return cityModel;
+			}
+		}
+		return null;
+	}
+
+	public String getCityName(String code) {
+		for (CityModel cityModel : cityModels) {
+			if (cityModel.getCode().equals(code)) {
+				return cityModel.getName();
+			}
+		}
+		return "";
+	}
+
 	public boolean checkUserApps(String appId) {
 		List<SystemApp> roleApps = getUserApps();
 		for (SystemApp app : roleApps) {
@@ -176,10 +236,46 @@ public class BaseDataCacheUtil implements InitializingBean {
 		CacheUtil.set("single:system", "apps", apps);
 	}
 
-	private void loadUploadProperties() throws IOException {
-		Properties props = PropertiesLoaderUtils.loadAllProperties("upload.properties");
-		UPLOAD_SAVE_PATH = props.getProperty("save_path");
-		UPLOAD_REQ_PATH = props.getProperty("req_path");
+	private void loadUploadProperties() {
+		try {
+			Properties props = PropertiesLoaderUtils.loadAllProperties("upload.properties");
+			UPLOAD_SAVE_PATH = props.getProperty("save_path");
+			UPLOAD_REQ_PATH = props.getProperty("req_path");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void loadDictItems() {
+		Wrapper<DictionaryType> dictionaryTypeWrapper = new EntityWrapper<>();
+		dictionaryTypeWrapper.eq("status", "Y");
+		List<DictionaryType> types = dictionaryTypeService.selectList(dictionaryTypeWrapper);
+		if (types != null) {
+			for (DictionaryType type : types) {
+				Wrapper<DictionaryItem> wrapper = new EntityWrapper<>();
+				wrapper.eq("status", "Y");
+				wrapper.eq("type_id", type.getId());
+				wrapper.orderBy("code asc");
+				List<DictionaryItem> items = dictionaryItemService.selectList(wrapper);
+				if (items != null && !items.isEmpty()) {
+					dictItems.put(type.getCode(), items);
+				}
+			}
+		}
+	}
+
+	private void loadCityDatas() {
+		Wrapper<BasicCity> wrapper = new EntityWrapper<>();
+		List<BasicCity> cities = basicCityService.selectList(wrapper);
+		CityModel cm = null;
+		for (BasicCity bc : cities) {
+			cm = new CityModel();
+			cm.setCode(bc.getCode());
+			cm.setName(bc.getName());
+			cm.setPinyin(bc.getPinyin());
+			cm.setJianpin(bc.getJianpin());
+			cityModels.add(cm);
+		}
 	}
 
 	// 类初始化时加载执行
@@ -188,6 +284,17 @@ public class BaseDataCacheUtil implements InitializingBean {
 		loadUploadProperties();
 		initSystemInfo();
 		initSystemApps();
+
+		loadDictItems();
+
+		loadCityDatas();
+
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				loadDictItems();
+			}
+		}, 0, 5 * 60 * 1000);
 	}
 
 }

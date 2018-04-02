@@ -18,7 +18,7 @@
         <result column="tax_no" property="taxNo" />
         <result column="provincial" property="provincial" />
         <result column="city" property="city" />
-        <result column="country" property="country" />
+        <result column="county" property="county" />
         <result column="address" property="address" />
         <result column="contacts" property="contacts" />
         <result column="contact_tel" property="contactTel" />

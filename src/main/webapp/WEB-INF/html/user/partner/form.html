@@ -1,0 +1,61 @@
+<input type="hidden" id="id" name="id"/>
+<table class="editTable" style="width: 90%">
+    <tr>
+        <td class="label" width="120">用户名称：</td>
+        <td>
+            <input type="text" name="userName" data-toggle="topjui-textbox" data-options="width:258,required:true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">手机号：</td>
+        <td>
+            <input type="text" name="phoneNo" data-toggle="topjui-textbox" data-options="width:258,required:true">
+        </td>
+    </tr>
+     <tr>
+        <td class="label" width="120">负责区域：</td>
+        <td>
+        	<input type="text" name="province" data-toggle="topjui-combobox" data-options="
+                           	width:83,
+                       		panelHeight:120,
+                       		required:true,
+                       		valueField: 'code',
+		                    textField:'name',
+                       		url: remoteHost + '/basic/city/cities',
+                       		childCombobox:{
+	                           id:'city-201804011346',
+	                           url:remoteHost+'/basic/city/cities?pcode={parentValue}'
+	                       	}">
+             <input type="text" name="city" data-toggle="topjui-combobox" data-options="
+             				id:'city-201804011346',
+                          	width:83,
+                      		panelHeight:120,
+                       		required:true,
+	                       	valueField:'code',
+	                       	textField:'name',
+                      		childCombobox:{
+                           		id:'county-201804011346',
+                          		url:remoteHost+'/basic/city/cities?pcode={parentValue}'
+                      		}">
+              <input type="text" name="county" data-toggle="topjui-combobox" data-options="
+              				id:'county-201804011346',
+                           	width:83,
+                       		panelHeight:120,
+                       		required:true,
+                       		valueField: 'code',
+		                    textField:'name'">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">平台城市合伙人：</td>
+        <td>
+        	<input type="text" name="isPlatform" data-toggle="topjui-combobox" data-options="data:[{value:'Y',text:'是'},{value:'N',text:'否'}],width:258,required:true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">申请理由：</td>
+        <td>
+            <input type="text" name="applyReason" data-toggle="topjui-textarea" data-options="width:258,required:true">
+        </td>
+    </tr>
+</table>

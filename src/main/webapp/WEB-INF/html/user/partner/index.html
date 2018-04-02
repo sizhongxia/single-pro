@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../../common/public.html">
+</head>
+<body>
+	<div data-toggle="topjui-layout" data-options="fit:true">
+	    <div data-options="region:'center',iconCls:'icon-reload',title:'',split:true,border:false,bodyCls:'border_left'">
+	    	<!-- datagrid表格 -->
+	        <table data-toggle="topjui-edatagrid"
+	               data-options="id:'userPartnerTg',
+			            rownumbers: !0,
+			            pagination: !1,
+			            pageSize: 0,
+			            editable: !1,
+				   	    singleSelect: !0,
+			            checkOnSelect: !0,
+			            selectOnCheck: !0,
+	                    url: remoteHost+'/user/partner/list'">
+	            <thead>
+		            <tr>
+				        <th data-options="field:'user_name',title:'用户名称'"></th>
+				        <th data-options="field:'phone_no',title:'手机号'"></th>
+				        <th data-options="field:'is_platform',title:'平台合伙人',formatter:function(value,row,index){
+		                        if (value == 'Y') {
+		                            return '<div>是</div>';
+		                        } else if (value == 'N') {
+		                            return '<div>否</div>';
+		                        } else {
+		                            return '<div>-</div>';
+		                        }
+		                    }"></th>
+				        <th data-options="field:'province',title:'省'"></th>
+				        <th data-options="field:'city',title:'市'"></th>
+				        <th data-options="field:'county',title:'区（县）'"></th>
+				        <th data-options="field:'address_detail',title:'地址'"></th>
+				        <th data-options="field:'gender',title:'性别',formatter:function(value,row,index){
+		                        if (value == 1) {
+		                            return '<div>男</div>';
+		                        } else if (value == 0) {
+		                            return '<div>女</div>';
+		                        } else {
+		                            return '<div>-</div>';
+		                        }
+		                    }"></th>
+				        <th data-options="field:'age',title:'年龄'"></th>
+				        <th data-options="field:'apply_status',title:'申请状态',formatter:function(value,row,index){
+		                        if (value == 'Y') {
+		                            return '<div>已通过</div>';
+		                        } else if (value == 'N') {
+		                            return '<div>未通过</div>';
+		                        } else if (value == 'D') {
+		                            return '<div>申请中</div>';
+		                        } else {
+		                            return '<div>无效</div>';
+		                        }
+		                    }"></th>
+				        <th data-options="field:'account_status',title:'账号状态',formatter:function(value,row,index){
+		                        if (value == 'Y') {
+		                            return '<div>正常</div>';
+		                        } else if (value == 'N') {
+		                            return '<div>禁用</div>';
+		                        } else {
+		                            return '<div>无效</div>';
+		                        }
+		                    }"></th>
+				        <th data-options="field:'regist_time',title:'注册时间'"></th>
+				        <th data-options="field:'update_time',title:'更新时间'"></th>
+		            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	</div>
+	
+	<!-- 表格工具栏开始 -->
+	<div id="userPartnerTg-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'datagrid',
+           id:'userPartnerTg'}" style="display:none">
+           
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'openDialog',
+	       extend: '#userPartnerTg-toolbar',
+	       iconCls: 'fa fa-plus',
+	       dialog:{
+               title: '新增合伙人',
+	           width: 520,
+	           height: 320,
+	           href: remoteHost + '/user/partner/form',
+	           buttonsGroup:[
+	               {text:'保存', url: remoteHost + '/user/partner/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	           ]
+	       }">新增合伙人</a>
+	    
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#userPartnerTg-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '编辑基本信息',
+		           width: 520,
+		           height: 320,
+	               href: remoteHost + '/user/partner/editForm',
+	               url: remoteHost + '/user/partner/detail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/user/partner/updateBase',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">编辑基本信息</a>
+	       
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#userPartnerTg-toolbar',
+	            iconCls: 'fa fa-exchange',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '变更负责区域',
+		           width: 520,
+		           height: 320,
+	           	   href: remoteHost + '/user/partner/changeAreaform',
+	               url: remoteHost + '/user/partner/areaDetail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/user/partner/updateArea',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">变更区域</a>
+	       
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#userPartnerTg-toolbar',
+	            iconCls: 'fa fa-tasks',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '申请信息',
+		           width: 520,
+		           height: 320,
+	           	   href: remoteHost + '/user/partner/applyDetailForm',
+	               url: remoteHost + '/user/partner/apllyDetail?id={id}'
+	       }">申请信息</a>
+	    
+	       <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'search',
+	       extend: '#userPartnerTg-toolbar'">查询</a>
+	       
+	</div>
+	<!-- 表格工具栏结束 -->
+</body>
+</html>
