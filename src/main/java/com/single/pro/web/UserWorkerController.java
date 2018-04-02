@@ -31,6 +31,7 @@ import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.entity.User;
 import com.single.pro.entity.UserWorker;
 import com.single.pro.model.UserWorkerModel;
+import com.single.pro.model.WorkerAptitudeModel;
 import com.single.pro.service.UserService;
 import com.single.pro.service.UserWorkerService;
 import com.single.pro.service.custom.UserWorkerCustomService;
@@ -163,6 +164,38 @@ public class UserWorkerController extends BaseController {
 		return mav;
 	}
 
+	@RequiresAuthentication
+	@RequestMapping(value = { "/aptitudeForm" }, method = { RequestMethod.GET })
+	public ModelAndView aptitudeForm(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("user/worker/aptitudeForm");
+		List<WorkerAptitudeModel> list = new ArrayList<>();
+
+		String id = request.getParameter("id");
+		User user = userService.selectById(id);
+		if (user == null) {
+			mav.addObject("list", list);
+			return mav;
+		}
+
+		Wrapper<UserWorker> wrapper = new EntityWrapper<>();
+		wrapper.eq("user_id", user.getId());
+		UserWorker userWorker = userWorkerService.selectOne(wrapper);
+		if (userWorker == null) {
+			mav.addObject("list", list);
+			return mav;
+		}
+
+		Map<String, Object> param = new HashMap<>();
+		param.put("workerId", userWorker.getId());
+		list = userWorkerCustomService.findWorkerAptitudes(param);
+		if (list == null) {
+			list = new ArrayList<>();
+		}
+
+		mav.addObject("list", list);
+		return mav;
+	}
+
 	/***
 	 * 客户详情
 	 * 
@@ -221,8 +254,8 @@ public class UserWorkerController extends BaseController {
 
 	@ResponseBody
 	@RequiresAuthentication
-	@RequestMapping(value = "/apllyDetail")
-	public Map<String, Object> apllyDetail(HttpServletRequest request) {
+	@RequestMapping(value = "/aptitude")
+	public Map<String, Object> aptitude(HttpServletRequest request) {
 		String id = request.getParameter("id");
 		User user = userService.selectById(id);
 		Map<String, Object> map = new HashMap<>();
@@ -237,7 +270,9 @@ public class UserWorkerController extends BaseController {
 		if (userWorker == null) {
 			return map;
 		}
+
 		map.put("id", user.getId());
+		map.put("userName", user.getUserName());
 
 		return map;
 	}
@@ -272,12 +307,12 @@ public class UserWorkerController extends BaseController {
 		user.setPassword("");
 		user.setGender(1);
 		user.setAge(0);
-		user.setProvince(request.getParameter("province"));
-		user.setCity(request.getParameter("city"));
-		user.setCounty(request.getParameter("county"));
+		user.setProvince("");
+		user.setCity("");
+		user.setCounty("");
 		user.setAddressDetail("");
 		user.setAccountStatus("Y");
-		user.setUserType("P");
+		user.setUserType("W");
 		Date now = new Date();
 		user.setRegistTime(now);
 		user.setUpdateTime(now);

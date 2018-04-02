@@ -19,6 +19,7 @@
 	                    url: remoteHost+'/user/worker/list'">
 	            <thead>
 		            <tr>
+				        <th data-options="field:'worker_no',title:'工号'"></th>
 				        <th data-options="field:'user_name',title:'用户名称'"></th>
 				        <th data-options="field:'phone_no',title:'手机号'"></th>
 				        <th data-options="field:'province',title:'省'"></th>
@@ -112,7 +113,7 @@
 	               title: '变更所在区域',
 		           width: 520,
 		           height: 320,
-	           	   href: remoteHost + '/user/worker/changeAreaform',
+	           	   href: remoteHost + '/user/worker/changeAreaForm',
 	               url: remoteHost + '/user/worker/areaDetail?id={id}',
 	               buttonsGroup: [{
 	                   	text: '更新',
@@ -122,8 +123,23 @@
 	       				btnCls: 'topjui-btn-red',
 	               }]
 	       }">变更所在区域</a>
+	   
+	   
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#userWorkerTg-toolbar',
+	            iconCls: 'fa fa-exchange',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '产品资质申请',
+		           width: 520,
+		           height: 320,
+	           	   href: remoteHost + '/user/worker/aptitudeForm?id={id}',
+	               url: remoteHost + '/user/worker/aptitude?id={id}'
+	       }">产品资质</a>
 	       
-	       <a href="javascript:void(0)"
+	   <a href="javascript:void(0)"
 	       data-toggle="topjui-menubutton"
 	       data-options="method:'search',
 	       extend: '#userWorkerTg-toolbar'">查询</a>

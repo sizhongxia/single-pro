@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../../common/public.html">
+</head>
+<body>
+	<div data-toggle="topjui-layout" data-options="fit:true">
+	    <div data-options="region:'center',iconCls:'icon-reload',title:'',split:true,border:false,bodyCls:'border_left'">
+	    
+       		<!-- datagrid表格 -->
+	        <table data-toggle="topjui-edatagrid"
+	               data-options="id:'productClueTg',
+				   	    rownumbers: !0,
+				   	    pagination: !0,
+			            pageSize: 10,
+			            editable: !1,
+				   	    singleSelect: !0,
+			            checkOnSelect: !0,
+			            selectOnCheck: !0,
+	                    url: remoteHost+'/product/clue/list'">
+	            <thead>
+	            <tr>
+			        <th data-options="field:'product_name',title:'产品名称'"></th>
+			        <th data-options="field:'company',title:'公司名称'"></th>
+			        <th data-options="field:'contacts',title:'联系人'"></th>
+			        <th data-options="field:'contact_tel',title:'联系电话',sortable:true"></th>
+			        <th data-options="field:'handle_status',title:'处理状态',formatter:function(value,row,index){
+		                        if (value == 'Y') {
+		                            return '<div>已处理</div>';
+		                        } else if (value == 'N') {
+		                            return '<div>无效数据</div>';
+		                        } else if (value == 'D') {
+		                            return '<div>待处理</div>';
+		                        } else {
+		                            return '<div>-</div>';
+		                        }
+		                    }"></th>
+			        <th data-options="field:'apply_time',title:'申请时间',width:200,sortable:true,formatter:timeFormatter"></th>
+	            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	</div>
+	
+	
+	<!-- 表格工具栏开始 -->
+	<div id="productClueTg-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'datagrid',
+           id:'productClueTg'}" style="display:none">
+           
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#productClueTg-toolbar',
+	            iconCls: 'fa fa-info',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '详细',
+		           width: 520,
+		           height: 320,
+	               href: remoteHost + '/product/clue/form',
+	               url: remoteHost + '/product/clue/detail?id={id}'
+	       }">详细</a>
+	       
+	     <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#productClueTg-toolbar',
+	            iconCls: 'fa fa-magic',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '处理',
+		           width: 520,
+		           height: 320,
+	           	   href: remoteHost + '/product/clue/handleForm',
+	               url: remoteHost + '/product/clue/handleDetail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '处理',
+	                   	url: remoteHost + '/product/clue/handle',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">处理</a>
+	</div>
+	<!-- 表格工具栏结束 -->
+	<script>
+	    function timeFormatter(value, rowData, rowIndex) {
+	        var htmlstr = '<div>';
+	        htmlstr += moment(value).format('YYYY-MM-DD HH:mm');
+	        htmlstr += '</div>';
+	        return htmlstr;
+	    }
+	</script>
+	
+</body>
+</html>

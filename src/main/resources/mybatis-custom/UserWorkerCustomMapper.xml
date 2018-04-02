@@ -39,5 +39,19 @@
 		</if>
 			order by ${orderByClause}
 	</select>
+	
+	
+	<select id="findWorkerAptitudes" parameterType="java.util.Map" resultType="com.single.pro.model.WorkerAptitudeModel">
+		select 
+			wa.id as id, p.`name` as productName, p.model as productModel, c.`name` as companyName, wa.apply_info as applyInfo, wa.apply_status as applyStatus, wa.apply_time as applyTime 
+		from 
+			sp_worker_aptitude wa 
+			left join sp_product p on wa.product_id = p.id
+			left join sp_company c on p.company_id = c.id
+		where wa.worker_id = #{workerId}
+		<if test="applyStatus != null">
+			and applyStatus = #{applyStatus}
+		</if>
+	</select>
 
 </mapper>

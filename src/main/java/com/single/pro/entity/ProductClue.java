@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-29
+ * @since 2018-04-02
  */
 @TableName("sp_product_clue")
 public class ProductClue implements Serializable {
@@ -45,10 +45,13 @@ public class ProductClue implements Serializable {
      */
 	private String summary;
     /**
-     * 产品类别
+     * 产品资料名称
      */
 	@TableField("file_name")
 	private String fileName;
+    /**
+     * 产品资料地址
+     */
 	@TableField("file_url")
 	private String fileUrl;
     /**
@@ -61,6 +64,16 @@ public class ProductClue implements Serializable {
      */
 	@TableField("apply_time")
 	private Date applyTime;
+    /**
+     * 处理状态（Y:已处理，N:无效数据，D:待处理）
+     */
+	@TableField("handle_status")
+	private String handleStatus;
+    /**
+     * 处理时间
+     */
+	@TableField("handle_time")
+	private Date handleTime;
 
 
 	public String getId() {
@@ -143,6 +156,22 @@ public class ProductClue implements Serializable {
 		this.applyTime = applyTime;
 	}
 
+	public String getHandleStatus() {
+		return handleStatus;
+	}
+
+	public void setHandleStatus(String handleStatus) {
+		this.handleStatus = handleStatus;
+	}
+
+	public Date getHandleTime() {
+		return handleTime;
+	}
+
+	public void setHandleTime(Date handleTime) {
+		this.handleTime = handleTime;
+	}
+
 	@Override
 	public String toString() {
 		return "ProductClue{" +
@@ -156,6 +185,8 @@ public class ProductClue implements Serializable {
 			", fileUrl=" + fileUrl +
 			", userId=" + userId +
 			", applyTime=" + applyTime +
+			", handleStatus=" + handleStatus +
+			", handleTime=" + handleTime +
 			"}";
 	}
 }

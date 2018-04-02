@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-29
+ * @since 2018-04-02
  */
 @Service
 public class ProductClueServiceImpl extends ServiceImpl<ProductClueDao, ProductClue> implements ProductClueService {

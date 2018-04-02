@@ -51,9 +51,9 @@ public class MpGenerator {
 
 		// 策略配置
 		StrategyConfig strategy = new StrategyConfig();
-		strategy.setTablePrefix(new String[] { "" });// 此处可以修改为您的表前缀
+		strategy.setTablePrefix(new String[] { "sp_" });// 此处可以修改为您的表前缀
 		strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-		strategy.setInclude(new String[] { "region" }); // 需要生成的表
+		strategy.setInclude(new String[] { "sp_product_clue" }); // 需要生成的表
 		// 自定义实体，公共字段
 		strategy.setSuperEntityColumns(new String[] {});
 		mpg.setStrategy(strategy);

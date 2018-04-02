@@ -17,6 +17,8 @@
         <result column="file_url" property="fileUrl" />
         <result column="user_id" property="userId" />
         <result column="apply_time" property="applyTime" />
+        <result column="handle_status" property="handleStatus" />
+        <result column="handle_time" property="handleTime" />
     </resultMap>
 
 </mapper>

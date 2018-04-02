@@ -155,7 +155,7 @@ public class UserPartnerController extends BaseController {
 	@RequiresAuthentication
 	@RequestMapping(value = { "/changeAreaForm" }, method = { RequestMethod.GET })
 	public ModelAndView changeAreaForm(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("user/partner/changeAreaform");
+		ModelAndView mav = new ModelAndView("user/partner/changeAreaForm");
 		return mav;
 	}
 
