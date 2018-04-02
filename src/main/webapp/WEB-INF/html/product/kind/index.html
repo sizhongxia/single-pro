@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../../common/public.html">
+<script type="text/javascript">
+    $(window).load(function () {
+        $("#loading").fadeOut();
+    });
+</script>
+</head>
+
+<body>
+	<div data-toggle="topjui-layout" data-options="fit:true">
+	    <div data-options="region:'center',title:'产品分类',split:true,border:false,iconCls:'fa'">
+	        <!-- treegrid表格 -->
+	        <table data-toggle="topjui-edatagrid"
+	               data-options="id: 'productKindDatagrid',
+				    idField: 'id',
+				    rownumbers: !0,
+			   	    singleSelect: !0,
+				    url: remoteHost + '/product/kind/list'">
+	            <thead>
+		            <tr>
+		                <th data-options="field:'name',title:'分类名称'"></th>
+		                <th data-options="field:'summary',title:'分类描述'"></th>
+		                <th data-options="field:'pic_url',title:'分类图标'"></th>
+		                <th data-options="field:'status',title:'状态',sortable:true,
+			                    formatter:function(value,row,index){
+			                        if (value == 'Y') {
+			                            return '<div>有效</div>';
+			                        } else {
+			                            return '<div>无效</div>';
+			                        }
+			                    }"></th>
+		                <th data-options="field:'create_time',title:'创建时间',sortable:true"></th>
+		                <th data-options="field:'update_time',title:'更新时间',sortable:true"></th>
+		            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	</div>
+	
+	<!-- 表格工具栏开始 -->
+	<div id="productKindDatagrid-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'datagrid',
+           id:'productKindDatagrid'}" style="display:none">
+           
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method:'openDialog',
+	       extend: '#productKindDatagrid-toolbar',
+	       iconCls: 'fa fa-plus',
+	       dialog:{
+               title: '新增分类',
+	           width: 520,
+	           height: 320,
+	           href: remoteHost + '/product/kind/form',
+	           buttonsGroup:[
+	               {text:'保存', url: remoteHost + '/product/kind/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	           ]
+	       }">新增分类</a>
+	    
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#productKindDatagrid-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '编辑分类',
+		           width: 520,
+		           height: 320,
+	           	   href: remoteHost + '/product/kind/form',
+	               url: remoteHost + '/product/kind/detail?id={id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/product/kind/update',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">编辑</a>
+
+	</div>
+	<!-- 表格工具栏结束 -->
+	
+</body>
+</html>
