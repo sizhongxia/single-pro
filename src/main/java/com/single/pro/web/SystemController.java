@@ -33,6 +33,7 @@ import com.single.pro.service.SystemAppService;
 import com.single.pro.service.SystemAuthwordService;
 import com.single.pro.service.SystemMenuService;
 import com.single.pro.service.SystemService;
+import com.single.pro.storage.RealHostReplace;
 import com.single.pro.util.IdUtil;
 
 /**
@@ -75,7 +76,7 @@ public class SystemController extends BaseController {
 		}
 
 		if (StringUtils.isNotBlank(system.getLogoUrl()) && !system.getLogoUrl().startsWith("http")) {
-			system.setLogoUrl(baseDataCacheUtil.getUploadReqPath() + system.getLogoUrl());
+			system.setLogoUrl(RealHostReplace.getResUrl(system.getLogoUrl()));
 		}
 
 		mav.addObject("system", system);
@@ -112,10 +113,7 @@ public class SystemController extends BaseController {
 		config.setTitle(request.getParameter("title"));
 		// config.setSubtitle(request.getParameter("subtitle"));
 		config.setWebsite(request.getParameter("website"));
-		String logoUrl = request.getParameter("logoUrl");
-		String reqLogoUrl = logoUrl;
-		logoUrl = logoUrl.replaceAll(baseDataCacheUtil.getUploadReqPath(), "");
-		config.setLogoUrl(logoUrl);
+		config.setLogoUrl(request.getParameter("logoUrl").replace(RealHostReplace.host, ""));
 		config.setCopyright(request.getParameter("copyright"));
 
 		if (!systemService.updateById(config)) {
@@ -124,7 +122,7 @@ public class SystemController extends BaseController {
 		}
 
 		// 更新缓存信息
-		config.setLogoUrl(reqLogoUrl);
+		config.setLogoUrl(RealHostReplace.getResUrl(config.getLogoUrl()));
 		CacheUtil.set("single:system", "info", config);
 
 		res.put("statusCode", 200);

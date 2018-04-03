@@ -1,21 +1,17 @@
 package com.single.pro.cache;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
@@ -33,6 +29,7 @@ import com.single.pro.service.DictionaryTypeService;
 import com.single.pro.service.SystemAppService;
 import com.single.pro.service.SystemService;
 import com.single.pro.shiro.realm.JDBCRealm;
+import com.single.pro.storage.RealHostReplace;
 
 import net.oschina.j2cache.CacheObject;
 
@@ -50,25 +47,6 @@ public class BaseDataCacheUtil implements InitializingBean {
 	private BasicCityService basicCityService;
 
 	private final String region = "single:system";
-
-	// private ConcurrentMap<String, List<DictionaryItem>> dictItems = new
-	// ConcurrentHashMap<>();
-
-	public String getUploadSavePath() {
-		CacheObject cacheObject = CacheUtil.get(region, "uploadSavePath");
-		if (cacheObject == null || StringUtils.isBlank(cacheObject.asString())) {
-			loadUploadProperties();
-		}
-		return cacheObject.asString();
-	}
-
-	public String getUploadReqPath() {
-		CacheObject cacheObject = CacheUtil.get(region, "uploadReqPath");
-		if (cacheObject == null || StringUtils.isBlank(cacheObject.asString())) {
-			loadUploadProperties();
-		}
-		return cacheObject.asString();
-	}
 
 	public System getSystemInfo() {
 		System system = getCacheSystemInfo();
@@ -236,14 +214,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 		if (system == null) {
 			throw new RuntimeException("请先配置系统应用基本信息");
 		}
-
-		CacheObject cacheObject = CacheUtil.get(region, "uploadReqPath");
-		if (cacheObject == null) {
-			loadUploadProperties();
-			cacheObject = CacheUtil.get(region, "uploadReqPath");
-		}
-
-		system.setLogoUrl(cacheObject.asString() + system.getLogoUrl());
+		system.setLogoUrl(RealHostReplace.getResUrl(system.getLogoUrl()));
 		CacheUtil.set(region, "info", system);
 	}
 
@@ -255,16 +226,6 @@ public class BaseDataCacheUtil implements InitializingBean {
 			throw new RuntimeException("无系统应用");
 		}
 		CacheUtil.set(region, "apps", apps);
-	}
-
-	private void loadUploadProperties() {
-		try {
-			Properties props = PropertiesLoaderUtils.loadAllProperties("upload.properties");
-			CacheUtil.set(region, "uploadSavePath", props.getProperty("save_path"));
-			CacheUtil.set(region, "uploadReqPath", props.getProperty("req_path"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void loadDictItems() {
@@ -305,7 +266,6 @@ public class BaseDataCacheUtil implements InitializingBean {
 	// 类初始化时加载执行
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		loadUploadProperties();
 		initSystemInfo();
 		initSystemApps();
 		loadDictItems();

@@ -32,12 +32,18 @@
 				                   data-toggle="topjui-textbox"
 				                   data-options="required:true,width:476,prompt:'必填'"></td>
 	                </tr>
-	                <tr>
-	                    <td class="label">LOGO URL</td>
-	                    <td colspan="3"><input type="text" name="logoUrl" value="${system.logoUrl!}" 
-				                   data-toggle="topjui-textbox"
-				                   data-options="required:true,width:476,prompt:'必填'"></td>
-	                </tr>
+				    <tr>
+				        <td class="label" width="120">网站LOGO：</td>
+				        <td>
+				        	<input type="text" name="logoUrl" value="${system.logoUrl!}"
+				                   data-toggle="topjui-uploadbox"
+				                   data-options="
+					                   buttonIcon:'fa fa-folder',
+					                   width:258,
+					                   required: true,
+					                   uploadUrl: remoteHost + '/uploadPic?typeCode=SystemLogo'">
+				        </td>
+				    </tr>
 	                <tr>
 	                	<td class="label"></td>
 	                    <td colspan="3">
