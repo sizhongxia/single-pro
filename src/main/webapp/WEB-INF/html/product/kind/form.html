@@ -9,7 +9,13 @@
     <tr>
         <td class="label" width="120">分类图标：</td>
         <td>
-        	<input type="text" name="picUrl" data-toggle="topjui-textbox" data-options="width:258,required: true">
+        	<input type="text" name="picUrl"
+                   data-toggle="topjui-uploadbox"
+                   data-options="
+	                   buttonIcon:'fa fa-folder',
+	                   width:258,
+	                   required: true,
+	                   uploadUrl: remoteHost + '/product/kind/uploadPic'">
         </td>
     </tr>
     <tr>

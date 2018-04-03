@@ -1,5 +1,6 @@
 package com.single.pro.web;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -25,7 +28,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.single.pro.entity.ProductKind;
 import com.single.pro.service.ProductKindService;
+import com.single.pro.storage.FileStorage;
 import com.single.pro.util.IdUtil;
+import com.single.pro.util.NidUtil;
 import com.xiaoleilu.hutool.util.NumberUtil;
 
 @Controller
@@ -34,6 +39,8 @@ public class ProductKindController extends BaseController {
 
 	@Autowired
 	ProductKindService productKindService;
+	@Autowired
+	FileStorage fileStorage;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -202,6 +209,34 @@ public class ProductKindController extends BaseController {
 
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
+		return res;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/uploadPic")
+	public Map<String, Object> uploadPic(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		if (file == null || file.isEmpty()) {
+			res.put("msg", "未选择文件");
+			return res;
+		}
+		
+		try {
+			String path = "/single/product/kind/" + NidUtil.randomUUID19() + ".jpg";
+			if(fileStorage.upload(path, file.getBytes())) {
+				res.put("statusCode", 200);
+				res.put("filePath", path);
+				return res;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		res.put("msg", "上传失败");
 		return res;
 	}
 }

@@ -1,4 +1,4 @@
-package com.util;
+package com.single.pro.util;
 
 import java.util.Base64;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import java.util.UUID;
  *
  * @author lry
  */
-public class NUUID {
+public class NidUtil {
 
 	private final static String STR_BASE = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private final static char[] digits = STR_BASE.toCharArray();
@@ -37,25 +37,6 @@ public class NUUID {
 	 * 支持的最大进制数
 	 */
 	private static final int MAX_RADIX = digits.length;
-
-	/**
-	 * 获取36位UUID(原生UUID)
-	 *
-	 * @return
-	 */
-	public static String randomUUID() {
-		return UUID.randomUUID().toString();
-	}
-
-	/**
-	 * 获取32位UUID
-	 *
-	 * @return
-	 */
-	public static String randomUUID32() {
-		return UUID.randomUUID().toString().replace("-", "");
-	}
-
 	/**
 	 * 获取19位的UUID
 	 *
@@ -251,55 +232,5 @@ public class NUUID {
 			return hexString + str.charAt(pixOne) + str.charAt(pixTwo) + str.charAt(pixThree) + str.charAt(pixFour);
 		}
 	}
-
-	public static void main(String[] args) {
-		System.out.println(randomUUID());
-		System.out.println(randomUUID32());
-		
-		System.out.println(randomUUID15());
-		System.out.println(randomUUID15());
-		System.out.println(randomUUID15());
-		System.out.println(randomUUID15());
-		System.out.println(randomUUID15Long());
-		System.out.println(randomUUID15Long());
-		System.out.println(randomUUID15Long());
-		System.out.println(randomUUID15Long());
-		System.out.println(randomUUID15Long());
-		System.out.println(randomUUID15Long());
-
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		System.out.println(randomUUID19());
-		
-
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-		System.out.println(randomUUIDBase64());
-	}
-
+	
 }

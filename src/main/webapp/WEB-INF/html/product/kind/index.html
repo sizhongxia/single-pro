@@ -55,8 +55,13 @@
 	           width: 520,
 	           height: 320,
 	           href: remoteHost + '/product/kind/form',
-	           buttonsGroup:[
-	               {text:'保存', url: remoteHost + '/product/kind/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
+	           uploadUrl:'ddd',
+	           buttonsGroup:[{
+	           		text:'保存', 
+	           		url: remoteHost + '/product/kind/save', 
+	           		iconCls:'fa fa-plus', 
+	           		handler:'multiAjaxForm', 
+	           		btnCls:'topjui-btn-brown'}
 	           ]
 	       }">新增分类</a>
 	    
@@ -76,7 +81,7 @@
 	                   	text: '更新',
 	                   	url: remoteHost + '/product/kind/update',
 	                   	iconCls: 'fa fa-save',
-	                   	handler: 'ajaxForm',
+	                   	handler: 'multiAjaxForm',
 	       				btnCls: 'topjui-btn-red',
 	               }]
 	       }">编辑</a>

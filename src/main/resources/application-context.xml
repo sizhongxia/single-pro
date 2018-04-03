@@ -20,6 +20,7 @@
 			<list>
 				<value>classpath:/mysql.properties</value>
 				<value>classpath:/redis.properties</value>
+				<value>classpath:/storage.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -27,8 +28,20 @@
 	<bean id="cacheUtil" class="com.single.pro.cache.CacheUtil" destroy-method="destroy"></bean>
 	<bean id="baseDataCacheUtil" class="com.single.pro.cache.BaseDataCacheUtil"></bean>
 
-	<bean id="scheduler" lazy-init="false" scope="singleton" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" />
+    <!-- 文件云存储 -->
+	<bean id="upyunConfig" class="com.single.pro.storage.impl.UpyunConfig">
+		<property name="bucket" value="${upyun.bucket}"/>
+		<property name="operator" value="${upyun.operator}"/>
+		<property name="password" value="${upyun.password}"/>
+		<property name="debug" value="${upyun.debug}"/>
+		<property name="timeout" value="${upyun.timeout}"/>
+	</bean>
+	<bean id="fileStorage" class="com.single.pro.storage.impl.UpyunStorage">
+		<property name="upyunConfig" ref="upyunConfig"/>
+	</bean>
+
 	<!-- 任务管理器 -->
+	<bean id="scheduler" lazy-init="false" scope="singleton" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" />
 	<bean class="com.single.pro.quartz.JobManager">
 		<property name="scheduler" ref="scheduler"></property>
 	</bean>
