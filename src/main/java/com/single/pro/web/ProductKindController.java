@@ -65,7 +65,7 @@ public class ProductKindController extends BaseController {
 		if (StringUtils.isNotBlank(sort) && StringUtils.isNotBlank(order)) {
 			wrapper.orderBy(sort, "asc".equals(order));
 		} else {
-			wrapper.orderBy("name", true);
+			wrapper.orderBy("status", false);
 		}
 
 		PageHelper.startPage(new Integer(pageStr), new Integer(rowsStr));
