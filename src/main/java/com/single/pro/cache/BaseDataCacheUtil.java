@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -45,8 +43,6 @@ public class BaseDataCacheUtil implements InitializingBean {
 	private DictionaryItemService dictionaryItemService;
 	@Autowired
 	private BasicCityService basicCityService;
-
-	private final String region = "single:system";
 
 	public System getSystemInfo() {
 		System system = getCacheSystemInfo();
@@ -113,7 +109,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 		List<DictionaryItemModel> itemModels = new ArrayList<>();
 		List<DictionaryItem> items = null;
 
-		CacheObject cacheObject = CacheUtil.get(region + ":dict:type", typeCode);
+		CacheObject cacheObject = CacheUtil.get("single:system:dict:type", typeCode);
 		if (cacheObject != null) {
 			Object obj = cacheObject.getValue();
 			if (obj != null) {
@@ -136,7 +132,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 
 	public String getDictItemName(String code) {
 		DictionaryItem item = null;
-		CacheObject cacheObject = CacheUtil.get(region + ":dict:item", code);
+		CacheObject cacheObject = CacheUtil.get("single:system:dict:item", code);
 		if (cacheObject != null) {
 			Object obj = cacheObject.getValue();
 			if (obj != null) {
@@ -150,7 +146,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 	}
 
 	public CityModel getCityModel(String code) {
-		CacheObject cacheObject = CacheUtil.get(region + ":city", code);
+		CacheObject cacheObject = CacheUtil.get("single:system:city", code);
 		if (cacheObject != null) {
 			Object obj = cacheObject.getValue();
 			if (obj != null) {
@@ -191,7 +187,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 	}
 
 	private System getCacheSystemInfo() {
-		Object obj = CacheUtil.get(region, "info").getValue();
+		Object obj = CacheUtil.get("single:system", "info").getValue();
 		if (obj != null) {
 			return (System) obj;
 		}
@@ -200,7 +196,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 
 	@SuppressWarnings("unchecked")
 	private List<SystemApp> getCacheSystemApps() {
-		Object obj = CacheUtil.get(region, "apps").getValue();
+		Object obj = CacheUtil.get("single:system", "apps").getValue();
 		if (obj != null) {
 			return (List<SystemApp>) obj;
 		}
@@ -215,7 +211,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 			throw new RuntimeException("请先配置系统应用基本信息");
 		}
 		system.setLogoUrl(RealHostReplace.getResUrl(system.getLogoUrl()));
-		CacheUtil.set(region, "info", system);
+		CacheUtil.set("single:system", "info", system);
 	}
 
 	private void initSystemApps() {
@@ -225,7 +221,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 		if (apps == null || apps.isEmpty()) {
 			throw new RuntimeException("无系统应用");
 		}
-		CacheUtil.set(region, "apps", apps);
+		CacheUtil.set("single:system", "apps", apps);
 	}
 
 	private void loadDictItems() {
@@ -240,9 +236,9 @@ public class BaseDataCacheUtil implements InitializingBean {
 				wrapper.orderBy("code asc");
 				List<DictionaryItem> items = dictionaryItemService.selectList(wrapper);
 				if (items != null && !items.isEmpty()) {
-					CacheUtil.set(region + ":dict:type", type.getCode(), items);
+					CacheUtil.set("single:system:dict:type", type.getCode(), items);
 					for (DictionaryItem item : items) {
-						CacheUtil.set(region + ":dict:item", item.getCode(), item);
+						CacheUtil.set("single:system:dict:item", item.getCode(), item);
 					}
 				}
 			}
@@ -270,12 +266,6 @@ public class BaseDataCacheUtil implements InitializingBean {
 		initSystemApps();
 		loadDictItems();
 		loadCityDatas();
-		new Timer().schedule(new TimerTask() {
-			@Override
-			public void run() {
-				loadDictItems();
-			}
-		}, 0, 5 * 60 * 1000);
 	}
 
 }

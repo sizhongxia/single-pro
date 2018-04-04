@@ -101,6 +101,31 @@ public class ProductKindController extends BaseController {
 		return res;
 	}
 
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = { "/all" }, method = { RequestMethod.POST })
+	public List<Map<String, Object>> all(HttpServletRequest request) {
+
+		Wrapper<ProductKind> wrapper = new EntityWrapper<>();
+		wrapper.eq("status", "Y");
+		wrapper.orderBy("name asc");
+		List<ProductKind> productKinds = productKindService.selectList(wrapper);
+
+		List<Map<String, Object>> productKindList = new ArrayList<>();
+		if (productKinds != null && !productKinds.isEmpty()) {
+			Map<String, Object> item = null;
+			for (ProductKind productKind : productKinds) {
+				item = new HashMap<>();
+				item.put("kindId", productKind.getId());
+				item.put("kindName", productKind.getName());
+				item.put("picUrl", RealHostReplace.getResUrl(productKind.getPicUrl()));
+				productKindList.add(item);
+			}
+		}
+
+		return productKindList;
+	}
+
 	@RequiresAuthentication
 	@RequestMapping(value = { "/form" }, method = { RequestMethod.GET })
 	public ModelAndView form(HttpServletRequest request) {

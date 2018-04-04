@@ -1,0 +1,99 @@
+<input type="hidden" id="id" name="id"/>
+<table class="editTable" style="width: 90%">
+    <tr>
+        <td class="label" width="120">所属分类：</td>
+        <td>
+        	<input type="text" name="kindId" data-toggle="topjui-combobox" 
+        		data-options="width:258,
+			            panelHeight: 158,
+        				required:true,
+                        valueField:'kindId',
+                        textField:'kindName',
+                       url: remoteHost + '/product/kind/all'">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">类别名称：</td>
+        <td>
+        	<input type="text" name="name" data-toggle="topjui-textbox" data-options="width:258,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">类别图标：</td>
+        <td>
+        	<input type="text" name="picUrl"
+                   data-toggle="topjui-uploadbox"
+                   data-options="
+	                   buttonIcon:'fa fa-folder',
+	                   width:258,
+	                   required: true,
+	                   uploadUrl: remoteHost + '/uploadPic?typeCode=ProductType'">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">施工申请条件：</td>
+        <td>
+        	<input type="text" name="sgsqCondition" data-toggle="topjui-textarea" data-options="width:258,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">勘测：</td>
+        <td>
+        	<input type="text" name="serSurvey" data-toggle="topjui-textarea" data-options="width:258,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">验货：</td>
+        <td>
+        	<input type="text" name="serCheck" data-toggle="topjui-textarea" data-options="width:258,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">施工：</td>
+        <td>
+        	<input type="text" name="serConstruct" data-toggle="topjui-textarea" data-options="width:258,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">培训：</td>
+        <td>
+        	<input type="text" name="serTrain" data-toggle="topjui-textarea" data-options="width:258,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">验收：</td>
+        <td>
+        	<input type="text" name="serAccept" data-toggle="topjui-textarea" data-options="width:258,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">产品单位：</td>
+        <td>
+        <input type="text" name="unit" data-toggle="topjui-combobox" 
+        		data-options="width:258,
+			           panelHeight: 158,
+                       required: true,
+                       valueField:'code',
+                       textField:'name',
+                       url: remoteHost + '/dictionary/dictionaryItems?typeCode=CPDW'">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">施工难度：</td>
+        <td>
+        	<input type="text" name="difficulty" data-toggle="topjui-combobox" data-options="data:[{value:'1',text:'1星'},{value:'2',text:'2星'},{value:'3',text:'3星'},{value:'4',text:'4星'},{value:'5',text:'5星'}],width:258,required:true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">描述：</td>
+        <td>
+        	<input type="text" name="summary" data-toggle="topjui-textarea" data-options="width:258,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">状态：</td>
+        <td>
+        	<input type="text" name="status" data-toggle="topjui-combobox" data-options="data:[{value:'Y',text:'有效'},{value:'N',text:'无效'}],width:258,required:true">
+        </td>
+    </tr>
+</table>

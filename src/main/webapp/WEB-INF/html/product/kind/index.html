@@ -21,9 +21,11 @@
 				    url: remoteHost + '/product/kind/list'">
 	            <thead>
 		            <tr>
-		                <th data-options="field:'name',title:'分类名称'"></th>
+		                <th data-options="field:'name',title:'分类名称',
+			                    formatter:function(value,row,index) {
+			                        return '<img style=\'width:20px;height:20px;margin:-4px 0 0 0;\' src=\'' + row.pic_url + '\'> &nbsp;' + value;
+			                    }"></th>
 		                <th data-options="field:'summary',title:'分类描述'"></th>
-		                <th data-options="field:'pic_url',title:'分类图标'"></th>
 		                <th data-options="field:'status',title:'状态',sortable:true,
 			                    formatter:function(value,row,index){
 			                        if (value == 'Y') {
