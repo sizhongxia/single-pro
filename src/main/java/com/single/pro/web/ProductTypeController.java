@@ -116,6 +116,37 @@ public class ProductTypeController extends BaseController {
 		return res;
 	}
 
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = { "/all" }, method = { RequestMethod.POST })
+	public List<Map<String, Object>> all(HttpServletRequest request) {
+		List<Map<String, Object>> productTypeList = new ArrayList<>();
+
+		String kindId = request.getParameter("kindId");
+		if (StringUtils.isBlank(kindId)) {
+			return productTypeList;
+		}
+
+		Wrapper<ProductType> wrapper = new EntityWrapper<>();
+		wrapper.eq("kind_id", kindId);
+		wrapper.eq("status", "Y");
+		wrapper.orderBy("name asc");
+		List<ProductType> productTypes = productTypeService.selectList(wrapper);
+
+		if (productTypes != null && !productTypes.isEmpty()) {
+			Map<String, Object> item = null;
+			for (ProductType productType : productTypes) {
+				item = new HashMap<>();
+				item.put("typeId", productType.getId());
+				item.put("typeName", productType.getName());
+				item.put("picUrl", RealHostReplace.getResUrl(productType.getPicUrl()));
+				productTypeList.add(item);
+			}
+		}
+
+		return productTypeList;
+	}
+
 	@RequiresAuthentication
 	@RequestMapping(value = { "/form" }, method = { RequestMethod.GET })
 	public ModelAndView form(HttpServletRequest request) {
@@ -133,9 +164,9 @@ public class ProductTypeController extends BaseController {
 		if (productType == null) {
 			return new ModelAndView("error/invalid_parameter");
 		}
-		
-		ProductKind productKind = 	productKindService.selectById(productType.getKindId());
-		if(productKind == null) {
+
+		ProductKind productKind = productKindService.selectById(productType.getKindId());
+		if (productKind == null) {
 			mav.addObject("productKindName", "");
 			mav.addObject("productKindPicUrl", "");
 		} else {

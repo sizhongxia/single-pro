@@ -51,7 +51,7 @@
 				    url: remoteHost + '/product/type/list'">
 	            <thead>
 		            <tr>
-		                <th data-options="field:'name',title:'类别名称',
+		                <th data-options="field:'name',title:'类型名称',
 			                    formatter:function(value,row,index) {
 			                        return '<img style=\'width:20px;height:20px;margin:-4px 0 0 0;\' src=\'' + row.pic_url + '\'> &nbsp;' + value;
 			                    }"></th>
@@ -60,12 +60,11 @@
 			                    	var starts = '', start = '<i class=\'fa fa-star\'></i>';
 			                    	for(var i=1;i<=parseInt(value);i++) {
 			                    		starts = starts + start;
-				                    	console.info(starts)
 			                    	}
 			                        return '<div style=\'color:grey\'>' + starts + '</div>';
 			                    }"></th>
 		                <th data-options="field:'unit',title:'单位'"></th>
-		                <th data-options="field:'summary',title:'类别描述'"></th>
+		                <th data-options="field:'summary',title:'类型描述'"></th>
 		                <th data-options="field:'status',title:'状态',sortable:true,
 			                    formatter:function(value,row,index){
 			                        if (value == 'Y') {
@@ -93,19 +92,18 @@
 	       extend: '#productTypeDatagrid-toolbar',
 	       iconCls: 'fa fa-plus',
 	       dialog:{
-               title: '新增分类',
+               title: '新增类型',
 	           width: 720,
 	           height: 450,
 	           href: remoteHost + '/product/type/form',
-	           uploadUrl:'ddd',
 	           buttonsGroup:[{
 	           		text:'保存', 
 	           		url: remoteHost + '/product/type/save', 
 	           		iconCls:'fa fa-plus', 
-	           		handler:'multiAjaxForm', 
+	           		handler:'ajaxForm', 
 	           		btnCls:'topjui-btn-brown'}
 	           ]
-	       }">新增分类</a>
+	       }">新增类型</a>
 	    
 	    <a href="javascript:void(0)"
 	       data-toggle="topjui-menubutton"
@@ -114,7 +112,7 @@
 	            iconCls: 'fa fa-pencil',
 	       		btnCls: 'topjui-btn-normal',
 	            dialog: {
-	               title: '编辑分类',
+	               title: '编辑类型',
 		           width: 720,
 		           height: 450,
 	           	   href: remoteHost + '/product/type/form',
@@ -123,7 +121,7 @@
 	                   	text: '更新',
 	                   	url: remoteHost + '/product/type/update',
 	                   	iconCls: 'fa fa-save',
-	                   	handler: 'multiAjaxForm',
+	                   	handler: 'ajaxForm',
 	       				btnCls: 'topjui-btn-red',
 	               }]
 	       }">编辑</a>

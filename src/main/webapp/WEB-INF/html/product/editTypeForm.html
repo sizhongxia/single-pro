@@ -1,0 +1,33 @@
+<input type="hidden" id="id" name="id" value="${id!}"/>
+<table class="editTable" style="width: 90%">
+    <tr>
+        <td class="label" width="120">原类型：</td>
+        <td>
+        	<input type="text" value="${productKindName!}" readonly="readonly" data-toggle="topjui-textbox" data-options="width:207,required: true">
+        	<input type="text" value="${productTypeName!}" readonly="readonly" data-toggle="topjui-textbox" data-options="width:207,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">新类型：</td>
+        <td>
+        	<input type="text" name="kindId" data-toggle="topjui-combobox" 
+        		data-options="width:207,
+			            panelHeight: 158,
+        				required:true,
+                        valueField:'kindId',
+                        textField:'kindName',
+                       url: remoteHost + '/product/kind/all',
+                       childCombobox:{
+                          id:'typeId-${domId!}',
+                          url:remoteHost+'/product/type/all?kindId={parentValue}'
+                       }">
+        	<input type="text" name="typeId" data-toggle="topjui-combobox" 
+        		data-options="id:'typeId-${domId!}',
+        				width:207,
+			            panelHeight: 158,
+        				required:true,
+                        valueField:'typeId',
+                        textField:'typeName'">
+        </td>
+    </tr>
+</table>

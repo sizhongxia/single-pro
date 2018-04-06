@@ -126,9 +126,17 @@ public class CompanyController extends BaseController {
 	@RequestMapping(value = "/groups")
 	public List<Map<String, String>> groups(HttpServletRequest request) {
 		List<Map<String, String>> list = new ArrayList<>();
+		Map<String, String> item = null;
+
+		String nempty = request.getParameter("nempty");
+		if (!"Y".equals(nempty)) {
+			item = new HashMap<>();
+			item.put("groupId", "");
+			item.put("companyName", "默认（未选择任何公司企业）");
+			list.add(item);
+		}
 
 		Map<String, Object> params = new HashMap<>();
-
 		String q = request.getParameter("q");
 		if (StringUtils.isNotBlank(q)) {
 			try {
@@ -136,17 +144,15 @@ public class CompanyController extends BaseController {
 				q = q.toLowerCase();
 				params.put("sq", q);
 			} catch (Exception e) {
+				return list;
 			}
+		} else {
+			return list;
 		}
 		List<Company> companys = companyCustomService.selectCompanyList(params);
 		if (companys == null || companys.isEmpty()) {
 			return list;
 		}
-		Map<String, String> item = null;
-		item = new HashMap<>();
-		item.put("groupId", "");
-		item.put("companyName", "空");
-		list.add(item);
 		for (Company company : companys) {
 			item = new HashMap<>();
 			item.put("groupId", company.getId());
@@ -323,9 +329,9 @@ public class CompanyController extends BaseController {
 		company.setBusinessRegistNo(request.getParameter("businessRegistNo"));
 		company.setOrganizationCode(organizationCode);
 		company.setTaxNo(request.getParameter("taxNo"));
-//		company.setProvincial(request.getParameter("provincial"));
-//		company.setCity(request.getParameter("city"));
-//		company.setCounty(request.getParameter("county"));
+		// company.setProvincial(request.getParameter("provincial"));
+		// company.setCity(request.getParameter("city"));
+		// company.setCounty(request.getParameter("county"));
 		company.setAddress(request.getParameter("address"));
 		company.setContacts(request.getParameter("contacts"));
 		company.setContactTel(request.getParameter("contactTel"));

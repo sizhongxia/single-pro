@@ -21,13 +21,25 @@
 				    url: remoteHost + '/product/list'">
 	            <thead>
 		            <tr>
-		                <th data-options="field:'name',title:'名称',
-			                    formatter:function(value,row,index) {
-			                        return '<img style=\'width:20px;height:20px;margin:-4px 0 0 0;\' src=\'' + row.pic_url + '\'> &nbsp;' + value;
+		                <th data-options="field:'p.name',title:'名称',sortable:true"></th>
+		                <th data-options="field:'pk.name',title:'种类',sortable:true"></th>
+		                <th data-options="field:'pt.name',title:'类型',sortable:true"></th>
+		                <th data-options="field:'p.model',title:'型号',sortable:true"></th>
+		                <th data-options="field:'c.name',title:'厂商',sortable:true"></th>
+		                <th data-options="field:'c.mechanism_type',title:'厂商类型'"></th>
+		                <th data-options="field:'p.describe',title:'描述'"></th>
+		                <th data-options="field:'p.show_status',title:'显示状态',sortable:true,
+			                    formatter:function(value,row,index){
+			                        if (value == 'Y') {
+			                            return '<div>上架</div>';
+			                        } else if (value == 'N') {
+			                            return '<div>下架</div>';
+			                        } else {
+			                            return '<div>待发布</div>';
+			                        }
 			                    }"></th>
-		                <th data-options="field:'summary',title:'描述'"></th>
-		                <th data-options="field:'create_time',title:'创建时间',sortable:true"></th>
-		                <th data-options="field:'update_time',title:'更新时间',sortable:true"></th>
+		                <th data-options="field:'p.create_time',title:'创建时间',sortable:true"></th>
+		                <th data-options="field:'p.update_time',title:'更新时间',sortable:true"></th>
 		            </tr>
 	            </thead>
 	        </table>
@@ -49,12 +61,11 @@
 	           width: 720,
 	           height: 450,
 	           href: remoteHost + '/product/form',
-	           uploadUrl:'ddd',
 	           buttonsGroup:[{
 	           		text:'保存', 
 	           		url: remoteHost + '/product/save', 
 	           		iconCls:'fa fa-plus', 
-	           		handler:'multiAjaxForm', 
+	           		handler:'ajaxForm', 
 	           		btnCls:'topjui-btn-brown'}
 	           ]
 	       }">新增产品</a>
@@ -69,16 +80,48 @@
 	               title: '编辑产品',
 		           width: 720,
 		           height: 450,
-	           	   href: remoteHost + '/product/form',
-	               url: remoteHost + '/product/detail?id={id}',
+	           	   href: remoteHost + '/product/editForm',
+	               url: remoteHost + '/product/detail?id={p.id}',
 	               buttonsGroup: [{
 	                   	text: '更新',
 	                   	url: remoteHost + '/product/update',
 	                   	iconCls: 'fa fa-save',
-	                   	handler: 'multiAjaxForm',
+	                   	handler: 'ajaxForm',
 	       				btnCls: 'topjui-btn-red',
 	               }]
 	       }">编辑</a>
+	       
+	    
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#productDatagrid-toolbar',
+	            iconCls: 'fa fa-exchange',
+	       		btnCls: 'topjui-btn-normal',
+	            parentGrid:{
+	               type:'datagrid',
+	               id:'productDatagrid',
+	               param:'id:p.id',
+	               unselectedMsg:'请先点击选择一条要修改的数据'
+	            },
+	            dialog: {
+	               title: '变更产品类型',
+		           width: 720,
+		           height: 450,
+	           	   href: remoteHost + '/product/editTypeForm?id={p.id}',
+	               buttonsGroup: [{
+	                   	text: '更新',
+	                   	url: remoteHost + '/product/updateType',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">变更类型</a>
+	       
+	       <a href="javascript:void(0)"
+		       data-toggle="topjui-menubutton"
+		       data-options="method:'search',
+		       extend: '#productDatagrid-toolbar'">查询</a>
 
 	</div>
 	<!-- 表格工具栏结束 -->

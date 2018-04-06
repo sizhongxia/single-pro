@@ -456,9 +456,9 @@
 								<value>${productionMode}</value>
 							</systemProperty>
 						</systemProperties>
-						<!-- 热部署 -->
+						<!-- 热部署
 						<scanIntervalSeconds>10</scanIntervalSeconds>
-						<useTestClasspath>false</useTestClasspath>
+						<useTestClasspath>false</useTestClasspath> -->
 					</configuration>
 				</plugin>
 			</plugins>

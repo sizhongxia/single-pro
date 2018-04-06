@@ -57,12 +57,11 @@
 	           width: 720,
 	           height: 450,
 	           href: remoteHost + '/product/kind/form',
-	           uploadUrl:'ddd',
 	           buttonsGroup:[{
 	           		text:'保存', 
 	           		url: remoteHost + '/product/kind/save', 
 	           		iconCls:'fa fa-plus', 
-	           		handler:'multiAjaxForm', 
+	           		handler:'ajaxForm', 
 	           		btnCls:'topjui-btn-brown'}
 	           ]
 	       }">新增种类</a>
@@ -83,7 +82,7 @@
 	                   	text: '更新',
 	                   	url: remoteHost + '/product/kind/update',
 	                   	iconCls: 'fa fa-save',
-	                   	handler: 'multiAjaxForm',
+	                   	handler: 'ajaxForm',
 	       				btnCls: 'topjui-btn-red',
 	               }]
 	       }">编辑</a>

@@ -9,29 +9,13 @@
     <tr>
         <td class="label" width="120">所属种类：</td>
         <td>
-        	<input type="text" name="kindId" data-toggle="topjui-combobox" 
-        		data-options="width:420,
-			            panelHeight: 158,
-        				required:true,
-                        valueField:'kindId',
-                        textField:'kindName',
-                       url: remoteHost + '/product/kind/all',
-                       childCombobox:{
-                          id:'typeId-${domId!}',
-                          url:remoteHost+'/product/type/all?kindId={parentValue}'
-                       }">
+        	<input type="text" name="productKindName" readonly="readonly" data-toggle="topjui-textbox" data-options="width:420,required: true">
         </td>
     </tr>
     <tr>
         <td class="label" width="120">所属类型：</td>
         <td>
-        	<input type="text" name="typeId" data-toggle="topjui-combobox" 
-        		data-options="id:'typeId-${domId!}',
-        				width:420,
-			            panelHeight: 158,
-        				required:true,
-                        valueField:'typeId',
-                        textField:'typeName'">
+        	<input type="text" name="productTypeName" readonly="readonly" data-toggle="topjui-textbox" data-options="width:420,required: true">
         </td>
     </tr>
     <tr>
