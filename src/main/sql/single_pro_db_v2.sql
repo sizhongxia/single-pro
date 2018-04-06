@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
-Source Server Version : 50631
+Source Server Version : 50637
 Source Host           : localhost:3306
 Source Database       : single_pro_db_v2
 
 Target Server Type    : MYSQL
-Target Server Version : 50631
+Target Server Version : 50637
 File Encoding         : 65001
 
-Date: 2018-04-03 23:28:32
+Date: 2018-04-06 23:04:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -3615,9 +3615,6 @@ CREATE TABLE `sp_company` (
 -- ----------------------------
 -- Records of sp_company
 -- ----------------------------
-INSERT INTO `sp_company` VALUES ('7418956E39254B0F9D69F4E506686197', 'cc', 'cc', 'cc', '', 'JGLX_QY', '1', '1', '1', '110000', '110100', '110101', '1', '1', '1', '', '2018-04-01 18:52:31', '2018-04-02 17:39:20');
-INSERT INTO `sp_company` VALUES ('AAF99808EB794A7D977CF6C2AEC68FF9', '仲夏科技1', 'zhongxiakeji1', '仲夏1', '', 'JGLX_QY', '112345', '1123456', '11234567', '120000', '120200', '120223', '车站镇李合楼', '1司仲夏', '28518436862', '1无', '2018-03-31 21:01:33', '2018-04-03 21:49:44');
-INSERT INTO `sp_company` VALUES ('D84C3B71943D4099BDDEB3B12F89633C', '测试', 'ceshi', '测试', 'AAF99808EB794A7D977CF6C2AEC68FF9', 'JGLX_ZF', '123', '1234562', '123', '130000', '130300', '130303', '23', '23', '23', '', '2018-03-31 21:09:57', '2018-04-02 17:39:35');
 
 -- ----------------------------
 -- Table structure for sp_dictionary_item
@@ -3642,7 +3639,6 @@ INSERT INTO `sp_dictionary_item` VALUES ('455A8AFD7B0E45509DC5B9A8BE7BDFF7', '96
 INSERT INTO `sp_dictionary_item` VALUES ('46D7C814C63D461EA0EC4827DF6AB59C', '96B4C5EFD3B942B089722A9816BD3484', '建筑建材', 'HY_JZJC', 'Y', '2018-03-31 16:55:49', '2018-04-02 17:07:36');
 INSERT INTO `sp_dictionary_item` VALUES ('7D66C716161A42D1B6D29A4C39DDF618', '96B4C5EFD3B942B089722A9816BD3484', '信息产业', 'HY_XXCY', 'Y', '2018-04-01 19:34:44', '2018-04-02 17:07:39');
 INSERT INTO `sp_dictionary_item` VALUES ('9B2039C54FBD4A5B8526080AF3DEA98F', '2D19CE4543674F979B6CF86DF6C613CE', '企业', 'JGLX_QY', 'Y', '2018-03-31 16:41:14', '2018-04-02 17:05:30');
-INSERT INTO `sp_dictionary_item` VALUES ('F56BFB4B81A74960AB6FB5A4872FD910', '2D19CE4543674F979B6CF86DF6C613CE', '其他', 'JGLX_OTHER', 'Y', '2018-04-03 21:47:41', '2018-04-03 21:47:41');
 
 -- ----------------------------
 -- Table structure for sp_dictionary_type
@@ -3928,6 +3924,8 @@ CREATE TABLE `sp_product` (
   `manual_url` varchar(200) NOT NULL COMMENT '操作手册访问链接',
   `apply_user_id` char(32) NOT NULL COMMENT '申请人ID',
   `show_status` char(1) NOT NULL COMMENT '上下架（展示）状态（Y:上架，N:下架，D:待发布）',
+  `contacts` varchar(50) NOT NULL COMMENT '产品联系人',
+  `contact_tel` varchar(30) NOT NULL COMMENT '联系电话',
   `create_time` datetime NOT NULL COMMENT '注册时间',
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`id`)
@@ -3964,6 +3962,25 @@ CREATE TABLE `sp_product_clue` (
 INSERT INTO `sp_product_clue` VALUES ('1', '测试', '仲夏科技', '司仲夏', '18518436862', '无', '1', 'http://www.file.url', '1', '2018-04-02 22:08:32', 'Y', '2018-04-02 22:37:40');
 
 -- ----------------------------
+-- Table structure for sp_product_image
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_product_image`;
+CREATE TABLE `sp_product_image` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `product_id` char(32) NOT NULL COMMENT '产品ID',
+  `path` varchar(200) NOT NULL COMMENT '图片路径',
+  `is_cover` char(1) NOT NULL COMMENT '封面（Y:是，N:否）',
+  `status` char(1) NOT NULL COMMENT '状态（Y:可用, N:移除）',
+  `create_time` datetime NOT NULL COMMENT '上传创建时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='产品图片表';
+
+-- ----------------------------
+-- Records of sp_product_image
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for sp_product_kind
 -- ----------------------------
 DROP TABLE IF EXISTS `sp_product_kind`;
@@ -3981,9 +3998,10 @@ CREATE TABLE `sp_product_kind` (
 -- ----------------------------
 -- Records of sp_product_kind
 -- ----------------------------
-INSERT INTO `sp_product_kind` VALUES ('7F816CAF282841A38AAC7AF623620112', '测试', '/2018/04/03/cDtTI40Neq6zFR6vy8w.jpg', '无1', 'Y', '2018-04-02 23:11:02', '2018-04-03 23:26:41');
-INSERT INTO `sp_product_kind` VALUES ('BD2DF24C094749C88B80FD7AF73C6BE5', 'ss', '/2018/04/03/YH7HEYX9WDTlOtR4JSC.png', 'ss', 'N', '2018-04-03 23:08:53', '2018-04-03 23:26:53');
-INSERT INTO `sp_product_kind` VALUES ('C9FD8FA323204F1EBD65C92987D2D374', '1211', '/2018/04/03/Phk5bUIdlW90zMDa7JR.png', '12', 'Y', '2018-04-03 21:51:30', '2018-04-03 23:26:28');
+INSERT INTO `sp_product_kind` VALUES ('49AB61CE88B546008AD80C9BFA7B1700', 'dd', '/single/product/kind/8hEKhXaMCfRrnxAzlA5.jpg', 'dd', 'Y', '2018-04-03 11:55:13', '2018-04-03 20:16:11');
+INSERT INTO `sp_product_kind` VALUES ('6B9E6DDFA81C4F23941BE1349BD5EEB7', '测试', '/single/product/kind/C262hArlNwnj3IaYQ01.jpg', '无', 'Y', '2018-04-03 20:15:27', '2018-04-03 20:15:27');
+INSERT INTO `sp_product_kind` VALUES ('7B93097656134972A7F8C60E39587A57', 'cccc', 'cccc', 'cccc', 'N', '2018-04-03 09:58:21', '2018-04-03 09:58:30');
+INSERT INTO `sp_product_kind` VALUES ('E0E39C11BECC4B32ADE2208DD1E93E55', 'cc', 'cc', 'cc', 'Y', '2018-04-03 11:54:54', '2018-04-03 12:44:28');
 
 -- ----------------------------
 -- Table structure for sp_product_qualification
@@ -4246,7 +4264,7 @@ CREATE TABLE `sp_system` (
 -- ----------------------------
 -- Records of sp_system
 -- ----------------------------
-INSERT INTO `sp_system` VALUES ('CC5172B4918546328542CEAB45163E44', '趣施工', '后台管理系统', 'http://www.team-union.com/index', '/2018/04/03/Z5YCg5To2mZO9aO0Dt7.png', '版权所有 © 2017-2018 豫ICP备15021339号-1');
+INSERT INTO `sp_system` VALUES ('CC5172B4918546328542CEAB45163E44', '后台管理系统', '后台管理系统', 'http://www.team-union.com/index', '2018/03/14/80C34C1FB6064E4CB54F869FD426DFB6.png', '版权所有 © 2017-2018 豫ICP备15021339号-1');
 
 -- ----------------------------
 -- Table structure for sp_system_app
@@ -4310,15 +4328,7 @@ CREATE TABLE `sp_system_file` (
 -- ----------------------------
 -- Records of sp_system_file
 -- ----------------------------
-INSERT INTO `sp_system_file` VALUES ('28BB4FF36D024E4F91060068F2CE76BE', '26174938f5bbf914869655.jpg', '/2018/04/03/8OHo8ZKEODt7YExdjyU.jpg', 'image/jpeg (.jpg)', '147665', '系统上传', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-03 23:05:37');
-INSERT INTO `sp_system_file` VALUES ('29223B3C4EAA4742918AD657E044CE3F', 'QQ截图20180119210937.png', '/2018/04/03/YH7HEYX9WDTlOtR4JSC.png', 'image/png (.png)', '69558', '产品分类图标', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-03 23:08:46');
-INSERT INTO `sp_system_file` VALUES ('600394430FC54257BE84D859DEA86616', '20180119210924.png', '/2018/04/03/Phk5bUIdlW90zMDa7JR.png', 'image/png (.png)', '112369', 'ProductKind', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-03 23:26:27');
-INSERT INTO `sp_system_file` VALUES ('726FC794708B407C9AAF51784B1BDBAC', '8、报表管理-历史数据导出.JPG', '/2018/04/03/cDtTI40Neq6zFR6vy8w.jpg', 'image/jpeg (.jpg)', '131074', 'ProductKind', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-03 23:26:40');
-INSERT INTO `sp_system_file` VALUES ('98CF7AD8F7A44BE5A64C9EE089B3CEE4', '20180119210924.png', '/2018/04/03/LHaZaMeFpSWsrjdTEZ7.png', 'image/png (.png)', '112369', '系统上传', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-03 23:05:37');
-INSERT INTO `sp_system_file` VALUES ('A452675558B04AFD9B2DDDD5292A7A60', 'QQ截图20180119210937.png', '/2018/04/03/Z5YCg5To2mZO9aO0Dt7.png', 'image/png (.png)', '69558', 'SystemLogo', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-03 23:17:43');
-INSERT INTO `sp_system_file` VALUES ('BFA1829F958A47049201CB4A1ED6A3F4', '20180119210924.png', '/2018/04/03/3z3HORGefZPrSieBaLK.png', 'image/png (.png)', '112369', 'SystemLogo', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-03 23:17:14');
-INSERT INTO `sp_system_file` VALUES ('C433C810E5C44CB090287ACD633BE845', '20180119210924.png', '/2018/04/03/X2iyii7J3CWjAgy6CHw.png', 'image/png (.png)', '112369', 'ProductKind', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-03 23:16:37');
-INSERT INTO `sp_system_file` VALUES ('EF010226ED024E89B0DA5E04A036E0B6', '20180119210924.png', '/2018/04/03/bzWiQ43iXx8GmH5UDrE.png', 'image/png (.png)', '112369', '系统上传', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-03 23:05:12');
+INSERT INTO `sp_system_file` VALUES ('80C34C1FB6064E4CB54F869FD426DFB6', 'Logo.png', '2018/03/14/80C34C1FB6064E4CB54F869FD426DFB6.png', 'image/png (.png)', '1300', '', '', '2018-03-14 17:17:25');
 
 -- ----------------------------
 -- Table structure for sp_system_menu
@@ -4390,7 +4400,7 @@ CREATE TABLE `sp_system_user` (
 -- ----------------------------
 -- Records of sp_system_user
 -- ----------------------------
-INSERT INTO `sp_system_user` VALUES ('3E8657B0E9B84023A3C16AF91E13E620', '司仲夏', 'sizhongxia', '18518436862', '2410042aea633697cff3e2e19a7dd726', '管理员', 'Y', '2017-12-27 11:29:22', '2018-03-30 16:36:17', '2018-04-03 21:33:33');
+INSERT INTO `sp_system_user` VALUES ('3E8657B0E9B84023A3C16AF91E13E620', '司仲夏', 'sizhongxia', '18518436862', '2410042aea633697cff3e2e19a7dd726', '管理员', 'Y', '2017-12-27 11:29:22', '2018-03-30 16:36:17', '2018-04-03 20:00:05');
 INSERT INTO `sp_system_user` VALUES ('73D829E6BBAC4486A171C95DDA609FDF', 'ss', 'ss', '18518436863', '2410042aea633697cff3e2e19a7dd726', '无', 'N', '2018-03-30 12:14:59', '2018-03-30 16:31:55', '2018-03-30 12:14:59');
 INSERT INTO `sp_system_user` VALUES ('DD97288F1C5347629D15B84221892D9F', '1', '1', '1', '2410042aea633697cff3e2e19a7dd726', '1', 'N', '2018-03-14 16:31:22', '2018-03-29 20:24:42', '2018-03-14 16:43:41');
 
