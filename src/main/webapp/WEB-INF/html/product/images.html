@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link type="text/css" href="${rc.contextPath}/statics/ui/other/spectre/spectre.min.css" rel="stylesheet"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<!-- 避免IE使用兼容模式 -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+	<meta name="renderer" content="webkit">
+	<!-- jQuery相关引用 -->
+	<script type="text/javascript" src="${rc.contextPath}/statics/ui/static/plugins/jquery/jquery.min.js"></script>
+	<!-- layui框架js -->
+	<script type="text/javascript" src="${rc.contextPath}/statics/ui/other/layer/layer.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="${rc.contextPath}/statics/ui/other/vue.min.js"></script>
+	<script type="text/javascript" src="${rc.contextPath}/statics/ui/static/public/js/topjui.config.js"></script>
+	<style type="text/css">
+		.p32 {
+			padding: 32px;
+		}
+		.mt20{
+			margin-top: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container p32" id="app">
+		<div class="columns">
+			<div class="column col-12">
+				  <ul class="breadcrumb">
+					  <li class="breadcrumb-item">
+					    <span>当前产品：${name!}</span>
+					  </li>
+					  <li class="breadcrumb-item">
+					    <span>产品图片</span>
+					  </li>
+				</ul>
+			</div>
+		</div>
+		<div class="columns p32">
+			<#if images?size==0>
+				<p class="text-gray text-center" style="width: 100%;">暂无图片数据，请在列表页面点击 “上传产品图片” 按钮进行上传。</p>
+			</#if>
+			<#list images as image>
+				<div class="column col-4 col-xs-6">
+		            <figure class="figure">
+		              <img src="${image.path!}" class="img-fit-contain rounded" alt="${image.path!}" style="height: 10rem; width: 100%;">
+		              <#if image_index==0>
+		              	<figcaption class="figure-caption text-center mt20">封面图片</figcaption>
+		              <#else>
+		              	<figcaption class="figure-caption text-center mt20"><a href="javascript:;" @click="setDefault('${image.id}')">设为默认</a> | <a href="javascript:;" @click="outlineHide('${image.id}')">下线隐藏</a></figcaption>
+		              </#if>
+		            </figure>
+	          	</div>
+          	</#list>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		$(function() {
+			new Vue({
+	   	    	el: '#app',
+	   	     	data: {},
+	      		methods: {
+	      			setDefault: function(id) {
+	      				layer.confirm('是否要设置当前图片为封面图片', {title:'提示'}, function(index){
+	      					$.post(remoteHost + "/product/setImageDefault", {id: id}, function(result){
+					    		window.location.reload();
+					    	}, "json");
+	      				});
+				    },
+				    outlineHide: function(id) {
+				    	layer.confirm('是否要移除当前图片', {title:'提示'}, function(index){
+					    	$.post(remoteHost + "/product/setImageOutline", {id: id}, function(result){
+					    		window.location.reload();
+					    	}, "json");
+	      				});
+				    }
+	      		},
+	      		mounted: function () { 
+	      		}
+			})
+		});
+	</script>
+</body>
+</html>

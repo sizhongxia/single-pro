@@ -31,12 +31,14 @@ import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.entity.Company;
 import com.single.pro.entity.Product;
+import com.single.pro.entity.ProductImage;
 import com.single.pro.entity.ProductKind;
 import com.single.pro.entity.ProductQualification;
 import com.single.pro.entity.ProductType;
 import com.single.pro.entity.SystemUser;
 import com.single.pro.model.ProductModel;
 import com.single.pro.service.CompanyService;
+import com.single.pro.service.ProductImageService;
 import com.single.pro.service.ProductKindService;
 import com.single.pro.service.ProductQualificationService;
 import com.single.pro.service.ProductService;
@@ -60,6 +62,8 @@ public class ProductController extends BaseController {
 	ProductTypeService productTypeService;
 	@Autowired
 	ProductQualificationService productQualificationService;
+	@Autowired
+	ProductImageService productImageService;
 	@Autowired
 	CompanyService companyService;
 	@Autowired
@@ -160,6 +164,44 @@ public class ProductController extends BaseController {
 	}
 
 	@RequiresAuthentication
+	@RequestMapping(value = { "/uploadPic" }, method = { RequestMethod.GET })
+	public ModelAndView uploadPic(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("product/uploadPic");
+		return mav;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/images" }, method = { RequestMethod.GET })
+	public ModelAndView images(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("product/images");
+
+		String id = request.getParameter("id");
+		Product product = productService.selectById(id);
+		if (product == null) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+
+		Wrapper<ProductImage> wrapper = new EntityWrapper<>();
+		wrapper.eq("product_id", id);
+		wrapper.eq("status", "Y");
+		wrapper.orderBy("is_cover desc");
+		List<ProductImage> images = productImageService.selectList(wrapper);
+
+		if (images != null && !images.isEmpty()) {
+			for (ProductImage img : images) {
+				img.setPath(RealHostReplace.getResUrl(img.getPath()));
+			}
+		} else {
+			images = new ArrayList<>();
+		}
+
+		mav.addObject("id", id);
+		mav.addObject("name", product.getName());
+		mav.addObject("images", images);
+		return mav;
+	}
+
+	@RequiresAuthentication
 	@RequestMapping(value = { "/editTypeForm" }, method = { RequestMethod.GET })
 	public ModelAndView editTypeForm(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("product/editTypeForm");
@@ -168,7 +210,7 @@ public class ProductController extends BaseController {
 		String id = request.getParameter("id");
 		Product product = productService.selectById(id);
 		if (product == null) {
-			return mav;
+			return new ModelAndView("error/invalid_parameter");
 		}
 
 		mav.addObject("id", product.getId());
@@ -244,6 +286,16 @@ public class ProductController extends BaseController {
 		map.put("contacts", product.getContacts());
 		map.put("contactTel", product.getContactTel());
 		map.put("showStatus", product.getShowStatus());
+		return map;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/baseData")
+	public Map<String, Object> baseData(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<>();
+		String id = request.getParameter("id");
+		map.put("id", id);
 		return map;
 	}
 
@@ -412,6 +464,213 @@ public class ProductController extends BaseController {
 
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
+		return res;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/unsale")
+	public Map<String, Object> unsale(HttpServletRequest request) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String ids = request.getParameter("ids");
+
+		if (StringUtils.isBlank(ids)) {
+			res.put("message", "未选择数据");
+			return res;
+		}
+
+		String[] idses = ids.split(",");
+		Set<String> idList = new HashSet<>();
+		for (String id : idses) {
+			idList.add(id);
+		}
+		List<Product> products = productService.selectBatchIds(idList);
+		if (products != null && products.size() > 0) {
+			List<Product> dProducts = new ArrayList<>();
+			for (Product product : products) {
+				if ("Y".equals(product.getShowStatus())) {
+					product.setShowStatus("N");
+					product.setUpdateTime(new Date());
+					dProducts.add(product);
+				}
+			}
+			if (!dProducts.isEmpty()) {
+				if (!productService.updateBatchById(dProducts)) {
+					res.put("message", "出现未知错误，请稍后重试");
+					return res;
+				}
+			} else {
+				res.put("message", "所选项目中未发现上线产品");
+				return res;
+			}
+		}
+
+		res.put("statusCode", 200);
+		res.put("message", "更新成功");
+		return res;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/savePic")
+	public Map<String, Object> savePic(HttpServletRequest request) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String id = request.getParameter("id");
+
+		if (StringUtils.isBlank(id)) {
+			res.put("message", "无效的参数");
+			return res;
+		}
+
+		Product product = productService.selectById(id);
+		if (product == null) {
+			res.put("message", "无效的参数");
+			return res;
+		}
+
+		String picUrl = request.getParameter("picUrl");
+
+		if (StringUtils.isBlank(picUrl)) {
+			res.put("message", "请上传一张图片");
+			return res;
+		}
+
+		String isCover = request.getParameter("isCover");
+		if (StringUtils.isBlank(isCover) || !"Y".equals(isCover)) {
+			isCover = "N";
+		}
+
+		Wrapper<ProductImage> wrapper = new EntityWrapper<>();
+		wrapper.eq("product_id", id);
+		wrapper.eq("status", "Y");
+		wrapper.eq("is_cover", "Y");
+		Date now = new Date();
+		ProductImage productImage = productImageService.selectOne(wrapper);
+		boolean change = false;
+		if (productImage == null) {
+			isCover = "Y";
+		} else {
+			if ("Y".equals(isCover)) {
+				productImage.setIsCover("N");
+				productImage.setUpdateTime(now);
+				change = true;
+			}
+		}
+
+		ProductImage entity = new ProductImage();
+		entity.setId(IdUtil.id());
+		entity.setProductId(id);
+		entity.setPath(picUrl);
+		entity.setIsCover(isCover);
+		entity.setStatus("Y");
+		entity.setCreateTime(now);
+		entity.setUpdateTime(now);
+
+		if (productImageService.insert(entity)) {
+			if (change) {
+				if (!productImageService.updateById(productImage)) {
+					res.put("message", "未知错误2");
+					return res;
+				}
+			}
+		} else {
+			res.put("message", "未知错误1");
+			return res;
+		}
+
+		res.put("statusCode", 200);
+		res.put("message", "更新成功");
+		return res;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/setImageDefault")
+	public Map<String, Object> setImageDefault(HttpServletRequest request) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String id = request.getParameter("id");
+
+		if (StringUtils.isBlank(id)) {
+			res.put("message", "无效的参数");
+			return res;
+		}
+
+		ProductImage productImage = productImageService.selectById(id);
+		if (productImage == null) {
+			res.put("message", "无效的参数");
+			return res;
+		}
+
+		Wrapper<ProductImage> wrapper = new EntityWrapper<>();
+		wrapper.eq("product_id", productImage.getProductId());
+		wrapper.eq("status", "Y");
+		wrapper.eq("is_cover", "Y");
+		Date now = new Date();
+		ProductImage productImageDeault = productImageService.selectOne(wrapper);
+
+		productImage.setIsCover("Y");
+		productImage.setUpdateTime(now);
+		if (productImageService.updateById(productImage)) {
+			productImageDeault.setIsCover("N");
+			productImageDeault.setUpdateTime(now);
+			if (!productImageService.updateById(productImageDeault)) {
+				res.put("message", "未知错误2");
+				return res;
+			}
+		} else {
+			res.put("message", "未知错误1");
+			return res;
+		}
+
+		res.put("statusCode", 200);
+		res.put("message", "设置成功");
+		return res;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/setImageOutline")
+	public Map<String, Object> setImageOutline(HttpServletRequest request) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String id = request.getParameter("id");
+
+		if (StringUtils.isBlank(id)) {
+			res.put("message", "无效的参数");
+			return res;
+		}
+
+		ProductImage productImage = productImageService.selectById(id);
+		if (productImage == null) {
+			res.put("message", "无效的参数");
+			return res;
+		}
+
+		if ("Y".equals(productImage.getIsCover())) {
+			res.put("message", "不允许直接删除封面图片");
+			return res;
+		}
+
+		productImage.setStatus("N");
+		productImage.setUpdateTime(new Date());
+		if (!productImageService.updateById(productImage)) {
+			res.put("message", "未知错误1");
+			return res;
+		}
+
+		res.put("statusCode", 200);
+		res.put("message", "移除成功");
 		return res;
 	}
 }

@@ -1,0 +1,25 @@
+<input type="hidden" id="id" name="id"/>
+<table class="editTable" style="width: 90%">
+    <tr>
+        <td class="label" width="120">产品图片：</td>
+        <td>
+        	<input type="text" name="picUrl"
+                   data-toggle="topjui-uploadbox"
+                   data-options="
+	                   buttonIcon:'fa fa-folder',
+	                   width:320,
+	                   required: true,
+	                   uploadUrl: remoteHost + '/uploadPic?typeCode=ProductPic'">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">设为封面：</td>
+        <td>
+        	<input type="text" name="isCover" data-toggle="topjui-combobox" data-options="data:[{value:'Y',text:'是'},{value:'N',text:'否'}],width:320,required:true">
+        </td>
+    </tr>
+    <tr>
+    	<td>&nbsp;</td>
+    	<td><p style="color:#8c8989"> ※ 上传的第一张图片默认为封面图片</p></td>
+    </tr>
+</table>

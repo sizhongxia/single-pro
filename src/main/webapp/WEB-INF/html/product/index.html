@@ -21,6 +21,7 @@
 				    url: remoteHost + '/product/list'">
 	            <thead>
 		            <tr>
+        				<th data-options="field:'p.id',title:'ID',checkbox:true"></th>
 		                <th data-options="field:'p.name',title:'名称',sortable:true"></th>
 		                <th data-options="field:'pk.name',title:'种类',sortable:true"></th>
 		                <th data-options="field:'pt.name',title:'类型',sortable:true"></th>
@@ -32,11 +33,11 @@
 		                <th data-options="field:'p.describe',title:'描述'"></th>
 		                <th data-options="field:'p.doc_url',title:'文档手册',sortable:true,
 			                    formatter:function(value,row,index){
-			                        return '<div><a href=\'' + value + '\' target=\'_blank\'>下载</a></div>';
+			                        return '<div><a style=\'color:rgb(0, 0, 204);\' title=\'' + value + '\' href=\'' + value + '\' target=\'_blank\'>下载</a></div>';
 			                    }"></th>
 		                <th data-options="field:'p.manual_url',title:'操作手册',sortable:true,
 			                    formatter:function(value,row,index){
-			                        return '<div><a href=\'' + value + '\' target=\'_blank\'>下载</a></div>';
+			                        return '<div><a style=\'color:rgb(0, 0, 204);\' title=\'' + value + '\' href=\'' + value + '\' target=\'_blank\'>下载</a></div>';
 			                    }"></th>
 		                <th data-options="field:'p.show_status',title:'显示状态',sortable:true,
 			                    formatter:function(value,row,index){
@@ -141,6 +142,48 @@
 		           	   href: remoteHost + '/product/qualification',
 		               url: remoteHost + '/product/qualificationData?id={p.id}'
 		       }">产品资质</a>
+		    
+		    <a href="javascript:void(0)"
+		       data-toggle="topjui-menubutton"
+		       data-options="method: 'openDialog',
+		      		extend: '#productDatagrid-toolbar',
+		            iconCls: 'fa fa-upload',
+		       		btnCls: 'topjui-btn-normal',
+		            dialog: {
+		               title: '上传产品图片',
+			           width: 620,
+			           height: 240,
+		           	   href: remoteHost + '/product/uploadPic',
+		               url: remoteHost + '/product/baseData?id={p.id}',
+		               buttonsGroup: [{
+		                   	text: '上传保存',
+		                   	url: remoteHost + '/product/savePic',
+		                   	iconCls: 'fa fa-save',
+		                   	handler: 'ajaxForm',
+		       				btnCls: 'topjui-btn-red',
+		               }]
+			       }">上传产品图片</a>
+			       
+		    <a href="javascript:void(0)"
+			       data-toggle="topjui-menubutton"
+			       data-options="method:'openTab',
+			       extend: '#productDatagrid-toolbar',
+		            iconCls: 'fa fa-file-image-o',
+			       btnCls:'topjui-btn-normal',
+			       tab: {
+			           title:'产品图片管理',
+			           href:remoteHost + '/product/images?id={p.id}'
+			       }">产品图片管理</a>
+					    
+	       <a href="javascript:void(0)"
+		       data-toggle="topjui-menubutton"
+		       data-options="method: 'doAjax',
+		      		extend: '#productDatagrid-toolbar',
+		            iconCls: 'fa fa-cart-arrow-down',
+		       		btnCls: 'topjui-btn-normal',
+		       		confirmMsg:'是否要下架所选的全部产品',
+       				grid: {uncheckedMsg:'请先勾选要提交的数据',param:'ids:p.id'},
+		       		url: remoteHost + '/product/unsale'">批量下架</a>
 	       
 	       <a href="javascript:void(0)"
 		       data-toggle="topjui-menubutton"
