@@ -100,6 +100,12 @@ public class ProductClueController extends BaseController {
 	@RequestMapping(value = { "/form" }, method = { RequestMethod.GET })
 	public ModelAndView form(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("product/clue/form");
+		String id = request.getParameter("id");
+		ProductClue productClue = productClueService.selectById(id);
+		if (productClue == null) {
+			productClue = new ProductClue();
+		}
+		mav.addObject("productClue", productClue);
 		return mav;
 	}
 
@@ -128,7 +134,7 @@ public class ProductClueController extends BaseController {
 		if (productClue == null) {
 			productClue = new ProductClue();
 		}
-		
+
 		return productClue;
 	}
 

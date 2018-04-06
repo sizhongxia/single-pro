@@ -3575,8 +3575,9 @@ function ($) {
                 }
         }
         function _248(a, b) {
-            var c = $.data(a, "panel"),
-                d = c.options,
+            var c = $.data(a, "panel");
+            if(!c) return;
+            var d = c.options,
                 e = c.panel;
             1 != b && 0 == d.onBeforeDestroy.call(a) || ($(a).panel("clear").panel("clear", "footer"), _210(e), d.onDestroy.call(a))
         }

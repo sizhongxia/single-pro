@@ -1,0 +1,74 @@
+<table class="editTable" style="width: 90%">
+    <tr>
+        <td class="label" width="120">所属种类：</td>
+        <td>
+        		<p>
+        			<#if productKindPicUrl !=""><img alt="分类图标" src="${productKindPicUrl!}" style="height: 24px;width: 24px;"/></#if> 
+					<input type="text" readonly="readonly" value="${productKindName!}" data-toggle="topjui-textbox" data-options="width:392,required: true">
+				</p>
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">类别名称：</td>
+        <td>
+				<p>
+					<#if productTypePicUrl !=""><img alt="分类图标" src="${productTypePicUrl!}" style="height: 24px;width: 24px;"/></#if> 
+					<input type="text" readonly="readonly" value="${productType.name!}" data-toggle="topjui-textbox" data-options="width:392,required: true">
+				</p>
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">施工申请条件：</td>
+        <td>
+        	<input type="text" readonly="readonly" value="${productType.sgsqCondition!}" data-toggle="topjui-textarea" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">勘测：</td>
+        <td>
+        	<input type="text" readonly="readonly" value="${productType.serSurvey!}" data-toggle="topjui-textarea" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">验货：</td>
+        <td>
+        	<input type="text" readonly="readonly" value="${productType.serCheck!}" data-toggle="topjui-textarea" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">施工：</td>
+        <td>
+        	<input type="text" readonly="readonly" value="${productType.serConstruct!}" data-toggle="topjui-textarea" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">培训：</td>
+        <td>
+        	<input type="text" readonly="readonly" value="${productType.serTrain!}" data-toggle="topjui-textarea" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">验收：</td>
+        <td>
+        	<input type="text" readonly="readonly" value="${productType.serAccept!}" data-toggle="topjui-textarea" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">产品单位：</td>
+        <td>
+        	<input type="text" readonly="readonly" value="${productTypeUnit!}" data-toggle="topjui-textbox" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">施工难度：</td>
+        <td>
+        	<input type="text" readonly="readonly" value="难度${productType.difficulty!}星" data-toggle="topjui-textbox" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">描述：</td>
+        <td>
+        	<input type="text" readonly="readonly" value="${productType.summary!}" data-toggle="topjui-textarea" data-options="width:420,required: true">
+        </td>
+    </tr>
+</table>

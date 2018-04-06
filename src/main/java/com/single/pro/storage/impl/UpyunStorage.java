@@ -20,7 +20,7 @@ public class UpyunStorage implements FileStorage, InitializingBean {
 	}
 
 	@Override
-	public boolean upload(String path, File file) {
+	public boolean uploadImage(String path, File file) {
 		if (file == null || upyun == null) {
 			return false;
 		}
@@ -34,7 +34,7 @@ public class UpyunStorage implements FileStorage, InitializingBean {
 	}
 
 	@Override
-	public boolean upload(String path, byte[] bytes) {
+	public boolean uploadImage(String path, byte[] bytes) {
 		if (bytes == null || upyun == null) {
 			return false;
 		}

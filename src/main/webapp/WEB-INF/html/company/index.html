@@ -54,8 +54,8 @@
 	       iconCls: 'fa fa-plus',
 	       dialog:{
                title: '新增企业',
-	           width: 520,
-	           height: 320,
+	           width: 720,
+	           height: 450,
 	           href: remoteHost + '/company/form',
 	           buttonsGroup:[
 	               {text:'保存', url: remoteHost + '/company/save', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
@@ -70,9 +70,9 @@
 	       		btnCls: 'topjui-btn-normal',
 	            dialog: {
 	               title: '编辑企业',
-		           width: 520,
-		           height: 320,
-	           	   href: remoteHost + '/company/editForm',
+		           width: 720,
+		           height: 450,
+	           	   href: remoteHost + '/company/editForm?id={id}',
 	               url: remoteHost + '/company/detail?id={id}',
 	               buttonsGroup: [{
 	                   	text: '更新',
@@ -91,8 +91,8 @@
 	       		btnCls: 'topjui-btn-normal',
 	            dialog: {
 	               title: '变更企业区域',
-		           width: 520,
-		           height: 320,
+		           width: 720,
+		           height: 450,
 	           	   href: remoteHost + '/company/changeAreaform?id={id}',
 	               url: remoteHost + '/company/detail?id={id}',
 	               buttonsGroup: [{

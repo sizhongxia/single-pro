@@ -143,10 +143,14 @@ public class CompanyController extends BaseController {
 			return list;
 		}
 		Map<String, String> item = null;
+		item = new HashMap<>();
+		item.put("groupId", "");
+		item.put("companyName", "空");
+		list.add(item);
 		for (Company company : companys) {
 			item = new HashMap<>();
 			item.put("groupId", company.getId());
-			item.put("companyName", company.getName() + " (" + company.getShortName() + ")");
+			item.put("companyName", company.getName());
 			list.add(item);
 		}
 
@@ -164,6 +168,15 @@ public class CompanyController extends BaseController {
 	@RequestMapping(value = { "/editForm" }, method = { RequestMethod.GET })
 	public ModelAndView editForm(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("company/editForm");
+		String id = request.getParameter("id");
+		mav.addObject("groupName", "");
+		Company company = companyService.selectById(id);
+		if (company != null && StringUtils.isNotBlank(company.getGroupId())) {
+			company = companyService.selectById(company.getGroupId());
+			if (company != null) {
+				mav.addObject("groupName", company.getName());
+			}
+		}
 		return mav;
 	}
 
@@ -305,14 +318,14 @@ public class CompanyController extends BaseController {
 			return res;
 		}
 		company.setShortName(request.getParameter("shortName"));
-		// company.setGroupId(request.getParameter("groupId"));
+		company.setGroupId(request.getParameter("groupId"));
 		company.setMechanismType(request.getParameter("mechanismType"));
 		company.setBusinessRegistNo(request.getParameter("businessRegistNo"));
 		company.setOrganizationCode(organizationCode);
 		company.setTaxNo(request.getParameter("taxNo"));
-		company.setProvincial(request.getParameter("provincial"));
-		company.setCity(request.getParameter("city"));
-		company.setCounty(request.getParameter("county"));
+//		company.setProvincial(request.getParameter("provincial"));
+//		company.setCity(request.getParameter("city"));
+//		company.setCounty(request.getParameter("county"));
 		company.setAddress(request.getParameter("address"));
 		company.setContacts(request.getParameter("contacts"));
 		company.setContactTel(request.getParameter("contactTel"));

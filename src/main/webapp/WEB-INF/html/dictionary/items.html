@@ -3,7 +3,7 @@
     <tr>
         <td class="label" width="120">当前字典类型：</td>
         <td>
-        	<input type="text" name="name" readonly="readonly" data-toggle="topjui-textbox" data-options="width:258,required: true">
+        	<input type="text" name="name" readonly="readonly" data-toggle="topjui-textbox" data-options="width:420,required: true">
         </td>
     </tr>
 </table>
@@ -38,8 +38,8 @@
 	       iconCls: 'fa fa-plus',
 	       dialog:{
                title: '新增字典',
-	           width: 520,
-	           height: 320,
+	           width: 720,
+	           height: 450,
 	           href: remoteHost + '/dictionary/itemForm?typeId=${typeId}',
 	           buttonsGroup:[
 	               {text:'保存', url: remoteHost + '/dictionary/saveItem', iconCls:'fa fa-plus', handler:'ajaxForm', btnCls:'topjui-btn-brown'}
@@ -53,8 +53,8 @@
 	       		btnCls: 'topjui-btn-normal',
 	            dialog: {
 	               title: '编辑字典项',
-		           width: 520,
-		           height: 320,
+		           width: 720,
+		           height: 450,
 	           	   href: remoteHost + '/dictionary/itemForm?typeId=${typeId}',
 	               url: remoteHost + '/dictionary/itemDetail?id={id}',
 	               buttonsGroup: [{

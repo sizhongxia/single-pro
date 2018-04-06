@@ -25,7 +25,9 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
+import com.single.pro.entity.ProductKind;
 import com.single.pro.entity.ProductType;
+import com.single.pro.service.ProductKindService;
 import com.single.pro.service.ProductTypeService;
 import com.single.pro.storage.RealHostReplace;
 import com.single.pro.util.IdUtil;
@@ -37,6 +39,8 @@ public class ProductTypeController extends BaseController {
 
 	@Autowired
 	ProductTypeService productTypeService;
+	@Autowired
+	ProductKindService productKindService;
 	@Autowired
 	BaseDataCacheUtil baseDataCacheUtil;
 
@@ -116,6 +120,31 @@ public class ProductTypeController extends BaseController {
 	@RequestMapping(value = { "/form" }, method = { RequestMethod.GET })
 	public ModelAndView form(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("product/type/form");
+		return mav;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/info" }, method = { RequestMethod.GET })
+	public ModelAndView info(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("product/type/info");
+		String id = request.getParameter("id");
+
+		ProductType productType = productTypeService.selectById(id);
+		if (productType == null) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+		
+		ProductKind productKind = 	productKindService.selectById(productType.getKindId());
+		if(productKind == null) {
+			mav.addObject("productKindName", "");
+			mav.addObject("productKindPicUrl", "");
+		} else {
+			mav.addObject("productKindName", productKind.getName());
+			mav.addObject("productKindPicUrl", RealHostReplace.getResUrl(productKind.getPicUrl()));
+		}
+		mav.addObject("productType", productType);
+		mav.addObject("productTypePicUrl", RealHostReplace.getResUrl(productType.getPicUrl()));
+		mav.addObject("productTypeUnit", baseDataCacheUtil.getDictItemName(productType.getUnit()));
 		return mav;
 	}
 

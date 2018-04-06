@@ -54,12 +54,17 @@
 	      		extend: '#productClueTg-toolbar',
 	            iconCls: 'fa fa-info',
 	       		btnCls: 'topjui-btn-normal',
+	           parentGrid:{
+	               type:'datagrid',
+	               id:'productClueTg',
+	               param:'id:id',
+	               unselectedMsg:'请先点击选择一条要查看的数据'
+	            },
 	            dialog: {
 	               title: '详细',
-		           width: 520,
-		           height: 320,
-	               href: remoteHost + '/product/clue/form',
-	               url: remoteHost + '/product/clue/detail?id={id}'
+		           width: 720,
+		           height: 450,
+	               href: remoteHost + '/product/clue/form?id={id}'
 	       }">详细</a>
 	       
 	     <a href="javascript:void(0)"
@@ -70,8 +75,8 @@
 	       		btnCls: 'topjui-btn-normal',
 	            dialog: {
 	               title: '处理',
-		           width: 520,
-		           height: 320,
+		           width: 720,
+		           height: 450,
 	           	   href: remoteHost + '/product/clue/handleForm',
 	               url: remoteHost + '/product/clue/handleDetail?id={id}',
 	               buttonsGroup: [{

@@ -1,0 +1,103 @@
+<input type="hidden" id="id" name="id"/>
+<table class="editTable" style="width: 90%">
+    <tr>
+        <td class="label" width="120">产品名称：</td>
+        <td>
+        	<input type="text" name="name" data-toggle="topjui-textbox" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">所属公司（厂家）：</td>
+        <td>
+        	<input type="text" data-toggle="topjui-autocomplete"
+        		data-options="width:420,
+                        prompt: '请输入公司、厂家名称/简称/拼音进行查询',
+                        textField:'companyName',
+                        valueField:'companyName',
+                   		formatter:itemFormatter,
+                       url: remoteHost + '/company/groups?q={name}',
+                       param:'groupId:groupId,companyName:companyName'">
+             <input type="hidden" name="groupId">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">产品型号：</td>
+        <td>
+        	<input type="text" name="model" data-toggle="topjui-textbox" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">产品描述：</td>
+        <td>
+        	<input type="text" name="describe" data-toggle="topjui-textarea" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">产品组成：</td>
+        <td>
+        	<input type="text" name="constituent" data-toggle="topjui-textarea" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">勘测事项：</td>
+        <td>
+        	<input type="text" name="surveyItems" data-toggle="topjui-textarea" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">安装调试：</td>
+        <td>
+        	<input type="text" name="installDebug" data-toggle="topjui-textarea" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">设备维护：</td>
+        <td>
+        	<input type="text" name="deviceMaintain" data-toggle="topjui-textarea" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">常见问题：</td>
+        <td>
+        	<input type="text" name="commonProblem" data-toggle="topjui-textarea" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">文档手册：</td>
+        <td>
+        	<input type="text" name="docUrl"
+                   data-toggle="topjui-uploadbox"
+                   data-options="
+	                   buttonIcon:'fa fa-folder',
+	                   width:420,
+	                   required: true,
+	                   buttonText: '选择文档手册',
+	                   uploadUrl: remoteHost + '/uploadFile?typeCode=ProductDoc'">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">操作手册：</td>
+        <td>
+        	<input type="text" name="manualUrl"
+                   data-toggle="topjui-uploadbox"
+                   data-options="
+	                   buttonIcon:'fa fa-folder',
+	                   width:420,
+	                   required: true,
+	                   buttonText: '选择操作手册',
+	                   uploadUrl: remoteHost + '/uploadFile?typeCode=ProductOperationManual'">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">显示状态：</td>
+        <td>
+        	<input type="text" name="showStatus" data-toggle="topjui-combobox" data-options="data:[{value:'Y',text:'上架'},{value:'N',text:'下架'},{value:'D',text:'待发布'}],width:420,required:true">
+        </td>
+    </tr>
+</table>
+<script>
+    function itemFormatter(row) {
+        var s = '<i class="fa fa-caret-right"></i> &nbsp; <span>' + row.companyName + '</span><br/>';
+        return s;
+    }
+</script>

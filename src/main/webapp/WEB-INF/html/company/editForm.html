@@ -3,20 +3,34 @@
     <tr>
         <td class="label" width="120">公司名称：</td>
         <td>
-        	<input type="text" name="name" data-toggle="topjui-textbox" data-options="width:258,required: true">
+        	<input type="text" name="name" data-toggle="topjui-textbox" data-options="width:420,required: true">
         </td>
     </tr>
     <tr>
         <td class="label" width="120">公司简称：</td>
         <td>
-        	<input type="text" name="shortName" data-toggle="topjui-textbox" data-options="width:258,required: true">
+        	<input type="text" name="shortName" data-toggle="topjui-textbox" data-options="width:420,required: true">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">所属组织：</td>
+        <td>
+        	<input type="text" data-toggle="topjui-autocomplete" value="${groupName!}"
+        		data-options="width:420,
+                        prompt: '请输入公司、集体名称/简称/拼音进行查询',
+                        textField:'companyName',
+                        valueField:'companyName',
+                   		formatter:itemFormatter,
+                       url: remoteHost + '/company/groups?q={name}',
+                       param:'groupId:groupId,companyName:companyName'">
+             <input type="hidden" name="groupId">
         </td>
     </tr>
     <tr>
         <td class="label" width="120">机构类型：</td>
         <td>
         <input type="text" name="mechanismType" data-toggle="topjui-combobox" 
-        		data-options="width:258,
+        		data-options="width:420,
 			           panelHeight: 158,
                        required: true,
                        valueField:'code',
@@ -27,51 +41,51 @@
     <tr>
         <td class="label" width="120">工商注册号：</td>
         <td>
-        	<input type="text" name="businessRegistNo" data-toggle="topjui-textbox" data-options="width:258,required: true">
+        	<input type="text" name="businessRegistNo" data-toggle="topjui-textbox" data-options="width:420,required: true">
         </td>
     </tr>
     <tr>
         <td class="label" width="120">组织机构代码：</td>
         <td>
-        	<input type="text" name="organizationCode" data-toggle="topjui-textbox" data-options="width:258,required: true">
+        	<input type="text" name="organizationCode" data-toggle="topjui-textbox" data-options="width:420,required: true">
         </td>
     </tr>
     <tr>
         <td class="label" width="120">纳税人识别号：</td>
         <td>
-        	<input type="text" name="taxNo" data-toggle="topjui-textbox" data-options="width:258,required: true">
+        	<input type="text" name="taxNo" data-toggle="topjui-textbox" data-options="width:420,required: true">
         </td>
     </tr>
     <tr>
         <td class="label" width="120">区域：</td>
         <td>
-        	<input type="text" name="provincial" readonly="readonly" data-toggle="topjui-textbox" data-options="width:83">
-             <input type="text" name="city" readonly="readonly" data-toggle="topjui-textbox" data-options="width:83">
-              <input type="text" name="county" readonly="readonly" data-toggle="topjui-textbox" data-options="width:83">
+        	<input type="text" name="provincial" readonly="readonly" data-toggle="topjui-textbox" data-options="width:137">
+             <input type="text" name="city" readonly="readonly" data-toggle="topjui-textbox" data-options="width:137">
+              <input type="text" name="county" readonly="readonly" data-toggle="topjui-textbox" data-options="width:137">
         </td>
     </tr>
     <tr>
         <td class="label" width="120">地址：</td>
         <td>
-        	<input type="text" name="address" readonly="readonly" data-toggle="topjui-textbox" data-options="width:258,required: true">
+        	<input type="text" name="address" readonly="readonly" data-toggle="topjui-textbox" data-options="width:420,required: true">
         </td>
     </tr>
     <tr>
         <td class="label" width="120">联系人：</td>
         <td>
-        	<input type="text" name="contacts" data-toggle="topjui-textbox" data-options="width:258,required: true">
+        	<input type="text" name="contacts" data-toggle="topjui-textbox" data-options="width:420,required: true">
         </td>
     </tr>
     <tr>
         <td class="label" width="120">联系电话：</td>
         <td>
-        	<input type="text" name="contactTel" data-toggle="topjui-textbox" data-options="width:258,required: true">
+        	<input type="text" name="contactTel" data-toggle="topjui-textbox" data-options="width:420,required: true">
         </td>
     </tr>
     <tr>
         <td class="label" width="120">备注：</td>
         <td>
-        	<input type="text" name="remarks" data-toggle="topjui-textbox" data-options="width:258">
+        	<input type="text" name="remarks" data-toggle="topjui-textbox" data-options="width:420">
         </td>
     </tr>
 </table>

@@ -94,8 +94,8 @@
 	       iconCls: 'fa fa-plus',
 	       dialog:{
                title: '新增分类',
-	           width: 520,
-	           height: 320,
+	           width: 720,
+	           height: 450,
 	           href: remoteHost + '/product/type/form',
 	           uploadUrl:'ddd',
 	           buttonsGroup:[{
@@ -115,8 +115,8 @@
 	       		btnCls: 'topjui-btn-normal',
 	            dialog: {
 	               title: '编辑分类',
-		           width: 520,
-		           height: 320,
+		           width: 720,
+		           height: 450,
 	           	   href: remoteHost + '/product/type/form',
 	               url: remoteHost + '/product/type/detail?id={id}',
 	               buttonsGroup: [{
@@ -127,6 +127,25 @@
 	       				btnCls: 'topjui-btn-red',
 	               }]
 	       }">编辑</a>
+	    
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#productTypeDatagrid-toolbar',
+	            iconCls: 'fa fa-pencil',
+	       		btnCls: 'topjui-btn-normal',
+	           parentGrid:{
+	               type:'datagrid',
+	               id:'productTypeDatagrid',
+	               param:'id:id',
+	               unselectedMsg:'请先点击选择一条要查看的数据'
+	            },
+	            dialog: {
+	               title: '详细',
+		           width: 720,
+		           height: 521,
+	           	   href: remoteHost + '/product/type/info?id={id}'
+	       }">详细</a>
 
 	</div>
 	<!-- 表格工具栏结束 -->

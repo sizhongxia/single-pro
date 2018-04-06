@@ -197,11 +197,11 @@ public class IndexController extends BaseController {
 		systemFile.setUploadUserId(((SystemUser) (SecurityUtils.getSubject().getPrincipal())).getId());
 		systemFile.setUploadTime(now);
 		if (!systemFileService.insert(systemFile)) {
-			res.put("msg", "报错图片数据失败，请稍候重试");
+			res.put("msg", "保存图片数据失败，请稍候重试");
 			return res;
 		}
 		try {
-			if (fileStorage.upload(path, file.getBytes())) {
+			if (fileStorage.uploadImage(path, file.getBytes())) {
 				res.put("statusCode", 200);
 				res.put("filePath", path);
 				return res;
@@ -211,6 +211,87 @@ public class IndexController extends BaseController {
 		}
 
 		res.put("msg", "上传图片失败，请检查图片云存储服务配置");
+		return res;
+	}
+	
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/uploadFile")
+	public Map<String, Object> uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String typeCode = request.getParameter("typeCode");
+		if (StringUtils.isBlank(typeCode)) {
+			typeCode = "";
+		}
+
+		if (file == null || file.isEmpty()) {
+			res.put("msg", "未选择文件");
+			return res;
+		}
+		String fileName = file.getOriginalFilename();
+		String[] allowImageTypes = FileStorage.allowTypes;
+		String type = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
+		if (!ArrayUtil.contains(allowImageTypes, type)) {
+			res.put("msg", "无效的文件类型");
+			return res;
+		}
+
+		byte[] bytes = null;
+		try {
+			bytes = file.getBytes();
+		} catch (IOException e) {
+			res.put("msg", "无效的文件");
+			return res;
+		}
+		int size = bytes.length;
+		if (size > FileStorage.imageMaxSize) {
+			res.put("msg", "文件大小 " + size + " 超出最大值 " + FileStorage.fileMaxSize);
+			return res;
+		}
+
+		Date now = new Date();
+
+		String path = "/" + new SimpleDateFormat("yyyy/MM/dd").format(now) + "/" + NidUtil.randomUUID19() + type;
+
+		SystemFile systemFile = new SystemFile();
+		systemFile.setId(IdUtil.id());
+
+		if (fileName.length() > 60) {
+			fileName = fileName.substring(0, 60) + "..." + type;
+		}
+		systemFile.setOriginalName(fileName);
+		systemFile.setPath(path);
+		systemFile.setSize((long) size);
+		String contentType = file.getContentType();
+		contentType = contentType + " (" + type + ")";
+		if (contentType.length() > 20) {
+			contentType = "(" + type + ")";
+		}
+		if (contentType.length() > 20) {
+			contentType = "unknown";
+		}
+		systemFile.setType(contentType);
+		systemFile.setDesc(typeCode);
+		systemFile.setUploadUserId(((SystemUser) (SecurityUtils.getSubject().getPrincipal())).getId());
+		systemFile.setUploadTime(now);
+		if (!systemFileService.insert(systemFile)) {
+			res.put("msg", "保存文件数据失败，请稍候重试");
+			return res;
+		}
+		try {
+			if (fileStorage.uploadImage(path, file.getBytes())) {
+				res.put("statusCode", 200);
+				res.put("filePath", path);
+				return res;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		res.put("msg", "上传文件失败，请检查文件云存储服务配置");
 		return res;
 	}
 }

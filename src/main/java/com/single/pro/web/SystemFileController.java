@@ -192,7 +192,7 @@ public class SystemFileController extends BaseController {
 				return res;
 			}
 			try {
-				if (fileStorage.upload(path, file.getBytes())) {
+				if (fileStorage.uploadImage(path, file.getBytes())) {
 					res.put("statusCode", 200);
 					res.put("filePath", path);
 					return res;
