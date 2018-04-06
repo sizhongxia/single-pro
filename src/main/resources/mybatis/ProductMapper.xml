@@ -23,6 +23,8 @@
         <result column="manual_url" property="manualUrl" />
         <result column="apply_user_id" property="applyUserId" />
         <result column="show_status" property="showStatus" />
+        <result column="contacts" property="contacts" />
+        <result column="contact_tel" property="contactTel" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>

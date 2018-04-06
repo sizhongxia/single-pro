@@ -90,6 +90,9 @@ public class SystemFileController extends BaseController {
 		String order = request.getParameter("order");
 
 		if (StringUtils.isNotBlank(sort) && StringUtils.isNotBlank(order)) {
+			if (sort.equals("desc")) {
+				sort = "`desc`";
+			}
 			wrapper.orderBy(sort, "asc".equals(order));
 		}
 
@@ -106,7 +109,8 @@ public class SystemFileController extends BaseController {
 				item.put("originalName", systemFile.getOriginalName());
 				item.put("type", systemFile.getType());
 				item.put("size", systemFile.getSize());
-				item.put("path", RealHostReplace.getResUrl(systemFile.getPath()));
+				item.put("path", systemFile.getPath());
+				item.put("url", RealHostReplace.getResUrl(systemFile.getPath()));
 				item.put("desc", systemFile.getDesc());
 				item.put("uploadTime", systemFile.getUploadTime());
 				systemFileList.add(item);

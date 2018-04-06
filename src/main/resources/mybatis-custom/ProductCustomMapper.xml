@@ -23,6 +23,8 @@
 			p.doc_url as docUrl,
 			p.manual_url as manualUrl,
 			p.show_status as showStatus,
+			p.contacts,
+			p.contact_tel as contactTel,
 			p.create_time as createTime,
 			p.update_time as updateTime
 			

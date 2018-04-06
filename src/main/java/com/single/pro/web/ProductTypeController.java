@@ -6,8 +6,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,8 +28,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.entity.ProductKind;
+import com.single.pro.entity.ProductQualification;
 import com.single.pro.entity.ProductType;
 import com.single.pro.service.ProductKindService;
+import com.single.pro.service.ProductQualificationService;
 import com.single.pro.service.ProductTypeService;
 import com.single.pro.storage.RealHostReplace;
 import com.single.pro.util.IdUtil;
@@ -43,6 +47,8 @@ public class ProductTypeController extends BaseController {
 	ProductKindService productKindService;
 	@Autowired
 	BaseDataCacheUtil baseDataCacheUtil;
+	@Autowired
+	ProductQualificationService productQualificationService;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -152,6 +158,41 @@ public class ProductTypeController extends BaseController {
 	public ModelAndView form(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("product/type/form");
 		return mav;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/qualification" }, method = { RequestMethod.GET })
+	public ModelAndView qualification(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("product/type/qualification");
+		return mav;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = { "/qualificationData" })
+	public Map<String, Object> qualificationData(HttpServletRequest request) {
+		Map<String, Object> res = new HashMap<>();
+		String id = request.getParameter("id");
+
+		ProductType productType = productTypeService.selectById(id);
+		if (productType == null) {
+			return res;
+		}
+
+		Wrapper<ProductQualification> wrapper = new EntityWrapper<>();
+		wrapper.eq("type_id", id);
+		List<ProductQualification> qualifications = productQualificationService.selectList(wrapper);
+
+		if (qualifications != null && !qualifications.isEmpty()) {
+			Set<String> qualificationCodes = new HashSet<>();
+			for (ProductQualification qualification : qualifications) {
+				qualificationCodes.add(qualification.getQualification());
+			}
+			res.put("qualification", qualificationCodes);
+		}
+
+		res.put("id", id);
+		return res;
 	}
 
 	@RequiresAuthentication
@@ -312,5 +353,120 @@ public class ProductTypeController extends BaseController {
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
 		return res;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/updateQualification")
+	public Map<String, Object> updateQualification(HttpServletRequest request) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String id = request.getParameter("id");
+
+		if (StringUtils.isBlank(id)) {
+			res.put("message", "无效的参数");
+			return res;
+		}
+
+		String[] qualifications = request.getParameterValues("qualification");
+		if (qualifications == null || qualifications.length == 0) {
+			res.put("message", "请选择一个产品资质");
+			return res;
+		}
+
+		ProductType productType = productTypeService.selectById(id);
+		if (productType == null) {
+			res.put("message", "无效的参数");
+			return res;
+		}
+
+		List<String> qualificationNews1 = new ArrayList<>();
+		List<String> qualificationNews2 = new ArrayList<>();
+		for (String qualification : qualifications) {
+			qualificationNews1.add(qualification);
+			qualificationNews2.add(qualification);
+		}
+
+		Wrapper<ProductQualification> wrapper = new EntityWrapper<>();
+		wrapper.eq("type_id", id);
+		List<ProductQualification> qualificationDbs = productQualificationService.selectList(wrapper);
+
+		if (qualificationDbs == null || qualificationDbs.isEmpty()) {
+			List<ProductQualification> entityList = new ArrayList<>();
+			for (String qualification : qualificationNews1) {
+				ProductQualification item = new ProductQualification();
+				item.setId(IdUtil.id());
+				item.setTypeId(id);
+				item.setQualification(qualification);
+				entityList.add(item);
+			}
+			if (!productQualificationService.insertBatch(entityList)) {
+				res.put("message", "未知错误");
+				return res;
+			}
+		} else {
+			List<String> qualificationOlds1 = new ArrayList<>();
+			List<String> qualificationOlds2 = new ArrayList<>();
+			for (ProductQualification qualification : qualificationDbs) {
+				qualificationOlds1.add(qualification.getQualification());
+				qualificationOlds2.add(qualification.getQualification());
+			}
+
+			qualificationNews1.removeAll(qualificationOlds1);
+			if (qualificationNews1.size() > 0) {
+				List<ProductQualification> entityList = new ArrayList<>();
+				for (String qualification : qualificationNews1) {
+					ProductQualification item = new ProductQualification();
+					item.setId(IdUtil.id());
+					item.setTypeId(id);
+					item.setQualification(qualification);
+					entityList.add(item);
+				}
+				if (!productQualificationService.insertBatch(entityList)) {
+					res.put("message", "未知错误");
+					return res;
+				}
+			}
+
+			qualificationOlds2.removeAll(qualificationNews2);
+
+			if (qualificationOlds2.size() > 0) {
+				for (String qualification : qualificationOlds2) {
+					Wrapper<ProductQualification> productQualificationWrapper = new EntityWrapper<>();
+					productQualificationWrapper.eq("type_id", id);
+					productQualificationWrapper.eq("qualification", qualification);
+					if (!productQualificationService.delete(productQualificationWrapper)) {
+						res.put("message", "未知错误");
+						return res;
+					}
+				}
+			}
+		}
+
+		res.put("statusCode", 200);
+		res.put("message", "操作成功");
+		return res;
+	}
+
+	public static void main(String[] args) {
+		List<String> qualificationNews = new ArrayList<>();
+		qualificationNews.add("A");
+		qualificationNews.add("B");
+		qualificationNews.add("C");
+		qualificationNews.add("D");
+		List<String> qualificationOlds = new ArrayList<>();
+		qualificationOlds.add("C");
+		qualificationOlds.add("D");
+		qualificationOlds.add("E");
+		List<String> qualificationNews2 = qualificationNews;
+
+		System.out.println(qualificationNews.retainAll(qualificationOlds));
+		System.out.println(qualificationNews);
+
+		System.out.println(qualificationNews2.removeAll(qualificationOlds));
+
+		System.out.println(qualificationNews2);
 	}
 }

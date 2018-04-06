@@ -1,0 +1,15 @@
+<input type="hidden" name="id"/>
+<table class="editTable" style="width: 90%">
+    <tr>
+        <td class="label" width="120">产品资质：</td>
+        <td>
+         	<input type="text" name="qualification" data-toggle="topjui-tagbox"
+                       data-options="required:true, width:220,
+                               hasDownArrow:true,
+					           panelHeight: 158,
+		                       valueField:'code',
+		                       textField:'name',
+		                       url: remoteHost + '/dictionary/dictionaryItems?typeCode=CPZZ'">
+        </td>
+    </tr>
+</table>

@@ -125,24 +125,40 @@
 	       				btnCls: 'topjui-btn-red',
 	               }]
 	       }">编辑</a>
+	       
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#productTypeDatagrid-toolbar',
+	            iconCls: 'fa fa-magnet',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '产品资质',
+		           width: 520,
+		           height: 320,
+	           	   href: remoteHost + '/product/type/qualification',
+	               url: remoteHost + '/product/type/qualificationData?id={id}',
+	               buttonsGroup: [{
+	                   	text: '保存',
+	                   	url: remoteHost + '/product/type/updateQualification',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">产品资质</a>
 	    
 	    <a href="javascript:void(0)"
 	       data-toggle="topjui-menubutton"
 	       data-options="method: 'openDialog',
 	      		extend: '#productTypeDatagrid-toolbar',
-	            iconCls: 'fa fa-pencil',
+	            iconCls: 'fa fa-info',
 	       		btnCls: 'topjui-btn-normal',
-	           parentGrid:{
-	               type:'datagrid',
-	               id:'productTypeDatagrid',
-	               param:'id:id',
-	               unselectedMsg:'请先点击选择一条要查看的数据'
-	            },
 	            dialog: {
 	               title: '详细',
 		           width: 720,
-		           height: 521,
-	           	   href: remoteHost + '/product/type/info?id={id}'
+		           height: 461,
+	           	   href: remoteHost + '/product/type/info?id={id}',
+	               url: remoteHost + '/product/type/detail?id={id}'
 	       }">详细</a>
 
 	</div>

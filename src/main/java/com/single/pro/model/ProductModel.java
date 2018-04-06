@@ -64,6 +64,9 @@ public class ProductModel implements Serializable {
 	 * 上下架（展示）状态（Y:上架，N:下架，D:待发布）
 	 */
 	private String showStatus;
+
+	private String contacts;
+	private String contactTel;
 	/**
 	 * 注册时间
 	 */
@@ -225,6 +228,22 @@ public class ProductModel implements Serializable {
 		this.showStatus = showStatus;
 	}
 
+	public String getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(String contacts) {
+		this.contacts = contacts;
+	}
+
+	public String getContactTel() {
+		return contactTel;
+	}
+
+	public void setContactTel(String contactTel) {
+		this.contactTel = contactTel;
+	}
+
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -245,11 +264,11 @@ public class ProductModel implements Serializable {
 	public String toString() {
 		return "ProductModel [id=" + id + ", name=" + name + ", kindId=" + kindId + ", kindName=" + kindName
 				+ ", typeId=" + typeId + ", typeName=" + typeName + ", companyId=" + companyId + ", companyName="
-				+ companyName + ", model=" + model + ", describe=" + describe + ", constituent=" + constituent
-				+ ", surveyItems=" + surveyItems + ", installDebug=" + installDebug + ", deviceMaintain="
-				+ deviceMaintain + ", commonProblem=" + commonProblem + ", docUrl=" + docUrl + ", manualUrl="
-				+ manualUrl + ", showStatus=" + showStatus + ", createTime=" + createTime + ", updateTime=" + updateTime
-				+ "]";
+				+ companyName + ", companyMechanismType=" + companyMechanismType + ", model=" + model + ", describe="
+				+ describe + ", constituent=" + constituent + ", surveyItems=" + surveyItems + ", installDebug="
+				+ installDebug + ", deviceMaintain=" + deviceMaintain + ", commonProblem=" + commonProblem + ", docUrl="
+				+ docUrl + ", manualUrl=" + manualUrl + ", showStatus=" + showStatus + ", contacts=" + contacts
+				+ ", contactTel=" + contactTel + ", createTime=" + createTime + ", updateTime=" + updateTime + "]";
 	}
 
 }

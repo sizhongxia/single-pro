@@ -27,7 +27,17 @@
 		                <th data-options="field:'p.model',title:'型号',sortable:true"></th>
 		                <th data-options="field:'c.name',title:'厂商',sortable:true"></th>
 		                <th data-options="field:'c.mechanism_type',title:'厂商类型'"></th>
+		                <th data-options="field:'p.contacts',title:'联系人'"></th>
+		                <th data-options="field:'p.contact_tel',title:'联系电话'"></th>
 		                <th data-options="field:'p.describe',title:'描述'"></th>
+		                <th data-options="field:'p.doc_url',title:'文档手册',sortable:true,
+			                    formatter:function(value,row,index){
+			                        return '<div><a href=\'' + value + '\' target=\'_blank\'>下载</a></div>';
+			                    }"></th>
+		                <th data-options="field:'p.manual_url',title:'操作手册',sortable:true,
+			                    formatter:function(value,row,index){
+			                        return '<div><a href=\'' + value + '\' target=\'_blank\'>下载</a></div>';
+			                    }"></th>
 		                <th data-options="field:'p.show_status',title:'显示状态',sortable:true,
 			                    formatter:function(value,row,index){
 			                        if (value == 'Y') {
@@ -117,6 +127,20 @@
 	       				btnCls: 'topjui-btn-red',
 	               }]
 	       }">变更类型</a>
+	       
+	       <a href="javascript:void(0)"
+		       data-toggle="topjui-menubutton"
+		       data-options="method: 'openDialog',
+		      		extend: '#productDatagrid-toolbar',
+		            iconCls: 'fa fa-magnet',
+		       		btnCls: 'topjui-btn-normal',
+		            dialog: {
+		               title: '产品资质',
+			           width: 520,
+			           height: 220,
+		           	   href: remoteHost + '/product/qualification',
+		               url: remoteHost + '/product/qualificationData?id={p.id}'
+		       }">产品资质</a>
 	       
 	       <a href="javascript:void(0)"
 		       data-toggle="topjui-menubutton"

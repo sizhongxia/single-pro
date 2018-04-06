@@ -24,20 +24,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.entity.Company;
 import com.single.pro.entity.Product;
 import com.single.pro.entity.ProductKind;
+import com.single.pro.entity.ProductQualification;
 import com.single.pro.entity.ProductType;
 import com.single.pro.entity.SystemUser;
 import com.single.pro.model.ProductModel;
 import com.single.pro.service.CompanyService;
 import com.single.pro.service.ProductKindService;
+import com.single.pro.service.ProductQualificationService;
 import com.single.pro.service.ProductService;
 import com.single.pro.service.ProductTypeService;
 import com.single.pro.service.custom.ProductCustomService;
+import com.single.pro.storage.RealHostReplace;
 import com.single.pro.util.AdvanceFilterUtil;
 import com.single.pro.util.IdUtil;
 
@@ -53,6 +58,8 @@ public class ProductController extends BaseController {
 	ProductKindService productKindService;
 	@Autowired
 	ProductTypeService productTypeService;
+	@Autowired
+	ProductQualificationService productQualificationService;
 	@Autowired
 	CompanyService companyService;
 	@Autowired
@@ -112,8 +119,11 @@ public class ProductController extends BaseController {
 				item.put("c.mechanism_type", baseDataCacheUtil.getDictItemName(product.getCompanyMechanismType()));
 				item.put("p.model", product.getModel());
 				item.put("p.describe", product.getDescribe());
-				item.put("p.name", product.getName());
+				item.put("p.doc_url", RealHostReplace.getResUrl(product.getDocUrl()));
+				item.put("p.manual_url", RealHostReplace.getResUrl(product.getManualUrl()));
 				item.put("p.show_status", product.getShowStatus());
+				item.put("p.contacts", product.getContacts());
+				item.put("p.contact_tel", product.getContactTel());
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 				item.put("p.create_time", dateFormat.format(product.getCreateTime()));
 				item.put("p.update_time", dateFormat.format(product.getUpdateTime()));
@@ -231,8 +241,43 @@ public class ProductController extends BaseController {
 		map.put("commonProblem", product.getCommonProblem());
 		map.put("docUrl", product.getDocUrl());
 		map.put("manualUrl", product.getManualUrl());
+		map.put("contacts", product.getContacts());
+		map.put("contactTel", product.getContactTel());
 		map.put("showStatus", product.getShowStatus());
 		return map;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/qualification" }, method = { RequestMethod.GET })
+	public ModelAndView qualification(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("product/qualification");
+		return mav;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = { "/qualificationData" })
+	public Map<String, Object> qualificationData(HttpServletRequest request) {
+		Map<String, Object> res = new HashMap<>();
+		String id = request.getParameter("id");
+
+		Product product = productService.selectById(id);
+		if (product == null) {
+			return res;
+		}
+
+		Wrapper<ProductQualification> wrapper = new EntityWrapper<>();
+		wrapper.eq("type_id", product.getTypeId());
+		List<ProductQualification> qualifications = productQualificationService.selectList(wrapper);
+
+		if (qualifications != null && !qualifications.isEmpty()) {
+			Set<String> qualificationCodes = new HashSet<>();
+			for (ProductQualification qualification : qualifications) {
+				qualificationCodes.add(qualification.getQualification());
+			}
+			res.put("qualification", qualificationCodes);
+		}
+		return res;
 	}
 
 	/***
@@ -264,7 +309,9 @@ public class ProductController extends BaseController {
 		product.setCommonProblem(request.getParameter("commonProblem"));
 		product.setDocUrl(request.getParameter("docUrl"));
 		product.setManualUrl(request.getParameter("manualUrl"));
-		product.setShowStatus(request.getParameter("showStatus"));
+		product.setShowStatus("D");
+		product.setContacts(request.getParameter("contacts"));
+		product.setContactTel(request.getParameter("contactTel"));
 		Subject subject = SecurityUtils.getSubject();
 		SystemUser user = (SystemUser) subject.getPrincipal();
 		product.setApplyUserId(user.getId());
@@ -321,6 +368,8 @@ public class ProductController extends BaseController {
 		product.setManualUrl(request.getParameter("manualUrl"));
 		product.setShowStatus(request.getParameter("showStatus"));
 		product.setUpdateTime(new Date());
+		product.setContacts(request.getParameter("contacts"));
+		product.setContactTel(request.getParameter("contactTel"));
 
 		if (!productService.updateById(product)) {
 			res.put("message", "未知错误");

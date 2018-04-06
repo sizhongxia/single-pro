@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-29
+ * @since 2018-04-06
  */
 @TableName("sp_product")
 public class Product implements Serializable {
@@ -90,6 +90,15 @@ public class Product implements Serializable {
      */
 	@TableField("show_status")
 	private String showStatus;
+    /**
+     * 产品联系人
+     */
+	private String contacts;
+    /**
+     * 联系电话
+     */
+	@TableField("contact_tel")
+	private String contactTel;
     /**
      * 注册时间
      */
@@ -230,6 +239,22 @@ public class Product implements Serializable {
 		this.showStatus = showStatus;
 	}
 
+	public String getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(String contacts) {
+		this.contacts = contacts;
+	}
+
+	public String getContactTel() {
+		return contactTel;
+	}
+
+	public void setContactTel(String contactTel) {
+		this.contactTel = contactTel;
+	}
+
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -265,6 +290,8 @@ public class Product implements Serializable {
 			", manualUrl=" + manualUrl +
 			", applyUserId=" + applyUserId +
 			", showStatus=" + showStatus +
+			", contacts=" + contacts +
+			", contactTel=" + contactTel +
 			", createTime=" + createTime +
 			", updateTime=" + updateTime +
 			"}";
