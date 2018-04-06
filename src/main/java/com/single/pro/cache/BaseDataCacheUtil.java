@@ -16,6 +16,8 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.single.pro.entity.BasicCity;
 import com.single.pro.entity.DictionaryItem;
 import com.single.pro.entity.DictionaryType;
+import com.single.pro.entity.ProductKind;
+import com.single.pro.entity.ProductType;
 import com.single.pro.entity.RoleApp;
 import com.single.pro.entity.System;
 import com.single.pro.entity.SystemApp;
@@ -24,6 +26,8 @@ import com.single.pro.model.DictionaryItemModel;
 import com.single.pro.service.BasicCityService;
 import com.single.pro.service.DictionaryItemService;
 import com.single.pro.service.DictionaryTypeService;
+import com.single.pro.service.ProductKindService;
+import com.single.pro.service.ProductTypeService;
 import com.single.pro.service.SystemAppService;
 import com.single.pro.service.SystemService;
 import com.single.pro.shiro.realm.JDBCRealm;
@@ -43,6 +47,10 @@ public class BaseDataCacheUtil implements InitializingBean {
 	private DictionaryItemService dictionaryItemService;
 	@Autowired
 	private BasicCityService basicCityService;
+	@Autowired
+	private ProductKindService productKindService;
+	@Autowired
+	private ProductTypeService productTypeService;
 
 	public System getSystemInfo() {
 		System system = getCacheSystemInfo();
@@ -164,6 +172,38 @@ public class BaseDataCacheUtil implements InitializingBean {
 		return "";
 	}
 
+	public ProductKind getProductKindById(String id) {
+		CacheObject obj = CacheUtil.get("single:system:product:kind", id);
+		if (obj == null) {
+			return null;
+		}
+		return (ProductKind) obj.getValue();
+	}
+
+	public String getProductKindNameById(String id) {
+		ProductKind productKind = getProductKindById(id);
+		if (productKind == null) {
+			return null;
+		}
+		return productKind.getName();
+	}
+
+	public ProductType getProductTypeById(String id) {
+		CacheObject obj = CacheUtil.get("single:system:product:type", id);
+		if (obj == null) {
+			return null;
+		}
+		return (ProductType) obj.getValue();
+	}
+
+	public String getProductTypeNameById(String id) {
+		ProductType productType = getProductTypeById(id);
+		if (productType == null) {
+			return null;
+		}
+		return productType.getName();
+	}
+
 	public boolean checkUserApps(String appId) {
 		List<SystemApp> roleApps = getUserApps();
 		for (SystemApp app : roleApps) {
@@ -259,6 +299,30 @@ public class BaseDataCacheUtil implements InitializingBean {
 		}
 	}
 
+	private void loadProductKindDatas() {
+		Wrapper<ProductKind> wrapper = new EntityWrapper<>();
+		wrapper.eq("status", "Y");
+		wrapper.orderBy("create_time", true);
+		List<ProductKind> productKinds = productKindService.selectList(wrapper);
+		if (productKinds != null && productKinds.size() > 0) {
+			for (ProductKind productKind : productKinds) {
+				CacheUtil.set("single:system:product:kind", productKind.getId(), productKind);
+			}
+		}
+	}
+
+	private void loadProductTypeDatas() {
+		Wrapper<ProductType> wrapper = new EntityWrapper<>();
+		wrapper.eq("status", "Y");
+		wrapper.orderBy("create_time", true);
+		List<ProductType> productTypes = productTypeService.selectList(wrapper);
+		if (productTypes != null && productTypes.size() > 0) {
+			for (ProductType productType : productTypes) {
+				CacheUtil.set("single:system:product:type", productType.getId(), productType);
+			}
+		}
+	}
+
 	// 类初始化时加载执行
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -266,6 +330,8 @@ public class BaseDataCacheUtil implements InitializingBean {
 		initSystemApps();
 		loadDictItems();
 		loadCityDatas();
+		loadProductKindDatas();
+		loadProductTypeDatas();
 	}
 
 }

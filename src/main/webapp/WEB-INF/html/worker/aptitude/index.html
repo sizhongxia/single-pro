@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../../common/public.html">
+<script type="text/javascript">
+    $(window).load(function () {
+        $("#loading").fadeOut();
+    });
+</script>
+</head>
+
+<body>
+	<div data-toggle="topjui-layout" data-options="fit:true">
+	    <div data-options="region:'center',title:'工人资质申请',split:true,border:false,iconCls:'fa'">
+	        <!-- treegrid表格 -->
+	        <table data-toggle="topjui-edatagrid"
+	               data-options="id: 'workerAptitudeDatagrid',
+				    idField: 'id',
+				    rownumbers: !0,
+			   	    singleSelect: !0,
+				    url: remoteHost + '/worker/aptitude/list'">
+	            <thead>
+		            <tr>
+		                <th data-options="field:'u.user_name',title:'客户名称'"></th>
+		                <th data-options="field:'kind_name',title:'产品种类'"></th>
+		                <th data-options="field:'type_name',title:'产品类型'"></th>
+		                <th data-options="field:'wa.model',title:'型号'"></th>
+		                <th data-options="field:'wa.apply_info',title:'申请信息'"></th>
+		                <th data-options="field:'wa.apply_status',title:'申请状态',sortable:true,
+			                    formatter:function(value,row,index){
+			                        if (value == 'Y') {
+			                            return '<div>申请通过</div>';
+			                        } else if (value == 'N') {
+			                            return '<div>申请驳回</div>';
+			                        } else {
+			                            return '<div>待处理</div>';
+			                        }
+			                    }"></th>
+		                <th data-options="field:'wa.apply_time',title:'申请时间',sortable:true"></th>
+		                <th data-options="field:'wa.update_time',title:'处理时间',sortable:true"></th>
+		            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	</div>
+	
+	<!-- 表格工具栏开始 -->
+	<div id="workerAptitudeDatagrid-toolbar" class="topjui-toolbar" data-options="grid:{
+           type:'datagrid',
+           id:'workerAptitudeDatagrid'}" style="display:none">
+           
+	     <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#workerAptitudeDatagrid-toolbar',
+	            iconCls: 'fa fa-magic',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '处理',
+		           width: 520,
+		           height: 180,
+	           	   href: remoteHost + '/worker/aptitude/handleForm',
+	               url: remoteHost + '/worker/aptitude/handleDetail?id={wa.id}',
+	               buttonsGroup: [{
+	                   	text: '处理',
+	                   	url: remoteHost + '/worker/aptitude/handle',
+	                   	iconCls: 'fa fa-save',
+	                   	handler: 'ajaxForm',
+	       				btnCls: 'topjui-btn-red',
+	               }]
+	       }">处理</a>
+	       
+	       <a href="javascript:void(0)"
+		       data-toggle="topjui-menubutton"
+		       data-options="method:'search',
+		       extend: '#workerAptitudeDatagrid-toolbar'">查询</a>
+
+	</div>
+	<!-- 表格工具栏结束 -->
+	
+</body>
+</html>

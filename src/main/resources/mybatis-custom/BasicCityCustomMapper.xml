@@ -5,8 +5,8 @@
 	<select id="findBasicCityWithParent" parameterType="java.lang.String" resultType="com.single.pro.model.BasicCityModel">
 		select 
 			if(bc3.name is not null, bc3.name, '') as lv1, if(bc2.name is not null, bc2.name, '') as lv2, bc1.name as lv3, bc1.code 
-		from sp_basic_city bc1 
-			left join sp_basic_city bc2 on bc1.pcode = bc2.code
+		from (sp_basic_city bc1 
+			left join sp_basic_city bc2 on bc1.pcode = bc2.code)
 			left join sp_basic_city bc3 on bc2.pcode = bc3.code
 		where bc1.`name` like concat('%', #{s}, '%') or bc1.`code` like concat('%', #{s}, '%') or bc1.jianpin like concat('%', #{s}, '%') or bc1.pinyin like concat('%', #{s}, '%')
 		order by bc1.code asc

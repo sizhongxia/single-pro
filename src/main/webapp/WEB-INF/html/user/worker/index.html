@@ -123,7 +123,20 @@
 	       				btnCls: 'topjui-btn-red',
 	               }]
 	       }">变更所在区域</a>
-	   
+	       
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#userWorkerTg-toolbar',
+	            iconCls: 'fa fa-wechat',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '微信账户',
+		           width: 720,
+		           height: 450,
+	           	   href: remoteHost + '/user/worker/wechatDetailForm',
+	               url: remoteHost + '/user/worker/wechatDetail?id={id}'
+	       }">微信账户</a>
 	   
 	    <a href="javascript:void(0)"
 	       data-toggle="topjui-menubutton"

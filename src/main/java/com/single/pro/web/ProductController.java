@@ -112,6 +112,7 @@ public class ProductController extends BaseController {
 
 		List<Map<String, Object>> productList = new ArrayList<>();
 		if (products != null && !products.isEmpty()) {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			Map<String, Object> item = null;
 			for (ProductModel product : products) {
 				item = new HashMap<>();
@@ -128,7 +129,6 @@ public class ProductController extends BaseController {
 				item.put("p.show_status", product.getShowStatus());
 				item.put("p.contacts", product.getContacts());
 				item.put("p.contact_tel", product.getContactTel());
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 				item.put("p.create_time", dateFormat.format(product.getCreateTime()));
 				item.put("p.update_time", dateFormat.format(product.getUpdateTime()));
 				productList.add(item);

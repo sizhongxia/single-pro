@@ -30,10 +30,12 @@ import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.entity.User;
 import com.single.pro.entity.UserWorker;
+import com.single.pro.entity.UserWxoauth;
 import com.single.pro.model.UserWorkerModel;
 import com.single.pro.model.WorkerAptitudeModel;
 import com.single.pro.service.UserService;
 import com.single.pro.service.UserWorkerService;
+import com.single.pro.service.UserWxoauthService;
 import com.single.pro.service.custom.UserWorkerCustomService;
 import com.single.pro.util.AdvanceFilterUtil;
 import com.single.pro.util.IdUtil;
@@ -49,6 +51,8 @@ public class UserWorkerController extends BaseController {
 	UserService userService;
 	@Autowired
 	UserWorkerService userWorkerService;
+	@Autowired
+	UserWxoauthService userWxoauthService;
 	@Autowired
 	BaseDataCacheUtil baseDataCacheUtil;
 
@@ -163,6 +167,13 @@ public class UserWorkerController extends BaseController {
 		ModelAndView mav = new ModelAndView("user/worker/changeAreaform");
 		return mav;
 	}
+	
+	@RequiresAuthentication
+	@RequestMapping(value = { "/wechatDetailForm" }, method = { RequestMethod.GET })
+	public ModelAndView wechatDetailForm(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("user/worker/wechatDetailForm");
+		return mav;
+	}
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/aptitudeForm" }, method = { RequestMethod.GET })
@@ -229,6 +240,36 @@ public class UserWorkerController extends BaseController {
 		map.put("accountStatus", user.getAccountStatus());
 		map.put("workerId", userWorker.getId());
 		map.put("remarks", userWorker.getRemarks());
+		return map;
+	}
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/wechatDetail")
+	public Map<String, Object> wechatDetail(HttpServletRequest request) {
+		String id = request.getParameter("id");
+		User user = userService.selectById(id);
+		Map<String, Object> map = new HashMap<>();
+		if (user == null) {
+			return map;
+		}
+
+		Wrapper<UserWxoauth> wrapper = new EntityWrapper<>();
+		wrapper.eq("user_id", user.getId());
+		UserWxoauth userWxoauth = userWxoauthService.selectOne(wrapper);
+
+		if (userWxoauth == null) {
+			map.put("openId", "暂未绑定");
+			return map;
+		}
+		map.put("openId", userWxoauth.getOpenId());
+		map.put("nickName", userWxoauth.getNickName());
+		map.put("avatarUrl", userWxoauth.getAvatarUrl());
+		map.put("gender", userWxoauth.getGender());
+		map.put("city", userWxoauth.getCity());
+		map.put("country", userWxoauth.getCountry());
+		map.put("status", userWxoauth.getStatus());
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		map.put("createTime", df.format(userWxoauth.getCreateTime()));
 		return map;
 	}
 

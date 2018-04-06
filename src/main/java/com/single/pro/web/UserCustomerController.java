@@ -31,10 +31,12 @@ import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.entity.Company;
 import com.single.pro.entity.User;
 import com.single.pro.entity.UserCustomer;
+import com.single.pro.entity.UserWxoauth;
 import com.single.pro.model.UserCustomerModel;
 import com.single.pro.service.CompanyService;
 import com.single.pro.service.UserCustomerService;
 import com.single.pro.service.UserService;
+import com.single.pro.service.UserWxoauthService;
 import com.single.pro.service.custom.UserCustomerCustomService;
 import com.single.pro.util.AdvanceFilterUtil;
 import com.single.pro.util.IdUtil;
@@ -53,6 +55,8 @@ public class UserCustomerController extends BaseController {
 	BaseDataCacheUtil baseDataCacheUtil;
 	@Autowired
 	CompanyService companyService;
+	@Autowired
+	UserWxoauthService userWxoauthService;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -178,6 +182,13 @@ public class UserCustomerController extends BaseController {
 		return mav;
 	}
 
+	@RequiresAuthentication
+	@RequestMapping(value = { "/wechatDetailForm" }, method = { RequestMethod.GET })
+	public ModelAndView wechatDetailForm(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("user/customer/wechatDetailForm");
+		return mav;
+	}
+
 	/***
 	 * 客户详情
 	 * 
@@ -210,6 +221,37 @@ public class UserCustomerController extends BaseController {
 		map.put("addressDetail", user.getAddressDetail());
 		map.put("accountStatus", user.getAccountStatus());
 		map.put("partnerId", userCustomer.getId());
+		return map;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/wechatDetail")
+	public Map<String, Object> wechatDetail(HttpServletRequest request) {
+		String id = request.getParameter("id");
+		User user = userService.selectById(id);
+		Map<String, Object> map = new HashMap<>();
+		if (user == null) {
+			return map;
+		}
+
+		Wrapper<UserWxoauth> wrapper = new EntityWrapper<>();
+		wrapper.eq("user_id", user.getId());
+		UserWxoauth userWxoauth = userWxoauthService.selectOne(wrapper);
+
+		if (userWxoauth == null) {
+			map.put("openId", "暂未绑定");
+			return map;
+		}
+		map.put("openId", userWxoauth.getOpenId());
+		map.put("nickName", userWxoauth.getNickName());
+		map.put("avatarUrl", userWxoauth.getAvatarUrl());
+		map.put("gender", userWxoauth.getGender());
+		map.put("city", userWxoauth.getCity());
+		map.put("country", userWxoauth.getCountry());
+		map.put("status", userWxoauth.getStatus());
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		map.put("createTime", df.format(userWxoauth.getCreateTime()));
 		return map;
 	}
 

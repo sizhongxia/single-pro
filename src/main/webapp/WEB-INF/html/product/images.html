@@ -19,6 +19,9 @@
 		.mt20{
 			margin-top: 20px;
 		}
+		.fs14 {
+			font-size: 14px;
+		}
 	</style>
 </head>
 
@@ -45,9 +48,9 @@
 		            <figure class="figure">
 		              <img src="${image.path!}" class="img-fit-contain rounded" alt="${image.path!}" style="height: 10rem; width: 100%;">
 		              <#if image_index==0>
-		              	<figcaption class="figure-caption text-center mt20">封面图片</figcaption>
+		              	<figcaption class="figure-caption text-center mt20 fs14">封面图片</figcaption>
 		              <#else>
-		              	<figcaption class="figure-caption text-center mt20"><a href="javascript:;" @click="setDefault('${image.id}')">设为默认</a> | <a href="javascript:;" @click="outlineHide('${image.id}')">下线隐藏</a></figcaption>
+		              	<figcaption class="figure-caption text-center mt20 fs14"><a href="javascript:;" @click="setDefault('${image.id}')">设为默认</a> | <a href="javascript:;" @click="outlineHide('${image.id}')">下线隐藏</a></figcaption>
 		              </#if>
 		            </figure>
 	          	</div>

@@ -17,8 +17,8 @@
 			su.last_login_time as lastLoginTime,
 			group_concat(r.`name` SEPARATOR ', ') as roleNames
 		from 
-			sp_system_user su 
-			left join sp_system_user_role sur on su.id = sur.user_id
+			(sp_system_user su 
+			left join sp_system_user_role sur on su.id = sur.user_id)
 			left join sp_role r on r.id = sur.role_id and r.`status` = 'Y'
 			<if test="searchParams != null">
 				<where>

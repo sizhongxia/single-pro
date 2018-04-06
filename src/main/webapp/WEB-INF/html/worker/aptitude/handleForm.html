@@ -1,0 +1,15 @@
+<input type="hidden" id="id" name="id"/>
+<table class="editTable" style="width: 90%">
+    <tr>
+        <td class="label" width="120">最后处理时间：</td>
+        <td>
+            <input type="text" name="updateTime" readonly="readonly" data-toggle="topjui-textbox" data-options="width:220">
+        </td>
+    </tr>
+    <tr>
+        <td class="label" width="120">处理状态：</td>
+        <td>
+        	<input type="text" name="applyStatus" data-toggle="topjui-combobox" data-options="data:[{value:'Y',text:'审核通过'},{value:'N',text:'申请驳回'},{value:'D',text:'待处理'}],width:220,required:true">
+        </td>
+    </tr>
+</table>

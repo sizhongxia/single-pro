@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.single.pro.service.custom.WorkerAptitudeCustomService">
+
+	<select id="findWorkerAptitudes" parameterType="java.util.Map" resultType="com.single.pro.model.WorkerAptitudeModel">
+		select 
+			wa.id,
+			wa.worker_id as workerId,
+			u.user_name as userName,
+			u.province,
+			u.city,
+			wa.product_id as productId,
+			p.`name` as productName,
+			p.kind_id as kindId,
+			p.type_id as typeId,
+			wa.model,
+			wa.apply_info as applyInfo,
+			wa.apply_status as applyStatus,
+			wa.apply_time as applyTime,
+			wa.update_time as updateTime
+			
+			from ((sp_worker_aptitude wa
+				left join sp_user_worker uw on wa.worker_id=uw.id)
+				left join sp_user u on uw.user_id=u.id)
+				left join sp_product p on wa.product_id=p.id
+		<if test="searchParams != null">
+			<where>
+				<foreach collection="searchParams" item="item" separator="and">
+					<![CDATA[ ${item.field} ${item.operator} #{item.value} ]]>
+				</foreach>
+			</where>
+		</if>
+			order by ${orderByClause}
+	</select>
+</mapper>

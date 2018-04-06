@@ -28,9 +28,9 @@
 			p.create_time as createTime,
 			p.update_time as updateTime
 			
-			 from sp_product p 
-			left join sp_product_kind pk on p.kind_id=pk.id
-			left join sp_product_type pt on p.type_id=pt.id
+			 from ((sp_product p 
+			left join sp_product_kind pk on p.kind_id=pk.id)
+			left join sp_product_type pt on p.type_id=pt.id)
 			left join sp_company c on p.company_id=c.id
 
 		<if test="searchParams != null">
