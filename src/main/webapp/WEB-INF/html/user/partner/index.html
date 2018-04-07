@@ -122,7 +122,7 @@
 	            dialog: {
 	               title: '变更负责区域',
 		           width: 720,
-		           height: 450,
+		           height: 240,
 	           	   href: remoteHost + '/user/partner/changeAreaForm',
 	               url: remoteHost + '/user/partner/areaDetail?id={id}',
 	               buttonsGroup: [{
@@ -143,10 +143,24 @@
 	            dialog: {
 	               title: '申请信息',
 		           width: 720,
-		           height: 450,
+		           height: 260,
 	           	   href: remoteHost + '/user/partner/applyDetailForm',
 	               url: remoteHost + '/user/partner/apllyDetail?id={id}'
 	       }">申请信息</a>
+	       
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#userPartnerTg-toolbar',
+	            iconCls: 'fa fa-tasks',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '申请信息',
+		           width: 720,
+		           height: 450,
+	           	   href: remoteHost + '/user/partner/applyDetailForm',
+	               url: remoteHost + '/user/partner/apllyDetail?id={id}'
+	       }">启用</a>
 	       
 	    <a href="javascript:void(0)"
 	       data-toggle="topjui-menubutton"
