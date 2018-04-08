@@ -9,7 +9,6 @@
     <link href="${rc.contextPath}/statics/ui/other/matrial/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
     <link href="${rc.contextPath}/statics/ui/other/pager/pager.css" rel="stylesheet" />
     <style type="text/css">
-    	a{color:#2c3b41;}
     	.text-primary {color: #2c3b41;}
     	.card [data-background-color="system"] {background: #fff;}
     	.form-group {margin-top: 0;margin-bottom: 0px;}
@@ -25,16 +24,13 @@
     <div class="wrapper" id="app">
         <div class="content">
             <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand"> 平台项目列表 </a>
-                </div>
                 <div class="card">
                 	<div class="card-header" data-background-color="system">
                        	<div class="category row">
                             <div class="col-md-2 col-xs-5">
                                 <div class="form-group">
                                     <label class="control-label">项目名称</label>
-                                    <input v-model="searchParam.name" type="text" placeholder="请输入项目名称/拼音进行查询" class="form-control">
+                                    <input v-model="searchParam.name" type="text" placeholder="按名称进行查询" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-2 col-xs-5">
@@ -51,7 +47,7 @@
                             <div class="col-md-2 col-xs-5">
                                 <div class="form-group">
                                     <label class="control-label">创建日期</label>
-                                    <input v-model="searchParam.ctime" id="ctime" type="text" placeholder="按项目创建时间进行查询" class="form-control">
+                                    <input v-model="searchParam.ctime" id="ctime" type="text" placeholder="按创建时间进行查询" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-2 col-xs-2">
