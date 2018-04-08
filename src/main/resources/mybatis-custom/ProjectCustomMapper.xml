@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.single.pro.service.custom.ProjectCustomService">
+
+	<select id="selectProjectList" parameterType="java.util.Map" resultType="com.single.pro.model.ProjectModel">
+		select 
+			p.`id`,
+			p.`name`,
+			p.`type`,
+			p.`provincial`,
+			p.`city`,
+			p.`country`,
+			p.`address`,
+			p.`longitude`,
+			p.`latitude`,
+			p.`covered_area` as coveredArea,
+			p.`worker_num` as workerNum,
+			p.`company_id` as companyId,
+			c.`name` as companyName,
+			p.`contacts`,
+			p.`contact_tel` as contactTel,
+			p.`remarks`,
+			p.`create_time` as createTime,
+			p.`update_time` as updateTime
+		from sp_project p 
+			left join sp_company c on p.company_id=c.id
+		<where>
+			<if test="type != null">
+				and p.`type` = #{type}
+			</if>
+			<if test="name != null">
+				and (p.`name` like concat('%', #{name}, '%') or p.pinyin like concat('%', #{name}, '%'))
+			</if>
+			<if test="ctimeStart != null">
+				<![CDATA[ and p.`create_time` >= #{ctimeStart} ]]>
+			</if>
+			<if test="ctimeEnd != null">
+				<![CDATA[ and p.`create_time` <= #{ctimeEnd} ]]>
+			</if>
+		</where>
+		order by p.`create_time` asc
+	</select>
+
+</mapper>

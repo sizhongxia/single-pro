@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+	<!-- TopJUI框架样式 -->
+	<link type="text/css" href="${rc.contextPath}/statics/ui/topjui/css/topjui.core.min.css?v=1.1" rel="stylesheet">
+	<link type="text/css" href="${rc.contextPath}/statics/ui/topjui/themes/default/topjui.black.css?v=2.3" rel="stylesheet"/>
+    <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/bootstrap.min.css" rel="stylesheet" />
+    <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
+    <link type="text/css" href="${rc.contextPath}/statics/ui/other/pager/pager.css" rel="stylesheet" />
+    <style type="text/css">
+    	.text-primary {color: #2c3b41;}
+    	.card [data-background-color="system"] {background: #fff;}
+    	.form-group {margin-top: 0;margin-bottom: 0px;}
+    	.card .card-header {box-shadow: rgba(220, 220, 220, 0.42) 0px 0px 0px -28px, rgba(0, 0, 0, 0.12) 1px 1px 6px 0px, rgba(0, 0, 0, 0.2) 0px 0px 0px 0px; margin: 15px 15px 0px;}
+    	.form-group label.control-label{color:#484848;margin: 0px 0px 0px 6px;}
+    	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 12px;}
+    	.m-style .active {background: #2c3b41;border-color: #2c3b41;}
+    	.m-style a:hover {background: #2c3b41;border-color: #2c3b41;}
+    	.search-btn {height: 30px;line-height: 6px;margin-top: 26px;}
+    	.layui-layer-setwin .layui-layer-close1 {background-position: 0px 0px;cursor: pointer;}
+    	.form-group .form-control{width: 100% !important;}
+    </style>
+</head>
+<body>
+    <div class="wrapper" id="app">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-content">
+                    	<input v-model="project.csrf" type="hidden"/>
+                    	<div class="category row">
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label">项目名称</label>
+                                    <input v-model="project.name" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label">项目类型</label>
+                                    <select v-model="project.type" class="form-control">
+                                    	<#list types as type>
+                                    		<option value="${type.code!}">${type.name!}</option>
+                                    	</#list>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">项目备注</label>
+                                    <textarea v-model="project.remarks" class="form-control" rows="5"></textarea>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label">详细地址</label>
+                                    <input v-model="project.address" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <button type="submit" class="btn btn-success search-btn" @click="submit">保存</button>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<!--   Core JS Files   -->
+<script src="${rc.contextPath}/statics/ui/other/matrial/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/matrial/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/matrial/js/material.min.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/layer/layer.min.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/laydate/laydate.js?v=1.0" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/vue.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+	$(function(){
+		
+		new Vue({
+   	    	el: '#app',
+   	     	data: {
+   	     		project: {
+   	     			id: '${project.id!}',
+   	     			name: '${project.name!}',
+   	     			type: '${project.type!}',
+   	     			address: '${project.address!}',
+   	     			longitude: '${project.longitude!}',
+   	     			latitude: '${project.latitude!}',
+   	     			coveredArea: '${project.coveredArea!}',
+   	     			workerNum: '${project.workerNum!}',
+   	     			contacts: '${project.contacts!}',
+   	     			contactTel: '${project.contactTel!}',
+   	     			remarks: '${project.remarks!}',
+   	     			csrf: '${csrf!}'
+   	     		}
+   	     	},
+      		methods: {
+      			submit: function(page) {
+      				var _this = this;
+          			let loading = _this.loading();
+          			
+          			new Promise(function (resolve, reject) {
+          				$.ajax({
+							type: 'POST',
+							url: '${rc.contextPath}/project/manage/update',
+							data: _this.project,
+							dataType: 'json',
+							success: resolve,
+							error: reject
+          		        })
+          			}).then(function(data){
+          				layer.msg(data.message);
+          				if(data.statusCode == 200) {
+          				}
+	          			_this.closeLoading(loading);
+          			}).catch(function (reason) {
+	          			_this.closeLoading(loading);
+          			});
+			    },
+			    loading: function() {
+			    	return layer.load(0, {shade: [0.1, '#EEE']});
+			    },
+			    closeLoading: function(index) {
+			    	layer.close(index);
+			    }
+      		},
+      		mounted: function () {
+      			var _this = this;
+      		}
+		})
+	})
+
+</script>
+
+</html>

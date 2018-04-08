@@ -5,9 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
-    <link href="${rc.contextPath}/statics/ui/other/matrial/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="${rc.contextPath}/statics/ui/other/matrial/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
-    <link href="${rc.contextPath}/statics/ui/other/pager/pager.css" rel="stylesheet" />
+	<!-- TopJUI框架样式 -->
+	<link type="text/css" href="${rc.contextPath}/statics/ui/topjui/css/topjui.core.min.css?v=1.1" rel="stylesheet">
+	<link type="text/css" href="${rc.contextPath}/statics/ui/topjui/themes/default/topjui.black.css?v=2.3" rel="stylesheet"/>
+    <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/bootstrap.min.css" rel="stylesheet" />
+    <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
+    <link type="text/css" href="${rc.contextPath}/statics/ui/other/pager/pager.css" rel="stylesheet" />
     <style type="text/css">
     	.text-primary {color: #2c3b41;}
     	.card [data-background-color="system"] {background: #fff;}
@@ -18,6 +21,7 @@
     	.m-style .active {background: #2c3b41;border-color: #2c3b41;}
     	.m-style a:hover {background: #2c3b41;border-color: #2c3b41;}
     	.search-btn {height: 30px;line-height: 6px;margin-top: 26px;}
+    	.layui-layer-setwin .layui-layer-close1 {background-position: 0px 0px;cursor: pointer;}
     </style>
 </head>
 <body>
@@ -81,20 +85,20 @@
                             </tbody>
                             <tbody v-if="list.length > 0">
                                 <tr v-for="(item, index) in list">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{ (searchParam.page - 1) * searchParam.rows + index+1 }}</td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.type }}</td>
+                                    <td>{{ item.address }}</td>
+                                    <td>{{ item.companyName }}</td>
+                                    <td>{{ item.coveredArea }}</td>
+                                    <td>{{ item.workerNum }}</td>
+                                    <td>{{ item.contacts }}</td>
+                                    <td>{{ item.contactTel }}</td>
+                                    <td>{{ item.createTime }}</td>
+                                    <td>{{ item.remarks }}</td>
                                     <td>
-                                    	<p>
-                                    		<a>修改</a>
-                                    	</p>
+                                    	<a @click="edit(item.id)" href="javascript:;">修改基础信息</a>
+                                    	<a @click="edit(item.id)" href="javascript:;">修改位置信息</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -131,7 +135,9 @@
    	     		searchParam: {
    	     			name: '',
    	     			type: '',
-   	     			ctime: ''
+   	     			ctime: '',
+   	     			page: 1,
+   	     			rows:10
    	     		}
    	     	},
       		methods: {
@@ -139,24 +145,51 @@
           			var _this = this;
           			let loading = _this.loading();
           			
-          			console.info(_this.searchParam);
-          			
-      				
-          			setTimeout(function(){
+          			new Promise(function (resolve, reject) {
+          				$.ajax({
+							type: 'POST',
+							url: '${rc.contextPath}/project/manage/data',
+							data: {
+								name: _this.searchParam.name,
+								type: _this.searchParam.type,
+								ctime: _this.searchParam.ctime,
+								page: page,
+								rows: _this.searchParam.rows
+							},
+							dataType: 'json',
+							success: resolve,
+							error: reject
+          		        })
+          			}).then(function(data){
+          				_this.searchParam.page = data.current;
           				$('#Page-M-box').pagination({
-	          			  	pageCount: 2,
-	          			  	current: page,
+	          			  	pageCount: data.pageCount,
+	          			  	current: data.current,
 	          			    callback: function (api) {
 	          			    	_this.loadProject(api.getCurrent())
 	          			    }
 	          			});
-	          			_this.list = [{"name":"szx"}];
+	          			_this.list = data.data;
 	          			_this.closeLoading(loading);
-          			}, 200)
+          			}).catch(function (reason) {
+	          			_this.closeLoading(loading);
+          			});
 			    },
 			    searchForm: function(){
 			    	var _this = this;
 			    	_this.loadProject(1);
+			    },
+			    edit: function(id){
+			    	layer.open({
+		    		  type: 2,
+		    		  title: '编辑项目',
+		    		  closeBtn: 1, 
+		    		  shade: [0.1],
+		    		  area: ['720px', '450px'],
+		    		  anim: false,
+		    		  content: ['${rc.contextPath}/project/manage/edit?id=' + id, 'yes'],
+		    		  end: function(){}
+			    	})
 			    },
 			    loading: function() {
 			    	return layer.load(0, {shade: [0.1, '#EEE']});
