@@ -18,14 +18,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.cache.CacheUtil;
 import com.single.pro.entity.Project;
+import com.single.pro.entity.ProjectWork;
 import com.single.pro.model.DictionaryItemModel;
 import com.single.pro.model.ProjectModel;
 import com.single.pro.service.ProjectService;
+import com.single.pro.service.ProjectWorkService;
 import com.single.pro.service.custom.ProjectCustomService;
 import com.single.pro.util.IdUtil;
 import com.xiaoleilu.hutool.date.DateUtil;
@@ -40,6 +44,8 @@ public class ProjectManageController extends BaseController {
 	BaseDataCacheUtil baseDataCacheUtil;
 	@Autowired
 	ProjectService projectService;
+	@Autowired
+	ProjectWorkService projectWorkService;
 	@Autowired
 	ProjectCustomService projectCustomService;
 
@@ -192,8 +198,69 @@ public class ProjectManageController extends BaseController {
 		if (project == null) {
 			return new ModelAndView("error/invalid_parameter");
 		}
-
+		mav.addObject("projectId", project.getId());
 		return mav;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = { "/works" }, method = { RequestMethod.POST })
+	public Map<String, Object> works(HttpServletRequest request) throws Exception {
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("suc", false);
+
+		String pageStr = request.getParameter("page");
+		if (!NumberUtils.isDigits(pageStr) || new Integer(pageStr) < 1) {
+			pageStr = "1";
+		}
+		String rowsStr = request.getParameter("rows");
+		if (!NumberUtils.isDigits(rowsStr) || new Integer(rowsStr) > 1000 || new Integer(rowsStr) < 2) {
+			rowsStr = "10";
+		}
+
+		String projectId = request.getParameter("projectId");
+		if (StringUtils.isBlank(projectId)) {
+			data.put("msg", "参数错误，无效的ID");
+			return data;
+		}
+		Project project = projectService.selectById(projectId);
+		if (project == null) {
+			data.put("msg", "无效的ID");
+			return data;
+		}
+
+		Wrapper<ProjectWork> wrapper = new EntityWrapper<>();
+		wrapper.eq("project_id", projectId);
+
+		String workNo = request.getParameter("workNo");
+		if (StringUtils.isNotBlank(workNo)) {
+			wrapper.like("work_no", workNo);
+		}
+
+		wrapper.orderBy("create_time", false);
+		PageHelper.startPage(new Integer(pageStr), new Integer(rowsStr));
+		List<ProjectWork> list = projectWorkService.selectList(wrapper);
+		PageInfo<ProjectWork> pageInfo = new PageInfo<ProjectWork>(list);
+		List<Map<String, Object>> listMap = new ArrayList<>();
+
+		if (list != null && list.size() > 0) {
+			Map<String, Object> _map = null;
+			for (ProjectWork item : list) {
+				_map = new HashMap<>();
+				_map.put("id", item.getId());
+				_map.put("workName", item.getWorkName());
+				_map.put("workNo", item.getWorkNo());
+				_map.put("createTime", DateUtil.format(item.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+				listMap.add(_map);
+			}
+		}
+
+		data.put("suc", true);
+		data.put("data", listMap);
+		data.put("current", pageInfo.getPageNum());
+		data.put("pageCount", pageInfo.getPages());
+
+		return data;
 	}
 
 	@ResponseBody

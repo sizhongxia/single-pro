@@ -18,7 +18,7 @@ window.post = function(url, data, sucCallback, errCallback) {
 		dataType: 'json',
 		success: sucCallback || function(){},
 		error: errCallback || function(){}
-      });
+    });
 }
 
 window.laydateRender = function(elem, callback) {

@@ -10,7 +10,7 @@
 	<link type="text/css" href="${rc.contextPath}/statics/ui/topjui/themes/default/topjui.black.css?v=2.3" rel="stylesheet"/>
     <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/bootstrap.min.css" rel="stylesheet" />
     <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
-    <link type="text/css" href="${rc.contextPath}/statics/ui/other/pager/pager.css" rel="stylesheet" />
+    <link type="text/css" href="${rc.contextPath}/statics/ui/other/pager/pager.css?v=1.0" rel="stylesheet" />
     <style type="text/css">
     	.text-primary {color: #2c3b41;}
     	.card [data-background-color="system"] {background: #fff;}
@@ -69,16 +69,16 @@
                         <table class="table table-hover">
                             <thead class="text-primary">
                             	<tr>
-	                                <th>序号</th>
+	                                <th class="text-center">序号</th>
 	                                <th>项目名称</th>
-	                                <th>项目类型</th>
+	                                <th class="text-center">项目类型</th>
 	                                <th>所属公司</th>
 	                                <th>建筑面积</th>
-	                                <th>劳务人数</th>
+	                                <th class="text-center">劳务人数</th>
 	                                <th>联系人</th>
-	                                <th>联系人电话</th>
-	                                <th>创建时间</th>
-	                                <th></th>
+	                                <th class="text-center">联系人电话</th>
+	                                <th class="text-center">创建时间</th>
+	                                <th class="text-center">操作</th>
                                 </tr>
                             </thead>
                             <tbody v-if="list.length == 0">
@@ -90,16 +90,16 @@
                             </tbody>
                             <tbody v-if="list.length > 0">
                                 <tr v-for="(item, index) in list">
-                                    <td>{{ (searchParam.page - 1) * searchParam.rows + index+1 }}</td>
+                                    <td class="text-center">{{ (searchParam.page - 1) * searchParam.rows + index+1 }}</td>
                                     <td>{{ item.name }}</td>
-                                    <td>{{ item.type }}</td>
+                                    <td class="text-center">{{ item.type }}</td>
                                     <td>{{ item.companyName }}</td>
                                     <td>{{ item.coveredArea }}</td>
-                                    <td>{{ item.workerNum }}</td>
+                                    <td class="text-center">{{ item.workerNum }}</td>
                                     <td>{{ item.contacts }}</td>
-                                    <td>{{ item.contactTel }}</td>
-                                    <td>{{ item.createTime }}</td>
-                                    <td>
+                                    <td class="text-center">{{ item.contactTel }}</td>
+                                    <td class="text-center">{{ item.createTime }}</td>
+                                    <td class="text-center">
                                     	<a @click="edit(item.id)" href="javascript:;">修改</a>
                                     	<a @click="addr(item.id)" href="javascript:;">位置</a>
                                     	<a @click="work(item.id)" href="javascript:;">任务</a>
@@ -185,7 +185,8 @@
 			    	_this.loadProject(1);
 			    },
 			    edit: function(id){
-			    	openLayer('编辑项目基础信息', '${rc.contextPath}/project/manage/edit?id=' + id, false, function() {
+			    	var _this = this;
+			    	openLayer('修改项目基础信息', '${rc.contextPath}/project/manage/edit?id=' + id, false, function() {
 			    		_this.loadProject();
 			    	});
 			    },
@@ -193,13 +194,13 @@
 			    	openLayer('项目位置信息', '${rc.contextPath}/project/manage/addr?id=' + id);
 			    },
 			    work: function(id){
-	      			if(navigator.cookieEnabled) {
+	      			//if(navigator.cookieEnabled) {
 	      				openLayer('项目工作批次', '${rc.contextPath}/project/manage/work?id=' + id, true, function() {
-				    		console.info(getCookieAndClean('SP_PAGE_COOKIE_WORK_ID'));
+				    		//console.info(getCookieAndClean('SP_PAGE_COOKIE_WORK_ID'));
 				    	});
-	      			} else {
-	      				layer.msg('请启用Cookie!!!!');
-	      			}
+	      			//} else {
+	      			//	layer.msg('请启用Cookie!!!!');
+	      			//}
 				},
 			    loading: function() {
 			    	return layer.load(0, {shade: [0.1, '#EEE']});
