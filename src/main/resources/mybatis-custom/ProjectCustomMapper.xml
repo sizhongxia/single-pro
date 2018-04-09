@@ -19,7 +19,6 @@
 			c.`name` as companyName,
 			p.`contacts`,
 			p.`contact_tel` as contactTel,
-			p.`remarks`,
 			p.`create_time` as createTime,
 			p.`update_time` as updateTime
 		from sp_project p 
@@ -31,6 +30,9 @@
 			<if test="name != null">
 				and (p.`name` like concat('%', #{name}, '%') or p.pinyin like concat('%', #{name}, '%'))
 			</if>
+			<if test="contacts != null">
+				and (p.`contacts` like concat('%', #{contacts}, '%') or p.contact_tel like concat('%', #{contacts}, '%'))
+			</if>
 			<if test="ctimeStart != null">
 				<![CDATA[ and p.`create_time` >= #{ctimeStart} ]]>
 			</if>
@@ -38,7 +40,7 @@
 				<![CDATA[ and p.`create_time` <= #{ctimeEnd} ]]>
 			</if>
 		</where>
-		order by p.`create_time` asc
+		order by p.`create_time` desc
 	</select>
 
 </mapper>

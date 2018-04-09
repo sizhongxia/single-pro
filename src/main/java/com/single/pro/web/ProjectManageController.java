@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -77,6 +76,10 @@ public class ProjectManageController extends BaseController {
 		if (StringUtils.isNotBlank(type)) {
 			params.put("type", type.trim());
 		}
+		String contacts = request.getParameter("contacts");
+		if (StringUtils.isNotBlank(contacts)) {
+			params.put("contacts", contacts.trim());
+		}
 		String ctime = request.getParameter("ctime");
 		if (StringUtils.isNotBlank(ctime)) {
 			String[] ctimes = ctime.split(" - ");
@@ -105,7 +108,6 @@ public class ProjectManageController extends BaseController {
 				_map.put("contacts", item.getContacts());
 				_map.put("contactTel", item.getContactTel());
 				_map.put("createTime", DateUtil.format(item.getCreateTime(), "yyyy-MM-dd HH:mm"));
-				_map.put("remarks", item.getRemarks());
 				listMap.add(_map);
 			}
 		}
@@ -136,8 +138,61 @@ public class ProjectManageController extends BaseController {
 		String csrf = IdUtil.id();
 		CacheUtil.set("single:system:form", "project_manage_csrf", csrf);
 		mav.addObject("csrf", csrf);
-		project.setRemarks(Pattern.compile("\t|\r|\n| |'|\"").matcher(project.getRemarks()).replaceAll(""));
 		mav.addObject("project", project);
+		return mav;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/detail" }, method = { RequestMethod.GET })
+	public ModelAndView detail(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("project/manage/detail");
+		String id = request.getParameter("id");
+		if (StringUtils.isBlank(id)) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+		Project project = projectService.selectById(id);
+		if (project == null) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+
+		mav.addObject("project", project);
+		return mav;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/addr" }, method = { RequestMethod.GET })
+	public ModelAndView addr(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("project/manage/addr");
+		String id = request.getParameter("id");
+		if (StringUtils.isBlank(id)) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+		Project project = projectService.selectById(id);
+		if (project == null) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+
+		String csrf = IdUtil.id();
+		CacheUtil.set("single:system:form", "project_manage_csrf", csrf);
+		mav.addObject("csrf", csrf);
+
+		mav.addObject("project", project);
+		return mav;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/work" }, method = { RequestMethod.GET })
+	public ModelAndView work(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("project/manage/work");
+		String id = request.getParameter("id");
+		if (StringUtils.isBlank(id)) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+		Project project = projectService.selectById(id);
+		if (project == null) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+
 		return mav;
 	}
 
@@ -176,20 +231,63 @@ public class ProjectManageController extends BaseController {
 			return res;
 		}
 
+		String name = request.getParameter("name");
+		if (StringUtils.isBlank(name)) {
+			res.put("message", "请输入项目名称");
+			return res;
+		}
 		String type = request.getParameter("type");
 		if (StringUtils.isBlank(type)) {
 			res.put("message", "请选择一个项目类型");
 			return res;
 		}
+		String coveredArea = request.getParameter("coveredArea");
+		if (StringUtils.isBlank(coveredArea)) {
+			coveredArea = "";
+		}
+		String workerNum = request.getParameter("workerNum");
+		if (!NumberUtils.isDigits(workerNum)) {
+			workerNum = "0";
+		}
+		String contacts = request.getParameter("contacts");
+		if (StringUtils.isBlank(contacts)) {
+			res.put("message", "请输入项目联系人名称");
+			return res;
+		}
+		String contactTel = request.getParameter("contactTel");
+		if (StringUtils.isBlank(contactTel)) {
+			res.put("message", "请输入项目联系人联系方式");
+			return res;
+		}
+		// String address = request.getParameter("address");
+		// if (StringUtils.isBlank(address)) {
+		// res.put("message", "请输入项目地址");
+		// return res;
+		// }
+		// String longitude = request.getParameter("longitude");
+		// if (StringUtils.isBlank(longitude)) {
+		// longitude = "0";
+		// }
+		// String latitude = request.getParameter("latitude");
+		// if (StringUtils.isBlank(latitude)) {
+		// latitude = "0";
+		// }
 
 		String remarks = request.getParameter("remarks");
 		if (StringUtils.isBlank(remarks)) {
 			remarks = "";
 		}
+		project.setName(name);
 		project.setType(type);
+		project.setWorkerNum(new Integer(workerNum));
+		project.setCoveredArea(coveredArea);
+		project.setContacts(contacts);
+		project.setContactTel(contactTel);
+		// project.setAddress(address);
+		// project.setLongitude(longitude);
+		// project.setLatitude(latitude);
 		project.setRemarks(remarks);
 		project.setUpdateTime(new Date());
-
 		if (!projectService.updateById(project)) {
 			res.put("message", "未知错误，请联系网站管理员");
 			return res;
@@ -199,4 +297,68 @@ public class ProjectManageController extends BaseController {
 		res.put("message", "更改成功");
 		return res;
 	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = { "/updateAddr" }, method = { RequestMethod.POST })
+	public Map<String, Object> updateAddr(HttpServletRequest request) throws Exception {
+		Map<String, Object> res = new HashMap<String, Object>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String csrf = request.getParameter("csrf");
+		if (StringUtils.isBlank(csrf)) {
+			res.put("message", "无效的表单，E:01");
+			return res;
+		}
+
+		CacheObject cacheObject = CacheUtil.get("single:system:form", "project_manage_csrf");
+		if (cacheObject == null) {
+			res.put("message", "无效的表单，E:02");
+			return res;
+		}
+
+		if (!csrf.equals(cacheObject.asString())) {
+			res.put("message", "无效的表单，E:03");
+			return res;
+		}
+		String id = request.getParameter("id");
+		if (StringUtils.isBlank(id)) {
+			res.put("message", "无效的表单，E:04");
+			return res;
+		}
+		Project project = projectService.selectById(id);
+		if (project == null) {
+			res.put("message", "无效的表单，E:05");
+			return res;
+		}
+
+		String address = request.getParameter("address");
+		if (StringUtils.isBlank(address)) {
+			res.put("message", "请输入项目地址");
+			return res;
+		}
+		String longitude = request.getParameter("longitude");
+		if (StringUtils.isBlank(longitude)) {
+			longitude = "0";
+		}
+		String latitude = request.getParameter("latitude");
+		if (StringUtils.isBlank(latitude)) {
+			latitude = "0";
+		}
+
+		project.setAddress(address);
+		project.setLongitude(longitude);
+		project.setLatitude(latitude);
+		project.setUpdateTime(new Date());
+		if (!projectService.updateById(project)) {
+			res.put("message", "未知错误，请联系网站管理员");
+			return res;
+		}
+
+		res.put("statusCode", 200);
+		res.put("message", "更改成功");
+		return res;
+	}
+
 }
