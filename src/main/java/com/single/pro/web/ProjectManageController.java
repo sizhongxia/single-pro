@@ -33,6 +33,7 @@ import com.single.pro.service.ProjectDrawService;
 import com.single.pro.service.ProjectService;
 import com.single.pro.service.ProjectWorkService;
 import com.single.pro.service.custom.ProjectCustomService;
+import com.single.pro.storage.RealHostReplace;
 import com.single.pro.util.IdUtil;
 import com.xiaoleilu.hutool.date.DateUtil;
 
@@ -215,7 +216,9 @@ public class ProjectManageController extends BaseController {
 		for (ProjectDraw draw : draws) {
 			item = new HashMap<>();
 			item.put("id", draw.getId());
-			item.put("drawingUrl", draw.getDrawingUrl());
+			item.put("url", RealHostReplace.getResUrl(draw.getDrawingUrl()));
+			item.put("path", draw.getDrawingUrl());
+			item.put("time", DateUtil.format(draw.getUploadTime(), "yyyy-MM-dd HH:mm:ss"));
 			drawListMaps.add(item);
 		}
 
@@ -463,6 +466,74 @@ public class ProjectManageController extends BaseController {
 
 		res.put("statusCode", 200);
 		res.put("message", "更改成功");
+		return res;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = { "/saveAttachment" }, method = { RequestMethod.POST })
+	public Map<String, Object> saveAttachment(HttpServletRequest request) throws Exception {
+		Map<String, Object> res = new HashMap<String, Object>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String projectId = request.getParameter("projectId");
+		if (StringUtils.isBlank(projectId)) {
+			res.put("message", "无效的表单，E:01");
+			return res;
+		}
+		Project project = projectService.selectById(projectId);
+		if (project == null) {
+			res.put("message", "无效的表单，E:02");
+			return res;
+		}
+
+		String drawingUrl = request.getParameter("path");
+		if (StringUtils.isBlank(drawingUrl)) {
+			res.put("message", "上传路径错误");
+			return res;
+		}
+		ProjectDraw projectDraw = new ProjectDraw();
+		projectDraw.setId(IdUtil.id());
+		projectDraw.setProjectId(projectId);
+		projectDraw.setDrawingUrl(drawingUrl);
+		projectDraw.setUploadTime(new Date());
+		if (!projectDrawService.insert(projectDraw)) {
+			res.put("message", "未知错误，请联系网站管理员");
+			return res;
+		}
+
+		res.put("statusCode", 200);
+		res.put("message", "上传成功");
+		return res;
+	}
+	
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = { "/removeAttachment" }, method = { RequestMethod.POST })
+	public Map<String, Object> removeAttachment(HttpServletRequest request) throws Exception {
+		Map<String, Object> res = new HashMap<String, Object>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String id = request.getParameter("id");
+		if (StringUtils.isBlank(id)) {
+			res.put("message", "无效的表单，E:01");
+			return res;
+		}
+		ProjectDraw projectDraw = projectDrawService.selectById(id);
+		if (projectDraw == null) {
+			res.put("message", "无效的表单，E:02");
+			return res;
+		}
+
+		if (!projectDrawService.deleteById(id)) {
+			res.put("message", "未知错误，请联系网站管理员");
+			return res;
+		}
+
+		res.put("statusCode", 200);
+		res.put("message", "删除成功");
 		return res;
 	}
 

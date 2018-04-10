@@ -10,6 +10,7 @@
 	<link type="text/css" href="${rc.contextPath}/statics/ui/topjui/themes/default/topjui.black.css?v=2.3" rel="stylesheet"/>
     <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/bootstrap.min.css" rel="stylesheet" />
     <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
+    <link type="text/css" href="${rc.contextPath}/statics/ui/static/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link type="text/css" href="${rc.contextPath}/statics/ui/other/pager/pager.css?v=1.0" rel="stylesheet" />
     <style type="text/css">
     	.content {width: 718px;height: 420px;background: #fff;overflow: auto;}
@@ -33,17 +34,24 @@
                   <div class="col-xs-12" style="border-bottom: 1px solid #EEE;margin-bottom: 12px;padding-bottom: 4px;">
                       <label class="control-label">附件：项目图纸 Drawing</label>
                       <input type="file" name="file" style="display: none;" id="uploadProjectDrawingFile">
-                      <button class="btn" @click="upload" style="padding: 6px 30px;font-size: 12px;float: right;margin: 0px;background-color: #2c3b41;">上传图纸</button>
+                      <i class="fa fa-refresh" @click="refresh" style="font-size: 12px;float: right;margin-top: 8px;cursor: pointer;">刷新</i>
+                      <button class="btn" @click="upload" style="padding: 6px 30px;font-size: 12px;float: right;margin: 0px;margin-right: 20px;background-color: #2c3b41;">上传图纸</button>
                   </div>
                   <div class="col-xs-12">
                   		<table class="table table-hover">
                             <tbody>
-                            	<#list draws as item>
+                            	<#if draws?size == 0>
+                            		<tr>
+	                                    <td style="border: none;" class="text-center" colspan="2">暂无</td>
+	                                </tr>
+                            	<#else>
+                            		<#list draws as item>
 	                            		<tr>
-			                                <td style="border: none;">${item.drawingUrl!}</td>
-		                                	<td style="border: none;" class="text-center"><a href="${item.drawingUrl!}" target="_blank">下载</a> | 移除</td>
+			                                <td style="border: none;"><span style="color: #2c3b41;">【${item.time}】</span> ${item.path!}</td>
+		                                	<td style="border: none;" class="text-center"><a href="${item.url!}" target="_blank">下载</a> | <a href="javascript:;" @click="remove('${item.id!}')" style="color:#d9534f">删除</a></td>
 		                                </tr>
-                            	</#list>
+                            		</#list>
+                            	</#if>
                             </tbody>
                         </table>
                   </div>
@@ -88,6 +96,29 @@
       			upload: function() {
       				$("#uploadProjectDrawingFile").click();
       			},
+  			  	refresh: function() {
+	  				window.location.reload(true); 
+	  			},
+	  			remove: function(id) {
+	      			var _this = this;
+	      			
+	  				layer.confirm('是否要删除该附件信息?', {title:!1}, function(index){
+	  					loading = _this.loading();
+	  					post('${rc.contextPath}/project/manage/removeAttachment', {id: id}, function(data){
+  		      				layer.msg(data.message);
+  		      				if(data.statusCode == 200) {
+  		      					setTimeout(function(){
+  		  	  						layer.close(index);
+		  		          			_this.closeLoading(loading);
+	  		      					window.location.reload(true); 
+  		      					}, 500)
+  		      				}
+  		      			}, function (reason) {
+  		  					layer.close(index);
+  		          			_this.closeLoading(loading);
+  		      			});
+	  				});
+	  			},
 			    loading: function() {
 			    	return layer.load(0, {shade: [0.1, '#EEE']});
 			    },
@@ -97,21 +128,38 @@
       		},
       		mounted: function () {
       			var _this = this;
+      			var loading = null;
+      			
       			$('input[type="file"]').ajaxfileupload({
 	  				  action: '${rc.contextPath}/uploadPic?typeCode=ProjectDrawing',
 	  				  onComplete: function(response) {
 		  				    if(response.statusCode == 200) {
-		  				    	
+		  				    	post('${rc.contextPath}/project/manage/saveAttachment', {
+	  		      					projectId: _this.projectId,
+	  		      					path: response.filePath
+	  		      				}, function(data){
+		  		      				layer.msg(data.message);
+		  		      				if(data.statusCode == 200) {
+		  		      					setTimeout(function(){
+				  		          			_this.closeLoading(loading);
+			  		      					window.location.reload(true); 
+		  		      					}, 500)
+		  		      				}
+		  		      			}, function (reason) {
+		  		          			_this.closeLoading(loading);
+		  		      			});
+		  				    } else {
+			  					_this.closeLoading(loading);
 		  				    }
-		  					_this.closeLoading();
 	  				  },
 	  				  onStart: function() {
-	  						_this.loading();
+	  						loading = _this.loading();
 	  				  },
 	  				  onCancel: function() {
-		  					_this.closeLoading();
+		  					_this.closeLoading(loading);
 	  				  }
 	  			});
+      			
       		}
 		})
 	})
