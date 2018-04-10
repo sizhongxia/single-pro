@@ -12,83 +12,79 @@
     <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
     <link type="text/css" href="${rc.contextPath}/statics/ui/other/pager/pager.css" rel="stylesheet" />
     <style type="text/css">
-    	.card {padding: 0;margin: 0;}
-    	.card .card-content {height: 99vh;padding: 20px;margin-top: 1px;}
+    	.content {width: 718px;height: 420px;background: #fff;overflow: auto;}
+    	.category {padding: 12px;}
     	.text-primary {color: #2c3b41;}
-    	.container-fluid {padding: 0;margin: 0;}
     	.form-group {margin-top: 0;margin-bottom: 0px;}
     	.form-group label.control-label{color:#484848;margin: 0px 0px 0px 6px;}
-    	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 12px;}
+    	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 12px;width: 100% !important;}
     	.m-style .active {background: #2c3b41;border-color: #2c3b41;}
     	.m-style a:hover {background: #2c3b41;border-color: #2c3b41;}
     	.layui-layer-setwin .layui-layer-close1 {background-position: 0px 0px;cursor: pointer;}
-    	.form-group .form-control{width: 100% !important;}
     	.search-btn {height: 30px;line-height: 6px;}
     </style>
 </head>
 <body>
     <div class="wrapper" id="app">
         <div class="content">
-            <div class="container-fluid">
-                <div class="card">
-                    <div class="card-content">
-                    	<input v-model="project.csrf" type="hidden"/>
-                    	<div class="category row">
-                            <div class="col-xs-6">
-                                <div class="form-group">
-                                    <label class="control-label">项目名称</label>
-                                    <input v-model="project.name" type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="form-group">
-                                    <label class="control-label">项目类型</label>
-                                    <select v-model="project.type" class="form-control">
-                                    	<#list types as type>
-                                    		<option value="${type.code!}">${type.name!}</option>
-                                    	</#list>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="form-group">
-                                    <label class="control-label">劳务人数</label>
-                                    <input v-model="project.workerNum" type="number" min="0" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="form-group">
-                                    <label class="control-label"> 建筑面积</label>
-                                    <input v-model="project.coveredArea" type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="form-group">
-                                    <label class="control-label">联系人</label>
-                                    <input v-model="project.contacts" type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="form-group">
-                                    <label class="control-label">联系电话</label>
-                                    <input v-model="project.contactTel" type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    <label class="control-label">项目备注</label>
-                                    <textarea v-model="project.remarks" class="form-control" style="height: 80px;margin-top: 8px;"></textarea>
-                                    <textarea style="display: none" id="project-remarks">${project.remarks!}</textarea>
-                                </div>
-                            </div>
-                            <div class="col-xs-12" style="text-align: center;">
-                                <button type="submit" class="btn btn-success search-btn" @click="submit">保存</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <input v-model="project.csrf" type="hidden"/>
+           	<div class="category">
+                   <div class="col-xs-6">
+                       <div class="form-group">
+                           <label class="control-label">项目名称</label>
+                           <input v-model="project.name" type="text" class="form-control">
+                       </div>
+                   </div>
+                   <div class="col-xs-6">
+                       <div class="form-group">
+                           <label class="control-label">项目类型</label>
+                           <select v-model="project.type" class="form-control">
+                           	<#list types as type>
+                           		<option value="${type.code!}">${type.name!}</option>
+                           	</#list>
+                           </select>
+                       </div>
+                   </div>
+                   <div class="col-xs-6">
+                       <div class="form-group">
+                           <label class="control-label">劳务人数</label>
+                           <input v-model="project.workerNum" type="number" min="0" class="form-control">
+                       </div>
+                   </div>
+                   <div class="col-xs-6">
+                       <div class="form-group">
+                           <label class="control-label"> 建筑面积</label>
+                           <input v-model="project.coveredArea" type="text" class="form-control">
+                       </div>
+                   </div>
+                   <div class="col-xs-6">
+                       <div class="form-group">
+                           <label class="control-label">联系人</label>
+                           <input v-model="project.contacts" type="text" class="form-control">
+                       </div>
+                   </div>
+                   <div class="col-xs-6">
+                       <div class="form-group">
+                           <label class="control-label">联系电话</label>
+                           <input v-model="project.contactTel" type="text" class="form-control">
+                       </div>
+                   </div>
+                   <div class="col-xs-12">
+                       <div class="form-group">
+                           <label class="control-label">项目备注</label>
+                           <textarea v-model="project.remarks" class="form-control" style="height: 80px;margin-top: 8px;"></textarea>
+                           <textarea style="display: none" id="project-remarks">${project.remarks!}</textarea>
+                       </div>
+                   </div>
+                   <div class="col-xs-12">
+                   		<p>※ 说明：项目名称唯一</p>
+                   </div>
+                   <div class="col-xs-12" style="text-align: center;">
+                       <button type="submit" class="btn btn-success search-btn" @click="submit">保存</button>
+                   </div>
+                   <div style="clear: both;"></div>
+               </div>
+           </div>
     </div>
 </body>
 <!--   Core JS Files   -->

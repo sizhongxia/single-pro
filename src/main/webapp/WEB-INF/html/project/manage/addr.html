@@ -12,55 +12,49 @@
     <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
     <link type="text/css" href="${rc.contextPath}/statics/ui/other/pager/pager.css" rel="stylesheet" />
     <style type="text/css">
-    	.card {padding: 0;margin: 0;}
-    	.card .card-content {height: 99vh;padding: 20px;margin-top: 1px;}
+    	.content {width: 718px;height: 420px;background: #fff;overflow: auto;}
+    	.category {padding: 12px;}
     	.text-primary {color: #2c3b41;}
-    	.container-fluid {padding: 0;margin: 0;}
     	.form-group {margin-top: 0;margin-bottom: 0px;}
     	.form-group label.control-label{color:#484848;margin: 0px 0px 0px 6px;}
-    	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 12px;}
+    	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 12px;width: 100% !important;}
     	.m-style .active {background: #2c3b41;border-color: #2c3b41;}
     	.m-style a:hover {background: #2c3b41;border-color: #2c3b41;}
     	.layui-layer-setwin .layui-layer-close1 {background-position: 0px 0px;cursor: pointer;}
-    	.form-group .form-control{width: 100% !important;}
     	.search-btn {height: 30px;line-height: 6px;}
     </style>
 </head>
 <body>
     <div class="wrapper" id="app">
         <div class="content">
-            <div class="container-fluid">
-                <div class="card">
-                    <div class="card-content">
-                    	<input v-model="csrf" type="hidden"/>
-                    	<div class="category row">
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    <label class="control-label">详细地址(Addr.)</label>
-                                    <input v-model="address" type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="form-group">
-                                    <label class="control-label">地图经度(Lon.)</label>
-                                    <input v-model="longitude" type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="form-group">
-                                    <label class="control-label">地图纬度(Lat.)</label>
-                                    <input v-model="latitude" type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-xs-12">
-                            	<div id="mapBox" style="width: 100%;height: 200px"></div>
-                            </div>
-                            <div class="col-xs-12" style="text-align: center;">
-                                <button type="submit" class="btn btn-success search-btn" @click="submit">保存</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               	<input v-model="csrf" type="hidden"/>
+               	<div class="category">
+                       <div class="col-xs-12">
+                           <div class="form-group">
+                               <label class="control-label">详细地址(Addr.)</label>
+                               <input v-model="address" type="text" class="form-control">
+                           </div>
+                       </div>
+                       <div class="col-xs-6">
+                           <div class="form-group">
+                               <label class="control-label">地图经度(Lon.)</label>
+                               <input v-model="longitude" type="text" class="form-control">
+                           </div>
+                       </div>
+                       <div class="col-xs-6">
+                           <div class="form-group">
+                               <label class="control-label">地图纬度(Lat.)</label>
+                               <input v-model="latitude" type="text" class="form-control">
+                           </div>
+                       </div>
+                       <div class="col-xs-12">
+                       	<div id="mapBox" style="width: 100%;height: 320px"></div>
+                       </div>
+                       <div class="col-xs-12" style="text-align: center;">
+                           <button type="submit" class="btn btn-success search-btn" @click="submit">保存</button>
+                       </div>
+                  	  <div style="clear: both;"></div>
+                   </div>
             </div>
         </div>
     </div>
@@ -158,12 +152,14 @@
       			var lat = _this.latitude == '0'? '39.90923' : _this.latitude;
       			
       			map = new AMap.Map('mapBox', {
+      				resizeEnable: true,
+      				scrollWheel: false,
       		        zoom:13,
       		        center: [lng, lat]
       		    });
       			
-      			map.plugin(["AMap.Scale"], function() {
-      				map.addControl(new AMap.Scale());
+      			map.plugin(["AMap.ToolBar"], function() {
+      				map.addControl(new AMap.ToolBar());
       	        });
       			
       			map.on('complete', function() {

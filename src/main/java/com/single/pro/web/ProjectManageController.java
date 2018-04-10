@@ -25,9 +25,11 @@ import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.cache.CacheUtil;
 import com.single.pro.entity.Project;
+import com.single.pro.entity.ProjectDraw;
 import com.single.pro.entity.ProjectWork;
 import com.single.pro.model.DictionaryItemModel;
 import com.single.pro.model.ProjectModel;
+import com.single.pro.service.ProjectDrawService;
 import com.single.pro.service.ProjectService;
 import com.single.pro.service.ProjectWorkService;
 import com.single.pro.service.custom.ProjectCustomService;
@@ -44,6 +46,8 @@ public class ProjectManageController extends BaseController {
 	BaseDataCacheUtil baseDataCacheUtil;
 	@Autowired
 	ProjectService projectService;
+	@Autowired
+	ProjectDrawService projectDrawService;
 	@Autowired
 	ProjectWorkService projectWorkService;
 	@Autowired
@@ -187,6 +191,31 @@ public class ProjectManageController extends BaseController {
 	}
 
 	@RequiresAuthentication
+	@RequestMapping(value = { "/attachment" }, method = { RequestMethod.GET })
+	public ModelAndView attachment(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("project/manage/attachment");
+		String id = request.getParameter("id");
+		if (StringUtils.isBlank(id)) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+		Project project = projectService.selectById(id);
+		if (project == null) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+
+		Wrapper<ProjectDraw> wrapper = new EntityWrapper<>();
+		wrapper.eq("project_id", project.getId());
+		wrapper.orderBy("upload_time", true);
+		List<ProjectDraw> draws = projectDrawService.selectList(wrapper);
+		if (draws == null) {
+			draws = new ArrayList<>();
+		}
+
+		mav.addObject("draws", draws);
+		return mav;
+	}
+
+	@RequiresAuthentication
 	@RequestMapping(value = { "/work" }, method = { RequestMethod.GET })
 	public ModelAndView work(HttpServletRequest request) throws Exception {
 		ModelAndView mav = new ModelAndView("project/manage/work");
@@ -234,7 +263,7 @@ public class ProjectManageController extends BaseController {
 
 		String workNo = request.getParameter("workNo");
 		if (StringUtils.isNotBlank(workNo)) {
-			wrapper.like("work_no", workNo);
+			wrapper.eq("work_no", workNo.trim());
 		}
 
 		wrapper.orderBy("create_time", false);
