@@ -210,8 +210,17 @@ public class ProjectManageController extends BaseController {
 		if (draws == null) {
 			draws = new ArrayList<>();
 		}
+		List<Map<String, Object>> drawListMaps = new ArrayList<>();
+		Map<String, Object> item = null;
+		for (ProjectDraw draw : draws) {
+			item = new HashMap<>();
+			item.put("id", draw.getId());
+			item.put("drawingUrl", draw.getDrawingUrl());
+			drawListMaps.add(item);
+		}
 
-		mav.addObject("draws", draws);
+		mav.addObject("projectId", project.getId());
+		mav.addObject("draws", drawListMaps);
 		return mav;
 	}
 
