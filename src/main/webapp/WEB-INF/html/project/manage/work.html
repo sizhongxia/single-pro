@@ -100,20 +100,6 @@
    	     		}
    	     	},
       		methods: {
-      			returnFun: function() {
-      				parent.layer.open({
-      					type: 2,
-      					title: '项目工作批次',
-      					closeBtn: !0, 
-      					shade: [0.1],
-      					area: ['720px', '460px'],
-      					content: ['${rc.contextPath}/project/manage/work?id=2', 'no'],
-      					success: function() {
-      						parent.layer.close(parent.layer.getFrameIndex(window.name));
-      					},
-      					end: function(){}
-      				});
-			    },
 			    loadProjectWorks: function(page) {
 			    	var _this = this;
           			let loading = _this.loading();
@@ -152,7 +138,16 @@
 			    	_this.loadProjectWorks(1);
 			    },
 			    detail: function(id) {
-			    	console.info(id);
+			    	parent.layer.open({
+      					type: 2,
+      					title: '项目产品',
+      					closeBtn: !0, 
+      					shade: [0.1],
+      					area: ['720px', '460px'],
+      					content: ['${rc.contextPath}/project/manage/product?workNo=' + id, 'no'],
+      					success: function() {},
+      					end: function(){}
+      				});
 			    },
 			    loading: function() {
 			    	return layer.load(0, {shade: [0.1, '#EEE']});

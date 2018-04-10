@@ -26,10 +26,12 @@ import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.cache.CacheUtil;
 import com.single.pro.entity.Project;
 import com.single.pro.entity.ProjectDraw;
+import com.single.pro.entity.ProjectProduct;
 import com.single.pro.entity.ProjectWork;
 import com.single.pro.model.DictionaryItemModel;
 import com.single.pro.model.ProjectModel;
 import com.single.pro.service.ProjectDrawService;
+import com.single.pro.service.ProjectProductService;
 import com.single.pro.service.ProjectService;
 import com.single.pro.service.ProjectWorkService;
 import com.single.pro.service.custom.ProjectCustomService;
@@ -51,6 +53,8 @@ public class ProjectManageController extends BaseController {
 	ProjectDrawService projectDrawService;
 	@Autowired
 	ProjectWorkService projectWorkService;
+	@Autowired
+	ProjectProductService projectProductService;
 	@Autowired
 	ProjectCustomService projectCustomService;
 
@@ -240,6 +244,52 @@ public class ProjectManageController extends BaseController {
 			return new ModelAndView("error/invalid_parameter");
 		}
 		mav.addObject("projectId", project.getId());
+		return mav;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/product" }, method = { RequestMethod.GET })
+	public ModelAndView product(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("project/manage/product");
+		
+		String workNo = request.getParameter("workNo");
+		if (StringUtils.isBlank(workNo)) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+		ProjectWork projectWork = projectWorkService.selectById(workNo);
+		if (projectWork == null) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+
+		Wrapper<ProjectProduct> wrapper = new EntityWrapper<>();
+
+		wrapper.eq("project_id", projectWork.getProjectId());
+		wrapper.eq("work_no", projectWork.getId());
+		wrapper.orderBy("create_time", true);
+
+		List<ProjectProduct> products = projectProductService.selectList(wrapper);
+		List<Map<String, Object>> listMap = new ArrayList<>();
+
+		if (products != null && products.size() > 0) {
+			Map<String, Object> _map = null;
+			for (ProjectProduct item : products) {
+				_map = new HashMap<>();
+				_map.put("id", item.getId());
+				_map.put("model", item.getModel());
+				_map.put("number", item.getNumber());
+				_map.put("survey", "Y".equals(item.getSerSurveyChoice()));
+				_map.put("check", "Y".equals(item.getSerCheckChoice()));
+				_map.put("construct", "Y".equals(item.getSerConstructChoice()));
+				_map.put("train", "Y".equals(item.getSerTrainChoice()));
+				_map.put("accept", "Y".equals(item.getSerAcceptChoice()));
+				_map.put("detailListUrl", RealHostReplace.getResUrl(item.getDetailListUrl()));
+				_map.put("remarks", item.getRemarks());
+				_map.put("createTime", DateUtil.format(item.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+				listMap.add(_map);
+			}
+		}
+
+		mav.addObject("products", listMap);
 		return mav;
 	}
 
@@ -507,7 +557,7 @@ public class ProjectManageController extends BaseController {
 		res.put("message", "上传成功");
 		return res;
 	}
-	
+
 	@ResponseBody
 	@RequiresAuthentication
 	@RequestMapping(value = { "/removeAttachment" }, method = { RequestMethod.POST })
