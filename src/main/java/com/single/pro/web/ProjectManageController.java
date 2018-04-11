@@ -135,6 +135,21 @@ public class ProjectManageController extends BaseController {
 	}
 
 	@RequiresAuthentication
+	@RequestMapping(value = { "/create" }, method = { RequestMethod.GET })
+	public ModelAndView create(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("project/manage/create");
+
+		List<DictionaryItemModel> types = baseDataCacheUtil.getDictItems("XMLX");
+		mav.addObject("types", types);
+		
+		String csrf = IdUtil.id();
+		CacheUtil.set("single:system:form", "project_manage_csrf", csrf);
+		mav.addObject("csrf", csrf);
+
+		return mav;
+	}
+
+	@RequiresAuthentication
 	@RequestMapping(value = { "/edit" }, method = { RequestMethod.GET })
 	public ModelAndView edit(HttpServletRequest request) throws Exception {
 		ModelAndView mav = new ModelAndView("project/manage/edit");
@@ -251,7 +266,7 @@ public class ProjectManageController extends BaseController {
 	@RequestMapping(value = { "/product" }, method = { RequestMethod.GET })
 	public ModelAndView product(HttpServletRequest request) throws Exception {
 		ModelAndView mav = new ModelAndView("project/manage/product");
-		
+
 		String workNo = request.getParameter("workNo");
 		if (StringUtils.isBlank(workNo)) {
 			return new ModelAndView("error/invalid_parameter");

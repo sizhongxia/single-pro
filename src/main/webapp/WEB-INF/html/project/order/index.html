@@ -16,8 +16,7 @@
     	.text-primary {color: #2c3b41;}
     	.card [data-background-color="system"] {background: #fff;}
     	.form-group {margin-top: 0;margin-bottom: 0px;}
-    	.card .card-header {box-shadow: none;margin: 0px;padding-bottom: 0px;}
-    	.card .card-content {padding: 0px 0px;}
+    	.card .card-header {box-shadow: rgba(220, 220, 220, 0.42) 0px 0px 0px -28px, rgba(0, 0, 0, 0.12) 1px 1px 6px 0px, rgba(0, 0, 0, 0.2) 0px 0px 0px 0px; margin: 15px 15px 0px;}
     	.form-group label.control-label{color:#484848;margin: 0px 0px 0px 6px;}
     	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 12px;}
     	.m-style .active {background: #2c3b41;border-color: #2c3b41;}
@@ -35,31 +34,20 @@
                        	<div class="category row">
                             <div class="col-md-2 col-xs-5">
                                 <div class="form-group">
-                                    <label class="control-label">项目名称</label>
-                                    <input v-model="searchParam.name" type="text" placeholder="按名称进行查询" class="form-control">
+                                    <label class="control-label">订单编号</label>
+                                    <input v-model="searchParam.order" type="text" placeholder="按订单编号进行查询" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-2 col-xs-5">
                                 <div class="form-group">
-                                    <label class="control-label">项目类型</label>
-                                    <select v-model="searchParam.type" class="form-control">
-                                    	<option value="">全部</option>
-                                    	<#list types as type>
-                                    		<option value="${type.code!}">${type.name!}</option>
-                                    	</#list>
-                                    </select>
+                                    <label class="control-label">项目任务</label>
+                                    <input v-model="searchParam.contacts" type="text" placeholder="按项目任务查询" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-2 col-xs-5">
                                 <div class="form-group">
-                                    <label class="control-label">联系人/电话</label>
-                                    <input v-model="searchParam.contacts" type="text" placeholder="按联系人信息查询" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-2 col-xs-5">
-                                <div class="form-group">
-                                    <label class="control-label">创建日期</label>
-                                    <input v-model="searchParam.ctime" id="ctime" type="text" placeholder="按创建时间进行查询" class="form-control">
+                                    <label class="control-label">订单日期</label>
+                                    <input v-model="searchParam.ctime" id="ctime" type="text" placeholder="按订单时间进行查询" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-2 col-xs-2">
