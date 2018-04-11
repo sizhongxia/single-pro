@@ -17,6 +17,7 @@
     	.category {padding: 12px;}
     	.text-primary {color: #2c3b41;}
     	.container-fluid {padding: 0;margin: 0;}
+    	.label, .label.label-default {background: #cecece;}
     	.form-group {margin-top: 0;margin-bottom: 0px;}
     	.form-group label.control-label{color:#484848;margin: 0px 0px 0px 6px;}
     	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 12px;}
@@ -31,35 +32,46 @@
     <div class="wrapper" id="app">
         <div class="content">
             <div class="category">
-            
-            
-                  <div class="col-xs-6">
-                  	<label class="control-label">流水号</label>
-                  	${workNo!}
+                  <div class="col-xs-5">
+                  	<label class="control-label">流水号：</label>${workNo!}
                   </div>
-                  <div class="col-xs-6">
-                  	<label class="control-label">名称</label>
-                  	${workName!} 
+                  <div class="col-xs-5">
+                  	<label class="control-label">项目任务名称：</label>${workName!}
                   </div>
-            
+                  <div class="col-xs-2">
+                  	<label class="control-label"><a href="javascript:;">清单列表</a></label>
+                  </div>
                   <div class="col-xs-12" style="border-bottom: 1px solid #EEE;margin-bottom: 12px;padding-bottom: 4px;">
                       <label class="control-label">已选择的产品 Products</label>
                   </div>
                   <div class="col-xs-12">
                   		<table class="table table-hover">
+                  			<thead>
+                  				<tr>
+                  					<td>规格型号</td>
+                  					<td class="text-center" width="58">数量</td>
+                  					<td class="text-center" width="260">服务</td>
+                  					<td class="text-center" width="170">时间</td>
+                  				</tr>
+                  			</thead>
                             <tbody>
                             	<#if products?size == 0>
                             		<tr>
-	                                    <td style="border: none;" class="text-center" colspan="2">未选择任何产品</td>
+	                                    <td style="border: none;" class="text-center" colspan="4">未选择任何产品</td>
 	                                </tr>
                             	<#else>
                             		<#list products as item>
 	                            		<tr>
 			                                <td style="border: none;">${item.model!}</td>
-			                                <td style="border: none;">
-			                                	
+			                                <td style="border: none;" class="text-center">${item.number!}</td>
+			                                <td style="border: none;" class="text-center">
+			                                	<span class="label label-${item.survey!}">勘测</span>
+												<span class="label label-${item.check!}">验货</span>
+												<span class="label label-${item.construct!}">施工</span>
+												<span class="label label-${item.train!}">培训</span>
+												<span class="label label-${item.accept!}">验收</span>
 			                                </td>
-		                                	<td style="border: none;" class="text-center"><a href="javascript:;" @click="remove('${item.id!}')" style="color:#f0ad4e">明细</a></td>
+			                                <td style="border: none;" class="text-center">${item.createTime!}</td>
 		                                </tr>
                             		</#list>
                             	</#if>

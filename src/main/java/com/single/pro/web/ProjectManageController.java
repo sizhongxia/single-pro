@@ -277,11 +277,11 @@ public class ProjectManageController extends BaseController {
 				_map.put("id", item.getId());
 				_map.put("model", item.getModel());
 				_map.put("number", item.getNumber());
-				_map.put("survey", "Y".equals(item.getSerSurveyChoice()));
-				_map.put("check", "Y".equals(item.getSerCheckChoice()));
-				_map.put("construct", "Y".equals(item.getSerConstructChoice()));
-				_map.put("train", "Y".equals(item.getSerTrainChoice()));
-				_map.put("accept", "Y".equals(item.getSerAcceptChoice()));
+				_map.put("survey", "Y".equals(item.getSerSurveyChoice()) ? "success" : "default");
+				_map.put("check", "Y".equals(item.getSerCheckChoice()) ? "success" : "default");
+				_map.put("construct", "Y".equals(item.getSerConstructChoice()) ? "success" : "default");
+				_map.put("train", "Y".equals(item.getSerTrainChoice()) ? "success" : "default");
+				_map.put("accept", "Y".equals(item.getSerAcceptChoice()) ? "success" : "default");
 				_map.put("detailListUrl", RealHostReplace.getResUrl(item.getDetailListUrl()));
 				_map.put("remarks", item.getRemarks());
 				_map.put("createTime", DateUtil.format(item.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
