@@ -9,7 +9,7 @@
 			p.`type`,
 			p.`provincial`,
 			p.`city`,
-			p.`country`,
+			p.`county`,
 			p.`address`,
 			p.`longitude`,
 			p.`latitude`,

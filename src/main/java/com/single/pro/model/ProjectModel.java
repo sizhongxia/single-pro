@@ -12,7 +12,7 @@ public class ProjectModel implements Serializable {
 	private String type;
 	private String provincial;
 	private String city;
-	private String country;
+	private String county;
 	private String address;
 	private String longitude;
 	private String latitude;
@@ -66,12 +66,12 @@ public class ProjectModel implements Serializable {
 		this.city = city;
 	}
 
-	public String getCountry() {
-		return country;
+	public String getCounty() {
+		return county;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setCounty(String county) {
+		this.county = county;
 	}
 
 	public String getAddress() {
@@ -173,7 +173,7 @@ public class ProjectModel implements Serializable {
 	@Override
 	public String toString() {
 		return "ProjectModel [id=" + id + ", name=" + name + ", type=" + type + ", provincial=" + provincial + ", city="
-				+ city + ", country=" + country + ", address=" + address + ", longitude=" + longitude + ", latitude="
+				+ city + ", county=" + county + ", address=" + address + ", longitude=" + longitude + ", latitude="
 				+ latitude + ", coveredArea=" + coveredArea + ", workerNum=" + workerNum + ", companyId=" + companyId
 				+ ", companyName=" + companyName + ", contacts=" + contacts + ", contactTel=" + contactTel
 				+ ", remarks=" + remarks + ", createTime=" + createTime + ", updateTime=" + updateTime + "]";

@@ -13,7 +13,7 @@
         <result column="type" property="type" />
         <result column="provincial" property="provincial" />
         <result column="city" property="city" />
-        <result column="country" property="country" />
+        <result column="county" property="county" />
         <result column="address" property="address" />
         <result column="longitude" property="longitude" />
         <result column="latitude" property="latitude" />

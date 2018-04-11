@@ -42,7 +42,7 @@ public class Project implements Serializable {
     /**
      * 区县
      */
-	private String country;
+	private String county;
     /**
      * 详细地址
      */
@@ -153,12 +153,12 @@ public class Project implements Serializable {
 		this.city = city;
 	}
 
-	public String getCountry() {
-		return country;
+	public String getCounty() {
+		return county;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setCounty(String county) {
+		this.county = county;
 	}
 
 	public String getAddress() {
@@ -274,7 +274,7 @@ public class Project implements Serializable {
 			", type=" + type +
 			", provincial=" + provincial +
 			", city=" + city +
-			", country=" + country +
+			", county=" + county +
 			", address=" + address +
 			", longitude=" + longitude +
 			", latitude=" + latitude +
