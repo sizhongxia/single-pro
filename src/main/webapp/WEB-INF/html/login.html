@@ -59,8 +59,7 @@
 <div class="modal fade" id="errModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
-            <div class="modal-body">
-                <span class="text-danger"><i class="fa fa-warning"></i> <span id="errModalMsg"></span></span>
+            <div class="modal-body" id="errModalMsg">
             </div>
         </div>
     </div>
@@ -83,7 +82,7 @@
             navigator.appVersion.split(";")[1].replace(/[ ]/g, "") == "MSIE7.0" ||
             navigator.appVersion.split(";")[1].replace(/[ ]/g, "") == "MSIE8.0")
     ) {
-        alert("您的浏览器版本过低，请使用360安全浏览器的极速模式或IE9.0以上版本的浏览器");
+        alert("您的浏览器版本过低，请使用谷歌浏览器或IE10以上版本的浏览器");
     }
 </script>
 <script type="text/javascript">
@@ -106,12 +105,14 @@
                     navigator.appVersion.split(";")[1].replace(/[ ]/g, "") == "MSIE7.0" ||
                     navigator.appVersion.split(";")[1].replace(/[ ]/g, "") == "MSIE8.0")
             ) {
-                alert("您的浏览器版本过低，请使用360安全浏览器的极速模式或IE9.0以上版本的浏览器");
+                alert("您的浏览器版本过低，请使用谷歌浏览器或IE10以上版本的浏览器");
             } else {
                 var formData = {
                 	loginame: $('#username').val(),
                     password: $('#password').val()
                 };
+            	$('#errModalMsg').html('<span class="text-success"><span>登录中...</span></span>');
+            	$('#errModal').modal();
                 $.ajax({
                     type: 'POST',
                     url: '${rc.contextPath}/auth/login',
@@ -120,12 +121,13 @@
                         if (data.statusCode == 200) {
                             location.href = 'index';
                         } else {
-                        	$('#errModalMsg').html(data.errMsg);
-                        	$('#errModal').modal();
+                        	setTimeout(function() {
+	                        	$('#errModalMsg').html('<span class="text-danger"><i class="fa fa-warning"></i> <span> Error：' + data.errMsg + '</span></span>');
+                        	}, 500)
                         }
                     },
                     error: function () {
-
+                    	alert('登录失败，请稍后重试');
                     }
                 });
             }

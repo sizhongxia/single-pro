@@ -1,7 +1,9 @@
 package com.single.pro.service;
 
-import com.single.pro.entity.User;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.baomidou.mybatisplus.service.IService;
+import com.single.pro.entity.User;
 
 /**
  * <p>
@@ -11,6 +13,7 @@ import com.baomidou.mybatisplus.service.IService;
  * @author SiZhongxia
  * @since 2018-03-29
  */
+@Transactional
 public interface UserService extends IService<User> {
 
 }

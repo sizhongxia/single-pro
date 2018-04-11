@@ -289,6 +289,8 @@ public class ProjectManageController extends BaseController {
 			}
 		}
 
+		mav.addObject("workNo", projectWork.getWorkNo());
+		mav.addObject("workName", projectWork.getWorkName());
 		mav.addObject("products", listMap);
 		return mav;
 	}

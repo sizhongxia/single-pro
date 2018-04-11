@@ -150,32 +150,28 @@
 	<tx:advice id="userTxAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<!-- PROPAGATION_REQUIRED: 如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入到这个事务中。 -->
-			<tx:method name="del*" propagation="REQUIRED" read-only="false"
-				rollback-for="java.lang.Exception" no-rollback-for="java.lang.RuntimeException" />
-			<tx:method name="insert*" propagation="REQUIRED" read-only="false"
-				rollback-for="java.lang.RuntimeException" />
-			<tx:method name="save*" propagation="REQUIRED" read-only="false"
-				rollback-for="java.lang.RuntimeException" />
-			<tx:method name="update*" propagation="REQUIRED" read-only="false"
-				rollback-for="java.lang.Exception" />
+			<tx:method name="del*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" no-rollback-for="java.lang.RuntimeException" />
+			<tx:method name="insert*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.RuntimeException" />
+			<tx:method name="save*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.RuntimeException" />
+			<tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
 			<tx:method name="find*" propagation="SUPPORTS" />
 			<tx:method name="get*" propagation="SUPPORTS" />
 			<tx:method name="select*" propagation="SUPPORTS" />
 		</tx:attributes>
 	</tx:advice>
 
-	<aop:config>
-		<!--把事务控制在Service层 -->
-		<aop:pointcut id="pc" expression="execution(public * com.single.pro.service.*.*(..))" />
-		<aop:advisor pointcut-ref="pc" advice-ref="userTxAdvice" />
-	</aop:config>
-
 	<bean id="manyDataSourceAspect" class="com.single.pro.holder.ManyDataSourceAspect" />
 	<aop:config>
 		<aop:aspect id="cds" ref="manyDataSourceAspect">
-			<aop:pointcut id="tx" expression="execution(public * com.single.pro.service.*.*(..))" />
+			<aop:pointcut id="tx" expression="execution(* *..*Impl.*(..))" />
 			<aop:before pointcut-ref="tx" method="switchDB" />
 		</aop:aspect>
+	</aop:config>
+	
+	<aop:config>
+		<!--把事务控制在Service层 -->
+		<aop:pointcut id="pc" expression="execution(* *..*Impl.*(..))" />
+		<aop:advisor pointcut-ref="pc" advice-ref="userTxAdvice" />
 	</aop:config>
 
 </beans>
