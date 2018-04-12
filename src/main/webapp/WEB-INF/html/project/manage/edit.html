@@ -18,7 +18,7 @@
     	.text-primary {color: #2c3b41;}
     	.form-group {margin-top: 0;margin-bottom: 0px;}
     	.form-group label.control-label{color:#484848;margin: 0px 0px 0px 6px;}
-    	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 12px;width: 100% !important;}
+    	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 12px;width: 100% !important;height: 38px;}
     	.m-style .active {background: #2c3b41;border-color: #2c3b41;}
     	.m-style a:hover {background: #2c3b41;border-color: #2c3b41;}
     	.layui-layer-setwin .layui-layer-close1 {background-position: 0px 0px;cursor: pointer;}
@@ -60,6 +60,25 @@
                    </div>
                    <div class="col-xs-6">
                        <div class="form-group">
+                           <label class="control-label">公司 <span style="color:red">*</span></label>
+                           <select v-model="project.companyId" class="form-control" @change="loadBranchCompanies">
+                           		<option value="">请选择一个公司</option>
+                           		<#list companies as item>
+                           			<option value="${item.id!}">${item.name}</option>
+                           		</#list>
+                           </select>
+                       </div>
+                   </div>
+                   <div class="col-xs-6">
+                       <div class="form-group">
+                           <label class="control-label">子公司</label>
+                           <select v-model="project.branchCompanyId" class="form-control">
+                           		<option v-for="item in project.branchCompanies" v-bind:value="item.groupId">{{ item.companyName }}</option>
+                           </select>
+                       </div>
+                   </div>
+                   <div class="col-xs-6">
+                       <div class="form-group">
                            <label class="control-label">联系人</label>
                            <input v-model="project.contacts" type="text" class="form-control">
                        </div>
@@ -76,9 +95,6 @@
                            <textarea v-model="project.remarks" class="form-control" style="height: 80px;margin-top: 8px;"></textarea>
                            <textarea style="display: none" id="project-remarks">${project.remarks!}</textarea>
                        </div>
-                   </div>
-                   <div class="col-xs-12">
-                   		<p>※ 说明：项目名称唯一</p>
                    </div>
                    <div class="col-xs-12" style="text-align: center;">
                        <button type="submit" class="btn btn-success search-btn" @click="submit">保存</button>
@@ -109,6 +125,9 @@
    	     			type: '${project.type!}',
    	     			coveredArea: '${project.coveredArea!}',
    	     			workerNum: '${project.workerNum!}',
+   	     			companyId: '${project.companyId!}',
+   	     			branchCompanies: [],
+   	     			branchCompanyId: '${project.branchCompanyId!}',
    	     			contacts: '${project.contacts!}',
    	     			contactTel: '${project.contactTel!}',
    	     			remarks: '',
@@ -131,6 +150,17 @@
 	          			_this.closeLoading(loading);
           			});
 			    },
+			    loadBranchCompanies: function() {
+	      			var _this = this;
+			    	new Promise(function (resolve, reject) {
+          				post('${rc.contextPath}/company/branchCompanies', {
+          					companyId: _this.project.companyId
+          				}, resolve, reject);
+          			}).then(function(data){
+          				_this.project.branchCompanies = data;
+          			}).catch(function (reason) {
+          			});
+			    },
 			    loading: function() {
 			    	return layer.load(0, {shade: [0.1, '#EEE']});
 			    },
@@ -141,6 +171,7 @@
       		mounted: function () {
       			var _this = this;
       			_this.project.remarks = $("#project-remarks").val();
+      			_this.loadBranchCompanies();
       		}
 		})
 	})

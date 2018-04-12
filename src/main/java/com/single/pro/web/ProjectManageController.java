@@ -28,6 +28,7 @@ import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
 import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.cache.CacheUtil;
+import com.single.pro.entity.Company;
 import com.single.pro.entity.Project;
 import com.single.pro.entity.ProjectDraw;
 import com.single.pro.entity.ProjectProduct;
@@ -35,6 +36,7 @@ import com.single.pro.entity.ProjectWork;
 import com.single.pro.entity.SystemUser;
 import com.single.pro.model.DictionaryItemModel;
 import com.single.pro.model.ProjectModel;
+import com.single.pro.service.CompanyService;
 import com.single.pro.service.ProjectDrawService;
 import com.single.pro.service.ProjectProductService;
 import com.single.pro.service.ProjectService;
@@ -62,6 +64,8 @@ public class ProjectManageController extends BaseController {
 	ProjectProductService projectProductService;
 	@Autowired
 	ProjectCustomService projectCustomService;
+	@Autowired
+	CompanyService companyService;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -147,6 +151,12 @@ public class ProjectManageController extends BaseController {
 		List<DictionaryItemModel> types = baseDataCacheUtil.getDictItems("XMLX");
 		mav.addObject("types", types);
 
+		Wrapper<Company> companyWrapper = new EntityWrapper<>();
+		companyWrapper.eq("group_id", "");
+		companyWrapper.orderBy("name", true);
+		List<Company> companies = companyService.selectList(companyWrapper);
+		mav.addObject("companies", companies);
+
 		String csrf = IdUtil.id();
 		CacheUtil.set("single:system:form", "project_manage_csrf", csrf);
 		mav.addObject("csrf", csrf);
@@ -169,6 +179,12 @@ public class ProjectManageController extends BaseController {
 
 		List<DictionaryItemModel> types = baseDataCacheUtil.getDictItems("XMLX");
 		mav.addObject("types", types);
+		
+		Wrapper<Company> companyWrapper = new EntityWrapper<>();
+		companyWrapper.eq("group_id", "");
+		companyWrapper.orderBy("name", true);
+		List<Company> companies = companyService.selectList(companyWrapper);
+		mav.addObject("companies", companies);
 
 		String csrf = IdUtil.id();
 		CacheUtil.set("single:system:form", "project_manage_csrf", csrf);
@@ -386,18 +402,18 @@ public class ProjectManageController extends BaseController {
 
 		String csrf = request.getParameter("csrf");
 		if (StringUtils.isBlank(csrf)) {
-			res.put("message", "无效的表单，E:01");
+			res.put("message", "无效的表单，E:01，请刷新页面后重试");
 			return res;
 		}
 
 		CacheObject cacheObject = CacheUtil.get("single:system:form", "project_manage_csrf");
 		if (cacheObject == null) {
-			res.put("message", "无效的表单，E:02");
+			res.put("message", "无效的表单，E:02，请刷新页面后重试");
 			return res;
 		}
 
 		if (!csrf.equals(cacheObject.asString())) {
-			res.put("message", "无效的表单，E:03");
+			res.put("message", "无效的表单，E:03，请刷新页面后重试");
 			return res;
 		}
 
@@ -419,6 +435,15 @@ public class ProjectManageController extends BaseController {
 		if (!NumberUtils.isDigits(workerNum)) {
 			workerNum = "0";
 		}
+		String companyId = request.getParameter("companyId");
+		if (StringUtils.isBlank(companyId)) {
+			res.put("message", "请选择一个公司，如果不存在请先创建");
+			return res;
+		}
+		String branchCompanyId = request.getParameter("branchCompanyId");
+		if (StringUtils.isBlank(branchCompanyId)) {
+			branchCompanyId = "";
+		}
 		String contacts = request.getParameter("contacts");
 		if (StringUtils.isBlank(contacts)) {
 			res.put("message", "请输入项目联系人名称");
@@ -429,17 +454,6 @@ public class ProjectManageController extends BaseController {
 			res.put("message", "请输入项目联系人联系方式");
 			return res;
 		}
-
-		String companyId = request.getParameter("companyId");
-		if (StringUtils.isBlank(companyId)) {
-			companyId = "";
-		}
-
-		String branchCompanyId = request.getParameter("branchCompanyId");
-		if (StringUtils.isBlank(branchCompanyId)) {
-			branchCompanyId = "";
-		}
-
 		String provincial = request.getParameter("provincial");
 		if (StringUtils.isBlank(provincial)) {
 			res.put("message", "请选择项目所在省");
@@ -581,6 +595,15 @@ public class ProjectManageController extends BaseController {
 		if (!NumberUtils.isDigits(workerNum)) {
 			workerNum = "0";
 		}
+		String companyId = request.getParameter("companyId");
+		if (StringUtils.isBlank(companyId)) {
+			res.put("message", "请选择一个公司，如果不存在请先创建");
+			return res;
+		}
+		String branchCompanyId = request.getParameter("branchCompanyId");
+		if (StringUtils.isBlank(branchCompanyId)) {
+			branchCompanyId = "";
+		}
 		String contacts = request.getParameter("contacts");
 		if (StringUtils.isBlank(contacts)) {
 			res.put("message", "请输入项目联系人名称");
@@ -599,6 +622,8 @@ public class ProjectManageController extends BaseController {
 		project.setType(type);
 		project.setWorkerNum(new Integer(workerNum));
 		project.setCoveredArea(coveredArea);
+		project.setCompanyId(companyId);
+		project.setBranchCompanyId(branchCompanyId);
 		project.setContacts(contacts);
 		project.setContactTel(contactTel);
 		project.setRemarks(remarks);

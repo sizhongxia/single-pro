@@ -163,6 +163,37 @@ public class CompanyController extends BaseController {
 		return list;
 	}
 
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/branchCompanies")
+	public List<Map<String, String>> branchCompanies(HttpServletRequest request) {
+		List<Map<String, String>> list = new ArrayList<>();
+		Map<String, String> item = new HashMap<>();
+		item.put("groupId", "");
+		item.put("companyName", "无");
+		list.add(item);
+
+		String companyId = request.getParameter("companyId");
+		if (StringUtils.isBlank(companyId)) {
+			return list;
+		}
+		Wrapper<Company> companyWrapper = new EntityWrapper<>();
+		companyWrapper.eq("group_id", companyId);
+		companyWrapper.orderBy("name", true);
+		List<Company> companys = companyService.selectList(companyWrapper);
+		if (companys == null || companys.isEmpty()) {
+			return list;
+		}
+		for (Company company : companys) {
+			item = new HashMap<>();
+			item.put("groupId", company.getId());
+			item.put("companyName", company.getName());
+			list.add(item);
+		}
+
+		return list;
+	}
+
 	@RequiresAuthentication
 	@RequestMapping(value = { "/form" }, method = { RequestMethod.GET })
 	public ModelAndView form(HttpServletRequest request) {
