@@ -32,7 +32,7 @@
             <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2">
 	            <div class="container-fluid">
 	                <div class="card">
-	                    <div class="card-content table-responsive" style="padding: 20px 40px;">
+	                    <div class="card-content table-responsive" style="padding: 20px 40px;border: none;">
 	                    	<div class="col-xs-12">
 	                    		<h5>新增项目 Project</h5>
 	            				<input v-model="csrf" type="hidden"/>
@@ -42,13 +42,13 @@
 		                  	</div>
 	                        <div class="col-xs-6">
 		                       <div class="form-group">
-		                           <label class="control-label">项目名称</label>
+		                           <label class="control-label">项目名称 <span style="color:red">*</span></label>
 		                           <input v-model="name" type="text" class="form-control">
 		                       </div>
 		                   </div>
 		                   <div class="col-xs-6">
 		                       <div class="form-group">
-		                           <label class="control-label">项目类型</label>
+		                           <label class="control-label">项目类型 <span style="color:red">*</span></label>
 		                           <select v-model="type" class="form-control">
 		                           	<#list types as type>
 		                           		<option value="${type.code!}">${type.name!}</option>
@@ -69,17 +69,31 @@
 		                       </div>
 		                   </div>
 		                   <div class="col-xs-12" style="border-bottom: 1px solid #EEE;margin-bottom: 12px;padding-bottom: 4px;">
-		                      	<label class="control-label">联系人</label>
+		                      	<label class="control-label">公司&联系人</label>
 		                   </div>
 		                   <div class="col-xs-6">
 		                       <div class="form-group">
-		                           <label class="control-label">联系人</label>
+		                           <label class="control-label">公司</label>
+		                           <select v-model="companyId" class="form-control">
+		                           </select>
+		                       </div>
+		                   </div>
+		                   <div class="col-xs-6">
+		                       <div class="form-group">
+		                           <label class="control-label">子公司</label>
+		                           <select v-model="branchCompanyId" class="form-control">
+		                           </select>
+		                       </div>
+		                   </div>
+		                   <div class="col-xs-6">
+		                       <div class="form-group">
+		                           <label class="control-label">联系人 <span style="color:red">*</span></label>
 		                           <input v-model="contacts" type="text" class="form-control">
 		                       </div>
 		                   </div>
 		                   <div class="col-xs-6">
 		                       <div class="form-group">
-		                           <label class="control-label">联系电话</label>
+		                           <label class="control-label">联系电话 <span style="color:red">*</span></label>
 		                           <input v-model="contactTel" type="text" class="form-control">
 		                       </div>
 		                   </div>
@@ -88,7 +102,7 @@
 		                   </div>
 		                   <div class="col-xs-4">
 		                       <div class="form-group">
-		                           <label class="control-label">省</label>
+		                           <label class="control-label">省 <span style="color:red">*</span></label>
 		                           <select v-model="provincial" class="form-control">
 		                           		<option v-for="item in provincials" v-bind:value="item.code">{{ item.name }}</option>
 		                           </select>
@@ -96,7 +110,7 @@
 		                   </div>
 		                   <div class="col-xs-4">
 		                       <div class="form-group">
-		                           <label class="control-label">市</label>
+		                           <label class="control-label">市 <span style="color:red">*</span></label>
 		                           <select v-model="city" class="form-control">
 		                           		<option v-for="item in citys" v-bind:value="item.code">{{ item.name }}</option>
 		                           </select>
@@ -104,7 +118,7 @@
 		                   </div>
 		                   <div class="col-xs-4">
 		                       <div class="form-group">
-		                           <label class="control-label">区(县)</label>
+		                           <label class="control-label">区(县) <span style="color:red">*</span></label>
 		                           <select v-model="county" class="form-control">
 		                           		<option v-for="item in countys" v-bind:value="item.code">{{ item.name }}</option>
 		                           </select>
@@ -141,7 +155,7 @@
 		                       </div>
 		                   </div>
 		                   <div class="col-xs-12">
-		                   		<p>※ 说明：项目名称唯一</p>
+		                   		<p>※ 说明：项目名称唯一； <span style="color:red">*</span> 为必填项</p>
 		                   </div>
 		                   <div class="col-xs-12" style="text-align: center;">
 		                       <button type="submit" class="btn btn-success search-btn" @click="submit">保存</button>
@@ -186,6 +200,8 @@
     			address: '',
     			longitude: '116.397428',
     			latitude: '39.90923',
+    			companyId: '',
+    			branchCompanyId: '',
     			contacts: '',
     			contactTel: '',
     			remarks: '',
@@ -195,15 +211,31 @@
       			submit: function(page) {
       				var _this = this;
           			let loading = _this.loading();
-          			
           			new Promise(function (resolve, reject) {
-          				post('${rc.contextPath}/project/manage/save', _this.project, resolve, reject);
+          				post('${rc.contextPath}/project/manage/save', {
+          					name: _this.name,
+          	    			type: _this.type,
+          	    			coveredArea: _this.coveredArea,
+          	    			workerNum: _this.workerNum,
+          	    			provincial: _this.provincial,
+          	    			city: _this.city,
+          	    			county: _this.county,
+          	    			address: _this.address,
+          	    			longitude: _this.longitude,
+          	    			latitude: _this.latitude,
+          	    			contacts: _this.contacts,
+          	    			contactTel: _this.contactTel,
+          	    			remarks: _this.remarks,
+          	    			csrf: _this.csrf
+          				}, resolve, reject);
           			}).then(function(data){
           				layer.msg(data.message);
           				if(data.statusCode == 200) {
+		      					window.location.reload(true); 
           				}
 	          			_this.closeLoading(loading);
           			}).catch(function (reason) {
+          				console.info(reason);
 	          			_this.closeLoading(loading);
           			});
 			    },
