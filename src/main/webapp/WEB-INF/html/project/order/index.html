@@ -35,13 +35,13 @@
                             <div class="col-md-2 col-xs-5">
                                 <div class="form-group">
                                     <label class="control-label">订单编号</label>
-                                    <input v-model="searchParam.order" type="text" placeholder="按订单编号进行查询" class="form-control">
+                                    <input v-model="searchParam.orderNo" type="text" placeholder="按订单编号进行查询" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-2 col-xs-5">
                                 <div class="form-group">
-                                    <label class="control-label">项目任务</label>
-                                    <input v-model="searchParam.contacts" type="text" placeholder="按项目任务查询" class="form-control">
+                                    <label class="control-label">项目批次</label>
+                                    <input v-model="searchParam.workNo" type="text" placeholder="按项目批次查询" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-2 col-xs-5">
@@ -60,46 +60,51 @@
                             <thead class="text-primary">
                             	<tr>
 	                                <th class="text-center">序号</th>
-	                                <th>项目名称</th>
-	                                <th class="text-center">项目类型</th>
-	                                <th>所属公司</th>
-	                                <th>建筑面积</th>
-	                                <th class="text-center">劳务人数</th>
-	                                <th>联系人</th>
-	                                <th class="text-center">联系人电话</th>
+	                                <th>订单编号</th>
+	                                <th>项目</th>
+	                                <th class="text-center">项目批次</th>
+	                                <th>产品名称</th>
+	                                <th class="text-center">产品种类</th>
+	                                <th class="text-center">产品类型</th>
+	                                <th class="text-center">规格型号</th>
+	                                <th class="text-center">开工时间</th>
+	                                <th class="text-center">预计天数</th>
+	                                <th class="text-center">订单费用</th>
+	                                <th class="text-center">订单状态</th>
 	                                <th class="text-center">创建时间</th>
 	                                <th class="text-center">操作</th>
                                 </tr>
                             </thead>
                             <tbody v-if="list.length == 0">
                             	<tr>
-                            		<td colspan="10" align="center">
-                            			<span class="text-primary">暂无项目数据</span>
+                            		<td colspan="14" align="center">
+                            			<span class="text-primary">暂无订单数据</span>
                             		</td>
                             	</tr>
                             </tbody>
                             <tbody v-if="list.length > 0">
                                 <tr v-for="(item, index) in list">
                                     <td class="text-center">{{ (searchParam.page - 1) * searchParam.rows + index+1 }}</td>
-                                    <td>{{ item.name }}</td>
-                                    <td class="text-center">{{ item.type }}</td>
-                                    <td>{{ item.companyName }}</td>
-                                    <td>{{ item.coveredArea }}</td>
-                                    <td class="text-center">{{ item.workerNum }}</td>
-                                    <td>{{ item.contacts }}</td>
-                                    <td class="text-center">{{ item.contactTel }}</td>
+                                    <td>{{ item.orderNo }}</td>
+                                    <td>{{ item.projectName }}</td>
+                                    <td class="text-center">{{ item.workNo }}</td>
+                                    <td>{{ item.productName }}</td>
+                                    <td class="text-center">{{ item.productKind }}</td>
+                                    <td class="text-center">{{ item.productType }}</td>
+                                    <td class="text-center">{{ item.productModel }}</td>
+                                    <td class="text-center">{{ item.expectStime }}</td>
+                                    <td class="text-center">{{ item.expectDays }}</td>
+                                    <td class="text-center">{{ item.orderCost }}</td>
+                                    <td class="text-center">{{ item.orderStatus }}</td>
                                     <td class="text-center">{{ item.createTime }}</td>
                                     <td class="text-center">
-                                    	<a @click="edit(item.id)" href="javascript:;">修改</a>
-                                    	<a @click="addr(item.id)" href="javascript:;">位置</a>
-                                    	<a @click="work(item.id)" href="javascript:;">任务</a>
-                                    	<a @click="attachment(item.id)" href="javascript:;">附件</a>
+                                    	<a href="javascript:;">详细</a>
                                     </td>
                                 </tr>
                             </tbody>
                             <tfoot>
                             	<tr>
-                            		<td colspan="10">
+                            		<td colspan="14">
                             			<div id="Page-M-box" class="m-style"></div>
                             		</td>
                             	</tr>
@@ -130,9 +135,8 @@
    	     	data: {
    	     		list: [],
    	     		searchParam: {
-   	     			name: '',
-   	     			type: '',
-   	     			contacts: '',
+   	     			orderNo: '',
+   	     			workNo: '',
    	     			ctime: '',
    	     			page: 1,
    	     			rows:10
@@ -146,10 +150,9 @@
           				page = _this.searchParam.page;
           			}
           			new Promise(function (resolve, reject) {
-          				post('${rc.contextPath}/project/manage/data', {
-							name: _this.searchParam.name,
-							type: _this.searchParam.type,
-							contacts: _this.searchParam.contacts,
+          				post('${rc.contextPath}/project/order/data', {
+          					orderNo: _this.searchParam.orderNo,
+          					workNo: _this.searchParam.workNo,
 							ctime: _this.searchParam.ctime,
 							page: page,
 							rows: _this.searchParam.rows
@@ -174,27 +177,6 @@
 			    	var _this = this;
 			    	_this.loadProject(1);
 			    },
-			    edit: function(id) {
-			    	var _this = this;
-			    	openLayer('修改项目基础信息', '${rc.contextPath}/project/manage/edit?id=' + id, false, function() {
-			    		_this.loadProject();
-			    	});
-			    },
-			    addr: function(id) {
-			    	openLayer('项目位置信息', '${rc.contextPath}/project/manage/addr?id=' + id);
-			    },
-			    work: function(id) {
-	      			//if(navigator.cookieEnabled) {
-	      				openLayer('项目工作批次', '${rc.contextPath}/project/manage/work?id=' + id, true, function() {
-				    		//console.info(getCookieAndClean('SP_PAGE_COOKIE_WORK_ID'));
-				    	});
-	      			//} else {
-	      			//	layer.msg('请启用Cookie!!!!');
-	      			//}
-				},
-				attachment: function(id) {
-					openLayer('项目附件', '${rc.contextPath}/project/manage/attachment?id=' + id, true);
-				},
 			    loading: function() {
 			    	return layer.load(0, {shade: [0.1, '#EEE']});
 			    },

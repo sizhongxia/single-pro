@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.single.pro.service.custom.ProjectOrderCustomService">
+
+	<select id="selectProjectOrderList" parameterType="java.util.Map" resultType="com.single.pro.model.ProjectOrderModel">
+		select o.id,
+			o.order_no as orderNo,
+			o.customer_id as customerId,
+			o.worker_id as workerId,
+			pw.work_no as workNo,
+			pw.work_name as workName,
+			o.project_product_id as projectProductId,
+			o.project_name as projectName,
+			o.product_id as productId,
+			o.product_name as productName,
+			o.product_kind as productKind,
+			o.product_type as productType,
+			o.product_model as productModel,
+			o.expect_stime as expectStime,
+			o.expect_days as expectDays,
+			o.order_cost as orderCost,
+			o.deposit_cost as depositCost,
+			o.paid_cost as paidCost,
+			o.order_status as orderStatus,
+			o.create_time as createTime,
+			o.update_time as updateTime
+		 from sp_order o 
+			left join sp_project_work pw on o.worker_id = pw.id
+			<where>
+				<if test="orderNo != null">
+					and o.order_no = #{orderNo}
+				</if>
+				<if test="workNo != null">
+					and pw.work_no = #{workNo}
+				</if>
+				<if test="productKind != null">
+					and o.product_kind = #{productKind}
+				</if>
+				<if test="productType != null">
+					and o.product_type = #{productType}
+				</if>
+				<if test="orderStatus != null">
+					and o.order_status = #{orderStatus}
+				</if>
+				<if test="projectName != null">
+					and o.`project_name` like concat('%', #{projectName}, '%')
+				</if>
+				<if test="ctimeStart != null">
+					<![CDATA[ and o.`create_time` >= #{ctimeStart} ]]>
+				</if>
+				<if test="ctimeEnd != null">
+					<![CDATA[ and o.`create_time` <= #{ctimeEnd} ]]>
+				</if>
+			</where>
+			order by o.create_time desc
+	</select>
+
+</mapper>
