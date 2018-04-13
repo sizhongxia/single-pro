@@ -24,8 +24,10 @@ public class ProjectOrderModel implements Serializable {
 	private BigDecimal orderCost;
 	private BigDecimal depositCost;
 	private BigDecimal paidCost;
-	/** Y:已完成，R:进行中，N:已取消，D:待施工，W:待工人确认，P:待平台确认 */
+	/** 订单状态（Y:已完成，D:已接单，N:已取消，W:待工人确认，P:待平台确认） */
 	private String orderStatus;
+	/** 施工状态（Y:已完工，R:进行中，D:待施工） */
+	private String buildStatus;
 	private Date createTime;
 	private Date updateTime;
 
@@ -181,6 +183,14 @@ public class ProjectOrderModel implements Serializable {
 		this.orderStatus = orderStatus;
 	}
 
+	public String getBuildStatus() {
+		return buildStatus;
+	}
+
+	public void setBuildStatus(String buildStatus) {
+		this.buildStatus = buildStatus;
+	}
+
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -195,6 +205,17 @@ public class ProjectOrderModel implements Serializable {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	@Override
+	public String toString() {
+		return "ProjectOrderModel [id=" + id + ", orderNo=" + orderNo + ", customerId=" + customerId + ", workerId="
+				+ workerId + ", workNo=" + workNo + ", workName=" + workName + ", projectProductId=" + projectProductId
+				+ ", projectName=" + projectName + ", productId=" + productId + ", productName=" + productName
+				+ ", productKind=" + productKind + ", productType=" + productType + ", productModel=" + productModel
+				+ ", expectStime=" + expectStime + ", expectDays=" + expectDays + ", orderCost=" + orderCost
+				+ ", depositCost=" + depositCost + ", paidCost=" + paidCost + ", orderStatus=" + orderStatus
+				+ ", buildStatus=" + buildStatus + ", createTime=" + createTime + ", updateTime=" + updateTime + "]";
 	}
 
 }

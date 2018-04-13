@@ -12,7 +12,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-29
+ * @since 2018-04-13
  */
 @TableName("sp_order")
 public class Order implements Serializable {
@@ -99,10 +99,15 @@ public class Order implements Serializable {
 	@TableField("paid_cost")
 	private BigDecimal paidCost;
     /**
-     * 订单状态（Y:已完成，R:进行中，N:已取消，D:待施工，W:待工人确认，P:待平台确认）
+     * 订单状态（Y:已完成，D:已接单，N:已取消，W:待工人确认，P:待平台确认）
      */
 	@TableField("order_status")
 	private String orderStatus;
+    /**
+     * 施工状态（Y:已完工，R:进行中，D:待施工）
+     */
+	@TableField("build_status")
+	private String buildStatus;
     /**
      * 取消订单理由
      */
@@ -290,6 +295,14 @@ public class Order implements Serializable {
 		this.orderStatus = orderStatus;
 	}
 
+	public String getBuildStatus() {
+		return buildStatus;
+	}
+
+	public void setBuildStatus(String buildStatus) {
+		this.buildStatus = buildStatus;
+	}
+
 	public String getCancleReason() {
 		return cancleReason;
 	}
@@ -390,6 +403,7 @@ public class Order implements Serializable {
 			", depositCost=" + depositCost +
 			", paidCost=" + paidCost +
 			", orderStatus=" + orderStatus +
+			", buildStatus=" + buildStatus +
 			", cancleReason=" + cancleReason +
 			", remarks=" + remarks +
 			", workerGrade=" + workerGrade +

@@ -22,6 +22,7 @@
 			o.deposit_cost as depositCost,
 			o.paid_cost as paidCost,
 			o.order_status as orderStatus,
+			o.build_status as buildStatus,
 			o.create_time as createTime,
 			o.update_time as updateTime
 		 from sp_order o 

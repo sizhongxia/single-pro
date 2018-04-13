@@ -64,20 +64,23 @@
 	                                <th>项目</th>
 	                                <th class="text-center">项目批次</th>
 	                                <th>产品名称</th>
+                                    <!--
 	                                <th class="text-center">产品种类</th>
 	                                <th class="text-center">产品类型</th>
 	                                <th class="text-center">规格型号</th>
+	                                -->
+	                                <th class="text-center">订单状态</th>
 	                                <th class="text-center">开工时间</th>
 	                                <th class="text-center">预计天数</th>
+	                                <th class="text-center">施工状态</th>
 	                                <th class="text-center">订单费用</th>
-	                                <th class="text-center">订单状态</th>
 	                                <th class="text-center">创建时间</th>
 	                                <th class="text-center">操作</th>
                                 </tr>
                             </thead>
                             <tbody v-if="list.length == 0">
                             	<tr>
-                            		<td colspan="14" align="center">
+                            		<td colspan="12" align="center">
                             			<span class="text-primary">暂无订单数据</span>
                             		</td>
                             	</tr>
@@ -89,22 +92,25 @@
                                     <td>{{ item.projectName }}</td>
                                     <td class="text-center">{{ item.workNo }}</td>
                                     <td>{{ item.productName }}</td>
+                                    <!--
                                     <td class="text-center">{{ item.productKind }}</td>
                                     <td class="text-center">{{ item.productType }}</td>
                                     <td class="text-center">{{ item.productModel }}</td>
+                                    -->
+                                    <td class="text-center">{{ item.orderStatus }}</td>
                                     <td class="text-center">{{ item.expectStime }}</td>
                                     <td class="text-center">{{ item.expectDays }}</td>
+                                    <td class="text-center">{{ item.buildStatus }}</td>
                                     <td class="text-center">{{ item.orderCost }}</td>
-                                    <td class="text-center">{{ item.orderStatus }}</td>
                                     <td class="text-center">{{ item.createTime }}</td>
                                     <td class="text-center">
-                                    	<a href="javascript:;">详细</a>
+                                    	<a href="javascript:;" @click="detail(item.id)">详细</a>
                                     </td>
                                 </tr>
                             </tbody>
                             <tfoot>
                             	<tr>
-                            		<td colspan="14">
+                            		<td colspan="12">
                             			<div id="Page-M-box" class="m-style"></div>
                             		</td>
                             	</tr>
@@ -176,6 +182,9 @@
 			    searchForm: function() {
 			    	var _this = this;
 			    	_this.loadProject(1);
+			    },
+			    detail: function(id) {
+			    	openLayer('订单详情', '${rc.contextPath}/project/order/detail?id=' + id, true);
 			    },
 			    loading: function() {
 			    	return layer.load(0, {shade: [0.1, '#EEE']});

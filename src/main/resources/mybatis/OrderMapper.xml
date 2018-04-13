@@ -24,6 +24,7 @@
         <result column="deposit_cost" property="depositCost" />
         <result column="paid_cost" property="paidCost" />
         <result column="order_status" property="orderStatus" />
+        <result column="build_status" property="buildStatus" />
         <result column="cancle_reason" property="cancleReason" />
         <result column="remarks" property="remarks" />
         <result column="worker_grade" property="workerGrade" />
