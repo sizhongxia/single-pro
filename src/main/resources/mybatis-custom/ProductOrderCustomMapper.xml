@@ -43,6 +43,9 @@
 				<if test="orderStatus != null">
 					and o.order_status = #{orderStatus}
 				</if>
+				<if test="buildStatus != null">
+					and o.build_status = #{buildStatus}
+				</if>
 				<if test="projectName != null">
 					and o.`project_name` like concat('%', #{projectName}, '%')
 				</if>

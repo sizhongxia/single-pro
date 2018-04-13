@@ -58,6 +58,17 @@
                             </div>
                             <div class="col-md-2 col-xs-5">
                                 <div class="form-group">
+                                    <label class="control-label">状态</label>
+                                    <select v-model="searchParam.status" class="form-control">
+                                    	<option value="">全部</option>
+                                    	<option value="Y">上线</option>
+                                    	<option value="D">待发布</option>
+                                    	<option value="N">下线</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-xs-5">
+                                <div class="form-group">
                                     <label class="control-label">创建日期</label>
                                     <input v-model="searchParam.ctime" id="ctime" type="text" class="form-control">
                                 </div>
@@ -79,13 +90,14 @@
 	                                <th class="text-center">劳务人数</th>
 	                                <th>联系人</th>
 	                                <th class="text-center">联系人电话</th>
+	                                <th class="text-center">状态</th>
 	                                <th class="text-center">创建时间</th>
 	                                <th class="text-center">操作</th>
                                 </tr>
                             </thead>
                             <tbody v-if="list.length == 0">
                             	<tr>
-                            		<td colspan="10" align="center">
+                            		<td colspan="11" align="center">
                             			<span class="text-primary">暂无项目数据</span>
                             		</td>
                             	</tr>
@@ -100,6 +112,7 @@
                                     <td class="text-center">{{ item.workerNum }}</td>
                                     <td>{{ item.contacts }}</td>
                                     <td class="text-center">{{ item.contactTel }}</td>
+                                    <td class="text-center">{{ item.status }}</td>
                                     <td class="text-center">{{ item.createTime }}</td>
                                     <td class="text-center">
                                     	<a @click="edit(item.id)" href="javascript:;">修改</a>
@@ -111,7 +124,7 @@
                             </tbody>
                             <tfoot>
                             	<tr>
-                            		<td colspan="10">
+                            		<td colspan="11">
                             			<div id="Page-M-box" class="m-style"></div>
                             		</td>
                             	</tr>
@@ -145,6 +158,7 @@
    	     			name: '',
    	     			type: '',
    	     			contacts: '',
+   	     			status: '',
    	     			ctime: '',
    	     			page: 1,
    	     			rows:10
@@ -162,6 +176,7 @@
 							name: _this.searchParam.name,
 							type: _this.searchParam.type,
 							contacts: _this.searchParam.contacts,
+							status: _this.searchParam.status,
 							ctime: _this.searchParam.ctime,
 							page: page,
 							rows: _this.searchParam.rows

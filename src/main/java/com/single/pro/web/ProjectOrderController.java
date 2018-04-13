@@ -101,6 +101,10 @@ public class ProjectOrderController extends BaseController {
 		if (StringUtils.isNotBlank(orderStatus)) {
 			params.put("orderStatus", orderStatus.trim());
 		}
+		String buildStatus = request.getParameter("buildStatus");
+		if (StringUtils.isNotBlank(buildStatus)) {
+			params.put("buildStatus", buildStatus.trim());
+		}
 		String projectName = request.getParameter("projectName");
 		if (StringUtils.isNotBlank(projectName)) {
 			params.put("projectName", projectName.trim());

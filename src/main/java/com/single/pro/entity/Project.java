@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-29
+ * @since 2018-04-13
  */
 @TableName("sp_project")
 public class Project implements Serializable {
@@ -84,6 +84,10 @@ public class Project implements Serializable {
      */
 	@TableField("contact_tel")
 	private String contactTel;
+    /**
+     * 项目状态
+     */
+	private String status;
     /**
      * 备注
      */
@@ -233,6 +237,14 @@ public class Project implements Serializable {
 		this.contactTel = contactTel;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public String getRemarks() {
 		return remarks;
 	}
@@ -284,6 +296,7 @@ public class Project implements Serializable {
 			", branchCompanyId=" + branchCompanyId +
 			", contacts=" + contacts +
 			", contactTel=" + contactTel +
+			", status=" + status +
 			", remarks=" + remarks +
 			", createUserId=" + createUserId +
 			", createTime=" + createTime +

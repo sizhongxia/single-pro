@@ -22,6 +22,7 @@ public class ProjectModel implements Serializable {
 	private String companyName;
 	private String contacts;
 	private String contactTel;
+	private String status;
 	private String remarks;
 	private Date createTime;
 	private Date updateTime;
@@ -146,6 +147,14 @@ public class ProjectModel implements Serializable {
 		this.contactTel = contactTel;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public String getRemarks() {
 		return remarks;
 	}
@@ -175,8 +184,8 @@ public class ProjectModel implements Serializable {
 		return "ProjectModel [id=" + id + ", name=" + name + ", type=" + type + ", provincial=" + provincial + ", city="
 				+ city + ", county=" + county + ", address=" + address + ", longitude=" + longitude + ", latitude="
 				+ latitude + ", coveredArea=" + coveredArea + ", workerNum=" + workerNum + ", companyId=" + companyId
-				+ ", companyName=" + companyName + ", contacts=" + contacts + ", contactTel=" + contactTel
-				+ ", remarks=" + remarks + ", createTime=" + createTime + ", updateTime=" + updateTime + "]";
+				+ ", companyName=" + companyName + ", contacts=" + contacts + ", contactTel=" + contactTel + ", status="
+				+ status + ", remarks=" + remarks + ", createTime=" + createTime + ", updateTime=" + updateTime + "]";
 	}
 
 }

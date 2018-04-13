@@ -16,7 +16,8 @@
     	.text-primary {color: #2c3b41;}
     	.card [data-background-color="system"] {background: #fff;}
     	.form-group {margin-top: 0;margin-bottom: 0px;}
-    	.card .card-header {box-shadow: rgba(220, 220, 220, 0.42) 0px 0px 0px -28px, rgba(0, 0, 0, 0.12) 1px 1px 6px 0px, rgba(0, 0, 0, 0.2) 0px 0px 0px 0px; margin: 15px 15px 0px;}
+    	.card .card-header {box-shadow: none;margin: 0px;padding-bottom: 0px;}
+    	.card .card-content {padding: 0px 0px;}
     	.form-group label.control-label{color:#484848;margin: 0px 0px 0px 6px;}
     	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 12px;}
     	.m-style .active {background: #2c3b41;border-color: #2c3b41;}
@@ -35,19 +36,43 @@
                             <div class="col-md-2 col-xs-5">
                                 <div class="form-group">
                                     <label class="control-label">订单编号</label>
-                                    <input v-model="searchParam.orderNo" type="text" placeholder="按订单编号进行查询" class="form-control">
+                                    <input v-model="searchParam.orderNo" type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-2 col-xs-5">
                                 <div class="form-group">
                                     <label class="control-label">项目批次</label>
-                                    <input v-model="searchParam.workNo" type="text" placeholder="按项目批次查询" class="form-control">
+                                    <input v-model="searchParam.workNo" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-xs-5">
+                                <div class="form-group">
+                                    <label class="control-label">订单状态</label>
+                                    <select v-model="searchParam.orderStatus" class="form-control">
+                                    	<option value="">全部</option>
+                                    	<option value="Y">已完成</option>
+                                    	<option value="D">已接单</option>
+                                    	<option value="N">已取消</option>
+                                    	<option value="W">待工人确认</option>
+                                    	<option value="P">待平台确认</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-xs-5">
+                                <div class="form-group">
+                                    <label class="control-label">施工状态</label>
+                                    <select v-model="searchParam.buildStatus" class="form-control">
+                                    	<option value="">全部</option>
+                                    	<option value="Y">已完工</option>
+                                    	<option value="R">进行中</option>
+                                    	<option value="D">待施工</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-2 col-xs-5">
                                 <div class="form-group">
                                     <label class="control-label">订单日期</label>
-                                    <input v-model="searchParam.ctime" id="ctime" type="text" placeholder="按订单时间进行查询" class="form-control">
+                                    <input v-model="searchParam.ctime" id="ctime" type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-2 col-xs-2">
@@ -144,6 +169,8 @@
    	     			orderNo: '',
    	     			workNo: '',
    	     			ctime: '',
+   	     			orderStatus: '',
+   	     			buildStatus: '',
    	     			page: 1,
    	     			rows:10
    	     		}
@@ -160,6 +187,8 @@
           					orderNo: _this.searchParam.orderNo,
           					workNo: _this.searchParam.workNo,
 							ctime: _this.searchParam.ctime,
+							orderStatus: _this.searchParam.orderStatus,
+							buildStatus: _this.searchParam.buildStatus,
 							page: page,
 							rows: _this.searchParam.rows
 						}, resolve, reject);

@@ -19,6 +19,7 @@
 			c.`name` as companyName,
 			p.`contacts`,
 			p.`contact_tel` as contactTel,
+			p.`status`,
 			p.`create_time` as createTime,
 			p.`update_time` as updateTime
 		from sp_project p 
@@ -38,6 +39,9 @@
 			</if>
 			<if test="ctimeEnd != null">
 				<![CDATA[ and p.`create_time` <= #{ctimeEnd} ]]>
+			</if>
+			<if test="status != null">
+				and p.`status` = #{status}
 			</if>
 		</where>
 		order by p.`create_time` desc

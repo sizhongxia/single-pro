@@ -100,6 +100,10 @@ public class ProjectManageController extends BaseController {
 		if (StringUtils.isNotBlank(type)) {
 			params.put("type", type.trim());
 		}
+		String status = request.getParameter("status");
+		if (StringUtils.isNotBlank(status)) {
+			params.put("status", status.trim());
+		}
 		String contacts = request.getParameter("contacts");
 		if (StringUtils.isNotBlank(contacts)) {
 			params.put("contacts", contacts.trim());
@@ -131,6 +135,7 @@ public class ProjectManageController extends BaseController {
 				_map.put("coveredArea", item.getCoveredArea());
 				_map.put("contacts", item.getContacts());
 				_map.put("contactTel", item.getContactTel());
+				_map.put("status", getProjectStatusText(item.getStatus()));
 				_map.put("createTime", DateUtil.format(item.getCreateTime(), "yyyy-MM-dd HH:mm"));
 				listMap.add(_map);
 			}
@@ -141,6 +146,19 @@ public class ProjectManageController extends BaseController {
 		data.put("pageCount", pageInfo.getPages());
 
 		return data;
+	}
+
+	private String getProjectStatusText(String status) {
+		switch (status) {
+		case "Y":
+			return "上线";
+		case "D":
+			return "待发布";
+		case "N":
+			return "下线";
+		default:
+			return "";
+		}
 	}
 
 	@RequiresAuthentication
@@ -179,7 +197,7 @@ public class ProjectManageController extends BaseController {
 
 		List<DictionaryItemModel> types = baseDataCacheUtil.getDictItems("XMLX");
 		mav.addObject("types", types);
-		
+
 		Wrapper<Company> companyWrapper = new EntityWrapper<>();
 		companyWrapper.eq("group_id", "");
 		companyWrapper.orderBy("name", true);
@@ -614,6 +632,11 @@ public class ProjectManageController extends BaseController {
 			res.put("message", "请输入项目联系人联系方式");
 			return res;
 		}
+		String status = request.getParameter("status");
+		if (StringUtils.isBlank(status)) {
+			res.put("message", "请选择一个项目状态");
+			return res;
+		}
 		String remarks = request.getParameter("remarks");
 		if (StringUtils.isBlank(remarks)) {
 			remarks = "";
@@ -626,6 +649,7 @@ public class ProjectManageController extends BaseController {
 		project.setBranchCompanyId(branchCompanyId);
 		project.setContacts(contacts);
 		project.setContactTel(contactTel);
+		project.setStatus(status);
 		project.setRemarks(remarks);
 		project.setUpdateTime(DateUtil.date());
 		if (!projectService.updateById(project)) {
@@ -672,7 +696,7 @@ public class ProjectManageController extends BaseController {
 			res.put("message", "无效的表单，E:05");
 			return res;
 		}
-		
+
 		String provincial = request.getParameter("provincial");
 		if (StringUtils.isBlank(provincial)) {
 			res.put("message", "请选择项目所在省");

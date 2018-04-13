@@ -89,6 +89,15 @@
                            <input v-model="project.contactTel" type="text" class="form-control">
                        </div>
                    </div>
+                   <div class="col-xs-6">
+                       <div class="form-group">
+                           <label class="control-label">状态</label>
+                           <select v-model="project.status" class="form-control">
+                           		<option v-for="item in statuss" v-bind:value="item.value">{{ item.name }}</option>
+                           </select>
+                       </div>
+                   </div>
+                   <div style="clear: both;"></div>
                    <div class="col-xs-12">
                        <div class="form-group">
                            <label class="control-label">项目备注</label>
@@ -119,6 +128,11 @@
 		new Vue({
    	    	el: '#app',
    	     	data: {
+   	     		statuss: [
+   	     			{name:'上线',value:'Y'},
+   	     			{name:'待发布',value:'D'},
+   	     			{name:'下线',value:'N'}
+   	     		],
    	     		project: {
    	     			id: '${project.id!}',
    	     			name: '${project.name!}',
@@ -130,6 +144,7 @@
    	     			branchCompanyId: '${project.branchCompanyId!}',
    	     			contacts: '${project.contacts!}',
    	     			contactTel: '${project.contactTel!}',
+   	     			status: '${project.status!}',
    	     			remarks: '',
    	     			csrf: '${csrf!}'
    	     		}
