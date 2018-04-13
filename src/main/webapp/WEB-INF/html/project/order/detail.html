@@ -17,8 +17,8 @@
     	.category {padding: 12px;}
     	.text-primary {color: #2c3b41;}
     	.form-group {margin-top: 0;margin-bottom: 0px;}
-    	.form-group label.control-label{color:#484848;margin: 0px 0px 0px 6px;}
-    	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 14px;width: 100% !important;height: 38px;line-height: 38px;}
+    	.form-group label.control-label{margin: 0px 0px 0px 6px;}
+    	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 12px;width: 100% !important;height: 38px;line-height: 38px;color: #000;font-weight: 200;}
     	.m-style .active {background: #2c3b41;border-color: #2c3b41;}
     	.m-style a:hover {background: #2c3b41;border-color: #2c3b41;}
     	.layui-layer-setwin .layui-layer-close1 {background-position: 0px 0px;cursor: pointer;}
@@ -63,6 +63,12 @@
                        <div class="form-group">
                            <label class="control-label">所属公司</label>
                            <div class="form-control">${companyName!}</div>
+                       </div>
+                   </div>
+                   <div class="col-xs-12">
+                       <div class="form-group">
+                           <label class="control-label">详细地址</label>
+                           <div class="form-control">${address!}</div>
                        </div>
                    </div>
                    <div class="col-xs-6">
@@ -180,42 +186,60 @@
                            <div class="form-control">${remarks!}</div>
                        </div>
                    </div>
-                   <div class="col-xs-6">
-                       <div class="form-group">
-                           <label class="control-label">工人评分</label>
-                           <div class="form-control">${workerGrade!}</div>
-                       </div>
-                   </div>
-                   <div class="col-xs-6">
-                       <div class="form-group">
-                           <label class="control-label">评论时间（客户）</label>
-                           <div class="form-control">${workerCtime!}</div>
-                       </div>
-                   </div>
-                   <div class="col-xs-12">
-                       <div class="form-group">
-                           <label class="control-label">工人评语</label>
-                           <div class="form-control">${workerComment!}</div>
-                       </div>
-                   </div>
-                   <div class="col-xs-6">
-                       <div class="form-group">
-                           <label class="control-label">客户评分</label>
-                           <div class="form-control">${customerGrade!}</div>
-                       </div>
-                   </div>
-                   <div class="col-xs-6">
-                       <div class="form-group">
-                           <label class="control-label">评论时间（工人）</label>
-                           <div class="form-control">${customerCtime!}</div>
-                       </div>
-                   </div>
-                   <div class="col-xs-12">
-                       <div class="form-group">
-                           <label class="control-label">客户评语</label>
-                           <div class="form-control">${customerComment!}</div>
-                       </div>
-                   </div>
+                   <#if workerGrade != 0>
+	                   <div class="col-xs-6">
+	                       <div class="form-group">
+	                           <label class="control-label">工人评分</label>
+	                           <div class="form-control">${workerGrade!}</div>
+	                       </div>
+	                   </div>
+	                   <div class="col-xs-6">
+	                       <div class="form-group">
+	                           <label class="control-label">评论时间（客户）</label>
+	                           <div class="form-control">${workerCtime!}</div>
+	                       </div>
+	                   </div>
+	                   <div class="col-xs-12">
+	                       <div class="form-group">
+	                           <label class="control-label">工人评语</label>
+	                           <div class="form-control">${workerComment!}</div>
+	                       </div>
+	                   </div>
+	               <#else>
+	               		<div class="col-xs-12">
+	                       <div class="form-group">
+	                           <label class="control-label">客户评语</label>
+	                           <div class="form-control">暂无</div>
+	                       </div>
+	                   </div>
+                   </#if>
+                   <#if customerGrade != 0>
+	                   <div class="col-xs-6">
+	                       <div class="form-group">
+	                           <label class="control-label">客户评分</label>
+	                           <div class="form-control">${customerGrade!}</div>
+	                       </div>
+	                   </div>
+	                   <div class="col-xs-6">
+	                       <div class="form-group">
+	                           <label class="control-label">评论时间（工人）</label>
+	                           <div class="form-control">${customerCtime!}</div>
+	                       </div>
+	                   </div>
+	                   <div class="col-xs-12">
+	                       <div class="form-group">
+	                           <label class="control-label">客户评语</label>
+	                           <div class="form-control">${customerComment!}</div>
+	                       </div>
+	                   </div>
+	               <#else>
+	               		<div class="col-xs-12">
+	                       <div class="form-group">
+	                           <label class="control-label">工人评语</label>
+	                           <div class="form-control">暂无</div>
+	                       </div>
+	                   </div>
+                   </#if>
                    <div style="clear: both;"></div>
                </div>
            </div>

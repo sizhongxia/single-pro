@@ -29,6 +29,30 @@
         <div class="content">
                	<input v-model="csrf" type="hidden"/>
                	<div class="category">
+	                   <div class="col-xs-4">
+	                       <div class="form-group">
+	                           <label class="control-label">省 <span style="color:red">*</span></label>
+	                           <select v-model="provincial" class="form-control">
+	                           		<option v-for="item in provincials" v-bind:value="item.code">{{ item.name }}</option>
+	                           </select>
+	                       </div>
+	                   </div>
+	                   <div class="col-xs-4">
+	                       <div class="form-group">
+	                           <label class="control-label">市 <span style="color:red">*</span></label>
+	                           <select v-model="city" class="form-control">
+	                           		<option v-for="item in citys" v-bind:value="item.code">{{ item.name }}</option>
+	                           </select>
+	                       </div>
+	                   </div>
+	                   <div class="col-xs-4">
+	                       <div class="form-group">
+	                           <label class="control-label">区(县) <span style="color:red">*</span></label>
+	                           <select v-model="county" class="form-control">
+	                           		<option v-for="item in countys" v-bind:value="item.code">{{ item.name }}</option>
+	                           </select>
+	                       </div>
+	                   </div>
                        <div class="col-xs-12">
                            <div class="form-group">
                                <label class="control-label">详细地址(Addr.)</label>
@@ -75,11 +99,17 @@
 		new Vue({
    	    	el: '#app',
    	     	data: {
-   	     			id: '${project.id!}',
-   	     			address: '${project.address!}',
-   	     			longitude: '${project.longitude!}',
-   	     			latitude: '${project.latitude!}',
-   	     			csrf: '${csrf!}'
+     			id: '${project.id!}',
+     			provincials: [],
+    			provincial: '${project.provincial!}',
+    			citys: [],
+    			city: '${project.city!}',
+    			countys: [],
+    			county: '${project.county!}',
+     			address: '${project.address!}',
+     			longitude: '${project.longitude!}',
+     			latitude: '${project.latitude!}',
+     			csrf: '${csrf!}'
    	     	},
       		methods: {
       			submit: function(page) {
@@ -89,6 +119,9 @@
           			new Promise(function (resolve, reject) {
           				post('${rc.contextPath}/project/manage/updateAddr', {
 							id: _this.id,
+							provincial: _this.provincial,
+							city: _this.city,
+							county: _this.county,
 							address: _this.address,
 							longitude: _this.longitude,
 							latitude: _this.latitude,
@@ -101,6 +134,49 @@
 	          			_this.closeLoading(loading);
           			}).catch(function (reason) {
 	          			_this.closeLoading(loading);
+          			});
+			    },
+			    loadProvincials: function() {
+      				var _this = this;
+			    	new Promise(function (resolve, reject) {
+          				post('${rc.contextPath}/basic/city/cities', {}, resolve, reject);
+          			}).then(function(data){
+          				_this.provincials = data;
+          				setTimeout(function(){
+          					if(_this.provincial) {
+          						_this.loadCitys();
+          					}
+          				}, 20)
+          			}).catch(function (reason) {
+          			});
+			    },
+			    loadCitys: function() {
+      				var _this = this;
+			    	new Promise(function (resolve, reject) {
+          				post('${rc.contextPath}/basic/city/cities', {
+          					pcode: _this.provincial
+          				}, resolve, reject);
+          			}).then(function(data){
+          				_this.citys = data;
+          				setTimeout(function(){
+	          				setTimeout(function(){
+	          					if(_this.city) {
+	              					_this.loadCountys();
+	          					}
+	          				}, 20)
+          				}, 20)
+          			}).catch(function (reason) {
+          			});
+			    },
+			    loadCountys: function() {
+      				var _this = this;
+			    	new Promise(function (resolve, reject) {
+          				post('${rc.contextPath}/basic/city/cities', {
+          					pcode: _this.city
+          				}, resolve, reject);
+          			}).then(function(data){
+          				_this.countys = data;
+          			}).catch(function (reason) {
           			});
 			    },
 			    changeLngLat: function(val, oldVal) {
@@ -135,18 +211,26 @@
 			    }
       		},
       		watch:{
-      			   longitude: {
-	      			    handler: 'changeLngLat'
-      			    },
-      				latitude: {
-      					handler: 'changeLngLat'
-      				},
-      				address: {
-      					handler: 'changeAddr'
-      				}
+				provincial: {
+					handler: 'loadCitys'
+				},
+				city: {
+					handler: 'loadCountys'
+				},
+   			   	longitude: {
+    			    handler: 'changeLngLat'
+   			    },
+   				latitude: {
+   					handler: 'changeLngLat'
+   				},
+   				address: {
+   					handler: 'changeAddr'
+   				}
       		},
       		mounted: function () {
       			var _this = this;
+      			
+      			_this.loadProvincials();
 
       			var lng = _this.longitude == '0'? '116.397428' : _this.longitude;
       			var lat = _this.latitude == '0'? '39.90923' : _this.latitude;

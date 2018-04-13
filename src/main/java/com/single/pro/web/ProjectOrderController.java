@@ -21,13 +21,19 @@ import org.springframework.web.servlet.ModelAndView;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
+import com.single.pro.entity.Company;
 import com.single.pro.entity.Order;
 import com.single.pro.entity.Project;
+import com.single.pro.entity.ProjectProduct;
 import com.single.pro.entity.ProjectWork;
+import com.single.pro.entity.User;
 import com.single.pro.model.ProjectOrderModel;
+import com.single.pro.service.CompanyService;
 import com.single.pro.service.OrderService;
+import com.single.pro.service.ProjectProductService;
 import com.single.pro.service.ProjectService;
 import com.single.pro.service.ProjectWorkService;
+import com.single.pro.service.UserService;
 import com.single.pro.service.custom.ProjectOrderCustomService;
 import com.xiaoleilu.hutool.date.DateUtil;
 
@@ -44,7 +50,13 @@ public class ProjectOrderController extends BaseController {
 	@Autowired
 	ProjectWorkService projectWorkService;
 	@Autowired
+	ProjectProductService projectProductService;
+	@Autowired
 	ProjectService projectService;
+	@Autowired
+	CompanyService companyService;
+	@Autowired
+	UserService userService;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -122,8 +134,9 @@ public class ProjectOrderController extends BaseController {
 				_map.put("productId", item.getProductId());
 				_map.put("productName", item.getProductName());
 				/*
-				 * _map.put("productKind", item.getProductKind()); _map.put("productType",
-				 * item.getProductType()); _map.put("productModel", item.getProductModel());
+				 * _map.put("productKind", item.getProductKind());
+				 * _map.put("productType", item.getProductType());
+				 * _map.put("productModel", item.getProductModel());
 				 */
 				_map.put("expectStime", DateUtil.format(item.getExpectStime(), "yyyy-MM-dd"));
 				_map.put("expectDays", item.getExpectDays());
@@ -188,7 +201,12 @@ public class ProjectOrderController extends BaseController {
 			return new ModelAndView("error/invalid_parameter");
 		}
 
-		ProjectWork projectWork = projectWorkService.selectById(order.getWorkerId());
+		ProjectProduct projectProduct = projectProductService.selectById(order.getProjectProductId());
+		if (projectProduct == null) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+
+		ProjectWork projectWork = projectWorkService.selectById(projectProduct.getWorkNo());
 		if (projectWork == null) {
 			return new ModelAndView("error/invalid_parameter");
 		}
@@ -198,38 +216,52 @@ public class ProjectOrderController extends BaseController {
 			return new ModelAndView("error/invalid_parameter");
 		}
 
+		Company company = companyService.selectById(project.getCompanyId());
+		if (company == null) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+
+		User customerUser = userService.selectById(order.getCustomerId());
+		if (customerUser == null) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+		User workerUser = userService.selectById(order.getWorkerId());
+		if (workerUser == null) {
+			return new ModelAndView("error/invalid_parameter");
+		}
+
 		mav.addObject("orderNo", order.getOrderNo());
 		mav.addObject("orderTime", DateUtil.format(order.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
 		mav.addObject("projectName", project.getName());
-		mav.addObject("workNo", "");
-		mav.addObject("city", "");
-		mav.addObject("companyName", "");
-		mav.addObject("companyContacts", "");
-		mav.addObject("companyContactTel", "");
-		mav.addObject("customerName", "");
-		mav.addObject("customerTel", "");
-		mav.addObject("workerName", "");
-		mav.addObject("workerTel", "");
-		mav.addObject("productName", "");
-		mav.addObject("productModel", "");
-		mav.addObject("productKindName", "");
-		mav.addObject("productTypeName", "");
-		mav.addObject("expectStime", "");
-		mav.addObject("expectDays", "");
-		mav.addObject("orderCost", "");
-		mav.addObject("depositCost", "");
-		mav.addObject("paidCost", "");
-		mav.addObject("orderStatus", "");
-		mav.addObject("buildStatus", "");
-		mav.addObject("cancleReason", "");
-		mav.addObject("remarks", "");
-		mav.addObject("workerGrade", "");
-		mav.addObject("workerCtime", "");
-		mav.addObject("workerComment", "");
-		mav.addObject("customerGrade", "");
-		mav.addObject("customerCtime", "");
-		mav.addObject("customerComment", "");
-
+		mav.addObject("workNo", projectWork.getWorkNo());
+		mav.addObject("city", baseDataCacheUtil.getCityName(project.getCity()));
+		mav.addObject("address", project.getAddress());
+		mav.addObject("companyName", company.getName());
+		mav.addObject("companyContacts", company.getContacts());
+		mav.addObject("companyContactTel", company.getContactTel());
+		mav.addObject("customerName", customerUser.getUserName());
+		mav.addObject("customerTel", customerUser.getPhoneNo());
+		mav.addObject("workerName", workerUser.getUserName());
+		mav.addObject("workerTel", workerUser.getPhoneNo());
+		mav.addObject("productName", order.getProductName());
+		mav.addObject("productModel", order.getProductModel());
+		mav.addObject("productKindName", order.getProductKind());
+		mav.addObject("productTypeName", order.getProductType());
+		mav.addObject("expectStime", DateUtil.format(order.getExpectStime(), "yyyy-MM-dd"));
+		mav.addObject("expectDays", order.getExpectDays());
+		mav.addObject("orderCost", order.getOrderCost());
+		mav.addObject("depositCost", order.getDepositCost());
+		mav.addObject("paidCost", order.getPaidCost());
+		mav.addObject("orderStatus", getOrderStatusText(order.getOrderStatus()));
+		mav.addObject("buildStatus", getBuildStatusText(order.getBuildStatus()));
+		mav.addObject("cancleReason", order.getCancleReason());
+		mav.addObject("remarks", order.getRemarks());
+		mav.addObject("workerGrade", order.getWorkerGrade());
+		mav.addObject("workerCtime", DateUtil.format(order.getWorkerCTime(), "yyyy-MM-dd HH:mm:ss"));
+		mav.addObject("workerComment", order.getWorkerComment());
+		mav.addObject("customerGrade", order.getCustomerGrade());
+		mav.addObject("customerCtime", DateUtil.format(order.getCustomerCTime(), "yyyy-MM-dd HH:mm:ss"));
+		mav.addObject("customerComment", order.getCustomerComment());
 		return mav;
 	}
 

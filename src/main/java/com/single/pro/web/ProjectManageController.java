@@ -672,6 +672,24 @@ public class ProjectManageController extends BaseController {
 			res.put("message", "无效的表单，E:05");
 			return res;
 		}
+		
+		String provincial = request.getParameter("provincial");
+		if (StringUtils.isBlank(provincial)) {
+			res.put("message", "请选择项目所在省");
+			return res;
+		}
+
+		String city = request.getParameter("city");
+		if (StringUtils.isBlank(city)) {
+			res.put("message", "请选择项目所在市");
+			return res;
+		}
+
+		String county = request.getParameter("county");
+		if (StringUtils.isBlank(county)) {
+			res.put("message", "请选择项目所在区(县)");
+			return res;
+		}
 
 		String address = request.getParameter("address");
 		if (StringUtils.isBlank(address)) {
@@ -686,7 +704,9 @@ public class ProjectManageController extends BaseController {
 		if (StringUtils.isBlank(latitude)) {
 			latitude = "0";
 		}
-
+		project.setProvincial(provincial);
+		project.setCity(city);
+		project.setCounty(county);
 		project.setAddress(address);
 		project.setLongitude(longitude);
 		project.setLatitude(latitude);
