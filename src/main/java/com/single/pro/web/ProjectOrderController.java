@@ -21,20 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
-import com.single.pro.entity.Company;
 import com.single.pro.entity.Order;
-import com.single.pro.entity.Project;
-import com.single.pro.entity.ProjectProduct;
-import com.single.pro.entity.ProjectWork;
-import com.single.pro.entity.User;
-import com.single.pro.model.ProjectOrderModel;
 import com.single.pro.service.CompanyService;
 import com.single.pro.service.OrderService;
-import com.single.pro.service.ProjectProductService;
 import com.single.pro.service.ProjectService;
 import com.single.pro.service.ProjectWorkService;
 import com.single.pro.service.UserService;
-import com.single.pro.service.custom.ProjectOrderCustomService;
 import com.xiaoleilu.hutool.date.DateUtil;
 
 @Controller
@@ -44,13 +36,9 @@ public class ProjectOrderController extends BaseController {
 	@Autowired
 	BaseDataCacheUtil baseDataCacheUtil;
 	@Autowired
-	ProjectOrderCustomService projectOrderCustomService;
-	@Autowired
 	OrderService orderService;
 	@Autowired
 	ProjectWorkService projectWorkService;
-	@Autowired
-	ProjectProductService projectProductService;
 	@Autowired
 	ProjectService projectService;
 	@Autowired
@@ -119,30 +107,27 @@ public class ProjectOrderController extends BaseController {
 		}
 
 		PageHelper.startPage(new Integer(pageStr), new Integer(rowsStr));
-		List<ProjectOrderModel> list = projectOrderCustomService.selectProjectOrderList(params);
-		PageInfo<ProjectOrderModel> pageInfo = new PageInfo<ProjectOrderModel>(list);
+		List<Order> list = orderService.selectList(null);
+		PageInfo<Order> pageInfo = new PageInfo<Order>(list);
 		List<Map<String, Object>> listMap = new ArrayList<>();
 
 		if (list != null && list.size() > 0) {
 			DecimalFormat df = new DecimalFormat("#0.00");
 			Map<String, Object> _map = null;
-			for (ProjectOrderModel item : list) {
+			for (Order item : list) {
 				_map = new HashMap<>();
 				_map.put("id", item.getId());
 				_map.put("orderNo", item.getOrderNo());
 				_map.put("customerId", item.getCustomerId());
 				_map.put("workerId", item.getWorkerId());
-				_map.put("workNo", item.getWorkNo());
-				_map.put("workName", item.getWorkName());
 				_map.put("projectName", item.getProjectName());
 				_map.put("productId", item.getProductId());
 				_map.put("productName", item.getProductName());
 				/*
-				 * _map.put("productKind", item.getProductKind());
-				 * _map.put("productType", item.getProductType());
-				 * _map.put("productModel", item.getProductModel());
+				 * _map.put("productKind", item.getProductKind()); _map.put("productType",
+				 * item.getProductType()); _map.put("productModel", item.getProductModel());
 				 */
-				_map.put("expectStime", DateUtil.format(item.getExpectStime(), "yyyy-MM-dd"));
+				_map.put("expectTime", item.getExpectTime());
 				_map.put("expectDays", item.getExpectDays());
 				_map.put("orderCost", df.format(item.getOrderCost()));
 				_map.put("depositCost", df.format(item.getDepositCost()));
@@ -194,78 +179,87 @@ public class ProjectOrderController extends BaseController {
 	@RequiresAuthentication
 	@RequestMapping(value = { "/detail" }, method = { RequestMethod.GET })
 	public ModelAndView detail(HttpServletRequest request) throws Exception {
-		ModelAndView mav = new ModelAndView("project/order/detail");
+		ModelAndView mav = new ModelAndView("error/error");
 
 		String id = request.getParameter("id");
 		if (StringUtils.isBlank(id)) {
-			return new ModelAndView("error/invalid_parameter");
+			mav.addObject("msg", "参数“id”丢失");
+			return mav;
 		}
 		Order order = orderService.selectById(id);
 		if (order == null) {
-			return new ModelAndView("error/invalid_parameter");
+			mav.addObject("msg", "通过参数 id:" + id + " 未找到有效的订单信息");
+			return mav;
 		}
 
-		ProjectProduct projectProduct = projectProductService.selectById(order.getProjectProductId());
-		if (projectProduct == null) {
-			return new ModelAndView("error/invalid_parameter");
-		}
+//		ProjectProduct projectProduct = projectProductService.selectById(order.getProjectProductId());
+//		if (projectProduct == null) {
+//			mav.addObject("msg", "通过 id:" + order.getProjectProductId() + " 未找到有效的项目产品记录");
+//			return mav;
+//		}
+//
+//		ProjectWork projectWork = projectWorkService.selectById(projectProduct.getWorkNo());
+//		if (projectWork == null) {
+//			mav.addObject("msg", "通过 id: " + projectProduct.getWorkNo() + " 未找到有效的项目工作批次");
+//			return mav;
+//		}
+//
+//		Project project = projectService.selectById(projectWork.getProjectId());
+//		if (project == null) {
+//			mav.addObject("msg", "通过 id:" + projectWork.getProjectId() + " 未找到有效的项目");
+//			return mav;
+//		}
 
-		ProjectWork projectWork = projectWorkService.selectById(projectProduct.getWorkNo());
-		if (projectWork == null) {
-			return new ModelAndView("error/invalid_parameter");
-		}
-
-		Project project = projectService.selectById(projectWork.getProjectId());
-		if (project == null) {
-			return new ModelAndView("error/invalid_parameter");
-		}
-
-		Company company = companyService.selectById(project.getCompanyId());
-		if (company == null) {
-			return new ModelAndView("error/invalid_parameter");
-		}
-
-		User customerUser = userService.selectById(order.getCustomerId());
-		if (customerUser == null) {
-			return new ModelAndView("error/invalid_parameter");
-		}
-		User workerUser = userService.selectById(order.getWorkerId());
-		if (workerUser == null) {
-			return new ModelAndView("error/invalid_parameter");
-		}
-
-		mav.addObject("orderNo", order.getOrderNo());
-		mav.addObject("orderTime", DateUtil.format(order.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
-		mav.addObject("projectName", project.getName());
-		mav.addObject("workNo", projectWork.getWorkNo());
-		mav.addObject("city", baseDataCacheUtil.getCityName(project.getCity()));
-		mav.addObject("address", project.getAddress());
-		mav.addObject("companyName", company.getName());
-		mav.addObject("companyContacts", company.getContacts());
-		mav.addObject("companyContactTel", company.getContactTel());
-		mav.addObject("customerName", customerUser.getUserName());
-		mav.addObject("customerTel", customerUser.getPhoneNo());
-		mav.addObject("workerName", workerUser.getUserName());
-		mav.addObject("workerTel", workerUser.getPhoneNo());
-		mav.addObject("productName", order.getProductName());
-		mav.addObject("productModel", order.getProductModel());
-		mav.addObject("productKindName", order.getProductKind());
-		mav.addObject("productTypeName", order.getProductType());
-		mav.addObject("expectStime", DateUtil.format(order.getExpectStime(), "yyyy-MM-dd"));
-		mav.addObject("expectDays", order.getExpectDays());
-		mav.addObject("orderCost", order.getOrderCost());
-		mav.addObject("depositCost", order.getDepositCost());
-		mav.addObject("paidCost", order.getPaidCost());
-		mav.addObject("orderStatus", getOrderStatusText(order.getOrderStatus()));
-		mav.addObject("buildStatus", getBuildStatusText(order.getBuildStatus()));
-		mav.addObject("cancleReason", order.getCancleReason());
-		mav.addObject("remarks", order.getRemarks());
-		mav.addObject("workerGrade", order.getWorkerGrade());
-		mav.addObject("workerCtime", DateUtil.format(order.getWorkerCTime(), "yyyy-MM-dd HH:mm:ss"));
-		mav.addObject("workerComment", order.getWorkerComment());
-		mav.addObject("customerGrade", order.getCustomerGrade());
-		mav.addObject("customerCtime", DateUtil.format(order.getCustomerCTime(), "yyyy-MM-dd HH:mm:ss"));
-		mav.addObject("customerComment", order.getCustomerComment());
+//		Company company = companyService.selectById(project.getCompanyId());
+//		if (company == null) {
+//			mav.addObject("msg", "通过 id:" + project.getCompanyId() + " 未找到有效的公司单位");
+//			return mav;
+//		}
+//
+//		User customerUser = userService.selectById(order.getCustomerId());
+//		if (customerUser == null) {
+//			mav.addObject("msg", "通过 id:" + order.getCustomerId() + " 未找到有效的客户");
+//			return mav;
+//		}
+//		User workerUser = userService.selectById(order.getWorkerId());
+//		if (workerUser == null) {
+//			mav.addObject("msg", "通过 id:" + order.getWorkerId() + " 未找到有效的工人");
+//			return mav;
+//		}
+//
+//		mav.addObject("orderNo", order.getOrderNo());
+//		mav.addObject("orderTime", DateUtil.format(order.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+//		mav.addObject("projectName", project.getName());
+//		mav.addObject("workNo", projectWork.getWorkNo());
+//		mav.addObject("city", baseDataCacheUtil.getCityName(project.getCity()));
+//		mav.addObject("address", project.getAddress());
+//		mav.addObject("companyName", company.getName());
+//		mav.addObject("companyContacts", company.getContacts());
+//		mav.addObject("companyContactTel", company.getContactTel());
+//		mav.addObject("customerName", customerUser.getUserName());
+//		mav.addObject("customerTel", customerUser.getPhoneNo());
+//		mav.addObject("workerName", workerUser.getUserName());
+//		mav.addObject("workerTel", workerUser.getPhoneNo());
+//		mav.addObject("productName", order.getProductName());
+//		mav.addObject("productModel", order.getProductModel());
+//		mav.addObject("productKindName", order.getProductKind());
+//		mav.addObject("productTypeName", order.getProductType());
+//		mav.addObject("expectStime", DateUtil.format(order.getExpectStime(), "yyyy-MM-dd"));
+//		mav.addObject("expectDays", order.getExpectDays());
+//		mav.addObject("orderCost", order.getOrderCost());
+//		mav.addObject("depositCost", order.getDepositCost());
+//		mav.addObject("paidCost", order.getPaidCost());
+//		mav.addObject("orderStatus", getOrderStatusText(order.getOrderStatus()));
+//		mav.addObject("buildStatus", getBuildStatusText(order.getBuildStatus()));
+//		mav.addObject("cancleReason", order.getCancleReason());
+//		mav.addObject("remarks", order.getRemarks());
+//		mav.addObject("workerGrade", order.getWorkerGrade());
+//		mav.addObject("workerCtime", DateUtil.format(order.getWorkerCTime(), "yyyy-MM-dd HH:mm:ss"));
+//		mav.addObject("workerComment", order.getWorkerComment());
+//		mav.addObject("customerGrade", order.getCustomerGrade());
+//		mav.addObject("customerCtime", DateUtil.format(order.getCustomerCTime(), "yyyy-MM-dd HH:mm:ss"));
+//		mav.addObject("customerComment", order.getCustomerComment());
+//		mav.setViewName("project/order/detail");
 		return mav;
 	}
 

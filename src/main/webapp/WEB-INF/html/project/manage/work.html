@@ -13,7 +13,7 @@
     <link type="text/css" href="${rc.contextPath}/statics/ui/static/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link type="text/css" href="${rc.contextPath}/statics/ui/other/pager/pager.css?v=1.0" rel="stylesheet" />
     <style type="text/css">
-    	.content {width: 718px;height: 420px;background: #fff;overflow: auto;}
+    	.content {width: 818px;height: 420px;background: #fff;overflow: auto;}
     	.category {padding: 12px;}
     	.text-primary {color: #2c3b41;}
     	.container-fluid {padding: 0;margin: 0;}
@@ -41,33 +41,55 @@
                       <button type="submit" class="btn btn-success search-btn" @click="searchForm">查询</button>
                   </div>
                   <div class="col-xs-12">
-                  		<table class="table table-striped table-hover" style="margin-bottom: 0px;margin-top: -8px;">
-                            <thead>
+                    <div class="card-content table-responsive" style="border: none;">
+                  		<table class="table table-striped table-hover" style="margin-bottom: 0px;margin-top: -8px;width: 1260px;">
+                            <thead v-if="list.length > 0">
                             	<tr>
 	                                <th width="44" class="text-center">#</th>
-	                                <th width="200">操作流水号</th>
+	                                <th width="160">操作流水号</th>
 	                                <th>项目任务名称</th>
+	                                <th width="100" class="text-center">人天单价(元)</th>
+	                                <th width="88" class="text-center">产品种类数</th>
+	                                <th width="78" class="text-center">工人数</th>
+	                                <th width="78" class="text-center">未确认</th>
+	                                <th width="78" class="text-center">已确认</th>
+	                                <th width="78" class="text-center">未完成</th>
+	                                <th width="78" class="text-center">已完成</th>
 	                                <th width="180" class="text-center">创建时间</th>
 	                                <th width="85" class="text-center">&nbsp;</th>
                                 </tr>
                             </thead>
                             <tbody>
+                            	<tr v-if="list.length == 0">
+                            		<td colspan="12" class="text-center">
+                            			<span class="text-primary" v-if="searchParam.workNo == ''">暂无数据</span>
+                            			<span class="text-primary" v-if="searchParam.workNo != ''">未查询到数据</span>
+                            		</td>
+                            	</tr>
                                 <tr v-for="(item, index) in list">
                                     <td class="text-center">{{ index + 1 }}</td>
                                     <td>{{ item.workNo }}</td>
                                     <td>{{ item.workName }}</td>
+                                    <td class="text-center">{{ item.cityUnitPrice }}</td>
+                                    <td class="text-center">{{ item.productNum }}</td>
+                                    <td class="text-center">{{ item.workerNum }}</td>
+                                    <td class="text-center">{{ item.unconfirmedNum }}</td>
+                                    <td class="text-center">{{ item.confirmedNum }}</td>
+                                    <td class="text-center">{{ item.uncompleteNum }}</td>
+                                    <td class="text-center">{{ item.completeNum }}</td>
                                     <td class="text-center">{{ item.createTime }}</td>
-                                    <td class="text-center"><a href="javascript:;" @click="detail(item.id)">产品/订单</a></td>
+                                    <td class="text-center"><a href="javascript:;" @click="detail(item.id)">详情/订单</a></td>
                                 </tr>
                             </tbody>
                             <tfoot>
                             	<tr>
-                            		<td colspan="5" class="text-center">
+                            		<td colspan="12" class="text-center">
                             			<div id="Page-M-box" class="m-style"></div>
                             		</td>
                             	</tr>
                             </tfoot>
                         </table>
+                  	</div>
                   </div>
                   <div style="clear: both;"></div>
               </div>
@@ -140,11 +162,11 @@
 			    detail: function(id) {
 			    	parent.layer.open({
       					type: 2,
-      					title: '项目产品',
+      					title: '详情/订单',
       					closeBtn: !0, 
       					shade: [0.1],
-      					area: ['720px', '460px'],
-      					content: ['${rc.contextPath}/project/manage/product?workNo=' + id, 'no'],
+      					area: ['820px', '460px'],
+      					content: ['${rc.contextPath}/project/manage/order?workId=' + id, 'yes'],
       					success: function() {},
       					end: function(){}
       				});

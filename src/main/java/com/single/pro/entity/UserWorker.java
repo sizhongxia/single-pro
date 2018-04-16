@@ -12,7 +12,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-29
+ * @since 2018-04-15
  */
 @TableName("sp_user_worker")
 public class UserWorker implements Serializable {
@@ -33,6 +33,11 @@ public class UserWorker implements Serializable {
      */
 	@TableField("worker_no")
 	private Integer workerNo;
+    /**
+     * 工种（字典）
+     */
+	@TableField("worker_type")
+	private String workerType;
     /**
      * 用户评分
      */
@@ -90,6 +95,14 @@ public class UserWorker implements Serializable {
 
 	public void setWorkerNo(Integer workerNo) {
 		this.workerNo = workerNo;
+	}
+
+	public String getWorkerType() {
+		return workerType;
+	}
+
+	public void setWorkerType(String workerType) {
+		this.workerType = workerType;
 	}
 
 	public BigDecimal getGradeLevel() {
@@ -154,6 +167,7 @@ public class UserWorker implements Serializable {
 			", id=" + id +
 			", userId=" + userId +
 			", workerNo=" + workerNo +
+			", workerType=" + workerType +
 			", gradeLevel=" + gradeLevel +
 			", bondStatus=" + bondStatus +
 			", balance=" + balance +

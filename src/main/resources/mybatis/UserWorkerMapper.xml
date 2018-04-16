@@ -10,6 +10,7 @@
         <id column="id" property="id" />
         <result column="user_id" property="userId" />
         <result column="worker_no" property="workerNo" />
+        <result column="worker_type" property="workerType" />
         <result column="grade_level" property="gradeLevel" />
         <result column="bond_status" property="bondStatus" />
         <result column="balance" property="balance" />

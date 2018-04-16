@@ -24,7 +24,6 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
-import com.single.pro.cache.CacheUtil;
 import com.single.pro.entity.System;
 import com.single.pro.entity.SystemApp;
 import com.single.pro.entity.SystemAuthword;
@@ -123,7 +122,6 @@ public class SystemController extends BaseController {
 
 		// 更新缓存信息
 		config.setLogoUrl(RealHostReplace.getResUrl(config.getLogoUrl()));
-		CacheUtil.set("single:system", "info", config);
 
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");

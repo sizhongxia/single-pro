@@ -11,6 +11,25 @@
         <result column="project_id" property="projectId" />
         <result column="work_no" property="workNo" />
         <result column="work_name" property="workName" />
+        <result column="project_type" property="projectType" />
+        <result column="provincial" property="provincial" />
+        <result column="city" property="city" />
+        <result column="county" property="county" />
+        <result column="address" property="address" />
+        <result column="longitude" property="longitude" />
+        <result column="latitude" property="latitude" />
+        <result column="city_unit_price" property="cityUnitPrice" />
+        <result column="company_id" property="companyId" />
+        <result column="company_name" property="companyName" />
+        <result column="product_num" property="productNum" />
+        <result column="worker_num" property="workerNum" />
+        <result column="deposit_cost_sum" property="depositCostSum" />
+        <result column="paid_cost_sum" property="paidCostSum" />
+        <result column="unpaid_cost_sum" property="unpaidCostSum" />
+        <result column="unconfirmed_num" property="unconfirmedNum" />
+        <result column="confirmed_num" property="confirmedNum" />
+        <result column="uncomplete_num" property="uncompleteNum" />
+        <result column="complete_num" property="completeNum" />
         <result column="work_description" property="workDescription" />
         <result column="customer_id" property="customerId" />
         <result column="create_time" property="createTime" />

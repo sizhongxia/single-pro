@@ -12,7 +12,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-04-13
+ * @since 2018-04-15
  */
 @TableName("sp_order")
 public class Order implements Serializable {
@@ -24,6 +24,21 @@ public class Order implements Serializable {
      */
 	private String id;
     /**
+     * 项目ID
+     */
+	@TableField("project_id")
+	private String projectId;
+    /**
+     * 项目名称
+     */
+	@TableField("project_name")
+	private String projectName;
+    /**
+     * 项目批次ID
+     */
+	@TableField("work_id")
+	private String workId;
+    /**
      * 订单编号
      */
 	@TableField("order_no")
@@ -34,20 +49,30 @@ public class Order implements Serializable {
 	@TableField("customer_id")
 	private String customerId;
     /**
+     * 下单客户名称
+     */
+	@TableField("customer_name")
+	private String customerName;
+    /**
      * 劳务工人ID
      */
 	@TableField("worker_id")
 	private String workerId;
     /**
-     * 项目产品关联ID
+     * 接单工人名称
      */
-	@TableField("project_product_id")
-	private String projectProductId;
+	@TableField("worker_name")
+	private String workerName;
     /**
-     * 项目名称
+     * 接单工人头像
      */
-	@TableField("project_name")
-	private String projectName;
+	@TableField("worker_head_pic")
+	private String workerHeadPic;
+    /**
+     * 接单工人年龄
+     */
+	@TableField("worker_age")
+	private Integer workerAge;
     /**
      * 产品关联ID
      */
@@ -74,10 +99,30 @@ public class Order implements Serializable {
 	@TableField("product_model")
 	private String productModel;
     /**
+     * 产品公司
+     */
+	@TableField("product_company")
+	private String productCompany;
+    /**
+     * 产品图片
+     */
+	@TableField("product_pic")
+	private String productPic;
+    /**
+     * 产品数量及描述
+     */
+	@TableField("product_num")
+	private String productNum;
+    /**
+     * 清单文件链接
+     */
+	@TableField("detail_list_url")
+	private String detailListUrl;
+    /**
      * 预计施工开始时间
      */
-	@TableField("expect_stime")
-	private Date expectStime;
+	@TableField("expect_time")
+	private String expectTime;
     /**
      * 预计施工天数
      */
@@ -99,54 +144,79 @@ public class Order implements Serializable {
 	@TableField("paid_cost")
 	private BigDecimal paidCost;
     /**
-     * 订单状态（Y:已完成，D:已接单，N:已取消，W:待工人确认，P:待平台确认）
+     * 勘测服务选择（Y:选择，N:未选择）
      */
-	@TableField("order_status")
-	private String orderStatus;
+	@TableField("ser_survey_choice")
+	private String serSurveyChoice;
+    /**
+     * 勘测服务进展状态（Y:已完成，D:进行中，N:未开始）
+     */
+	@TableField("ser_survey_status")
+	private String serSurveyStatus;
+    /**
+     * 验货服务选择（Y:选择，N:未选择）
+     */
+	@TableField("ser_check_choice")
+	private String serCheckChoice;
+    /**
+     * 验货服务进展状态（Y:已完成，D:进行中，N:未开始）
+     */
+	@TableField("ser_check_status")
+	private String serCheckStatus;
+    /**
+     * 施工服务选择（Y:选择，N:未选择）
+     */
+	@TableField("ser_construct_choice")
+	private String serConstructChoice;
+    /**
+     * 施工服务进展状态（Y:已完成，D:进行中，N:未开始）
+     */
+	@TableField("ser_construct_status")
+	private String serConstructStatus;
+    /**
+     * 培训服务选择（Y:选择，N:未选择）
+     */
+	@TableField("ser_train_choice")
+	private String serTrainChoice;
+    /**
+     * 培训服务进展状态（Y:已完成，D:进行中，N:未开始）
+     */
+	@TableField("ser_train_status")
+	private String serTrainStatus;
+    /**
+     * 验收服务选择（Y:选择，N:未选择）
+     */
+	@TableField("ser_accept_choice")
+	private String serAcceptChoice;
+    /**
+     * 验收服务进展状态（Y:已完成，D:进行中，N:未开始）
+     */
+	@TableField("ser_accept_status")
+	private String serAcceptStatus;
+    /**
+     * 下单发布状态（Y:已发布，N:暂存），一旦发布，状态不可修改
+     */
+	@TableField("release_status")
+	private String releaseStatus;
+    /**
+     * 发布时间
+     */
+	@TableField("release_time")
+	private Date releaseTime;
     /**
      * 施工状态（Y:已完工，R:进行中，D:待施工）
      */
 	@TableField("build_status")
 	private String buildStatus;
     /**
-     * 取消订单理由
+     * 订单状态（Y:已完成，D:已接单，N:已取消，W:待工人确认，P:待平台确认）
      */
-	@TableField("cancle_reason")
-	private String cancleReason;
+	@TableField("order_status")
+	private String orderStatus;
     /**
      * 备注说明
      */
 	private String remarks;
-    /**
-     * 工人评分，客户填写
-     */
-	@TableField("worker_grade")
-	private BigDecimal workerGrade;
-    /**
-     * 工人评语，客户填写
-     */
-	@TableField("worker_comment")
-	private String workerComment;
-    /**
-     * 客户填写时间
-     */
-	@TableField("worker_c_time")
-	private Date workerCTime;
-    /**
-     * 客户评分，工人填写
-     */
-	@TableField("customer_grade")
-	private BigDecimal customerGrade;
-    /**
-     * 客户评语，工人填写
-     */
-	@TableField("customer_comment")
-	private String customerComment;
-    /**
-     * 工人填写时间
-     */
-	@TableField("customer_c_time")
-	private Date customerCTime;
     /**
      * 创建时间
      */
@@ -167,6 +237,30 @@ public class Order implements Serializable {
 		this.id = id;
 	}
 
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getWorkId() {
+		return workId;
+	}
+
+	public void setWorkId(String workId) {
+		this.workId = workId;
+	}
+
 	public String getOrderNo() {
 		return orderNo;
 	}
@@ -183,6 +277,14 @@ public class Order implements Serializable {
 		this.customerId = customerId;
 	}
 
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
 	public String getWorkerId() {
 		return workerId;
 	}
@@ -191,20 +293,28 @@ public class Order implements Serializable {
 		this.workerId = workerId;
 	}
 
-	public String getProjectProductId() {
-		return projectProductId;
+	public String getWorkerName() {
+		return workerName;
 	}
 
-	public void setProjectProductId(String projectProductId) {
-		this.projectProductId = projectProductId;
+	public void setWorkerName(String workerName) {
+		this.workerName = workerName;
 	}
 
-	public String getProjectName() {
-		return projectName;
+	public String getWorkerHeadPic() {
+		return workerHeadPic;
 	}
 
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
+	public void setWorkerHeadPic(String workerHeadPic) {
+		this.workerHeadPic = workerHeadPic;
+	}
+
+	public Integer getWorkerAge() {
+		return workerAge;
+	}
+
+	public void setWorkerAge(Integer workerAge) {
+		this.workerAge = workerAge;
 	}
 
 	public String getProductId() {
@@ -247,12 +357,44 @@ public class Order implements Serializable {
 		this.productModel = productModel;
 	}
 
-	public Date getExpectStime() {
-		return expectStime;
+	public String getProductCompany() {
+		return productCompany;
 	}
 
-	public void setExpectStime(Date expectStime) {
-		this.expectStime = expectStime;
+	public void setProductCompany(String productCompany) {
+		this.productCompany = productCompany;
+	}
+
+	public String getProductPic() {
+		return productPic;
+	}
+
+	public void setProductPic(String productPic) {
+		this.productPic = productPic;
+	}
+
+	public String getProductNum() {
+		return productNum;
+	}
+
+	public void setProductNum(String productNum) {
+		this.productNum = productNum;
+	}
+
+	public String getDetailListUrl() {
+		return detailListUrl;
+	}
+
+	public void setDetailListUrl(String detailListUrl) {
+		this.detailListUrl = detailListUrl;
+	}
+
+	public String getExpectTime() {
+		return expectTime;
+	}
+
+	public void setExpectTime(String expectTime) {
+		this.expectTime = expectTime;
 	}
 
 	public Integer getExpectDays() {
@@ -287,12 +429,100 @@ public class Order implements Serializable {
 		this.paidCost = paidCost;
 	}
 
-	public String getOrderStatus() {
-		return orderStatus;
+	public String getSerSurveyChoice() {
+		return serSurveyChoice;
 	}
 
-	public void setOrderStatus(String orderStatus) {
-		this.orderStatus = orderStatus;
+	public void setSerSurveyChoice(String serSurveyChoice) {
+		this.serSurveyChoice = serSurveyChoice;
+	}
+
+	public String getSerSurveyStatus() {
+		return serSurveyStatus;
+	}
+
+	public void setSerSurveyStatus(String serSurveyStatus) {
+		this.serSurveyStatus = serSurveyStatus;
+	}
+
+	public String getSerCheckChoice() {
+		return serCheckChoice;
+	}
+
+	public void setSerCheckChoice(String serCheckChoice) {
+		this.serCheckChoice = serCheckChoice;
+	}
+
+	public String getSerCheckStatus() {
+		return serCheckStatus;
+	}
+
+	public void setSerCheckStatus(String serCheckStatus) {
+		this.serCheckStatus = serCheckStatus;
+	}
+
+	public String getSerConstructChoice() {
+		return serConstructChoice;
+	}
+
+	public void setSerConstructChoice(String serConstructChoice) {
+		this.serConstructChoice = serConstructChoice;
+	}
+
+	public String getSerConstructStatus() {
+		return serConstructStatus;
+	}
+
+	public void setSerConstructStatus(String serConstructStatus) {
+		this.serConstructStatus = serConstructStatus;
+	}
+
+	public String getSerTrainChoice() {
+		return serTrainChoice;
+	}
+
+	public void setSerTrainChoice(String serTrainChoice) {
+		this.serTrainChoice = serTrainChoice;
+	}
+
+	public String getSerTrainStatus() {
+		return serTrainStatus;
+	}
+
+	public void setSerTrainStatus(String serTrainStatus) {
+		this.serTrainStatus = serTrainStatus;
+	}
+
+	public String getSerAcceptChoice() {
+		return serAcceptChoice;
+	}
+
+	public void setSerAcceptChoice(String serAcceptChoice) {
+		this.serAcceptChoice = serAcceptChoice;
+	}
+
+	public String getSerAcceptStatus() {
+		return serAcceptStatus;
+	}
+
+	public void setSerAcceptStatus(String serAcceptStatus) {
+		this.serAcceptStatus = serAcceptStatus;
+	}
+
+	public String getReleaseStatus() {
+		return releaseStatus;
+	}
+
+	public void setReleaseStatus(String releaseStatus) {
+		this.releaseStatus = releaseStatus;
+	}
+
+	public Date getReleaseTime() {
+		return releaseTime;
+	}
+
+	public void setReleaseTime(Date releaseTime) {
+		this.releaseTime = releaseTime;
 	}
 
 	public String getBuildStatus() {
@@ -303,12 +533,12 @@ public class Order implements Serializable {
 		this.buildStatus = buildStatus;
 	}
 
-	public String getCancleReason() {
-		return cancleReason;
+	public String getOrderStatus() {
+		return orderStatus;
 	}
 
-	public void setCancleReason(String cancleReason) {
-		this.cancleReason = cancleReason;
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
 	}
 
 	public String getRemarks() {
@@ -317,54 +547,6 @@ public class Order implements Serializable {
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
-	}
-
-	public BigDecimal getWorkerGrade() {
-		return workerGrade;
-	}
-
-	public void setWorkerGrade(BigDecimal workerGrade) {
-		this.workerGrade = workerGrade;
-	}
-
-	public String getWorkerComment() {
-		return workerComment;
-	}
-
-	public void setWorkerComment(String workerComment) {
-		this.workerComment = workerComment;
-	}
-
-	public Date getWorkerCTime() {
-		return workerCTime;
-	}
-
-	public void setWorkerCTime(Date workerCTime) {
-		this.workerCTime = workerCTime;
-	}
-
-	public BigDecimal getCustomerGrade() {
-		return customerGrade;
-	}
-
-	public void setCustomerGrade(BigDecimal customerGrade) {
-		this.customerGrade = customerGrade;
-	}
-
-	public String getCustomerComment() {
-		return customerComment;
-	}
-
-	public void setCustomerComment(String customerComment) {
-		this.customerComment = customerComment;
-	}
-
-	public Date getCustomerCTime() {
-		return customerCTime;
-	}
-
-	public void setCustomerCTime(Date customerCTime) {
-		this.customerCTime = customerCTime;
 	}
 
 	public Date getCreateTime() {
@@ -387,31 +569,45 @@ public class Order implements Serializable {
 	public String toString() {
 		return "Order{" +
 			", id=" + id +
+			", projectId=" + projectId +
+			", projectName=" + projectName +
+			", workId=" + workId +
 			", orderNo=" + orderNo +
 			", customerId=" + customerId +
+			", customerName=" + customerName +
 			", workerId=" + workerId +
-			", projectProductId=" + projectProductId +
-			", projectName=" + projectName +
+			", workerName=" + workerName +
+			", workerHeadPic=" + workerHeadPic +
+			", workerAge=" + workerAge +
 			", productId=" + productId +
 			", productName=" + productName +
 			", productKind=" + productKind +
 			", productType=" + productType +
 			", productModel=" + productModel +
-			", expectStime=" + expectStime +
+			", productCompany=" + productCompany +
+			", productPic=" + productPic +
+			", productNum=" + productNum +
+			", detailListUrl=" + detailListUrl +
+			", expectTime=" + expectTime +
 			", expectDays=" + expectDays +
 			", orderCost=" + orderCost +
 			", depositCost=" + depositCost +
 			", paidCost=" + paidCost +
-			", orderStatus=" + orderStatus +
+			", serSurveyChoice=" + serSurveyChoice +
+			", serSurveyStatus=" + serSurveyStatus +
+			", serCheckChoice=" + serCheckChoice +
+			", serCheckStatus=" + serCheckStatus +
+			", serConstructChoice=" + serConstructChoice +
+			", serConstructStatus=" + serConstructStatus +
+			", serTrainChoice=" + serTrainChoice +
+			", serTrainStatus=" + serTrainStatus +
+			", serAcceptChoice=" + serAcceptChoice +
+			", serAcceptStatus=" + serAcceptStatus +
+			", releaseStatus=" + releaseStatus +
+			", releaseTime=" + releaseTime +
 			", buildStatus=" + buildStatus +
-			", cancleReason=" + cancleReason +
+			", orderStatus=" + orderStatus +
 			", remarks=" + remarks +
-			", workerGrade=" + workerGrade +
-			", workerComment=" + workerComment +
-			", workerCTime=" + workerCTime +
-			", customerGrade=" + customerGrade +
-			", customerComment=" + customerComment +
-			", customerCTime=" + customerCTime +
 			", createTime=" + createTime +
 			", updateTime=" + updateTime +
 			"}";

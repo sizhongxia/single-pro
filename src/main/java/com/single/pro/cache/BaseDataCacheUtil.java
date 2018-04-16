@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.single.pro.entity.BasicCity;
@@ -23,6 +27,7 @@ import com.single.pro.entity.System;
 import com.single.pro.entity.SystemApp;
 import com.single.pro.model.CityModel;
 import com.single.pro.model.DictionaryItemModel;
+import com.single.pro.redis.CacheUtil;
 import com.single.pro.service.BasicCityService;
 import com.single.pro.service.DictionaryItemService;
 import com.single.pro.service.DictionaryTypeService;
@@ -32,10 +37,13 @@ import com.single.pro.service.SystemAppService;
 import com.single.pro.service.SystemService;
 import com.single.pro.shiro.realm.JDBCRealm;
 import com.single.pro.storage.RealHostReplace;
+import com.single.pro.util.ShaUtil;
 
-import net.oschina.j2cache.CacheObject;
+import redis.clients.jedis.JedisPubSub;
 
 public class BaseDataCacheUtil implements InitializingBean {
+
+	private Logger logger = LoggerFactory.getLogger(BaseDataCacheUtil.class);
 
 	@Autowired
 	private SystemService systemService;
@@ -51,6 +59,19 @@ public class BaseDataCacheUtil implements InitializingBean {
 	private ProductKindService productKindService;
 	@Autowired
 	private ProductTypeService productTypeService;
+	@Autowired
+	private CacheUtil cacheUtil;
+
+	public String setPageCsrf(String page) {
+		String csrf = ShaUtil.sha1(UUID.randomUUID().toString());
+		cacheUtil.setex("single:cache:csrf:" + SecurityUtils.getSubject().getSession(true).getId() + ":" + page,
+				60 * 60 * 1, csrf);
+		return csrf;
+	}
+
+	public String getPageCsrf(String page) {
+		return cacheUtil.get("single:cache:csrf:" + SecurityUtils.getSubject().getSession(true).getId() + ":" + page);
+	}
 
 	public System getSystemInfo() {
 		System system = getCacheSystemInfo();
@@ -62,9 +83,6 @@ public class BaseDataCacheUtil implements InitializingBean {
 	}
 
 	public List<SystemApp> getSystemApps() {
-		// Wrapper<SystemApp> wrapper = new EntityWrapper<>();
-		// wrapper.orderBy("sort_no", true);
-		// List<SystemApp> systemApps = systemAppService.selectList(wrapper);
 		List<SystemApp> systemApps = getCacheSystemApps();
 		if (systemApps == null) {
 			initSystemApps();
@@ -112,17 +130,13 @@ public class BaseDataCacheUtil implements InitializingBean {
 		return apps;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<DictionaryItemModel> getDictItems(String typeCode) {
 		List<DictionaryItemModel> itemModels = new ArrayList<>();
 		List<DictionaryItem> items = null;
 
-		CacheObject cacheObject = CacheUtil.get("single:system:dict:type", typeCode);
-		if (cacheObject != null) {
-			Object obj = cacheObject.getValue();
-			if (obj != null) {
-				items = (List<DictionaryItem>) obj;
-			}
+		String res = cacheUtil.hget("single:cache:system:dict:type", typeCode);
+		if (res != null) {
+			items = JSON.parseArray(res, DictionaryItem.class);
 		}
 
 		if (items == null || items.isEmpty()) {
@@ -140,12 +154,9 @@ public class BaseDataCacheUtil implements InitializingBean {
 
 	public String getDictItemName(String code) {
 		DictionaryItem item = null;
-		CacheObject cacheObject = CacheUtil.get("single:system:dict:item", code);
-		if (cacheObject != null) {
-			Object obj = cacheObject.getValue();
-			if (obj != null) {
-				item = (DictionaryItem) obj;
-			}
+		String res = cacheUtil.hget("single:cache:system:dict:item", code);
+		if (res != null) {
+			item = JSON.parseObject(res, DictionaryItem.class);
 		}
 		if (item != null) {
 			return item.getName();
@@ -154,12 +165,9 @@ public class BaseDataCacheUtil implements InitializingBean {
 	}
 
 	public CityModel getCityModel(String code) {
-		CacheObject cacheObject = CacheUtil.get("single:system:city", code);
-		if (cacheObject != null) {
-			Object obj = cacheObject.getValue();
-			if (obj != null) {
-				return (CityModel) obj;
-			}
+		String res = cacheUtil.hget("single:cache:system:city", code);
+		if (res != null) {
+			return JSON.parseObject(res, CityModel.class);
 		}
 		return null;
 	}
@@ -173,11 +181,11 @@ public class BaseDataCacheUtil implements InitializingBean {
 	}
 
 	public ProductKind getProductKindById(String id) {
-		CacheObject obj = CacheUtil.get("single:system:product:kind", id);
-		if (obj == null) {
-			return null;
+		String res = cacheUtil.hget("single:cache:system:product:kind", id);
+		if (res != null) {
+			return JSON.parseObject(res, ProductKind.class);
 		}
-		return (ProductKind) obj.getValue();
+		return null;
 	}
 
 	public String getProductKindNameById(String id) {
@@ -189,11 +197,11 @@ public class BaseDataCacheUtil implements InitializingBean {
 	}
 
 	public ProductType getProductTypeById(String id) {
-		CacheObject obj = CacheUtil.get("single:system:product:type", id);
-		if (obj == null) {
-			return null;
+		String res = cacheUtil.hget("single:cache:system:product:type", id);
+		if (res != null) {
+			return JSON.parseObject(res, ProductType.class);
 		}
-		return (ProductType) obj.getValue();
+		return null;
 	}
 
 	public String getProductTypeNameById(String id) {
@@ -227,58 +235,65 @@ public class BaseDataCacheUtil implements InitializingBean {
 	}
 
 	private System getCacheSystemInfo() {
-		Object obj = CacheUtil.get("single:system", "info").getValue();
-		if (obj != null) {
-			return (System) obj;
+		String res = cacheUtil.get("single:cache:system:info");
+		if (res != null) {
+			return JSON.parseObject(res, System.class);
 		}
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	private List<SystemApp> getCacheSystemApps() {
-		Object obj = CacheUtil.get("single:system", "apps").getValue();
-		if (obj != null) {
-			return (List<SystemApp>) obj;
+		String res = cacheUtil.get("single:cache:system:apps");
+		if (res != null) {
+			return JSON.parseArray(res, SystemApp.class);
 		}
 		return null;
 	}
 
 	// 初始化应用信息
 	private void initSystemInfo() {
-		Wrapper<System> wrapper = new EntityWrapper<System>();
-		System system = systemService.selectOne(wrapper);
-		if (system == null) {
-			throw new RuntimeException("请先配置系统应用基本信息");
+		if (!cacheUtil.exists("single:cache:system:info")) {
+			Wrapper<System> wrapper = new EntityWrapper<System>();
+			System system = systemService.selectOne(wrapper);
+			if (system == null) {
+				throw new RuntimeException("请先配置系统应用基本信息");
+			}
+			system.setLogoUrl(RealHostReplace.getResUrl(system.getLogoUrl()));
+			cacheUtil.set("single:cache:system:info", JSON.toJSONString(system, false));
 		}
-		system.setLogoUrl(RealHostReplace.getResUrl(system.getLogoUrl()));
-		CacheUtil.set("single:system", "info", system);
 	}
 
 	private void initSystemApps() {
-		Wrapper<SystemApp> wrapper = new EntityWrapper<>();
-		wrapper.orderBy("sort_no", true);
-		List<SystemApp> apps = systemAppService.selectList(wrapper);
-		if (apps == null || apps.isEmpty()) {
-			throw new RuntimeException("无系统应用");
+		if (!cacheUtil.exists("single:cache:system:apps")) {
+			Wrapper<SystemApp> wrapper = new EntityWrapper<>();
+			wrapper.orderBy("sort_no", true);
+			List<SystemApp> apps = systemAppService.selectList(wrapper);
+			if (apps == null || apps.isEmpty()) {
+				throw new RuntimeException("无系统应用");
+			}
+			cacheUtil.set("single:cache:system:apps", JSON.toJSONString(apps, false));
 		}
-		CacheUtil.set("single:system", "apps", apps);
 	}
 
 	private void loadDictItems() {
-		Wrapper<DictionaryType> dictionaryTypeWrapper = new EntityWrapper<>();
-		dictionaryTypeWrapper.eq("status", "Y");
-		List<DictionaryType> types = dictionaryTypeService.selectList(dictionaryTypeWrapper);
-		if (types != null) {
-			for (DictionaryType type : types) {
-				Wrapper<DictionaryItem> wrapper = new EntityWrapper<>();
-				wrapper.eq("status", "Y");
-				wrapper.eq("type_id", type.getId());
-				wrapper.orderBy("code asc");
-				List<DictionaryItem> items = dictionaryItemService.selectList(wrapper);
-				if (items != null && !items.isEmpty()) {
-					CacheUtil.set("single:system:dict:type", type.getCode(), items);
-					for (DictionaryItem item : items) {
-						CacheUtil.set("single:system:dict:item", item.getCode(), item);
+		if (!cacheUtil.exists("single:cache:system:dict:type") || !cacheUtil.exists("single:cache:system:dict:item")) {
+			Wrapper<DictionaryType> dictionaryTypeWrapper = new EntityWrapper<>();
+			dictionaryTypeWrapper.eq("status", "Y");
+			List<DictionaryType> types = dictionaryTypeService.selectList(dictionaryTypeWrapper);
+			if (types != null) {
+				for (DictionaryType type : types) {
+					Wrapper<DictionaryItem> wrapper = new EntityWrapper<>();
+					wrapper.eq("status", "Y");
+					wrapper.eq("type_id", type.getId());
+					wrapper.orderBy("code asc");
+					List<DictionaryItem> items = dictionaryItemService.selectList(wrapper);
+					if (items != null && !items.isEmpty()) {
+						cacheUtil.hset("single:cache:system:dict:type", type.getCode(),
+								JSON.toJSONString(items, false));
+						for (DictionaryItem item : items) {
+							cacheUtil.hset("single:cache:system:dict:item", item.getCode(),
+									JSON.toJSONString(item, false));
+						}
 					}
 				}
 			}
@@ -286,39 +301,47 @@ public class BaseDataCacheUtil implements InitializingBean {
 	}
 
 	private void loadCityDatas() {
-		Wrapper<BasicCity> wrapper = new EntityWrapper<>();
-		List<BasicCity> cities = basicCityService.selectList(wrapper);
-		CityModel cm = null;
-		for (BasicCity bc : cities) {
-			cm = new CityModel();
-			cm.setCode(bc.getCode());
-			cm.setName(bc.getName());
-			cm.setPinyin(bc.getPinyin());
-			cm.setJianpin(bc.getJianpin());
-			CacheUtil.set("single:system:city", bc.getCode(), cm);
+		if (!cacheUtil.exists("single:cache:system:city")) {
+			Wrapper<BasicCity> wrapper = new EntityWrapper<>();
+			List<BasicCity> cities = basicCityService.selectList(wrapper);
+			CityModel cm = null;
+			for (BasicCity bc : cities) {
+				cm = new CityModel();
+				cm.setCode(bc.getCode());
+				cm.setName(bc.getName());
+				cm.setPinyin(bc.getPinyin());
+				cm.setJianpin(bc.getJianpin());
+				cacheUtil.hset("single:cache:system:city", cm.getCode(), JSON.toJSONString(cm, false));
+			}
 		}
 	}
 
 	private void loadProductKindDatas() {
-		Wrapper<ProductKind> wrapper = new EntityWrapper<>();
-		wrapper.eq("status", "Y");
-		wrapper.orderBy("create_time", true);
-		List<ProductKind> productKinds = productKindService.selectList(wrapper);
-		if (productKinds != null && productKinds.size() > 0) {
-			for (ProductKind productKind : productKinds) {
-				CacheUtil.set("single:system:product:kind", productKind.getId(), productKind);
+		if (!cacheUtil.exists("single:cache:system:product:kind")) {
+			Wrapper<ProductKind> wrapper = new EntityWrapper<>();
+			wrapper.eq("status", "Y");
+			wrapper.orderBy("create_time", true);
+			List<ProductKind> productKinds = productKindService.selectList(wrapper);
+			if (productKinds != null && productKinds.size() > 0) {
+				for (ProductKind productKind : productKinds) {
+					cacheUtil.hset("single:cache:system:product:kind", productKind.getId(),
+							JSON.toJSONString(productKind, false));
+				}
 			}
 		}
 	}
 
 	private void loadProductTypeDatas() {
-		Wrapper<ProductType> wrapper = new EntityWrapper<>();
-		wrapper.eq("status", "Y");
-		wrapper.orderBy("create_time", true);
-		List<ProductType> productTypes = productTypeService.selectList(wrapper);
-		if (productTypes != null && productTypes.size() > 0) {
-			for (ProductType productType : productTypes) {
-				CacheUtil.set("single:system:product:type", productType.getId(), productType);
+		if (!cacheUtil.exists("single:cache:system:product:type")) {
+			Wrapper<ProductType> wrapper = new EntityWrapper<>();
+			wrapper.eq("status", "Y");
+			wrapper.orderBy("create_time", true);
+			List<ProductType> productTypes = productTypeService.selectList(wrapper);
+			if (productTypes != null && productTypes.size() > 0) {
+				for (ProductType productType : productTypes) {
+					cacheUtil.hset("single:cache:system:product:type", productType.getId(),
+							JSON.toJSONString(productType, false));
+				}
 			}
 		}
 	}
@@ -326,11 +349,32 @@ public class BaseDataCacheUtil implements InitializingBean {
 	// 类初始化时加载执行
 	@Override
 	public void afterPropertiesSet() throws Exception {
+		initCacheData();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				cacheUtil.subscribe(new JedisPubSub() {
+					@Override
+					public void onMessage(String channel, String message) {
+						initCacheData();
+					}
+				}, "update_single_pro_cache");
+			}
+		}).start();
+	}
+
+	private void initCacheData() {
+		logger.info("init system info cache data...");
 		initSystemInfo();
+		logger.info("init system apps cache data...");
 		initSystemApps();
+		logger.info("init dict cache data...");
 		loadDictItems();
+		logger.info("init city cache data...");
 		loadCityDatas();
+		logger.info("init product kind cache data...");
 		loadProductKindDatas();
+		logger.info("init product type cache data...");
 		loadProductTypeDatas();
 	}
 

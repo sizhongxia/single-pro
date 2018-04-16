@@ -27,26 +27,23 @@ import com.github.stuxuhai.jpinyin.PinyinException;
 import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
 import com.single.pro.cache.BaseDataCacheUtil;
-import com.single.pro.cache.CacheUtil;
 import com.single.pro.entity.Company;
+import com.single.pro.entity.Order;
 import com.single.pro.entity.Project;
 import com.single.pro.entity.ProjectDraw;
-import com.single.pro.entity.ProjectProduct;
 import com.single.pro.entity.ProjectWork;
 import com.single.pro.entity.SystemUser;
 import com.single.pro.model.DictionaryItemModel;
 import com.single.pro.model.ProjectModel;
 import com.single.pro.service.CompanyService;
+import com.single.pro.service.OrderService;
 import com.single.pro.service.ProjectDrawService;
-import com.single.pro.service.ProjectProductService;
 import com.single.pro.service.ProjectService;
 import com.single.pro.service.ProjectWorkService;
 import com.single.pro.service.custom.ProjectCustomService;
 import com.single.pro.storage.RealHostReplace;
 import com.single.pro.util.IdUtil;
 import com.xiaoleilu.hutool.date.DateUtil;
-
-import net.oschina.j2cache.CacheObject;
 
 @Controller
 @RequestMapping("project/manage")
@@ -61,11 +58,11 @@ public class ProjectManageController extends BaseController {
 	@Autowired
 	ProjectWorkService projectWorkService;
 	@Autowired
-	ProjectProductService projectProductService;
-	@Autowired
 	ProjectCustomService projectCustomService;
 	@Autowired
 	CompanyService companyService;
+	@Autowired
+	OrderService orderService;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -174,11 +171,7 @@ public class ProjectManageController extends BaseController {
 		companyWrapper.orderBy("name", true);
 		List<Company> companies = companyService.selectList(companyWrapper);
 		mav.addObject("companies", companies);
-
-		String csrf = IdUtil.id();
-		CacheUtil.set("single:system:form", "project_manage_csrf", csrf);
-		mav.addObject("csrf", csrf);
-
+		mav.addObject("csrf", baseDataCacheUtil.setPageCsrf("project_manage_create"));
 		return mav;
 	}
 
@@ -203,10 +196,7 @@ public class ProjectManageController extends BaseController {
 		companyWrapper.orderBy("name", true);
 		List<Company> companies = companyService.selectList(companyWrapper);
 		mav.addObject("companies", companies);
-
-		String csrf = IdUtil.id();
-		CacheUtil.set("single:system:form", "project_manage_csrf", csrf);
-		mav.addObject("csrf", csrf);
+		mav.addObject("csrf", baseDataCacheUtil.setPageCsrf("project_manage_edit"));
 		mav.addObject("project", project);
 		return mav;
 	}
@@ -240,11 +230,7 @@ public class ProjectManageController extends BaseController {
 		if (project == null) {
 			return new ModelAndView("error/invalid_parameter");
 		}
-
-		String csrf = IdUtil.id();
-		CacheUtil.set("single:system:form", "project_manage_csrf", csrf);
-		mav.addObject("csrf", csrf);
-
+		mav.addObject("csrf", baseDataCacheUtil.setPageCsrf("project_manage_addr"));
 		mav.addObject("project", project);
 		return mav;
 	}
@@ -302,40 +288,52 @@ public class ProjectManageController extends BaseController {
 	}
 
 	@RequiresAuthentication
-	@RequestMapping(value = { "/product" }, method = { RequestMethod.GET })
-	public ModelAndView product(HttpServletRequest request) throws Exception {
-		ModelAndView mav = new ModelAndView("project/manage/product");
-
-		String workNo = request.getParameter("workNo");
-		if (StringUtils.isBlank(workNo)) {
-			return new ModelAndView("error/invalid_parameter");
+	@RequestMapping(value = { "/order" }, method = { RequestMethod.GET })
+	public ModelAndView order(HttpServletRequest request) throws Exception {
+		ModelAndView mav = null;
+		String workId = request.getParameter("workId");
+		if (StringUtils.isBlank(workId)) {
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "缺失参数：workId");
+			return mav;
 		}
-		ProjectWork projectWork = projectWorkService.selectById(workNo);
+		ProjectWork projectWork = projectWorkService.selectById(workId);
 		if (projectWork == null) {
-			return new ModelAndView("error/invalid_parameter");
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "通过参数 workId:" + workId + " 未找到有效的项目批次");
+			return mav;
 		}
-
-		Wrapper<ProjectProduct> wrapper = new EntityWrapper<>();
-
-		wrapper.eq("project_id", projectWork.getProjectId());
-		wrapper.eq("work_no", projectWork.getId());
+		Wrapper<Order> wrapper = new EntityWrapper<>();
+		wrapper.eq("work_id", projectWork.getId());
 		wrapper.orderBy("create_time", true);
+		List<Order> orders = orderService.selectList(wrapper);
 
-		List<ProjectProduct> products = projectProductService.selectList(wrapper);
 		List<Map<String, Object>> listMap = new ArrayList<>();
-
-		if (products != null && products.size() > 0) {
+		if (orders != null && orders.size() > 0) {
 			Map<String, Object> _map = null;
-			for (ProjectProduct item : products) {
+			for (Order item : orders) {
 				_map = new HashMap<>();
 				_map.put("id", item.getId());
-				_map.put("model", item.getModel());
-				_map.put("number", item.getNumber());
+				_map.put("orderNo", item.getOrderNo());
+				_map.put("customerId", item.getCustomerId());
+				_map.put("customerName", item.getCustomerName());
+				_map.put("workerId", item.getWorkerId());
+				_map.put("workerName", item.getWorkerName());
+				_map.put("productName", item.getProductName());
+				_map.put("productKind", item.getProductKind());
+				_map.put("productType", item.getProductType());
+				_map.put("productModel", item.getProductModel());
+				_map.put("productCompany", item.getProductCompany());
 				_map.put("survey", "Y".equals(item.getSerSurveyChoice()) ? "success" : "default");
+				_map.put("surveyStatus", item.getSerSurveyStatus());
 				_map.put("check", "Y".equals(item.getSerCheckChoice()) ? "success" : "default");
+				_map.put("checkStatus", item.getSerCheckStatus());
 				_map.put("construct", "Y".equals(item.getSerConstructChoice()) ? "success" : "default");
+				_map.put("constructStatus", item.getSerConstructStatus());
 				_map.put("train", "Y".equals(item.getSerTrainChoice()) ? "success" : "default");
+				_map.put("trainStatus", item.getSerTrainStatus());
 				_map.put("accept", "Y".equals(item.getSerAcceptChoice()) ? "success" : "default");
+				_map.put("acceptStatus", item.getSerAcceptStatus());
 				_map.put("detailListUrl", RealHostReplace.getResUrl(item.getDetailListUrl()));
 				_map.put("remarks", item.getRemarks());
 				_map.put("createTime", DateUtil.format(item.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
@@ -343,9 +341,14 @@ public class ProjectManageController extends BaseController {
 			}
 		}
 
-		mav.addObject("workNo", projectWork.getWorkNo());
-		mav.addObject("workName", projectWork.getWorkName());
-		mav.addObject("products", listMap);
+		projectWork.setProjectType(baseDataCacheUtil.getDictItemName(projectWork.getProjectType()));
+		projectWork.setProvincial(baseDataCacheUtil.getCityName(projectWork.getProvincial()));
+		projectWork.setCity(baseDataCacheUtil.getCityName(projectWork.getCity()));
+		projectWork.setCounty(baseDataCacheUtil.getCityName(projectWork.getCounty()));
+
+		mav = new ModelAndView("project/manage/order");
+		mav.addObject("projectWork", projectWork);
+		mav.addObject("orders", listMap);
 		return mav;
 	}
 
@@ -395,8 +398,15 @@ public class ProjectManageController extends BaseController {
 			for (ProjectWork item : list) {
 				_map = new HashMap<>();
 				_map.put("id", item.getId());
-				_map.put("workName", item.getWorkName());
 				_map.put("workNo", item.getWorkNo());
+				_map.put("workName", item.getWorkName());
+				_map.put("cityUnitPrice", item.getCityUnitPrice());
+				_map.put("productNum", item.getProductNum());
+				_map.put("workerNum", item.getWorkerNum());
+				_map.put("unconfirmedNum", item.getUnconfirmedNum());
+				_map.put("confirmedNum", item.getConfirmedNum());
+				_map.put("uncompleteNum", item.getUncompleteNum());
+				_map.put("completeNum", item.getCompleteNum());
 				_map.put("createTime", DateUtil.format(item.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
 				listMap.add(_map);
 			}
@@ -423,15 +433,13 @@ public class ProjectManageController extends BaseController {
 			res.put("message", "无效的表单，E:01，请刷新页面后重试");
 			return res;
 		}
-
-		CacheObject cacheObject = CacheUtil.get("single:system:form", "project_manage_csrf");
-		if (cacheObject == null) {
-			res.put("message", "无效的表单，E:02，请刷新页面后重试");
+		String _csrf = baseDataCacheUtil.getPageCsrf("project_manage_create");
+		if (_csrf == null) {
+			res.put("message", "表单已失效，请刷新页面后重试");
 			return res;
 		}
-
-		if (!csrf.equals(cacheObject.asString())) {
-			res.put("message", "无效的表单，E:03，请刷新页面后重试");
+		if (!csrf.equals(_csrf)) {
+			res.put("message", "表单已失效，你可能在其他页面已打开该页面");
 			return res;
 		}
 
@@ -568,16 +576,16 @@ public class ProjectManageController extends BaseController {
 			return res;
 		}
 
-		CacheObject cacheObject = CacheUtil.get("single:system:form", "project_manage_csrf");
-		if (cacheObject == null) {
-			res.put("message", "无效的表单，E:02");
+		String _csrf = baseDataCacheUtil.getPageCsrf("project_manage_edit");
+		if (_csrf == null) {
+			res.put("message", "表单已失效，请刷新页面后重试");
+			return res;
+		}
+		if (!csrf.equals(_csrf)) {
+			res.put("message", "表单已失效，你可能在其他页面已打开该页面");
 			return res;
 		}
 
-		if (!csrf.equals(cacheObject.asString())) {
-			res.put("message", "无效的表单，E:03");
-			return res;
-		}
 		String id = request.getParameter("id");
 		if (StringUtils.isBlank(id)) {
 			res.put("message", "无效的表单，E:04");
@@ -676,16 +684,16 @@ public class ProjectManageController extends BaseController {
 			return res;
 		}
 
-		CacheObject cacheObject = CacheUtil.get("single:system:form", "project_manage_csrf");
-		if (cacheObject == null) {
-			res.put("message", "无效的表单，E:02");
+		String _csrf = baseDataCacheUtil.getPageCsrf("project_manage_addr");
+		if (_csrf == null) {
+			res.put("message", "表单已失效，请刷新页面后重试");
+			return res;
+		}
+		if (!csrf.equals(_csrf)) {
+			res.put("message", "表单已失效，你可能在其他页面已打开该页面");
 			return res;
 		}
 
-		if (!csrf.equals(cacheObject.asString())) {
-			res.put("message", "无效的表单，E:03");
-			return res;
-		}
 		String id = request.getParameter("id");
 		if (StringUtils.isBlank(id)) {
 			res.put("message", "无效的表单，E:04");

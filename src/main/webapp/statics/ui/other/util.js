@@ -2,11 +2,15 @@ window.openLayer = function(title, url, scroll, end) {
 	return layer.open({
 		type: 2,
 		title: title,
-		closeBtn: !0, 
+		closeBtn: !0,
+		resizing: !0,
 		shade: [0.1],
-		area: ['720px', '460px'],
+		area: ['820px', '460px'],
 		content: [url, scroll?'yes':'no'],
-		end: end || function(){}
+		end: end || function(){},
+		resizing: function(e){
+			  console.log(e);
+		}
 	});
 }
 

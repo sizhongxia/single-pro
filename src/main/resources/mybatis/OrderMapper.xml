@@ -8,31 +8,45 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.single.pro.entity.Order">
         <id column="id" property="id" />
+        <result column="project_id" property="projectId" />
+        <result column="project_name" property="projectName" />
+        <result column="work_id" property="workId" />
         <result column="order_no" property="orderNo" />
         <result column="customer_id" property="customerId" />
+        <result column="customer_name" property="customerName" />
         <result column="worker_id" property="workerId" />
-        <result column="project_product_id" property="projectProductId" />
-        <result column="project_name" property="projectName" />
+        <result column="worker_name" property="workerName" />
+        <result column="worker_head_pic" property="workerHeadPic" />
+        <result column="worker_age" property="workerAge" />
         <result column="product_id" property="productId" />
         <result column="product_name" property="productName" />
         <result column="product_kind" property="productKind" />
         <result column="product_type" property="productType" />
         <result column="product_model" property="productModel" />
-        <result column="expect_stime" property="expectStime" />
+        <result column="product_company" property="productCompany" />
+        <result column="product_pic" property="productPic" />
+        <result column="product_num" property="productNum" />
+        <result column="detail_list_url" property="detailListUrl" />
+        <result column="expect_time" property="expectTime" />
         <result column="expect_days" property="expectDays" />
         <result column="order_cost" property="orderCost" />
         <result column="deposit_cost" property="depositCost" />
         <result column="paid_cost" property="paidCost" />
-        <result column="order_status" property="orderStatus" />
+        <result column="ser_survey_choice" property="serSurveyChoice" />
+        <result column="ser_survey_status" property="serSurveyStatus" />
+        <result column="ser_check_choice" property="serCheckChoice" />
+        <result column="ser_check_status" property="serCheckStatus" />
+        <result column="ser_construct_choice" property="serConstructChoice" />
+        <result column="ser_construct_status" property="serConstructStatus" />
+        <result column="ser_train_choice" property="serTrainChoice" />
+        <result column="ser_train_status" property="serTrainStatus" />
+        <result column="ser_accept_choice" property="serAcceptChoice" />
+        <result column="ser_accept_status" property="serAcceptStatus" />
+        <result column="release_status" property="releaseStatus" />
+        <result column="release_time" property="releaseTime" />
         <result column="build_status" property="buildStatus" />
-        <result column="cancle_reason" property="cancleReason" />
+        <result column="order_status" property="orderStatus" />
         <result column="remarks" property="remarks" />
-        <result column="worker_grade" property="workerGrade" />
-        <result column="worker_comment" property="workerComment" />
-        <result column="worker_c_time" property="workerCTime" />
-        <result column="customer_grade" property="customerGrade" />
-        <result column="customer_comment" property="customerComment" />
-        <result column="customer_c_time" property="customerCTime" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
