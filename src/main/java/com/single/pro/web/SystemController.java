@@ -119,13 +119,10 @@ public class SystemController extends BaseController {
 			res.put("message", "未知错误");
 			return res;
 		}
-
-		// 更新缓存信息
-		config.setLogoUrl(RealHostReplace.getResUrl(config.getLogoUrl()));
-
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("system:apps");
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
-
 		return res;
 	}
 
@@ -231,7 +228,8 @@ public class SystemController extends BaseController {
 			res.put("message", "未知错误");
 			return res;
 		}
-
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("system:apps");
 		res.put("statusCode", 200);
 		res.put("message", "保存成功");
 		return res;
@@ -272,7 +270,8 @@ public class SystemController extends BaseController {
 			res.put("message", "未知错误");
 			return res;
 		}
-
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("system:apps");
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
 		return res;
@@ -320,7 +319,8 @@ public class SystemController extends BaseController {
 			res.put("message", "未知错误");
 			return res;
 		}
-
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("system:apps");
 		res.put("statusCode", 200);
 		res.put("message", "操作成功");
 		return res;

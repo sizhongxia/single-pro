@@ -288,7 +288,8 @@ public class ProductTypeController extends BaseController {
 			res.put("message", "未知错误");
 			return res;
 		}
-
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("product:type");
 		res.put("statusCode", 200);
 		res.put("message", "保存成功");
 		return res;
@@ -349,7 +350,8 @@ public class ProductTypeController extends BaseController {
 			res.put("message", "未知错误");
 			return res;
 		}
-
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("product:type");
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
 		return res;
@@ -448,25 +450,5 @@ public class ProductTypeController extends BaseController {
 		res.put("statusCode", 200);
 		res.put("message", "操作成功");
 		return res;
-	}
-
-	public static void main(String[] args) {
-		List<String> qualificationNews = new ArrayList<>();
-		qualificationNews.add("A");
-		qualificationNews.add("B");
-		qualificationNews.add("C");
-		qualificationNews.add("D");
-		List<String> qualificationOlds = new ArrayList<>();
-		qualificationOlds.add("C");
-		qualificationOlds.add("D");
-		qualificationOlds.add("E");
-		List<String> qualificationNews2 = qualificationNews;
-
-		System.out.println(qualificationNews.retainAll(qualificationOlds));
-		System.out.println(qualificationNews);
-
-		System.out.println(qualificationNews2.removeAll(qualificationOlds));
-
-		System.out.println(qualificationNews2);
 	}
 }

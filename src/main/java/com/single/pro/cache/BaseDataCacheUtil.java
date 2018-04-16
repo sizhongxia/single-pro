@@ -234,6 +234,10 @@ public class BaseDataCacheUtil implements InitializingBean {
 		return false;
 	}
 
+	public void updateCachePublish(String type) {
+		cacheUtil.publish("update_single_pro_cache", type);
+	}
+
 	private System getCacheSystemInfo() {
 		String res = cacheUtil.get("single:cache:system:info");
 		if (res != null) {
@@ -356,7 +360,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 				cacheUtil.subscribe(new JedisPubSub() {
 					@Override
 					public void onMessage(String channel, String message) {
-						initCacheData();
+						reInitCacheData(message);
 					}
 				}, "update_single_pro_cache");
 			}
@@ -376,6 +380,44 @@ public class BaseDataCacheUtil implements InitializingBean {
 		loadProductKindDatas();
 		logger.info("init product type cache data...");
 		loadProductTypeDatas();
+	}
+
+	private void reInitCacheData(String type) {
+		if ("system:info".equals(type)) {
+			logger.info("clear system info cache data...");
+			cacheUtil.del("single:cache:system:info");
+			logger.info("init system info cache data...");
+			initSystemInfo();
+		} else if ("system:apps".equals(type)) {
+			logger.info("clear system apps cache data...");
+			cacheUtil.del("single:cache:system:apps");
+			logger.info("init system apps cache data...");
+			initSystemApps();
+		} else if ("dict".equals(type)) {
+			logger.info("clear dict type cache data...");
+			cacheUtil.del("single:cache:system:dict:type");
+			logger.info("clear dict item cache data...");
+			cacheUtil.del("single:cache:system:dict:item");
+			logger.info("init dict cache data...");
+			loadDictItems();
+		} else if ("city".equals(type)) {
+			logger.info("clear city cache data...");
+			cacheUtil.del("single:cache:system:city");
+			logger.info("init city cache data...");
+			loadCityDatas();
+		} else if ("product:kind".equals(type)) {
+			logger.info("clear product kind cache data...");
+			cacheUtil.del("single:cache:system:product:kind");
+			logger.info("init product kind cache data...");
+			loadProductKindDatas();
+		} else if ("product:type".equals(type)) {
+			logger.info("clear product type cache data...");
+			cacheUtil.del("single:cache:system:product:type");
+			logger.info("init product type cache data...");
+			loadProductTypeDatas();
+		} else {
+			logger.error("通过类型：" + type + " 未找到缓存信息！");
+		}
 	}
 
 }

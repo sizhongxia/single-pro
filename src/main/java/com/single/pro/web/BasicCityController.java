@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.entity.BasicCity;
 import com.single.pro.model.BasicCityModel;
 import com.single.pro.service.BasicCityService;
@@ -34,6 +35,8 @@ public class BasicCityController extends BaseController {
 	BasicCityService basicCityService;
 	@Autowired
 	BasicCityCustomService basicCityCustomService;
+	@Autowired
+	BaseDataCacheUtil baseDataCacheUtil;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -216,7 +219,8 @@ public class BasicCityController extends BaseController {
 			res.put("message", "未知错误");
 			return res;
 		}
-
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("city");
 		res.put("statusCode", 200);
 		res.put("message", "保存成功");
 		return res;
@@ -271,7 +275,8 @@ public class BasicCityController extends BaseController {
 			res.put("message", "未知错误");
 			return res;
 		}
-
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("city");
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
 		return res;
@@ -319,7 +324,8 @@ public class BasicCityController extends BaseController {
 			res.put("message", "未知错误");
 			return res;
 		}
-
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("city");
 		res.put("statusCode", 200);
 		res.put("message", "操作成功");
 		return res;

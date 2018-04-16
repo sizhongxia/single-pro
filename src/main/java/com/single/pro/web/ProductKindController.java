@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.entity.ProductKind;
 import com.single.pro.service.ProductKindService;
 import com.single.pro.storage.RealHostReplace;
@@ -35,6 +36,8 @@ public class ProductKindController extends BaseController {
 
 	@Autowired
 	ProductKindService productKindService;
+	@Autowired
+	BaseDataCacheUtil baseDataCacheUtil;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -182,7 +185,8 @@ public class ProductKindController extends BaseController {
 			res.put("message", "未知错误");
 			return res;
 		}
-
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("product:kind");
 		res.put("statusCode", 200);
 		res.put("message", "保存成功");
 		return res;
@@ -225,7 +229,8 @@ public class ProductKindController extends BaseController {
 			res.put("message", "未知错误");
 			return res;
 		}
-
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("product:kind");
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
 		return res;

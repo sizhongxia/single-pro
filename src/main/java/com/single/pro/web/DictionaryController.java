@@ -272,6 +272,8 @@ public class DictionaryController extends BaseController {
 			return res;
 		}
 
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("dict");
 		res.put("statusCode", 200);
 		res.put("message", "保存成功");
 		return res;
@@ -324,6 +326,8 @@ public class DictionaryController extends BaseController {
 			return res;
 		}
 
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("dict");
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
 		return res;
@@ -375,6 +379,8 @@ public class DictionaryController extends BaseController {
 			return res;
 		}
 
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("dict");
 		res.put("statusCode", 200);
 		res.put("message", "保存成功");
 		return res;
@@ -427,6 +433,8 @@ public class DictionaryController extends BaseController {
 			return res;
 		}
 
+		// 更新通知
+		baseDataCacheUtil.updateCachePublish("dict");
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
 		return res;

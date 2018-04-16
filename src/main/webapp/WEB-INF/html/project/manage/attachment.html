@@ -131,7 +131,7 @@
       			var loading = null;
       			
       			$('input[type="file"]').ajaxfileupload({
-	  				  action: '${rc.contextPath}/uploadPic?typeCode=ProjectDrawing',
+	  				  action: '${rc.contextPath}/uploadFile?typeCode=ProjectDrawing',
 	  				  onComplete: function(response) {
 		  				    if(response.statusCode == 200) {
 		  				    	post('${rc.contextPath}/project/manage/saveAttachment', {
@@ -149,6 +149,7 @@
 		  		          			_this.closeLoading(loading);
 		  		      			});
 		  				    } else {
+	  		      				layer.msg(response.message || response.msg);
 			  					_this.closeLoading(loading);
 		  				    }
 	  				  },
