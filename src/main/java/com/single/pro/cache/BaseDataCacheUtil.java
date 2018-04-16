@@ -3,6 +3,7 @@ package com.single.pro.cache;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -180,6 +181,17 @@ public class BaseDataCacheUtil implements InitializingBean {
 		return "";
 	}
 
+	public List<ProductKind> getProductKinds() {
+		Map<String, String> res = cacheUtil.hgetAll("single:cache:system:product:kind");
+		List<ProductKind> pks = new ArrayList<>();
+		if (res != null && !res.isEmpty()) {
+			for (Map.Entry<String, String> r : res.entrySet()) {
+				pks.add(JSON.parseObject(r.getValue(), ProductKind.class));
+			}
+		}
+		return pks;
+	}
+
 	public ProductKind getProductKindById(String id) {
 		String res = cacheUtil.hget("single:cache:system:product:kind", id);
 		if (res != null) {
@@ -194,6 +206,17 @@ public class BaseDataCacheUtil implements InitializingBean {
 			return null;
 		}
 		return productKind.getName();
+	}
+
+	public List<ProductType> getProductTypes() {
+		Map<String, String> res = cacheUtil.hgetAll("single:cache:system:product:type");
+		List<ProductType> pts = new ArrayList<>();
+		if (res != null && !res.isEmpty()) {
+			for (Map.Entry<String, String> r : res.entrySet()) {
+				pts.add(JSON.parseObject(r.getValue(), ProductType.class));
+			}
+		}
+		return pts;
 	}
 
 	public ProductType getProductTypeById(String id) {

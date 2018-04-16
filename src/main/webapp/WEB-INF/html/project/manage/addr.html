@@ -114,8 +114,7 @@
       		methods: {
       			submit: function(page) {
       				var _this = this;
-          			let loading = _this.loading();
-          			
+          			var loading = _this.loading();
           			new Promise(function (resolve, reject) {
           				post('${rc.contextPath}/project/manage/updateAddr', {
 							id: _this.id,
@@ -138,6 +137,7 @@
 			    },
 			    loadProvincials: function() {
       				var _this = this;
+			    	var loading = _this.loading();
 			    	new Promise(function (resolve, reject) {
           				post('${rc.contextPath}/basic/city/cities', {}, resolve, reject);
           			}).then(function(data){
@@ -145,13 +145,16 @@
           				setTimeout(function(){
           					if(_this.provincial) {
           						_this.loadCitys();
+        	          			_this.closeLoading(loading);
           					}
           				}, 20)
           			}).catch(function (reason) {
+	          			_this.closeLoading(loading);
           			});
 			    },
 			    loadCitys: function() {
       				var _this = this;
+			    	var loading = _this.loading();
 			    	new Promise(function (resolve, reject) {
           				post('${rc.contextPath}/basic/city/cities', {
           					pcode: _this.provincial
@@ -159,28 +162,32 @@
           			}).then(function(data){
           				_this.citys = data;
           				setTimeout(function(){
-	          				setTimeout(function(){
-	          					if(_this.city) {
-	              					_this.loadCountys();
-	          					}
-	          				}, 20)
+          					if(_this.city) {
+              					_this.loadCountys();
+        	          			_this.closeLoading(loading);
+          					}
           				}, 20)
           			}).catch(function (reason) {
+	          			_this.closeLoading(loading);
           			});
 			    },
 			    loadCountys: function() {
       				var _this = this;
+			    	var loading = _this.loading();
 			    	new Promise(function (resolve, reject) {
           				post('${rc.contextPath}/basic/city/cities', {
           					pcode: _this.city
           				}, resolve, reject);
           			}).then(function(data){
           				_this.countys = data;
+	          			_this.closeLoading(loading);
           			}).catch(function (reason) {
+	          			_this.closeLoading(loading);
           			});
 			    },
 			    changeLngLat: function(val, oldVal) {
       				var _this = this;
+			    	var loading = _this.loading();
 			    	if(val != oldVal) {
   						if(map && marker && _this.longitude != 0 && _this.latitude != 0) {
 	      					var lngLat = new AMap.LngLat(Number(_this.longitude), Number(_this.latitude));
@@ -188,6 +195,7 @@
 	      					marker.setPosition(lngLat);
 	      				}
   					}
+          			_this.closeLoading(loading);
 			    },
 			    changeAddr: function(val, oldVal) {
       				var _this = this;

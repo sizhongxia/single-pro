@@ -165,16 +165,47 @@ public class CompanyController extends BaseController {
 
 	@ResponseBody
 	@RequiresAuthentication
+	@RequestMapping(value = "/companies")
+	public List<Map<String, String>> companies(HttpServletRequest request) {
+
+		Wrapper<Company> companyWrapper = new EntityWrapper<>();
+		companyWrapper.eq("group_id", "");
+		companyWrapper.orderBy("name", true);
+		List<Company> companys = companyService.selectList(companyWrapper);
+
+		List<Map<String, String>> list = new ArrayList<>();
+		Map<String, String> item = null;
+		if (companys == null || companys.isEmpty()) {
+			item = new HashMap<>();
+			item.put("groupId", "");
+			item.put("companyName", "无");
+			list.add(item);
+			return list;
+		}
+
+		for (Company company : companys) {
+			item = new HashMap<>();
+			item.put("groupId", company.getId());
+			item.put("companyName", company.getName());
+			list.add(item);
+		}
+
+		return list;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
 	@RequestMapping(value = "/branchCompanies")
 	public List<Map<String, String>> branchCompanies(HttpServletRequest request) {
 		List<Map<String, String>> list = new ArrayList<>();
-		Map<String, String> item = new HashMap<>();
-		item.put("groupId", "");
-		item.put("companyName", "无");
-		list.add(item);
+		Map<String, String> item = null;
 
 		String companyId = request.getParameter("companyId");
 		if (StringUtils.isBlank(companyId)) {
+			item = new HashMap<>();
+			item.put("groupId", "");
+			item.put("companyName", "无");
+			list.add(item);
 			return list;
 		}
 		Wrapper<Company> companyWrapper = new EntityWrapper<>();
@@ -182,8 +213,18 @@ public class CompanyController extends BaseController {
 		companyWrapper.orderBy("name", true);
 		List<Company> companys = companyService.selectList(companyWrapper);
 		if (companys == null || companys.isEmpty()) {
+			item = new HashMap<>();
+			item.put("groupId", "");
+			item.put("companyName", "无");
+			list.add(item);
 			return list;
 		}
+
+		item = new HashMap<>();
+		item.put("groupId", "");
+		item.put("companyName", "集团");
+		list.add(item);
+
 		for (Company company : companys) {
 			item = new HashMap<>();
 			item.put("groupId", company.getId());

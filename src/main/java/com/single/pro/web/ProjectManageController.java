@@ -27,7 +27,6 @@ import com.github.stuxuhai.jpinyin.PinyinException;
 import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
 import com.single.pro.cache.BaseDataCacheUtil;
-import com.single.pro.entity.Company;
 import com.single.pro.entity.Order;
 import com.single.pro.entity.Project;
 import com.single.pro.entity.ProjectDraw;
@@ -35,7 +34,6 @@ import com.single.pro.entity.ProjectWork;
 import com.single.pro.entity.SystemUser;
 import com.single.pro.model.DictionaryItemModel;
 import com.single.pro.model.ProjectModel;
-import com.single.pro.service.CompanyService;
 import com.single.pro.service.OrderService;
 import com.single.pro.service.ProjectDrawService;
 import com.single.pro.service.ProjectService;
@@ -59,8 +57,6 @@ public class ProjectManageController extends BaseController {
 	ProjectWorkService projectWorkService;
 	@Autowired
 	ProjectCustomService projectCustomService;
-	@Autowired
-	CompanyService companyService;
 	@Autowired
 	OrderService orderService;
 
@@ -165,12 +161,7 @@ public class ProjectManageController extends BaseController {
 
 		List<DictionaryItemModel> types = baseDataCacheUtil.getDictItems("XMLX");
 		mav.addObject("types", types);
-
-		Wrapper<Company> companyWrapper = new EntityWrapper<>();
-		companyWrapper.eq("group_id", "");
-		companyWrapper.orderBy("name", true);
-		List<Company> companies = companyService.selectList(companyWrapper);
-		mav.addObject("companies", companies);
+		
 		mav.addObject("csrf", baseDataCacheUtil.setPageCsrf("project_manage_create"));
 		return mav;
 	}
@@ -191,11 +182,6 @@ public class ProjectManageController extends BaseController {
 		List<DictionaryItemModel> types = baseDataCacheUtil.getDictItems("XMLX");
 		mav.addObject("types", types);
 
-		Wrapper<Company> companyWrapper = new EntityWrapper<>();
-		companyWrapper.eq("group_id", "");
-		companyWrapper.orderBy("name", true);
-		List<Company> companies = companyService.selectList(companyWrapper);
-		mav.addObject("companies", companies);
 		mav.addObject("csrf", baseDataCacheUtil.setPageCsrf("project_manage_edit"));
 		mav.addObject("project", project);
 		return mav;
@@ -287,71 +273,6 @@ public class ProjectManageController extends BaseController {
 		return mav;
 	}
 
-	@RequiresAuthentication
-	@RequestMapping(value = { "/order" }, method = { RequestMethod.GET })
-	public ModelAndView order(HttpServletRequest request) throws Exception {
-		ModelAndView mav = null;
-		String workId = request.getParameter("workId");
-		if (StringUtils.isBlank(workId)) {
-			mav = new ModelAndView("error/error");
-			mav.addObject("msg", "缺失参数：workId");
-			return mav;
-		}
-		ProjectWork projectWork = projectWorkService.selectById(workId);
-		if (projectWork == null) {
-			mav = new ModelAndView("error/error");
-			mav.addObject("msg", "通过参数 workId:" + workId + " 未找到有效的项目批次");
-			return mav;
-		}
-		Wrapper<Order> wrapper = new EntityWrapper<>();
-		wrapper.eq("work_id", projectWork.getId());
-		wrapper.orderBy("create_time", true);
-		List<Order> orders = orderService.selectList(wrapper);
-
-		List<Map<String, Object>> listMap = new ArrayList<>();
-		if (orders != null && orders.size() > 0) {
-			Map<String, Object> _map = null;
-			for (Order item : orders) {
-				_map = new HashMap<>();
-				_map.put("id", item.getId());
-				_map.put("orderNo", item.getOrderNo());
-				_map.put("customerId", item.getCustomerId());
-				_map.put("customerName", item.getCustomerName());
-				_map.put("workerId", item.getWorkerId());
-				_map.put("workerName", item.getWorkerName());
-				_map.put("productName", item.getProductName());
-				_map.put("productKind", item.getProductKind());
-				_map.put("productType", item.getProductType());
-				_map.put("productModel", item.getProductModel());
-				_map.put("productCompany", item.getProductCompany());
-				_map.put("survey", "Y".equals(item.getSerSurveyChoice()) ? "success" : "default");
-				_map.put("surveyStatus", item.getSerSurveyStatus());
-				_map.put("check", "Y".equals(item.getSerCheckChoice()) ? "success" : "default");
-				_map.put("checkStatus", item.getSerCheckStatus());
-				_map.put("construct", "Y".equals(item.getSerConstructChoice()) ? "success" : "default");
-				_map.put("constructStatus", item.getSerConstructStatus());
-				_map.put("train", "Y".equals(item.getSerTrainChoice()) ? "success" : "default");
-				_map.put("trainStatus", item.getSerTrainStatus());
-				_map.put("accept", "Y".equals(item.getSerAcceptChoice()) ? "success" : "default");
-				_map.put("acceptStatus", item.getSerAcceptStatus());
-				_map.put("detailListUrl", RealHostReplace.getResUrl(item.getDetailListUrl()));
-				_map.put("remarks", item.getRemarks());
-				_map.put("createTime", DateUtil.format(item.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
-				listMap.add(_map);
-			}
-		}
-
-		projectWork.setProjectType(baseDataCacheUtil.getDictItemName(projectWork.getProjectType()));
-		projectWork.setProvincial(baseDataCacheUtil.getCityName(projectWork.getProvincial()));
-		projectWork.setCity(baseDataCacheUtil.getCityName(projectWork.getCity()));
-		projectWork.setCounty(baseDataCacheUtil.getCityName(projectWork.getCounty()));
-
-		mav = new ModelAndView("project/manage/order");
-		mav.addObject("projectWork", projectWork);
-		mav.addObject("orders", listMap);
-		return mav;
-	}
-
 	@ResponseBody
 	@RequiresAuthentication
 	@RequestMapping(value = { "/works" }, method = { RequestMethod.POST })
@@ -403,6 +324,7 @@ public class ProjectManageController extends BaseController {
 				_map.put("cityUnitPrice", item.getCityUnitPrice());
 				_map.put("productNum", item.getProductNum());
 				_map.put("workerNum", item.getWorkerNum());
+				_map.put("arrearageNum", item.getArrearageNum());
 				_map.put("unconfirmedNum", item.getUnconfirmedNum());
 				_map.put("confirmedNum", item.getConfirmedNum());
 				_map.put("uncompleteNum", item.getUncompleteNum());
@@ -418,6 +340,110 @@ public class ProjectManageController extends BaseController {
 		data.put("pageCount", pageInfo.getPages());
 
 		return data;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/order" }, method = { RequestMethod.GET })
+	public ModelAndView order(HttpServletRequest request) throws Exception {
+		ModelAndView mav = null;
+		String workId = request.getParameter("workId");
+		if (StringUtils.isBlank(workId)) {
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "缺失参数：workId");
+			return mav;
+		}
+		ProjectWork projectWork = projectWorkService.selectById(workId);
+		if (projectWork == null) {
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "通过参数 workId:" + workId + " 未找到有效的项目批次");
+			return mav;
+		}
+		Wrapper<Order> wrapper = new EntityWrapper<>();
+		wrapper.eq("work_id", projectWork.getId());
+		wrapper.orderBy("create_time", true);
+		List<Order> orders = orderService.selectList(wrapper);
+
+		List<Map<String, Object>> listMap = new ArrayList<>();
+		if (orders != null && orders.size() > 0) {
+			Map<String, Object> _map = null;
+			for (Order item : orders) {
+				_map = new HashMap<>();
+				_map.put("id", item.getId());
+				_map.put("orderNo", item.getOrderNo());
+
+				_map.put("customerId", item.getCustomerId());
+				_map.put("customerName", item.getCustomerName());
+
+				_map.put("workerId", item.getWorkerId());
+				_map.put("workerName", item.getWorkerName());
+
+				_map.put("productName", item.getProductName());
+				_map.put("productCompany", item.getProductCompany());
+
+				_map.put("expectTime", item.getExpectTime());
+				_map.put("expectDays", item.getExpectDays());
+
+				_map.put("orderCost", item.getOrderCost());
+				_map.put("depositCost", item.getDepositCost());
+				_map.put("paidCost", item.getPaidCost());
+
+				_map.put("survey", "Y".equals(item.getSerSurveyChoice()) ? "success" : "default");
+				_map.put("surveyStatus", item.getSerSurveyStatus());
+				_map.put("check", "Y".equals(item.getSerCheckChoice()) ? "success" : "default");
+				_map.put("checkStatus", item.getSerCheckStatus());
+				_map.put("construct", "Y".equals(item.getSerConstructChoice()) ? "success" : "default");
+				_map.put("constructStatus", item.getSerConstructStatus());
+				_map.put("train", "Y".equals(item.getSerTrainChoice()) ? "success" : "default");
+				_map.put("trainStatus", item.getSerTrainStatus());
+				_map.put("accept", "Y".equals(item.getSerAcceptChoice()) ? "success" : "default");
+				_map.put("acceptStatus", item.getSerAcceptStatus());
+
+				String releaseStatus = item.getReleaseStatus();
+				String releaseStatusTxt = "暂存，未发布";
+				_map.put("releaseTime", "-");
+				if ("Y".equals(releaseStatus)) {
+					releaseStatusTxt = "已发布";
+					_map.put("releaseTime", DateUtil.format(item.getReleaseTime(), "yyyy-MM-dd HH:mm:ss"));
+				}
+				_map.put("releaseStatus", releaseStatusTxt);
+
+				String buildStatus = item.getBuildStatus();
+				String buildStatusTxt = "待施工";
+				if ("Y".equals(buildStatus)) {
+					buildStatusTxt = "已完工";
+				} else if ("R".equals(buildStatus)) {
+					buildStatusTxt = "进行中";
+				}
+				_map.put("buildStatus", buildStatusTxt);
+
+				String orderStatus = item.getOrderStatus();
+				String orderStatusTxt = "待工人确认";
+				if ("Y".equals(orderStatus)) {
+					orderStatusTxt = "已完成";
+				} else if ("D".equals(orderStatus)) {
+					orderStatusTxt = "工人已接单";
+				} else if ("N".equals(orderStatus)) {
+					orderStatusTxt = "已取消";
+				} else if ("P".equals(orderStatus)) {
+					orderStatusTxt = "待平台确认";
+				}
+				_map.put("orderStatus", orderStatusTxt);
+
+				_map.put("remarks", item.getRemarks());
+				_map.put("createTime", DateUtil.format(item.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+				listMap.add(_map);
+			}
+		}
+
+		projectWork.setProjectType(baseDataCacheUtil.getDictItemName(projectWork.getProjectType()));
+		projectWork.setProvincial(baseDataCacheUtil.getCityName(projectWork.getProvincial()));
+		projectWork.setCity(baseDataCacheUtil.getCityName(projectWork.getCity()));
+		projectWork.setCounty(baseDataCacheUtil.getCityName(projectWork.getCounty()));
+
+		mav = new ModelAndView("project/manage/order");
+		mav.addObject("projectWork", projectWork);
+		mav.addObject("orders", listMap);
+		return mav;
 	}
 
 	@ResponseBody

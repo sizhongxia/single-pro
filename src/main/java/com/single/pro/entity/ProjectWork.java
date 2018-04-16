@@ -12,7 +12,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-04-15
+ * @since 2018-04-16
  */
 @TableName("sp_project_work")
 public class ProjectWork implements Serializable {
@@ -127,6 +127,11 @@ public class ProjectWork implements Serializable {
      */
 	@TableField("complete_num")
 	private Integer completeNum;
+    /**
+     * 未付款的订单
+     */
+	@TableField("arrearage_num")
+	private Integer arrearageNum;
     /**
      * 工作项目描述
      */
@@ -333,6 +338,14 @@ public class ProjectWork implements Serializable {
 		this.completeNum = completeNum;
 	}
 
+	public Integer getArrearageNum() {
+		return arrearageNum;
+	}
+
+	public void setArrearageNum(Integer arrearageNum) {
+		this.arrearageNum = arrearageNum;
+	}
+
 	public String getWorkDescription() {
 		return workDescription;
 	}
@@ -391,6 +404,7 @@ public class ProjectWork implements Serializable {
 			", confirmedNum=" + confirmedNum +
 			", uncompleteNum=" + uncompleteNum +
 			", completeNum=" + completeNum +
+			", arrearageNum=" + arrearageNum +
 			", workDescription=" + workDescription +
 			", customerId=" + customerId +
 			", createTime=" + createTime +

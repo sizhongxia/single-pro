@@ -33,19 +33,41 @@
                 <div class="card">
                 	<div class="card-header" data-background-color="system">
                        	<div class="category row">
-                            <div class="col-md-2 col-xs-5">
+                            <div class="col-md-3 col-xs-5">
                                 <div class="form-group">
                                     <label class="control-label">订单编号</label>
                                     <input v-model="searchParam.orderNo" type="text" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-2 col-xs-5">
+                            <div class="col-md-3 col-xs-5" v-show="searchMore">
                                 <div class="form-group">
-                                    <label class="control-label">项目批次</label>
-                                    <input v-model="searchParam.workNo" type="text" class="form-control">
+                                    <label class="control-label">项目名称</label>
+                                    <input v-model="searchParam.projectName" type="text" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-2 col-xs-5">
+                            <div class="col-md-3 col-xs-5" v-show="searchMore">
+                                <div class="form-group">
+                                    <label class="control-label">产品厂家</label>
+                                    <input v-model="searchParam.productCompany" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-xs-5" v-show="searchMore">
+                                <div class="form-group">
+                                    <label class="control-label">产品型号</label>
+                                    <input v-model="searchParam.productModel" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-xs-5" v-show="searchMore">
+                                <div class="form-group">
+                                    <label class="control-label">发布状态</label>
+                                    <select v-model="searchParam.releaseStatus" class="form-control">
+                                    	<option value="">全部</option>
+                                    	<option value="Y">已发布</option>
+                                    	<option value="N">暂存</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-xs-5">
                                 <div class="form-group">
                                     <label class="control-label">订单状态</label>
                                     <select v-model="searchParam.orderStatus" class="form-control">
@@ -58,7 +80,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-2 col-xs-5">
+                            <div class="col-md-3 col-xs-5" v-show="searchMore">
                                 <div class="form-group">
                                     <label class="control-label">施工状态</label>
                                     <select v-model="searchParam.buildStatus" class="form-control">
@@ -69,38 +91,45 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-2 col-xs-5">
+                            <div class="col-md-3 col-xs-5" v-show="searchMore">
+                                <div class="form-group">
+                                    <label class="control-label">发布日期</label>
+                                    <input v-model="searchParam.rtime" id="rtime" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-xs-5">
                                 <div class="form-group">
                                     <label class="control-label">订单日期</label>
                                     <input v-model="searchParam.ctime" id="ctime" type="text" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-2 col-xs-2">
-                                <button type="submit" class="btn btn-success search-btn" @click="searchForm">查询</button>
+                            <div class="col-md-3 col-xs-5">
+                                <button type="submit" class="btn btn-success search-btn" @click="searchForm" style="float: left;">查询</button>
+                                <a href="javascript:;" @click="moreSearch" v-show="!searchMore" style="color: #484848; margin-top: 34px; margin-left: 10px;float: left;">更多查询</a>
+                                <a href="javascript:;" @click="lessSearch" v-show="searchMore" style="color: #484848; margin-top: 34px; margin-left: 10px;float: left;">更少查询</a>
                             </div>
                         </div>
                     </div>
-                    <div class="card-content table-responsive">
-                        <table class="table table-hover">
+                    <div class="card-content">
+                    	<div class="table-responsive" style="min-height: .01%; overflow-x: auto;">
+                        <table class="table table-hover" style="width: 1840px;max-width: 1840px;">
                             <thead class="text-primary">
                             	<tr>
-	                                <th class="text-center">序号</th>
-	                                <th>订单编号</th>
-	                                <th>项目</th>
-	                                <th class="text-center">项目批次</th>
-	                                <th>产品名称</th>
-                                    <!--
-	                                <th class="text-center">产品种类</th>
-	                                <th class="text-center">产品类型</th>
-	                                <th class="text-center">规格型号</th>
-	                                -->
-	                                <th class="text-center">订单状态</th>
-	                                <th class="text-center">开工时间</th>
-	                                <th class="text-center">预计天数</th>
-	                                <th class="text-center">施工状态</th>
-	                                <th class="text-center">订单费用</th>
-	                                <th class="text-center">创建时间</th>
-	                                <th class="text-center">操作</th>
+	                                <th width="65" class="text-center">序号</th>
+	                                <th width="180" class="text-center">订单编号</th>
+	                                <th width="85" class="text-center">发布状态</th>
+	                                <th width="175" class="text-center">发布时间</th>
+	                                <th width="85" class="text-center">订单金额</th>
+	                                <th width="105" class="text-center">已托管金额</th>
+	                                <th width="105" class="text-center">已支付金额</th>
+	                                <th width="85" class="text-center">订单状态</th>
+	                                <th width="85" class="text-center">施工状态</th>
+	                                <th class="text-center">项目</th>
+	                                <th width="125" class="text-center">产品名称</th>
+	                                <th width="105" class="text-center">产品型号</th>
+	                                <th width="135" class="text-center">产品厂家</th>
+	                                <th width="175" class="text-center">创建时间</th>
+	                                <th width="105" class="text-center">操作</th>
                                 </tr>
                             </thead>
                             <tbody v-if="list.length == 0">
@@ -113,20 +142,18 @@
                             <tbody v-if="list.length > 0">
                                 <tr v-for="(item, index) in list">
                                     <td class="text-center">{{ (searchParam.page - 1) * searchParam.rows + index+1 }}</td>
-                                    <td>{{ item.orderNo }}</td>
-                                    <td>{{ item.projectName }}</td>
-                                    <td class="text-center">{{ item.workNo }}</td>
-                                    <td>{{ item.productName }}</td>
-                                    <!--
-                                    <td class="text-center">{{ item.productKind }}</td>
-                                    <td class="text-center">{{ item.productType }}</td>
-                                    <td class="text-center">{{ item.productModel }}</td>
-                                    -->
-                                    <td class="text-center">{{ item.orderStatus }}</td>
-                                    <td class="text-center">{{ item.expectStime }}</td>
-                                    <td class="text-center">{{ item.expectDays }}</td>
-                                    <td class="text-center">{{ item.buildStatus }}</td>
+                                    <td class="text-center">{{ item.orderNo }}</td>
+                                    <td class="text-center">{{ item.releaseStatus }}</td>
+                                    <td class="text-center">{{ item.releaseTime }}</td>
                                     <td class="text-center">{{ item.orderCost }}</td>
+                                    <td class="text-center">{{ item.depositCost }}</td>
+                                    <td class="text-center">{{ item.paidCost }}</td>
+                                    <td class="text-center">{{ item.orderStatus }}</td>
+                                    <td class="text-center">{{ item.buildStatus }}</td>
+                                    <td>{{ item.projectName }}</td>
+                                    <td>{{ item.productName }}</td>
+                                    <td class="text-center">{{ item.productModel }}</td>
+                                    <td>{{ item.productCompany }}</td>
                                     <td class="text-center">{{ item.createTime }}</td>
                                     <td class="text-center">
                                     	<a href="javascript:;" @click="detail(item.id)">详细</a>
@@ -141,6 +168,7 @@
                             	</tr>
                             </tfoot>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -165,12 +193,17 @@
    	    	el: '#app',
    	     	data: {
    	     		list: [],
+   	     		searchMore: false,
    	     		searchParam: {
    	     			orderNo: '',
-   	     			workNo: '',
-   	     			ctime: '',
+   	     			projectName: '',
+	   	     		productCompany: '',
+	   	   	     	productModel: '',
+   	   	 		 	releaseStatus: '',
    	     			orderStatus: '',
    	     			buildStatus: '',
+   	     			rtime: '',
+   	     			ctime: '',
    	     			page: 1,
    	     			rows:10
    	     		}
@@ -185,10 +218,14 @@
           			new Promise(function (resolve, reject) {
           				post('${rc.contextPath}/project/order/data', {
           					orderNo: _this.searchParam.orderNo,
-          					workNo: _this.searchParam.workNo,
-							ctime: _this.searchParam.ctime,
+          					projectName: _this.searchParam.projectName,
+          					productCompany: _this.searchParam.productCompany,
+          					productModel: _this.searchParam.productModel,
+          					releaseStatus: _this.searchParam.releaseStatus,
 							orderStatus: _this.searchParam.orderStatus,
 							buildStatus: _this.searchParam.buildStatus,
+          					rtime: _this.searchParam.rtime,
+							ctime: _this.searchParam.ctime,
 							page: page,
 							rows: _this.searchParam.rows
 						}, resolve, reject);
@@ -215,6 +252,14 @@
 			    detail: function(id) {
 			    	openLayer('订单详情', '${rc.contextPath}/project/order/detail?id=' + id, true);
 			    },
+			    moreSearch: function() {
+			    	var _this = this;
+			    	_this.searchMore = true;
+			    },
+			    lessSearch: function() {
+			    	var _this = this;
+			    	_this.searchMore = false;
+			    },
 			    loading: function() {
 			    	return layer.load(0, {shade: [0.1, '#EEE']});
 			    },
@@ -224,8 +269,11 @@
       		},
       		mounted: function () {
       			var _this = this;
-      			
+
       			laydateRender('#ctime', function(value) {
+      				_this.searchParam.ctime = value;
+      			});
+      			laydateRender('#rtime', function(value) {
       				_this.searchParam.ctime = value;
       			});
       			

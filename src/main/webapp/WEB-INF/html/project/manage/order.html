@@ -24,7 +24,7 @@
     	.m-style .active {background: #2c3b41;border-color: #2c3b41;}
     	.m-style a:hover {background: #2c3b41;border-color: #2c3b41;}
     	.layui-layer-setwin .layui-layer-close1 {background-position: 0px 0px;cursor: pointer;}
-    	label.item {margin: 4px 0 14px 14px;color:#484848;width: 76px;text-align: right;}
+    	label.item {margin: 4px 0 14px 14px;color:#484848;width: 84px;text-align: right;}
     </style>
 </head>
 <body>
@@ -51,6 +51,9 @@
                   </div>
                   <div class="col-xs-4">
                   	<label class="control-label item">工人数：</label> ${projectWork.workerNum!}
+                  </div>
+                  <div class="col-xs-6">
+                  	<label class="control-label item">未支付订单：</label> ${projectWork.arrearageNum!}
                   </div>
                   <div class="col-xs-12" style="border-bottom: 1px solid #EEE;margin-bottom: 12px;padding-bottom: 4px;">
                       <label class="control-label">位置 Position</label>
@@ -101,46 +104,58 @@
                       <label class="control-label">订单 Orders</label>
                   </div>
                   <div class="col-xs-12">
-                    <div class="card-content table-responsive" style="border: none;">
-                  		<table class="table table-hover" style="width: 1260px;">
-                  			<#if orders?size gt 0>
+                    <div class="card-content table-responsive">
+                  		<table class="table table-hover" style="width: 2260px;">
                   			<thead>
                   				<tr>
                   					<td>订单编号</td>
+                  					<td>客户</td>
+                  					<td>劳务工人</td>
                   					<td>产品名称</td>
-                  					<td>产品种类</td>
-                  					<td>产品类型</td>
-                  					<td>产品型号</td>
                   					<td>产品厂家</td>
-                  					<td class="text-center" width="58">数量</td>
+                  					<td>预计施工时间</td>
+                  					<td class="text-center">预计施工天数</td>
+                  					<td class="text-center">订单金额</td>
+                  					<td class="text-center">已托管金额</td>
+                  					<td class="text-center">已支付金额</td>
                   					<td class="text-center" width="360">服务</td>
+                  					<td class="text-center">发布状态</td>
+                  					<td class="text-center">发布时间</td>
+                  					<td class="text-center">订单状态</td>
+                  					<td class="text-center">施工状态</td>
                   					<td class="text-center" width="170">时间</td>
                   				</tr>
                   			</thead>
-                  			</#if>
                             <tbody>
                             	<#if orders?size == 0>
                             		<tr>
-	                                    <td style="border: none;" class="text-center" colspan="9">暂无订单</td>
+	                                    <td class="text-center" colspan="9">暂无订单</td>
 	                                </tr>
                             	<#else>
                             		<#list orders as item>
 	                            		<tr>
-			                                <td style="border: none;">${item.orderNo!}</td>
-			                                <td style="border: none;">${item.productName!}</td>
-			                                <td style="border: none;">${item.productKind!}</td>
-			                                <td style="border: none;">${item.productType!}</td>
-			                                <td style="border: none;">${item.productModel!}</td>
-			                                <td style="border: none;">${item.productCompany!}</td>
-			                                <td style="border: none;" class="text-center">${item.number!}</td>
-			                                <td style="border: none;" class="text-center">
+			                                <td>${item.orderNo!}</td>
+			                                <td>${item.customerName!}</td>
+			                                <td>${item.workerName!}</td>
+			                                <td>${item.productName!}</td>
+			                                <td>${item.productCompany!}</td>
+			                                <td>${item.expectTime!}</td>
+			                                <td class="text-center">${item.expectDays!}</td>
+			                                <td class="text-center">${item.orderCost!}</td>
+			                                <td class="text-center">${item.depositCost!}</td>
+			                                <td class="text-center">${item.paidCost!}</td>
+			                                <td class="text-center">
 			                                	<span class="label label-${item.survey!}"><#if item.surveyStatus=="Y"><img alt="" src="${rc.contextPath}/statics/images/confirm.png"> </#if>勘测</span>
 												<span class="label label-${item.check!}"><#if item.checkStatus=="Y"><img alt="" src="${rc.contextPath}/statics/images/confirm.png"> </#if>验货</span>
 												<span class="label label-${item.construct!}"><#if item.constructStatus=="Y"><img alt="" src="${rc.contextPath}/statics/images/confirm.png"> </#if>施工</span>
 												<span class="label label-${item.train!}"><#if item.trainStatus=="Y"><img alt="" src="${rc.contextPath}/statics/images/confirm.png"> </#if>培训</span>
 												<span class="label label-${item.accept!}"><#if item.acceptStatus=="Y"><img alt="" src="${rc.contextPath}/statics/images/confirm.png"> </#if>验收</span>
 			                                </td>
-			                                <td style="border: none;" class="text-center">${item.createTime!}</td>
+			                                <td class="text-center">${item.releaseStatus!}</td>
+			                                <td class="text-center">${item.releaseTime!}</td>
+			                                <td class="text-center">${item.orderStatus!}</td>
+			                                <td class="text-center">${item.buildStatus!}</td>
+			                                <td class="text-center">${item.createTime!}</td>
 		                                </tr>
                             		</#list>
                             	</#if>

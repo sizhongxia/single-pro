@@ -60,12 +60,9 @@
                    </div>
                    <div class="col-xs-6">
                        <div class="form-group">
-                           <label class="control-label">公司 <span style="color:red">*</span></label>
+                           <label class="control-label">公司 <span style="color:red">*</span> [<a href="javascript:;" @click="loadCompanies">刷新</a>]</label>
                            <select v-model="project.companyId" class="form-control" @change="loadBranchCompanies">
-                           		<option value="">请选择一个公司</option>
-                           		<#list companies as item>
-                           			<option value="${item.id!}">${item.name}</option>
-                           		</#list>
+                           		<option v-for="item in project.companies" v-bind:value="item.groupId">{{ item.companyName }}</option>
                            </select>
                        </div>
                    </div>
@@ -139,6 +136,7 @@
    	     			type: '${project.type!}',
    	     			coveredArea: '${project.coveredArea!}',
    	     			workerNum: '${project.workerNum!}',
+   	     			companies: [],
    	     			companyId: '${project.companyId!}',
    	     			branchCompanies: [],
    	     			branchCompanyId: '${project.branchCompanyId!}',
@@ -165,15 +163,33 @@
 	          			_this.closeLoading(loading);
           			});
 			    },
+			    loadCompanies: function() {
+			    	var _this = this;
+			    	var loading = _this.loading();
+			    	new Promise(function (resolve, reject) {
+          				post('${rc.contextPath}/company/companies', {}, resolve, reject);
+          			}).then(function(data){
+          				_this.project.companies = data;
+          				setTimeout(function(){
+          					_this.loadBranchCompanies();
+              				_this.closeLoading(loading);
+          				}, 20)
+          			}).catch(function (reason) {
+          				_this.closeLoading(loading);
+          			});
+			    },
 			    loadBranchCompanies: function() {
 	      			var _this = this;
+			    	var loading = _this.loading();
 			    	new Promise(function (resolve, reject) {
           				post('${rc.contextPath}/company/branchCompanies', {
           					companyId: _this.project.companyId
           				}, resolve, reject);
           			}).then(function(data){
           				_this.project.branchCompanies = data;
+          				_this.closeLoading(loading);
           			}).catch(function (reason) {
+          				_this.closeLoading(loading);
           			});
 			    },
 			    loading: function() {
@@ -186,7 +202,7 @@
       		mounted: function () {
       			var _this = this;
       			_this.project.remarks = $("#project-remarks").val();
-      			_this.loadBranchCompanies();
+      			_this.loadCompanies();
       		}
 		})
 	})

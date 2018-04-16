@@ -42,8 +42,8 @@
                   </div>
                   <div class="col-xs-12">
                     <div class="card-content table-responsive" style="border: none;">
-                  		<table class="table table-striped table-hover" style="margin-bottom: 0px;margin-top: -8px;width: 1260px;">
-                            <thead v-if="list.length > 0">
+                  		<table class="table table-striped table-hover" style="margin-bottom: 0px;margin-top: -8px;width: 1460px;">
+                            <thead>
                             	<tr>
 	                                <th width="44" class="text-center">#</th>
 	                                <th width="160">操作流水号</th>
@@ -51,6 +51,7 @@
 	                                <th width="100" class="text-center">人天单价(元)</th>
 	                                <th width="88" class="text-center">产品种类数</th>
 	                                <th width="78" class="text-center">工人数</th>
+	                                <th width="158" class="text-center">未支付订单数</th>
 	                                <th width="78" class="text-center">未确认</th>
 	                                <th width="78" class="text-center">已确认</th>
 	                                <th width="78" class="text-center">未完成</th>
@@ -61,7 +62,7 @@
                             </thead>
                             <tbody>
                             	<tr v-if="list.length == 0">
-                            		<td colspan="12" class="text-center">
+                            		<td colspan="13" class="text-center">
                             			<span class="text-primary" v-if="searchParam.workNo == ''">暂无数据</span>
                             			<span class="text-primary" v-if="searchParam.workNo != ''">未查询到数据</span>
                             		</td>
@@ -73,6 +74,7 @@
                                     <td class="text-center">{{ item.cityUnitPrice }}</td>
                                     <td class="text-center">{{ item.productNum }}</td>
                                     <td class="text-center">{{ item.workerNum }}</td>
+                                    <td class="text-center">{{ item.arrearageNum }}</td>
                                     <td class="text-center">{{ item.unconfirmedNum }}</td>
                                     <td class="text-center">{{ item.confirmedNum }}</td>
                                     <td class="text-center">{{ item.uncompleteNum }}</td>
@@ -83,7 +85,7 @@
                             </tbody>
                             <tfoot>
                             	<tr>
-                            		<td colspan="12" class="text-center">
+                            		<td colspan="13" class="text-center">
                             			<div id="Page-M-box" class="m-style"></div>
                             		</td>
                             	</tr>

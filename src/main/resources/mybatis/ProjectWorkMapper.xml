@@ -30,6 +30,7 @@
         <result column="confirmed_num" property="confirmedNum" />
         <result column="uncomplete_num" property="uncompleteNum" />
         <result column="complete_num" property="completeNum" />
+        <result column="arrearage_num" property="arrearageNum" />
         <result column="work_description" property="workDescription" />
         <result column="customer_id" property="customerId" />
         <result column="create_time" property="createTime" />

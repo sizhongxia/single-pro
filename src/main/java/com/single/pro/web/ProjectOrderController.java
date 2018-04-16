@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
@@ -68,46 +70,54 @@ public class ProjectOrderController extends BaseController {
 			rowsStr = "10";
 		}
 
-		Map<String, Object> params = new HashMap<>();
+		Wrapper<Order> wrapper = new EntityWrapper<>();
 		String orderNo = request.getParameter("orderNo");
 		if (StringUtils.isNotBlank(orderNo)) {
-			params.put("orderNo", orderNo.trim());
-		}
-		String workNo = request.getParameter("workNo");
-		if (StringUtils.isNotBlank(workNo)) {
-			params.put("workNo", workNo.trim());
-		}
-		String productKind = request.getParameter("productKind");
-		if (StringUtils.isNotBlank(productKind)) {
-			params.put("productKind", productKind.trim());
-		}
-		String productType = request.getParameter("productType");
-		if (StringUtils.isNotBlank(productType)) {
-			params.put("productType", productType.trim());
-		}
-		String orderStatus = request.getParameter("orderStatus");
-		if (StringUtils.isNotBlank(orderStatus)) {
-			params.put("orderStatus", orderStatus.trim());
-		}
-		String buildStatus = request.getParameter("buildStatus");
-		if (StringUtils.isNotBlank(buildStatus)) {
-			params.put("buildStatus", buildStatus.trim());
+			wrapper.eq("order_no", orderNo.trim());
 		}
 		String projectName = request.getParameter("projectName");
 		if (StringUtils.isNotBlank(projectName)) {
-			params.put("projectName", projectName.trim());
+			wrapper.like("project_name", projectName.trim());
+		}
+		String productCompany = request.getParameter("productCompany");
+		if (StringUtils.isNotBlank(productCompany)) {
+			wrapper.eq("product_company", productCompany.trim());
+		}
+		String productModel = request.getParameter("productModel");
+		if (StringUtils.isNotBlank(productModel)) {
+			wrapper.eq("product_model", productModel.trim());
+		}
+		String releaseStatus = request.getParameter("releaseStatus");
+		if (StringUtils.isNotBlank(releaseStatus)) {
+			wrapper.eq("release_status", releaseStatus.trim());
+		}
+		String orderStatus = request.getParameter("orderStatus");
+		if (StringUtils.isNotBlank(orderStatus)) {
+			wrapper.eq("order_status", orderStatus.trim());
+		}
+		String buildStatus = request.getParameter("buildStatus");
+		if (StringUtils.isNotBlank(buildStatus)) {
+			wrapper.eq("build_status", buildStatus.trim());
+		}
+		String rtime = request.getParameter("rtime");
+		if (StringUtils.isNotBlank(rtime)) {
+			String[] rtimes = rtime.split(" - ");
+			if (rtimes.length == 2) {
+				wrapper.ge("release_time", rtimes[0] + " 00:00:00");
+				wrapper.le("release_time", rtimes[1] + " 23:59:59");
+			}
 		}
 		String ctime = request.getParameter("ctime");
 		if (StringUtils.isNotBlank(ctime)) {
 			String[] ctimes = ctime.split(" - ");
 			if (ctimes.length == 2) {
-				params.put("ctimeStart", ctimes[0] + " 00:00:00");
-				params.put("ctimeEnd", ctimes[1] + " 23:59:59");
+				wrapper.ge("create_time", ctimes[0] + " 00:00:00");
+				wrapper.le("create_time", ctimes[1] + " 23:59:59");
 			}
 		}
 
 		PageHelper.startPage(new Integer(pageStr), new Integer(rowsStr));
-		List<Order> list = orderService.selectList(null);
+		List<Order> list = orderService.selectList(wrapper);
 		PageInfo<Order> pageInfo = new PageInfo<Order>(list);
 		List<Map<String, Object>> listMap = new ArrayList<>();
 
@@ -117,24 +127,35 @@ public class ProjectOrderController extends BaseController {
 			for (Order item : list) {
 				_map = new HashMap<>();
 				_map.put("id", item.getId());
-				_map.put("orderNo", item.getOrderNo());
-				_map.put("customerId", item.getCustomerId());
-				_map.put("workerId", item.getWorkerId());
 				_map.put("projectName", item.getProjectName());
+
+				_map.put("orderNo", item.getOrderNo());
+
+				_map.put("customerId", item.getCustomerId());
+				_map.put("customerName", item.getCustomerName());
+				_map.put("workerId", item.getWorkerId());
+				_map.put("workerName", item.getWorkerName());
+
 				_map.put("productId", item.getProductId());
 				_map.put("productName", item.getProductName());
-				/*
-				 * _map.put("productKind", item.getProductKind()); _map.put("productType",
-				 * item.getProductType()); _map.put("productModel", item.getProductModel());
-				 */
-				_map.put("expectTime", item.getExpectTime());
-				_map.put("expectDays", item.getExpectDays());
+				_map.put("productModel", item.getProductModel());
+				_map.put("productCompany", item.getProductCompany());
+
 				_map.put("orderCost", df.format(item.getOrderCost()));
 				_map.put("depositCost", df.format(item.getDepositCost()));
 				_map.put("paidCost", df.format(item.getPaidCost()));
+
+				_map.put("releaseStatus", getReleaseStatusText(item.getReleaseStatus()));
 				_map.put("orderStatus", getOrderStatusText(item.getOrderStatus()));
 				_map.put("buildStatus", getBuildStatusText(item.getBuildStatus()));
-				_map.put("createTime", DateUtil.format(item.getCreateTime(), "yyyy-MM-dd HH:mm"));
+
+				if ("Y".equals(item.getReleaseStatus())) {
+					_map.put("releaseTime", DateUtil.format(item.getReleaseTime(), "yyyy-MM-dd HH:mm:ss"));
+				} else {
+					_map.put("releaseTime", "-");
+				}
+
+				_map.put("createTime", DateUtil.format(item.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
 				listMap.add(_map);
 			}
 		}
@@ -146,7 +167,18 @@ public class ProjectOrderController extends BaseController {
 		return data;
 	}
 
-	private Object getBuildStatusText(String status) {
+	private String getReleaseStatusText(String status) {
+		switch (status) {
+		case "Y":
+			return "已发布";
+		case "N":
+			return "暂存";
+		default:
+			return "-";
+		}
+	}
+
+	private String getBuildStatusText(String status) {
 		switch (status) {
 		case "Y":
 			return "已完工";
@@ -192,74 +224,82 @@ public class ProjectOrderController extends BaseController {
 			return mav;
 		}
 
-//		ProjectProduct projectProduct = projectProductService.selectById(order.getProjectProductId());
-//		if (projectProduct == null) {
-//			mav.addObject("msg", "通过 id:" + order.getProjectProductId() + " 未找到有效的项目产品记录");
-//			return mav;
-//		}
-//
-//		ProjectWork projectWork = projectWorkService.selectById(projectProduct.getWorkNo());
-//		if (projectWork == null) {
-//			mav.addObject("msg", "通过 id: " + projectProduct.getWorkNo() + " 未找到有效的项目工作批次");
-//			return mav;
-//		}
-//
-//		Project project = projectService.selectById(projectWork.getProjectId());
-//		if (project == null) {
-//			mav.addObject("msg", "通过 id:" + projectWork.getProjectId() + " 未找到有效的项目");
-//			return mav;
-//		}
+		// ProjectProduct projectProduct =
+		// projectProductService.selectById(order.getProjectProductId());
+		// if (projectProduct == null) {
+		// mav.addObject("msg", "通过 id:" + order.getProjectProductId() + "
+		// 未找到有效的项目产品记录");
+		// return mav;
+		// }
+		//
+		// ProjectWork projectWork =
+		// projectWorkService.selectById(projectProduct.getWorkNo());
+		// if (projectWork == null) {
+		// mav.addObject("msg", "通过 id: " + projectProduct.getWorkNo() + "
+		// 未找到有效的项目工作批次");
+		// return mav;
+		// }
+		//
+		// Project project = projectService.selectById(projectWork.getProjectId());
+		// if (project == null) {
+		// mav.addObject("msg", "通过 id:" + projectWork.getProjectId() + " 未找到有效的项目");
+		// return mav;
+		// }
 
-//		Company company = companyService.selectById(project.getCompanyId());
-//		if (company == null) {
-//			mav.addObject("msg", "通过 id:" + project.getCompanyId() + " 未找到有效的公司单位");
-//			return mav;
-//		}
-//
-//		User customerUser = userService.selectById(order.getCustomerId());
-//		if (customerUser == null) {
-//			mav.addObject("msg", "通过 id:" + order.getCustomerId() + " 未找到有效的客户");
-//			return mav;
-//		}
-//		User workerUser = userService.selectById(order.getWorkerId());
-//		if (workerUser == null) {
-//			mav.addObject("msg", "通过 id:" + order.getWorkerId() + " 未找到有效的工人");
-//			return mav;
-//		}
-//
-//		mav.addObject("orderNo", order.getOrderNo());
-//		mav.addObject("orderTime", DateUtil.format(order.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
-//		mav.addObject("projectName", project.getName());
-//		mav.addObject("workNo", projectWork.getWorkNo());
-//		mav.addObject("city", baseDataCacheUtil.getCityName(project.getCity()));
-//		mav.addObject("address", project.getAddress());
-//		mav.addObject("companyName", company.getName());
-//		mav.addObject("companyContacts", company.getContacts());
-//		mav.addObject("companyContactTel", company.getContactTel());
-//		mav.addObject("customerName", customerUser.getUserName());
-//		mav.addObject("customerTel", customerUser.getPhoneNo());
-//		mav.addObject("workerName", workerUser.getUserName());
-//		mav.addObject("workerTel", workerUser.getPhoneNo());
-//		mav.addObject("productName", order.getProductName());
-//		mav.addObject("productModel", order.getProductModel());
-//		mav.addObject("productKindName", order.getProductKind());
-//		mav.addObject("productTypeName", order.getProductType());
-//		mav.addObject("expectStime", DateUtil.format(order.getExpectStime(), "yyyy-MM-dd"));
-//		mav.addObject("expectDays", order.getExpectDays());
-//		mav.addObject("orderCost", order.getOrderCost());
-//		mav.addObject("depositCost", order.getDepositCost());
-//		mav.addObject("paidCost", order.getPaidCost());
-//		mav.addObject("orderStatus", getOrderStatusText(order.getOrderStatus()));
-//		mav.addObject("buildStatus", getBuildStatusText(order.getBuildStatus()));
-//		mav.addObject("cancleReason", order.getCancleReason());
-//		mav.addObject("remarks", order.getRemarks());
-//		mav.addObject("workerGrade", order.getWorkerGrade());
-//		mav.addObject("workerCtime", DateUtil.format(order.getWorkerCTime(), "yyyy-MM-dd HH:mm:ss"));
-//		mav.addObject("workerComment", order.getWorkerComment());
-//		mav.addObject("customerGrade", order.getCustomerGrade());
-//		mav.addObject("customerCtime", DateUtil.format(order.getCustomerCTime(), "yyyy-MM-dd HH:mm:ss"));
-//		mav.addObject("customerComment", order.getCustomerComment());
-//		mav.setViewName("project/order/detail");
+		// Company company = companyService.selectById(project.getCompanyId());
+		// if (company == null) {
+		// mav.addObject("msg", "通过 id:" + project.getCompanyId() + " 未找到有效的公司单位");
+		// return mav;
+		// }
+		//
+		// User customerUser = userService.selectById(order.getCustomerId());
+		// if (customerUser == null) {
+		// mav.addObject("msg", "通过 id:" + order.getCustomerId() + " 未找到有效的客户");
+		// return mav;
+		// }
+		// User workerUser = userService.selectById(order.getWorkerId());
+		// if (workerUser == null) {
+		// mav.addObject("msg", "通过 id:" + order.getWorkerId() + " 未找到有效的工人");
+		// return mav;
+		// }
+		//
+		// mav.addObject("orderNo", order.getOrderNo());
+		// mav.addObject("orderTime", DateUtil.format(order.getCreateTime(), "yyyy-MM-dd
+		// HH:mm:ss"));
+		// mav.addObject("projectName", project.getName());
+		// mav.addObject("workNo", projectWork.getWorkNo());
+		// mav.addObject("city", baseDataCacheUtil.getCityName(project.getCity()));
+		// mav.addObject("address", project.getAddress());
+		// mav.addObject("companyName", company.getName());
+		// mav.addObject("companyContacts", company.getContacts());
+		// mav.addObject("companyContactTel", company.getContactTel());
+		// mav.addObject("customerName", customerUser.getUserName());
+		// mav.addObject("customerTel", customerUser.getPhoneNo());
+		// mav.addObject("workerName", workerUser.getUserName());
+		// mav.addObject("workerTel", workerUser.getPhoneNo());
+		// mav.addObject("productName", order.getProductName());
+		// mav.addObject("productModel", order.getProductModel());
+		// mav.addObject("productKindName", order.getProductKind());
+		// mav.addObject("productTypeName", order.getProductType());
+		// mav.addObject("expectStime", DateUtil.format(order.getExpectStime(),
+		// "yyyy-MM-dd"));
+		// mav.addObject("expectDays", order.getExpectDays());
+		// mav.addObject("orderCost", order.getOrderCost());
+		// mav.addObject("depositCost", order.getDepositCost());
+		// mav.addObject("paidCost", order.getPaidCost());
+		// mav.addObject("orderStatus", getOrderStatusText(order.getOrderStatus()));
+		// mav.addObject("buildStatus", getBuildStatusText(order.getBuildStatus()));
+		// mav.addObject("cancleReason", order.getCancleReason());
+		// mav.addObject("remarks", order.getRemarks());
+		// mav.addObject("workerGrade", order.getWorkerGrade());
+		// mav.addObject("workerCtime", DateUtil.format(order.getWorkerCTime(),
+		// "yyyy-MM-dd HH:mm:ss"));
+		// mav.addObject("workerComment", order.getWorkerComment());
+		// mav.addObject("customerGrade", order.getCustomerGrade());
+		// mav.addObject("customerCtime", DateUtil.format(order.getCustomerCTime(),
+		// "yyyy-MM-dd HH:mm:ss"));
+		mav.setViewName("project/order/detail");
+		mav.addObject("order", order);
 		return mav;
 	}
 
