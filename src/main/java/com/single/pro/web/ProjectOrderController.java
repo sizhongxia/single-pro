@@ -24,7 +24,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.entity.Order;
-import com.single.pro.service.CompanyService;
+import com.single.pro.entity.Project;
+import com.single.pro.entity.ProjectWork;
+import com.single.pro.entity.User;
 import com.single.pro.service.OrderService;
 import com.single.pro.service.ProjectService;
 import com.single.pro.service.ProjectWorkService;
@@ -43,8 +45,6 @@ public class ProjectOrderController extends BaseController {
 	ProjectWorkService projectWorkService;
 	@Autowired
 	ProjectService projectService;
-	@Autowired
-	CompanyService companyService;
 	@Autowired
 	UserService userService;
 
@@ -224,82 +224,50 @@ public class ProjectOrderController extends BaseController {
 			return mav;
 		}
 
-		// ProjectProduct projectProduct =
-		// projectProductService.selectById(order.getProjectProductId());
-		// if (projectProduct == null) {
-		// mav.addObject("msg", "通过 id:" + order.getProjectProductId() + "
-		// 未找到有效的项目产品记录");
-		// return mav;
-		// }
-		//
-		// ProjectWork projectWork =
-		// projectWorkService.selectById(projectProduct.getWorkNo());
-		// if (projectWork == null) {
-		// mav.addObject("msg", "通过 id: " + projectProduct.getWorkNo() + "
-		// 未找到有效的项目工作批次");
-		// return mav;
-		// }
-		//
-		// Project project = projectService.selectById(projectWork.getProjectId());
-		// if (project == null) {
-		// mav.addObject("msg", "通过 id:" + projectWork.getProjectId() + " 未找到有效的项目");
-		// return mav;
-		// }
+		ProjectWork projectWork = projectWorkService.selectById(order.getWorkId());
+		if (projectWork == null) {
+			mav.addObject("msg", "通过 id: " + order.getWorkId() + "未找到有效的项目工作批次");
+			return mav;
+		}
+		Project project = projectService.selectById(projectWork.getProjectId());
+		if (project == null) {
+			mav.addObject("msg", "通过 id:" + projectWork.getProjectId() + " 未找到有效的项目");
+			return mav;
+		}
 
-		// Company company = companyService.selectById(project.getCompanyId());
-		// if (company == null) {
-		// mav.addObject("msg", "通过 id:" + project.getCompanyId() + " 未找到有效的公司单位");
-		// return mav;
-		// }
-		//
-		// User customerUser = userService.selectById(order.getCustomerId());
-		// if (customerUser == null) {
-		// mav.addObject("msg", "通过 id:" + order.getCustomerId() + " 未找到有效的客户");
-		// return mav;
-		// }
-		// User workerUser = userService.selectById(order.getWorkerId());
-		// if (workerUser == null) {
-		// mav.addObject("msg", "通过 id:" + order.getWorkerId() + " 未找到有效的工人");
-		// return mav;
-		// }
-		//
-		// mav.addObject("orderNo", order.getOrderNo());
-		// mav.addObject("orderTime", DateUtil.format(order.getCreateTime(), "yyyy-MM-dd
-		// HH:mm:ss"));
-		// mav.addObject("projectName", project.getName());
-		// mav.addObject("workNo", projectWork.getWorkNo());
-		// mav.addObject("city", baseDataCacheUtil.getCityName(project.getCity()));
-		// mav.addObject("address", project.getAddress());
-		// mav.addObject("companyName", company.getName());
-		// mav.addObject("companyContacts", company.getContacts());
-		// mav.addObject("companyContactTel", company.getContactTel());
-		// mav.addObject("customerName", customerUser.getUserName());
-		// mav.addObject("customerTel", customerUser.getPhoneNo());
-		// mav.addObject("workerName", workerUser.getUserName());
-		// mav.addObject("workerTel", workerUser.getPhoneNo());
-		// mav.addObject("productName", order.getProductName());
-		// mav.addObject("productModel", order.getProductModel());
-		// mav.addObject("productKindName", order.getProductKind());
-		// mav.addObject("productTypeName", order.getProductType());
-		// mav.addObject("expectStime", DateUtil.format(order.getExpectStime(),
-		// "yyyy-MM-dd"));
-		// mav.addObject("expectDays", order.getExpectDays());
-		// mav.addObject("orderCost", order.getOrderCost());
-		// mav.addObject("depositCost", order.getDepositCost());
-		// mav.addObject("paidCost", order.getPaidCost());
-		// mav.addObject("orderStatus", getOrderStatusText(order.getOrderStatus()));
-		// mav.addObject("buildStatus", getBuildStatusText(order.getBuildStatus()));
-		// mav.addObject("cancleReason", order.getCancleReason());
-		// mav.addObject("remarks", order.getRemarks());
-		// mav.addObject("workerGrade", order.getWorkerGrade());
-		// mav.addObject("workerCtime", DateUtil.format(order.getWorkerCTime(),
-		// "yyyy-MM-dd HH:mm:ss"));
-		// mav.addObject("workerComment", order.getWorkerComment());
-		// mav.addObject("customerGrade", order.getCustomerGrade());
-		// mav.addObject("customerCtime", DateUtil.format(order.getCustomerCTime(),
-		// "yyyy-MM-dd HH:mm:ss"));
+		User customerUser = userService.selectById(order.getCustomerId());
+		if (customerUser == null) {
+			mav.addObject("msg", "通过 id:" + order.getCustomerId() + " 未找到有效的客户");
+			return mav;
+		}
+		if (StringUtils.isNotBlank(order.getWorkerId())) {
+			User workerUser = userService.selectById(order.getWorkerId());
+			if (workerUser == null) {
+				mav.addObject("msg", "通过 id:" + order.getWorkerId() + " 未找到有效的工人");
+				return mav;
+			}
+			mav.addObject("worker", workerUser);
+		}
 		mav.setViewName("project/order/detail");
+		
+		
+		Map<String, Object> _map = new HashMap<>();
+		_map .put("survey", "Y".equals(order.getSerSurveyChoice()) ? "success" : "default");
+		_map.put("surveyStatus", order.getSerSurveyStatus());
+		_map.put("check", "Y".equals(order.getSerCheckChoice()) ? "success" : "default");
+		_map.put("checkStatus", order.getSerCheckStatus());
+		_map.put("construct", "Y".equals(order.getSerConstructChoice()) ? "success" : "default");
+		_map.put("constructStatus", order.getSerConstructStatus());
+		_map.put("train", "Y".equals(order.getSerTrainChoice()) ? "success" : "default");
+		_map.put("trainStatus", order.getSerTrainStatus());
+		_map.put("accept", "Y".equals(order.getSerAcceptChoice()) ? "success" : "default");
+		_map.put("acceptStatus", order.getSerAcceptStatus());
+		mav.addObject("orderSer", _map);
+		
 		mav.addObject("order", order);
+		mav.addObject("project", project);
+		mav.addObject("projectWork", projectWork);
+		mav.addObject("customer", customerUser);
 		return mav;
 	}
 

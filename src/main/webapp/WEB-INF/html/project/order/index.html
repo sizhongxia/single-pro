@@ -105,8 +105,8 @@
                             </div>
                             <div class="col-md-3 col-xs-5">
                                 <button type="submit" class="btn btn-success search-btn" @click="searchForm" style="float: left;">查询</button>
-                                <a href="javascript:;" @click="moreSearch" v-show="!searchMore" style="color: #484848; margin-top: 34px; margin-left: 10px;float: left;">更多查询</a>
-                                <a href="javascript:;" @click="lessSearch" v-show="searchMore" style="color: #484848; margin-top: 34px; margin-left: 10px;float: left;">更少查询</a>
+                                <a href="javascript:;" @click="moreSearch" v-show="!searchMore" style="color: #484848; margin-top: 40px; margin-left: 10px;float: left;">更多查询</a>
+                                <a href="javascript:;" @click="lessSearch" v-show="searchMore" style="color: #484848; margin-top: 40px; margin-left: 10px;float: left;">更少查询</a>
                             </div>
                         </div>
                     </div>
@@ -116,6 +116,7 @@
                             <thead class="text-primary">
                             	<tr>
 	                                <th width="65" class="text-center">序号</th>
+	                                <th class="text-center">项目</th>
 	                                <th width="180" class="text-center">订单编号</th>
 	                                <th width="85" class="text-center">发布状态</th>
 	                                <th width="175" class="text-center">发布时间</th>
@@ -124,12 +125,11 @@
 	                                <th width="105" class="text-center">已支付金额</th>
 	                                <th width="85" class="text-center">订单状态</th>
 	                                <th width="85" class="text-center">施工状态</th>
-	                                <th class="text-center">项目</th>
 	                                <th width="125" class="text-center">产品名称</th>
 	                                <th width="105" class="text-center">产品型号</th>
 	                                <th width="135" class="text-center">产品厂家</th>
 	                                <th width="175" class="text-center">创建时间</th>
-	                                <th width="105" class="text-center">操作</th>
+	                                <th width="105" class="text-center" draggable="true">操作</th>
                                 </tr>
                             </thead>
                             <tbody v-if="list.length == 0">
@@ -142,6 +142,7 @@
                             <tbody v-if="list.length > 0">
                                 <tr v-for="(item, index) in list">
                                     <td class="text-center">{{ (searchParam.page - 1) * searchParam.rows + index+1 }}</td>
+                                    <td>{{ item.projectName }}</td>
                                     <td class="text-center">{{ item.orderNo }}</td>
                                     <td class="text-center">{{ item.releaseStatus }}</td>
                                     <td class="text-center">{{ item.releaseTime }}</td>
@@ -150,7 +151,6 @@
                                     <td class="text-center">{{ item.paidCost }}</td>
                                     <td class="text-center">{{ item.orderStatus }}</td>
                                     <td class="text-center">{{ item.buildStatus }}</td>
-                                    <td>{{ item.projectName }}</td>
                                     <td>{{ item.productName }}</td>
                                     <td class="text-center">{{ item.productModel }}</td>
                                     <td>{{ item.productCompany }}</td>
