@@ -1,14 +1,10 @@
 package com.single.pro.web;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,11 +21,17 @@ import org.springframework.web.servlet.ModelAndView;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
+import com.single.pro.entity.Company;
+import com.single.pro.entity.Product;
+import com.single.pro.entity.User;
 import com.single.pro.entity.WorkerAptitude;
 import com.single.pro.model.WorkerAptitudeModel;
+import com.single.pro.service.CompanyService;
+import com.single.pro.service.ProductService;
+import com.single.pro.service.UserService;
 import com.single.pro.service.WorkerAptitudeService;
 import com.single.pro.service.custom.WorkerAptitudeCustomService;
-import com.single.pro.util.AdvanceFilterUtil;
+import com.xiaoleilu.hutool.date.DateUtil;
 
 @Controller
 @RequestMapping("worker/aptitude")
@@ -39,6 +41,12 @@ public class WorkerAptitudeController extends BaseController {
 	WorkerAptitudeService workerAptitudeService;
 	@Autowired
 	WorkerAptitudeCustomService workerAptitudeCustomService;
+	@Autowired
+	UserService userService;
+	@Autowired
+	ProductService productService;
+	@Autowired
+	CompanyService companyService;
 	@Autowired
 	BaseDataCacheUtil baseDataCacheUtil;
 
@@ -51,138 +59,169 @@ public class WorkerAptitudeController extends BaseController {
 
 	@ResponseBody
 	@RequiresAuthentication
-	@RequestMapping(value = { "/list" }, method = { RequestMethod.POST })
-	public Map<String, Object> list(HttpServletRequest request) {
-		Map<String, Object> res = new HashMap<>();
+	@RequestMapping(value = { "/data" }, method = { RequestMethod.POST })
+	public Map<String, Object> data(HttpServletRequest request) throws Exception {
+		Map<String, Object> data = new HashMap<String, Object>();
 
 		String pageStr = request.getParameter("page");
-		if (!NumberUtils.isDigits(pageStr)) {
+		if (!NumberUtils.isDigits(pageStr) || new Integer(pageStr) < 1) {
 			pageStr = "1";
 		}
 		String rowsStr = request.getParameter("rows");
-		if (!NumberUtils.isDigits(rowsStr)) {
-			rowsStr = "20";
+		if (!NumberUtils.isDigits(rowsStr) || new Integer(rowsStr) > 1000 || new Integer(rowsStr) < 10) {
+			rowsStr = "10";
 		}
-		String sort = request.getParameter("sort");
-		String order = request.getParameter("order");
 
 		Map<String, Object> params = new HashMap<>();
-		if (StringUtils.isNotBlank(sort) && StringUtils.isNotBlank(order)) {
-			params.put("orderByClause", sort + " " + order);
-		} else {
-			params.put("orderByClause", "wa.apply_status asc, wa.apply_time asc");
+		String phoneNo = request.getParameter("phoneNo");
+		if (StringUtils.isNotBlank(phoneNo)) {
+			params.put("phoneNo", phoneNo.trim());
 		}
-
-		Set<String> exclusionFields = new HashSet<>();
-		exclusionFields.add("u.province");
-		exclusionFields.add("provinceName");
-		exclusionFields.add("u.city");
-		exclusionFields.add("cityName");
-		exclusionFields.add("p.kind_id");
-		exclusionFields.add("kind_name");
-		exclusionFields.add("p.type_id");
-		exclusionFields.add("type_name");
-
-		String advanceFilter = request.getParameter("advanceFilter");
-		params = AdvanceFilterUtil.initSerachParams(advanceFilter, exclusionFields, "", params);
+		String applyStatus = request.getParameter("applyStatus");
+		if (StringUtils.isNotBlank(applyStatus)) {
+			params.put("applyStatus", applyStatus.trim());
+		}
+		String atime = request.getParameter("atime");
+		if (StringUtils.isNotBlank(atime)) {
+			params.put("applyTimeStart", atime + " 00:00:00");
+			params.put("applyTimeEnd", atime + " 23:59:59");
+		}
 
 		PageHelper.startPage(new Integer(pageStr), new Integer(rowsStr));
-		List<WorkerAptitudeModel> workerAptitudeModels = workerAptitudeCustomService.findWorkerAptitudes(params);
-		PageInfo<WorkerAptitudeModel> pageInfo = new PageInfo<WorkerAptitudeModel>(workerAptitudeModels);
+		List<WorkerAptitudeModel> list = workerAptitudeCustomService.findWorkerAptitudes(params);
+		PageInfo<WorkerAptitudeModel> pageInfo = new PageInfo<WorkerAptitudeModel>(list);
 
-		List<Map<String, Object>> systemRoleList = new ArrayList<>();
-		if (workerAptitudeModels != null && !workerAptitudeModels.isEmpty()) {
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Map<String, Object> item = null;
-			for (WorkerAptitudeModel workerAptitudeModel : workerAptitudeModels) {
-				item = new HashMap<>();
-				item.put("wa.id", workerAptitudeModel.getId());
-				item.put("wa.worker_id", workerAptitudeModel.getWorkerId());
-				String cityCode = workerAptitudeModel.getCity();
-				item.put("u.city", cityCode);
-				item.put("cityName", "");
-				if (StringUtils.isNotBlank(cityCode)) {
-					String cityName = baseDataCacheUtil.getCityName(cityCode);
-					if (StringUtils.isNotBlank(cityName)) {
-						item.put("cityName", cityName);
-					}
-				}
-				item.put("wa.product_id", workerAptitudeModel.getProductId());
-				item.put("p.name", workerAptitudeModel.getProductName());
-				String kindId = workerAptitudeModel.getKindId();
-				item.put("p.kind_id", kindId);
-				item.put("kind_name", "");
-				if (StringUtils.isNotBlank(kindId)) {
-					String kindName = baseDataCacheUtil.getProductKindNameById(kindId);
-					if (StringUtils.isNotBlank(kindName)) {
-						item.put("kind_name", kindName);
-					}
-				}
-				String typeId = workerAptitudeModel.getTypeId();
-				item.put("p.type_id", typeId);
-				item.put("type_name", "");
-				if (StringUtils.isNotBlank(typeId)) {
-					String typeName = baseDataCacheUtil.getProductTypeNameById(typeId);
-					if (StringUtils.isNotBlank(typeName)) {
-						item.put("type_name", typeName);
-					}
-				}
-				item.put("wa.model", workerAptitudeModel.getProductModel());
-				item.put("wa.apply_info", workerAptitudeModel.getApplyInfo());
-				item.put("wa.apply_status", workerAptitudeModel.getApplyStatus());
+		List<Map<String, Object>> listMap = new ArrayList<>();
 
-				item.put("wa.apply_time", dateFormat.format(workerAptitudeModel.getApplyTime()));
-				systemRoleList.add(item);
+		if (list != null && list.size() > 0) {
+			Map<String, Object> _map = null;
+			for (WorkerAptitudeModel item : list) {
+				_map = new HashMap<>();
+				_map.put("id", item.getId());
+				_map.put("userName", item.getUserName());
+				_map.put("phoneNo", item.getPhoneNo());
+				_map.put("gender", item.getGender() == 0 ? "女" : "男");
+				_map.put("productName", item.getProductName());
+				_map.put("productModel", item.getProductModel());
+				_map.put("kindName", baseDataCacheUtil.getProductKindNameById(item.getKindId()));
+				_map.put("typeName", baseDataCacheUtil.getProductTypeNameById(item.getTypeId()));
+				_map.put("city", baseDataCacheUtil.getCityName(item.getCity()));
+				_map.put("companyName", item.getCompanyName());
+				_map.put("applyStatus", getWorkerAptitudeApplyStatusTxt(item.getApplyStatus()));
+				if (("Y".equals(item.getApplyStatus()) || "N".equals(item.getApplyStatus()))
+						&& item.getHandleTime() != null) {
+					_map.put("canToApproval", 0);
+					_map.put("approvalTime", DateUtil.format(item.getHandleTime(), "yyyy-MM-dd"));
+				} else {
+					_map.put("canToApproval", 1);
+					_map.put("approvalTime", "-");
+				}
+
+				_map.put("applyTime", DateUtil.format(item.getApplyTime(), "yyyy-MM-dd"));
+				listMap.add(_map);
 			}
-
 		}
 
-		res.put("rows", systemRoleList);
+		data.put("data", listMap);
+		data.put("current", pageInfo.getPageNum());
+		data.put("pageCount", pageInfo.getPages());
 
-		res.put("currentPage", pageInfo.getPageNum());
-		res.put("firstPage", pageInfo.isIsFirstPage());
-		res.put("lastPage", pageInfo.isIsLastPage());
-		res.put("numPerPage", pageInfo.getPrePage());
-		res.put("totalPage", pageInfo.getPages());
-		res.put("total", pageInfo.getTotal());
+		return data;
+	}
 
-		return res;
+	private String getWorkerAptitudeApplyStatusTxt(String applyStatus) {
+		if ("Y".equals(applyStatus)) {
+			return "申请通过";
+		} else if ("N".equals(applyStatus)) {
+			return "申请驳回";
+		} else if ("D".equals(applyStatus)) {
+			return "待处理";
+		}
+		return "-";
 	}
 
 	@RequiresAuthentication
-	@RequestMapping(value = { "/handleForm" }, method = { RequestMethod.GET })
-	public ModelAndView handleForm(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("worker/aptitude/handleForm");
+	@RequestMapping(value = { "/detail" }, method = { RequestMethod.GET })
+	public ModelAndView detail(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("worker/aptitude/detail");
+
+		String id = request.getParameter("id");
+		if (StringUtils.isBlank(id)) {
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "缺失参数：id");
+			return mav;
+		}
+		WorkerAptitude workerAptitude = workerAptitudeService.selectById(id);
+		if (workerAptitude == null) {
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "通过参数 id:" + id + " 未找到有效的资质申请记录");
+			return mav;
+		}
+		User worker = userService.selectById(workerAptitude.getWorkerId());
+		if (worker == null) {
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "无效的工人信息");
+			return mav;
+		}
+		Product product = productService.selectById(workerAptitude.getProductId());
+		if (product == null) {
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "无效的产品信息");
+			return mav;
+		}
+		Company company = companyService.selectById(product.getCompanyId());
+		if (company == null) {
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "无效的产品厂商信息");
+			return mav;
+		}
+		mav.addObject("workerAptitude", workerAptitude);
+		mav.addObject("city", baseDataCacheUtil.getCityName(workerAptitude.getCity()));
+		mav.addObject("worker", worker);
+		mav.addObject("gender", worker.getGender() == 0 ? "女" : "男");
+		mav.addObject("product", product);
+		mav.addObject("kindName", baseDataCacheUtil.getProductKindNameById(product.getKindId()));
+		mav.addObject("typeName", baseDataCacheUtil.getProductTypeNameById(product.getTypeId()));
+		mav.addObject("company", company);
+		mav.addObject("applyStatus", getWorkerAptitudeApplyStatusTxt(workerAptitude.getApplyStatus()));
+		mav.addObject("applyTime", DateUtil.format(workerAptitude.getApplyTime(), "yyyy-MM-dd"));
 		return mav;
 	}
 
 	/***
-	 * 申请处理详情
+	 * 申请审批处理
 	 * 
 	 * @param request
 	 * @return
 	 */
-	@ResponseBody
 	@RequiresAuthentication
-	@RequestMapping(value = "/handleDetail")
-	public Map<String, Object> handleDetail(HttpServletRequest request) {
-		Map<String, Object> res = new HashMap<>();
+	@RequestMapping(value = { "/approval" }, method = { RequestMethod.GET })
+	public ModelAndView approval(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("worker/aptitude/approval");
 		String id = request.getParameter("id");
+		if (StringUtils.isBlank(id)) {
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "缺失参数：id");
+			return mav;
+		}
 		WorkerAptitude workerAptitude = workerAptitudeService.selectById(id);
 		if (workerAptitude == null) {
-			return res;
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "通过参数 id:" + id + " 未找到有效的资质申请记录");
+			return mav;
 		}
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String ct = dateFormat.format(workerAptitude.getApplyTime());
-		String ut = dateFormat.format(workerAptitude.getUpdateTime());
-		if (ct.equals(ut)) {
-			res.put("updateTime", "未处理");
-		} else {
-			res.put("updateTime", ut);
+		if ("Y".equals(workerAptitude.getApplyStatus()) || "N".equals(workerAptitude.getApplyStatus())) {
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "当前申请记录已被处理");
+			return mav;
 		}
-		res.put("id", workerAptitude.getId());
-		res.put("applyStatus", workerAptitude.getApplyStatus());
-		return res;
+		mav.addObject("id", workerAptitude.getId());
+		mav.addObject("applyTime", DateUtil.format(workerAptitude.getApplyTime(), "yyyy-MM-dd"));
+		mav.addObject("applyStatus", workerAptitude.getApplyStatus());
+		mav.addObject("applyStatusTxt", getWorkerAptitudeApplyStatusTxt(workerAptitude.getApplyStatus()));
+		mav.addObject("applyInfo", workerAptitude.getApplyInfo());
+		mav.addObject("csrf", baseDataCacheUtil.setPageCsrf("worker_aptitude_approval"));
+		return mav;
 	}
 
 	/***
@@ -199,6 +238,21 @@ public class WorkerAptitudeController extends BaseController {
 		res.put("title", "操作提示");
 		res.put("statusCode", 300);
 
+		String csrf = request.getParameter("csrf");
+		if (StringUtils.isBlank(csrf)) {
+			res.put("message", "无效的表单，E:01，请刷新页面后重试");
+			return res;
+		}
+		String _csrf = baseDataCacheUtil.getPageCsrf("worker_aptitude_approval");
+		if (_csrf == null) {
+			res.put("message", "表单已失效，请刷新页面后重试");
+			return res;
+		}
+		if (!csrf.equals(_csrf)) {
+			res.put("message", "表单已失效，你可能在其他页面已打开该页面");
+			return res;
+		}
+
 		String id = request.getParameter("id");
 
 		if (StringUtils.isBlank(id)) {
@@ -211,6 +265,13 @@ public class WorkerAptitudeController extends BaseController {
 			res.put("message", "无效的参数");
 			return res;
 		}
+
+		if ("Y".equals(workerAptitude.getApplyStatus()) || "N".equals(workerAptitude.getApplyStatus())) {
+			res.put("message", "状态已被更改");
+			res.put("applyStatus", workerAptitude.getApplyStatus());
+			return res;
+		}
+
 		String applyStatus = request.getParameter("applyStatus");
 		if (workerAptitude.getApplyStatus().equals(applyStatus)) {
 			res.put("message", "状态未改变");

@@ -6,10 +6,15 @@
 		select 
 			a.id as id,
 			a.worker_id as workerId,
+			u.user_name as userName,
+			u.gender as gender,
+			u.age as age,
+			u.phone_no as phoneNo,
 			a.city as city,
 			a.apply_status as applyStatus,
 			a.apply_info as applyInfo,
 			a.apply_time as applyTime,
+			a.update_time as handleTime,
 			p.`id` as productId,
 			p.`name` as productName,
 			p.kind_id as kindId,
@@ -18,12 +23,19 @@
 			p.cover_pic_url as coverPicUrl,
 			p.model as productModel
 		 from 
-			(sp_worker_aptitude a 
+			((sp_worker_aptitude a 
 			left join sp_product p on a.product_id = p.id)
+			left join sp_user u on a.worker_id = u.id)
 			left join sp_company c on p.company_id = c.id
 			<where>
 					<if test="workerId != null">
 						and a.worker_id = #{workerId}
+					</if>
+					<if test="phoneNo != null">
+						and u.phone_no = #{phoneNo}
+					</if>
+					<if test="applyStatus != null">
+						and a.apply_status = #{applyStatus}
 					</if>
 					<if test="kindId != null">
 						and p.kind_id = #{kindId}
@@ -31,6 +43,13 @@
 					<if test="typeId != null">
 						and p.kind_id = #{typeId}
 					</if>
+					<if test="applyTimeStart != null">
+						<![CDATA[ and a.apply_time >= #{applyTimeStart} ]]>
+					</if>
+					<if test="applyTimeEnd != null">
+						<![CDATA[ and a.apply_time <= #{applyTimeEnd} ]]>
+					</if>
+					
 			</where>
 			order by a.apply_time desc
 	</select>

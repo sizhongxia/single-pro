@@ -13,7 +13,7 @@
     <link type="text/css" href="${rc.contextPath}/statics/ui/static/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link type="text/css" href="${rc.contextPath}/statics/ui/other/pager/pager.css?v=1.0" rel="stylesheet" />
     <style type="text/css">
-    	.content {width: 510px;height: auto;background: #fff;overflow: auto;}
+    	.content {width: 818px;height: 420px;background: #fff;overflow: auto;}
     	.category {padding: 12px;}
     	.text-primary {color: #2c3b41;}
     	.container-fluid {padding: 0;margin: 0;}
@@ -24,7 +24,7 @@
     	.m-style .active {background: #2c3b41;border-color: #2c3b41;}
     	.m-style a:hover {background: #2c3b41;border-color: #2c3b41;}
     	.layui-layer-setwin .layui-layer-close1 {background-position: 0px 0px;cursor: pointer;}
-    	label.item {margin: 4px 0 14px 14px;color:#484848;width: 77px;text-align: right;}
+    	label.item {margin: 4px 0 14px 14px;color:#484848;width: 84px;text-align: right;}
     </style>
 </head>
 <body>
@@ -32,49 +32,56 @@
         <div class="content">
             <div class="category">
                   <div class="col-xs-12" style="border-bottom: 1px solid #EEE;margin-bottom: 12px;padding-bottom: 4px;">
-                      <label class="control-label">产品信息 BaseInfo</label>
+                      <label class="control-label">申请信息 ApplyInfo</label>
                   </div>
                   <div class="col-xs-6">
-                  	<label class="control-label item">产品名称：</label>${productName!}
+                  	<label class="control-label item">申请日期：</label> ${applyTime!}
                   </div>
                   <div class="col-xs-6">
-                  	<label class="control-label item">产品型号：</label>${productModel!}
-                  </div>
-                  <div class="col-xs-6">
-                  	<label class="control-label item">产品种类：</label>${productKind!}
-                  </div>
-                  <div class="col-xs-6">
-                  	<label class="control-label item">产品类型：</label>${productType!}
+                  	<label class="control-label item">申请状态：</label> ${applyStatus!}
                   </div>
                   <div class="col-xs-12">
-                  	<label class="control-label item">产品厂商：</label>${companyName!}
+                  	<label class="control-label item" style="margin-bottom: 0;">申请描述：</label>${workerAptitude.applyInfo!}
                   </div>
                   <div class="col-xs-12" style="border-bottom: 1px solid #EEE;margin-bottom: 12px;padding-bottom: 4px;">
-                      <label class="control-label">施工城市 City</label>
+                      <label class="control-label">工人信息 WorkerInfo</label>
                   </div>
                   <div class="col-xs-6">
-                  	<label class="control-label item">施工城市：</label>${city!}
+                  	<label class="control-label item">姓名：</label> ${worker.userName!}
+                  </div>
+                  <div class="col-xs-6">
+                  	<label class="control-label item">手机号：</label> ${worker.phoneNo!}
+                  </div>
+                  <div class="col-xs-6">
+                  	<label class="control-label item">性别：</label> ${gender!}
+                  </div>
+                  <div class="col-xs-6">
+                  	<label class="control-label item">年龄：</label> ${worker.age!}
+                  </div>
+                  <div class="col-xs-6">
+                  	<label class="control-label item">施工城市：</label> ${city!} (${workerAptitude.city!})
                   </div>
                   <div class="col-xs-12" style="border-bottom: 1px solid #EEE;margin-bottom: 12px;padding-bottom: 4px;">
-                      <label class="control-label">申请信息 Apply</label>
+                      <label class="control-label">产品信息 ProductInfo</label>
                   </div>
                   <div class="col-xs-6">
-                  	<label class="control-label item">申请状态：</label>${applyStatus!}
+                  	<label class="control-label item">产品名称：</label> ${product.name!}
                   </div>
                   <div class="col-xs-6">
-                  	<label class="control-label item">申请时间：</label>${applyTime!}
-                  </div> 
-                  <div class="col-xs-12">
-                  	<label class="control-label item" style="margin-bottom: 0;">申请描述：</label>${applyInfo!}
+                  	<label class="control-label item">产品型号：</label> ${product.model!}
+                  </div>
+                  <div class="col-xs-6">
+                  	<label class="control-label item">产品种类：</label> ${kindName!}
+                  </div>
+                  <div class="col-xs-6">
+                  	<label class="control-label item">产品类型：</label> ${typeName!}
+                  </div>
+                  <div class="col-xs-6">
+                  	<label class="control-label item">产品厂家：</label> ${company.name!}
                   </div>
                   <div style="clear: both;"></div>
               </div>
         </div>
     </div>
 </body>
-<!--   Core JS Files   -->
-<script src="${rc.contextPath}/statics/ui/other/matrial/js/jquery-3.2.1.min.js" type="text/javascript"></script>
-<script src="${rc.contextPath}/statics/ui/other/matrial/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="${rc.contextPath}/statics/ui/other/matrial/js/material.min.js" type="text/javascript"></script>
-<script src="${rc.contextPath}/statics/ui/other/util.js?v=2.0" type="text/javascript"></script>
 </html>

@@ -1,82 +1,219 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<#include "../../common/public.html">
-<script type="text/javascript">
-    $(window).load(function () {
-        $("#loading").fadeOut();
-    });
-</script>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+	<!-- TopJUI框架样式 -->
+	<link type="text/css" href="${rc.contextPath}/statics/ui/topjui/css/topjui.core.min.css?v=1.1" rel="stylesheet">
+	<link type="text/css" href="${rc.contextPath}/statics/ui/topjui/themes/default/topjui.black.css?v=2.3" rel="stylesheet"/>
+    <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/bootstrap.min.css" rel="stylesheet" />
+    <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
+    <link type="text/css" href="${rc.contextPath}/statics/ui/static/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link type="text/css" href="${rc.contextPath}/statics/ui/other/pager/pager.css?v=1.0" rel="stylesheet" />
+    <style type="text/css">
+    	.text-primary {color: #2c3b41;}
+    	.card [data-background-color="system"] {background: #fff;}
+    	.form-group {margin-top: 0;margin-bottom: 0px;}
+    	.card .card-header {box-shadow: none;margin: 0px;padding-bottom: 0px;}
+    	.card .card-content {padding: 0px 0px;}
+    	.form-group label.control-label{color:#484848;margin: 0px 0px 0px 6px;}
+    	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 12px;}
+    	.m-style .active {background: #2c3b41;border-color: #2c3b41;}
+    	.m-style a:hover {background: #2c3b41;border-color: #2c3b41;}
+    	.search-btn {height: 30px;line-height: 6px;margin-top: 26px;}
+    	.layui-layer-setwin .layui-layer-close1 {background-position: 0px 0px;cursor: pointer;}
+    </style>
 </head>
-
 <body>
-	<div data-toggle="topjui-layout" data-options="fit:true">
-	    <div data-options="region:'center',title:'工人资质申请',split:true,border:false,iconCls:'fa'">
-	        <!-- treegrid表格 -->
-	        <table data-toggle="topjui-edatagrid"
-	               data-options="id: 'workerAptitudeDatagrid',
-				    idField: 'id',
-				    rownumbers: !0,
-			   	    singleSelect: !0,
-				    url: remoteHost + '/worker/aptitude/list'">
-	            <thead>
-		            <tr>
-		                <th data-options="field:'u.user_name',title:'客户名称'"></th>
-		                <th data-options="field:'kind_name',title:'产品种类'"></th>
-		                <th data-options="field:'type_name',title:'产品类型'"></th>
-		                <th data-options="field:'wa.model',title:'型号'"></th>
-		                <th data-options="field:'wa.apply_info',title:'申请理由'"></th>
-		                <th data-options="field:'wa.apply_status',title:'申请状态',sortable:true,
-			                    formatter:function(value,row,index){
-			                        if (value == 'Y') {
-			                            return '<div>申请通过</div>';
-			                        } else if (value == 'N') {
-			                            return '<div>申请驳回</div>';
-			                        } else {
-			                            return '<div>待处理</div>';
-			                        }
-			                    }"></th>
-		                <th data-options="field:'wa.apply_time',title:'申请时间',sortable:true"></th>
-		                <th data-options="field:'wa.update_time',title:'处理时间',sortable:true"></th>
-		            </tr>
-	            </thead>
-	        </table>
-	    </div>
-	</div>
-	
-	<!-- 表格工具栏开始 -->
-	<div id="workerAptitudeDatagrid-toolbar" class="topjui-toolbar" data-options="grid:{
-           type:'datagrid',
-           id:'workerAptitudeDatagrid'}" style="display:none">
-           
-	     <a href="javascript:void(0)"
-	       data-toggle="topjui-menubutton"
-	       data-options="method: 'openDialog',
-	      		extend: '#workerAptitudeDatagrid-toolbar',
-	            iconCls: 'fa fa-magic',
-	       		btnCls: 'topjui-btn-normal',
-	            dialog: {
-	               title: '处理',
-		           width: 520,
-		           height: 180,
-	           	   href: remoteHost + '/worker/aptitude/handleForm',
-	               url: remoteHost + '/worker/aptitude/handleDetail?id={wa.id}',
-	               buttonsGroup: [{
-	                   	text: '处理',
-	                   	url: remoteHost + '/worker/aptitude/handle',
-	                   	iconCls: 'fa fa-save',
-	                   	handler: 'ajaxForm',
-	       				btnCls: 'topjui-btn-red',
-	               }]
-	       }">处理</a>
-	       
-	       <a href="javascript:void(0)"
-		       data-toggle="topjui-menubutton"
-		       data-options="method:'search',
-		       extend: '#workerAptitudeDatagrid-toolbar'">查询</a>
-
-	</div>
-	<!-- 表格工具栏结束 -->
-	
+    <div class="wrapper" id="app">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="card">
+                	<div class="card-header" data-background-color="system">
+                       	<div class="category row">
+                            <div class="col-md-2 col-xs-5">
+                                <div class="form-group">
+                                    <label class="control-label">工人手机号</label>
+                                    <input v-model="searchParam.phoneNo" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-xs-5">
+                                <div class="form-group">
+                                    <label class="control-label">审核状态</label>
+                                    <select v-model="searchParam.applyStatus" class="form-control">
+										<option value="">全部</option>
+										<option value="D">待处理</option>
+										<option value="Y">申请通过</option>
+										<option value="N">申请驳回</option>
+									</select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-xs-5">
+                                <div class="form-group">
+                                    <label class="control-label">申请日期</label>
+                                    <input v-model="searchParam.atime" id="atime" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-xs-2">
+                                <button type="submit" class="btn btn-success search-btn" @click="searchForm">查询</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive" style="min-height: .01%; overflow-x: auto;">
+                        <table class="table table-hover">
+                            <thead class="text-primary">
+                            	<tr>
+	                                <th class="text-center">序号</th>
+	                                <th>工人名称</th>
+	                                <th class="text-center">手机号</th>
+	                                <th class="text-center">性别</th>
+	                                <th class="text-center">施工城市</th>
+	                                <th>产品名称</th>
+	                                <th class="text-center">产品种类</th>
+	                                <th class="text-center">产品类型</th>
+	                                <th class="text-center">产品型号</th>
+	                                <th class="text-center">产品厂家</th>
+	                                <th class="text-center">申请状态</th>
+	                                <th class="text-center">申请时间</th>
+	                                <th class="text-center">处理时间</th>
+	                                <th class="text-center">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="list.length == 0">
+                            	<tr>
+                            		<td colspan="14" align="center">
+                            			<span class="text-primary">暂无项目数据</span>
+                            		</td>
+                            	</tr>
+                            </tbody>
+                            <tbody v-if="list.length > 0">
+                                <tr v-for="(item, index) in list">
+                                    <td class="text-center">{{ (searchParam.page - 1) * searchParam.rows + index+1 }}</td>
+                                    <td>{{ item.userName }}</td>
+                                    <td class="text-center">{{ item.phoneNo }}</td>
+                                    <td class="text-center">{{ item.gender }}</td>
+                                    <td class="text-center">{{ item.city }}</td>
+                                    <td>{{ item.productName }}</td>
+                                    <td class="text-center">{{ item.kindName }}</td>
+                                    <td class="text-center">{{ item.typeName }}</td>
+                                    <td class="text-center">{{ item.productModel }}</td>
+                                    <td class="text-center">{{ item.companyName }}</td>
+                                    <td class="text-center">{{ item.applyStatus }}</td>
+                                    <td class="text-center">{{ item.applyTime }}</td>
+                                    <td class="text-center">{{ item.approvalTime }}</td>
+                                    <td class="text-center">
+                                    	<a @click="detail(item.id)" href="javascript:;">申请详情</a>
+                                    	<a v-if="item.canToApproval > 0" @click="edit(item.id)" href="javascript:;">审批</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            	<tr>
+                            		<td colspan="14">
+                            			<div id="Page-M-box" class="m-style"></div>
+                            		</td>
+                            	</tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+<!--   Core JS Files   -->
+<script src="${rc.contextPath}/statics/ui/other/matrial/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/matrial/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/matrial/js/material.min.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/pager/pager.min.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/layer/layer.min.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/laydate/laydate.js?v=1.0" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/static/plugins/jquery/jquery.cookie.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/util.js?v=1.0" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/vue.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+	$(function(){
+		
+		new Vue({
+   	    	el: '#app',
+   	     	data: {
+   	     		list: [],
+   	     		searchParam: {
+   	     			phoneNo: '',
+   	     			applyStatus: '',
+   	     			atime: '',
+   	     			page: 1,
+   	     			rows:10
+   	     		}
+   	     	},
+      		methods: {
+      			loadWorkerAptitude: function(page) {
+          			var _this = this;
+          			let loading = _this.loading();
+          			if(!page) {
+          				page = _this.searchParam.page;
+          			}
+          			new Promise(function (resolve, reject) {
+          				post('${rc.contextPath}/worker/aptitude/data', {
+          					phoneNo: _this.searchParam.phoneNo,
+          					applyStatus: _this.searchParam.applyStatus,
+							atime: _this.searchParam.atime,
+							page: page,
+							rows: _this.searchParam.rows
+						}, resolve, reject);
+          			}).then(function(data){
+          				_this.searchParam.page = data.current;
+          				$('#Page-M-box').pagination({
+	          			  	pageCount: data.pageCount,
+	          			  	current: data.current,
+	          			    callback: function (api) {
+	          			    	_this.loadWorkerAptitude(api.getCurrent())
+	          			    }
+	          			});
+	          			_this.list = data.data;
+	          			_this.closeLoading(loading);
+          			}).catch(function (reason) {
+	          			console.log(reason);
+	          			_this.closeLoading(loading);
+          			});
+			    },
+			    searchForm: function() {
+			    	var _this = this;
+			    	_this.loadWorkerAptitude(1);
+			    },
+			    detail: function(id) {
+			    	var _this = this;
+			    	openLayer('申请详情', '${rc.contextPath}/worker/aptitude/detail?id=' + id, false, function() {
+			    	});
+			    },
+			    edit: function(id) {
+			    	var _this = this;
+			    	openLayer('申请审批', '${rc.contextPath}/worker/aptitude/approval?id=' + id, false, function() {
+			    		_this.loadWorkerAptitude();
+			    	});
+			    },
+			    loading: function() {
+			    	return layer.load(0, {shade: [0.1, '#EEE']});
+			    },
+			    closeLoading: function(index) {
+			    	layer.close(index);
+			    }
+      		},
+      		mounted: function () {
+      			var _this = this;
+      			
+      			laydateInit('#atime', function(value) {
+      				_this.searchParam.atime = value;
+      			});
+      			
+      			_this.loadWorkerAptitude(1);
+      		}
+		})
+	})
+
+</script>
+
 </html>

@@ -9,15 +9,22 @@ public class WorkerAptitudeModel implements Serializable {
 
 	private String id;
 	private String workerId;
+	private String userName;
+	private Integer gender;
+	private Integer age;
+	private String phoneNo;
 	private String city;
 	private String applyStatus;
 	private String applyInfo;
 	private Date applyTime;
+	private Date handleTime;
 	private String productId;
 	private String productName;
 	private String kindId;
 	private String typeId;
 	private String productModel;
+	private String companyName;
+	private String coverPicUrl;
 
 	public String getId() {
 		return id;
@@ -33,6 +40,38 @@ public class WorkerAptitudeModel implements Serializable {
 
 	public void setWorkerId(String workerId) {
 		this.workerId = workerId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public Integer getGender() {
+		return gender;
+	}
+
+	public void setGender(Integer gender) {
+		this.gender = gender;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public String getPhoneNo() {
+		return phoneNo;
+	}
+
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
 	}
 
 	public String getCity() {
@@ -65,6 +104,14 @@ public class WorkerAptitudeModel implements Serializable {
 
 	public void setApplyTime(Date applyTime) {
 		this.applyTime = applyTime;
+	}
+
+	public Date getHandleTime() {
+		return handleTime;
+	}
+
+	public void setHandleTime(Date handleTime) {
+		this.handleTime = handleTime;
 	}
 
 	public String getProductId() {
@@ -107,12 +154,30 @@ public class WorkerAptitudeModel implements Serializable {
 		this.productModel = productModel;
 	}
 
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getCoverPicUrl() {
+		return coverPicUrl;
+	}
+
+	public void setCoverPicUrl(String coverPicUrl) {
+		this.coverPicUrl = coverPicUrl;
+	}
+
 	@Override
 	public String toString() {
-		return "WorkerAptitudeModel [id=" + id + ", workerId=" + workerId + ", city=" + city + ", applyStatus="
-				+ applyStatus + ", applyInfo=" + applyInfo + ", applyTime=" + applyTime + ", productId=" + productId
-				+ ", productName=" + productName + ", kindId=" + kindId + ", typeId=" + typeId + ", productModel="
-				+ productModel + "]";
+		return "WorkerAptitudeModel [id=" + id + ", workerId=" + workerId + ", userName=" + userName + ", gender="
+				+ gender + ", age=" + age + ", phoneNo=" + phoneNo + ", city=" + city + ", applyStatus=" + applyStatus
+				+ ", applyInfo=" + applyInfo + ", applyTime=" + applyTime + ", handleTime=" + handleTime
+				+ ", productId=" + productId + ", productName=" + productName + ", kindId=" + kindId + ", typeId="
+				+ typeId + ", productModel=" + productModel + ", companyName=" + companyName + ", coverPicUrl="
+				+ coverPicUrl + "]";
 	}
 
 }
