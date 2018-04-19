@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50637
 File Encoding         : 65001
 
-Date: 2018-04-16 23:28:52
+Date: 2018-04-20 00:31:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -52,12 +52,12 @@ INSERT INTO `sp_basic_city` VALUES ('015029af0a58409bbaada800938a04b9', '福鼎�
 INSERT INTO `sp_basic_city` VALUES ('01516451e857499bb7d0f7f16151d833', '鸡泽县', 'jizexian', 'jzx', '130400', '130431', '2018-03-30 18:06:49', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('017028f3785d4610a38d3821d750470e', '谯城区', 'qiaochengqu', 'qcq', '341600', '341602', '2018-03-30 18:06:55', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('01b27413871249f5becd78a7899504a0', '道里区', 'daoliqu', 'dlq', '230100', '230102', '2018-03-30 18:06:52', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('01ba297d819942809203d98fe2a88ebd', '丰都县', 'fengdouxian', 'fdx', '500200', '500230', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('01ba297d819942809203d98fe2a88ebd', '丰都县', 'fengdouxian', 'fdx', '500100', '500230', '2018-03-30 18:07:00', '2018-04-19 18:19:22');
 INSERT INTO `sp_basic_city` VALUES ('01e4358d71194fa48a1536e240388720', '桂林市', 'guilinshi', 'gls', '450000', '450300', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('01e7baf3ec734f23ae089c9223122ea2', '沈河区', 'shenhequ', 'shq', '210100', '210103', '2018-03-30 18:06:51', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('0203f234a27d4609adf3670346ab7ed7', '大厂回族自治县', 'dachanghuizuzizhixian', 'dchzzzx', '131000', '131028', '2018-03-30 18:06:49', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('023071c8c98f421fb117a335806a416f', '海淀区', 'haidianqu', 'hdq', '110100', '110108', '2018-03-30 18:06:48', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('0231e4e5e0634b5d848062dd106eb8a7', '秀山土家族苗族自治县', 'xiushantujiazumiaozuzizhixian', 'xstjzmzzzx', '500200', '500241', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('0231e4e5e0634b5d848062dd106eb8a7', '秀山土家族苗族自治县', 'xiushantujiazumiaozuzizhixian', 'xstjzmzzzx', '500100', '500241', '2018-03-30 18:07:00', '2018-04-19 18:19:22');
 INSERT INTO `sp_basic_city` VALUES ('023c8015e0f54981bc65ae6c44769f9f', '四子王旗', 'siziwangqi', 'szwq', '150900', '150929', '2018-03-30 18:06:51', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('0242dd2ad49f465ea709fdc7c2d7227a', '邹平县', 'zoupingxian', 'zpx', '371600', '371626', '2018-03-30 18:06:57', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('026e33e6d4374316afbf3e18a1d43ffd', '永州市', 'yongzhoushi', 'yzs', '430000', '431100', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
@@ -70,10 +70,10 @@ INSERT INTO `sp_basic_city` VALUES ('02cdc18bca4e4b81b65da23f1483a17e', '金塔�
 INSERT INTO `sp_basic_city` VALUES ('02df1c67251a478d85bd8d37f6f9c849', '蛟河市', 'jiaoheshi', 'jhs', '220200', '220281', '2018-03-30 18:06:52', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('02f107b7dd9f4256ad7a02b37389aa1e', '大丰市', 'dafengshi', 'dfs', '320900', '320982', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('02f6460126a548ba9ccd5c75bfe989d7', '西安区', 'xianqu', 'xaq', '220400', '220403', '2018-03-30 18:06:52', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('02fa943bc8814cc3bb794fcffe24f96d', '石柱土家族自治县', 'shizhutujiazuzizhixian', 'sztjzzzx', '500200', '500240', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('02fa943bc8814cc3bb794fcffe24f96d', '石柱土家族自治县', 'shizhutujiazuzizhixian', 'sztjzzzx', '500100', '500240', '2018-03-30 18:07:00', '2018-04-19 18:19:22');
 INSERT INTO `sp_basic_city` VALUES ('02fb77fee71c499ba7ace8c32313fb6b', '麻城市', 'machengshi', 'mcs', '421100', '421181', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('0307cbe741c04482bddf5a0273d3ddce', '耒阳市', 'leiyangshi', 'lys', '430400', '430481', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('03099cb7336b4603a295e4aba7d7e986', '奉节县', 'fengjiexian', 'fjx', '500200', '500236', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('03099cb7336b4603a295e4aba7d7e986', '奉节县', 'fengjiexian', 'fjx', '500100', '500236', '2018-03-30 18:07:00', '2018-04-19 18:19:22');
 INSERT INTO `sp_basic_city` VALUES ('031dfe8f5e284d4ab61de0d4b95af5ae', '市辖区', 'shixiaqu', 'sxq', '530900', '530901', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('03267ec71a974861a0f3dbd024e542d9', '南康市', 'nankangshi', 'nks', '360700', '360782', '2018-03-30 18:06:56', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('033c176094154bb9b90078943b4f4620', '梅列区', 'meiliequ', 'mlq', '350400', '350402', '2018-03-30 18:06:55', '2018-04-14 22:18:12');
@@ -521,7 +521,7 @@ INSERT INTO `sp_basic_city` VALUES ('217f3df297d9413b91d9539f473c7de8', '岷县'
 INSERT INTO `sp_basic_city` VALUES ('218d46127bac4008bc1471d117691970', '晋安区', 'jinanqu', 'jaq', '350100', '350111', '2018-03-30 18:06:55', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('219b2fe986984eb08d10ce9ff602a100', '防城港市', 'fangchenggangshi', 'fcgs', '450000', '450600', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('21b04f050b3c41f3a8c1c726cd2cceb1', '海口市', 'haikoushi', 'hks', '460000', '460100', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('21b573c400ea4c4289409e178dd8e514', '开县', 'kaixian', 'kx', '500200', '500234', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('21b573c400ea4c4289409e178dd8e514', '开县', 'kaixian', 'kx', '500100', '500234', '2018-03-30 18:07:00', '2018-04-19 18:19:22');
 INSERT INTO `sp_basic_city` VALUES ('21cc5bc7efe04de6b9f173da9ab1c9b5', '盐城市', 'yanchengshi', 'ycs', '320000', '320900', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('21e4083ce64945e4b5ce087480c13241', '广水市', 'guangshuishi', 'gss', '421300', '421381', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('2206ace26bea472c9f2c1421d9a12541', '芙蓉区', 'furongqu', 'frq', '430100', '430102', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
@@ -536,7 +536,7 @@ INSERT INTO `sp_basic_city` VALUES ('22b9037957a04f6dbf527f2f9a144cbb', '盘锦�
 INSERT INTO `sp_basic_city` VALUES ('22d2289647874c5db9c687f6c5e4efd3', '阜平县', 'fupingxian', 'fpx', '130600', '130624', '2018-03-30 18:06:49', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('22f705f9874941619037e6bb20cb0c77', '太湖县', 'taihuxian', 'thx', '340800', '340825', '2018-03-30 18:06:55', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('22ffa816cc6f43f6841162ba2620e93b', '峰峰矿区', 'fengfengkuangqu', 'ffkq', '130400', '130406', '2018-03-30 18:06:49', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('230b4383d90240eaacd2c4e9c0123e26', '崇明县', 'chongmingxian', 'cmx', '310200', '310230', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('230b4383d90240eaacd2c4e9c0123e26', '崇明县', 'chongmingxian', 'cmx', '310100', '310230', '2018-03-30 18:06:53', '2018-04-19 18:22:19');
 INSERT INTO `sp_basic_city` VALUES ('231ec845b8b648929cab68f3c7d80ef1', '永兴县', 'yongxingxian', 'yxx', '431000', '431023', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('232ed7ad3b3e48f2abbb89986ec3a44b', '太仓市', 'taicangshi', 'tcs', '320500', '320585', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('2330229e4a664db1a8f3a76c9c5dd484', '市辖区', 'shixiaqu', 'sxq', '410600', '410601', '2018-03-30 18:06:57', '2018-04-14 22:18:12');
@@ -707,7 +707,7 @@ INSERT INTO `sp_basic_city` VALUES ('2f65e6df0b7341109a9601dd32ebdb79', '市辖�
 INSERT INTO `sp_basic_city` VALUES ('2f674228143a49afb5a6ece75296a9dd', '楚雄市', 'chuxiongshi', 'cxs', '532300', '532301', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('2f7208f5c5c946c9a3ab70eb514874d8', '民勤县', 'minqinxian', 'mqx', '620600', '620621', '2018-03-30 18:07:03', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('2f91576f0da944eab6dbe52fe39e8080', '布尔津县', 'buerjinxian', 'bejx', '654300', '654321', '2018-03-30 18:07:04', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('2f9692ef15ed4fc384fce08065c432c0', '酉阳土家族苗族自治县', 'youyangtujiazumiaozuzizhixian', 'yytjzmzzzx', '500200', '500242', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('2f9692ef15ed4fc384fce08065c432c0', '酉阳土家族苗族自治县', 'youyangtujiazumiaozuzizhixian', 'yytjzmzzzx', '500100', '500242', '2018-03-30 18:07:00', '2018-04-19 18:19:22');
 INSERT INTO `sp_basic_city` VALUES ('2facac4716b24b31abc4e6c93c5a4fd6', '海港区', 'haigangqu', 'hgq', '130300', '130302', '2018-03-30 18:06:49', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('2fb6bc29425c4aeeba5121942427252f', '金川区', 'jinchuanqu', 'jcq', '620300', '620302', '2018-03-30 18:07:03', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('2fc27b983b354293930a336e41520d8c', '莱山区', 'laishanqu', 'lsq', '370600', '370613', '2018-03-30 18:06:56', '2018-04-14 22:18:12');
@@ -742,8 +742,8 @@ INSERT INTO `sp_basic_city` VALUES ('31e2db49fd52459595a373467928010c', '元阳�
 INSERT INTO `sp_basic_city` VALUES ('323a104df8b941399b7b88a77c5e0ba3', '甘德县', 'gandexian', 'gdx', '632600', '632623', '2018-03-30 18:07:04', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('324553a0340645cf9e240368835ea7fd', '多伦县', 'duolunxian', 'dlx', '152500', '152531', '2018-03-30 18:06:51', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('3274aced14354b9d82fba617480ad4ba', '万年县', 'wannianxian', 'wnx', '361100', '361129', '2018-03-30 18:06:56', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('32911677084b41bab555c13bbad9954c', '市辖区', 'shixiaqu', 'sxq', '120000', '120100', '2018-03-30 18:06:48', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('3294648a68834556b3372de7e35506ec', '延庆县', 'yanqingxian', 'yqx', '110200', '110229', '2018-03-30 18:06:48', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('32911677084b41bab555c13bbad9954c', '天津市', 'tianjinshi', 'tjs', '120000', '120100', '2018-03-30 18:06:48', '2018-04-19 22:04:02');
+INSERT INTO `sp_basic_city` VALUES ('3294648a68834556b3372de7e35506ec', '延庆县', 'yanqingxian', 'yqx', '110100', '110229', '2018-03-30 18:06:48', '2018-04-19 18:16:18');
 INSERT INTO `sp_basic_city` VALUES ('329796ed64734d3faa05208232b11952', '港闸区', 'gangzhaqu', 'gzq', '320600', '320611', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('32a29001903143db81afca7b9277be01', '龙湖区', 'longhuqu', 'lhq', '440500', '440507', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('32b2b1d7fe1043c9b3560e84aa1c963b', '崇川区', 'chongchuanqu', 'ccq', '320600', '320602', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
@@ -1023,7 +1023,7 @@ INSERT INTO `sp_basic_city` VALUES ('452450221dcc4c759bdedc6b3999053c', '相山�
 INSERT INTO `sp_basic_city` VALUES ('4542417cf98d4b149b52470f9adc5552', '调兵山市', 'tiaobingshanshi', 'tbss', '211200', '211281', '2018-03-30 18:06:52', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('45663f566bb743759ffba28138a1f012', '铜仁市', 'tongrenshi', 'trs', '522200', '522201', '2018-03-30 18:07:01', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('45694ee236fd4b8795e5d0e3e6b7839e', '灌云县', 'guanyunxian', 'gyx', '320700', '320723', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('457554c129de408a9f6a197225873da0', '城口县', 'chengkouxian', 'ckx', '500200', '500229', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('457554c129de408a9f6a197225873da0', '城口县', 'chengkouxian', 'ckx', '500100', '500229', '2018-03-30 18:07:00', '2018-04-19 18:19:22');
 INSERT INTO `sp_basic_city` VALUES ('457843d2db37481da12e00df2d3ae158', '嫩江县', 'nenjiangxian', 'njx', '231100', '231121', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('4589199ff88d406ab7e8f207c353b2d5', '三明市', 'sanmingshi', 'sms', '350000', '350400', '2018-03-30 18:06:55', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('458ef43d0353489f80d5c382f987934f', '双清区', 'shuangqingqu', 'sqq', '430500', '430502', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
@@ -1035,7 +1035,7 @@ INSERT INTO `sp_basic_city` VALUES ('45dd170bbb1f47079e6d5ff65a7cc1dc', '婺城�
 INSERT INTO `sp_basic_city` VALUES ('45f5a857bdba4ad89b55e3ef1b548501', '清新县', 'qingxinxian', 'qxx', '441800', '441827', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('45fba681137d41d7a92c5cfda8849545', '紫金县', 'zijinxian', 'zjx', '441600', '441621', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('46012ac485fc4c03a5d279e254beb46a', '南平市', 'nanpingshi', 'nps', '350000', '350700', '2018-03-30 18:06:55', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('4631662f829c477f89a8e0398b79a2bf', '潼南县', 'tongnanxian', 'tnx', '500200', '500223', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('4631662f829c477f89a8e0398b79a2bf', '潼南县', 'tongnanxian', 'tnx', '500100', '500223', '2018-03-30 18:07:00', '2018-04-19 18:19:22');
 INSERT INTO `sp_basic_city` VALUES ('463999ac2f6b4c64861c06c3c080b378', '呼图壁县', 'hutubixian', 'htbx', '652300', '652323', '2018-03-30 18:07:04', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('4639d9bc49544e46a5269f44c76a89b3', '贺兰县', 'helanxian', 'hlx', '640100', '640122', '2018-03-30 18:07:04', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('463eed1f92b84fd1badf7445c51d3dcc', '市辖区', 'shixiaqu', 'sxq', '320300', '320301', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
@@ -1062,9 +1062,8 @@ INSERT INTO `sp_basic_city` VALUES ('477d7ad20f11484a9693d8c2725bb50a', '万州�
 INSERT INTO `sp_basic_city` VALUES ('4796bb392dab41c1a35bc548d8bc96a1', '历城区', 'lichengqu', 'lcq', '370100', '370112', '2018-03-30 18:06:56', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('47a142c15fcb4b79af00ffeb1722b505', '市辖区', 'shixiaqu', 'sxq', '441600', '441601', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('47b83e3c1c564e739218979322048427', '博山区', 'boshanqu', 'bsq', '370300', '370304', '2018-03-30 18:06:56', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('47c1a289f6e44cdfa752f1c31f9b2d8b', '密云县', 'miyunxian', 'myx', '110200', '110228', '2018-03-30 18:06:48', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('47c1a289f6e44cdfa752f1c31f9b2d8b', '密云县', 'miyunxian', 'myx', '110100', '110228', '2018-03-30 18:06:48', '2018-04-19 18:17:09');
 INSERT INTO `sp_basic_city` VALUES ('47ce4f6ff1214aeebb64f4899ad0eac0', '西安市', 'xianshi', 'xas', '610000', '610100', '2018-03-30 18:07:03', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('47cff96700084f5c9436f5aa9211f126', '县', 'xian', 'x', '110000', '110200', '2018-03-30 18:06:48', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('47e1de5d1bd7419a9cf56dbf758bca32', '扎兰屯市', 'zalantunshi', 'zlts', '150700', '150783', '2018-03-30 18:06:51', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('47e7dd2a0ac54131b4c1ca3be052f2ba', '安居区', 'anjuqu', 'ajq', '510900', '510904', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('47ec410688c449fdb50eed892e25b370', '市辖区', 'shixiaqu', 'sxq', '610200', '610201', '2018-03-30 18:07:03', '2018-04-14 22:18:12');
@@ -1166,7 +1165,7 @@ INSERT INTO `sp_basic_city` VALUES ('4f6f1da0d612486e84a5fe93cd27d056', '上街�
 INSERT INTO `sp_basic_city` VALUES ('4f700a455516447bb5bdb06dae73bfdf', '师宗县', 'shizongxian', 'szx', '530300', '530323', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('4f75d53ce8aa48198f38be509f6b642f', '日喀则市', 'rikazeshi', 'rkzs', '542300', '542301', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('4f882d41bab1476289b3fc6851e82fbe', '南涧彝族自治县', 'nanjianyizuzizhixian', 'njyzzzx', '532900', '532926', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('4f95491e20534dad827b0cc6cfa2afaa', '忠县', 'zhongxian', 'zx', '500200', '500233', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('4f95491e20534dad827b0cc6cfa2afaa', '忠县', 'zhongxian', 'zx', '500100', '500233', '2018-03-30 18:07:00', '2018-04-19 18:19:23');
 INSERT INTO `sp_basic_city` VALUES ('4fa04ada7e274ea6b8b4e18f63b2435d', '南山区', 'nanshanqu', 'nsq', '440300', '440305', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('4fa69d81a32f4137946b42f5d4a78b3f', '兴化市', 'xinghuashi', 'xhs', '321200', '321281', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('4fbedd18ce9b42b1bd0828dd30813329', '松岭区', 'songlingqu', 'slq', '232700', '232702', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
@@ -1192,7 +1191,7 @@ INSERT INTO `sp_basic_city` VALUES ('50e7b75b5a54497b9fc12dbee3dc4d55', '古浪�
 INSERT INTO `sp_basic_city` VALUES ('50f6e60e6f6a43efa7437079d7d80a96', '射阳县', 'sheyangxian', 'syx', '320900', '320924', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('5141f1496e5d41328bd18a15a68bc748', '香格里拉县', 'xianggelilaxian', 'xgllx', '533400', '533421', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('5153b91a1e3f4244813637cfe1a3a3d5', '歙县', 'shexian', 'sx', '341000', '341021', '2018-03-30 18:06:55', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('515e0fdb452d4f4d9c32b1b85711b4b1', '綦江县', 'qijiangxian', 'qjx', '500200', '500222', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('515e0fdb452d4f4d9c32b1b85711b4b1', '綦江县', 'qijiangxian', 'qjx', '500100', '500222', '2018-03-30 18:07:00', '2018-04-19 18:19:23');
 INSERT INTO `sp_basic_city` VALUES ('517e158e72054f3e9361d271c5300f30', '牙克石市', 'yakeshishi', 'ykss', '150700', '150782', '2018-03-30 18:06:51', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('51884c34d3504bb9a49e197c6cb26db8', '景谷傣族彝族自治县', 'jinggudaizuyizuzizhixian', 'jgdzyzzzx', '530800', '530824', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('518e0be9cd8b471caba5372d09930010', '黑山县', 'heishanxian', 'hsx', '210700', '210726', '2018-03-30 18:06:52', '2018-04-14 22:18:12');
@@ -1224,7 +1223,7 @@ INSERT INTO `sp_basic_city` VALUES ('534509e141ef4ab9a047c64dc9565509', '治多�
 INSERT INTO `sp_basic_city` VALUES ('539645b3ad3f41aa9b4061905b7a603d', '浪卡子县', 'langqiazixian', 'lqzx', '542200', '542233', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('53a1000f0307467997377fb459586c1c', '开阳县', 'kaiyangxian', 'kyx', '520100', '520121', '2018-03-30 18:07:01', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('53a194e851a44231a9cc36c34323314f', '路北区', 'lubeiqu', 'lbq', '130200', '130203', '2018-03-30 18:06:49', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('53a22243ad534192ac5570757694f05c', '巫溪县', 'wuxixian', 'wxx', '500200', '500238', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('53a22243ad534192ac5570757694f05c', '巫溪县', 'wuxixian', 'wxx', '500100', '500238', '2018-03-30 18:07:00', '2018-04-19 18:19:23');
 INSERT INTO `sp_basic_city` VALUES ('53a8b33857c649299d4b2d6366c2197c', '滕州市', 'tengzhoushi', 'tzs', '370400', '370481', '2018-03-30 18:06:56', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('53b661c6fd614042b451c7c6a0c78fbf', '卫辉市', 'weihuishi', 'whs', '410700', '410781', '2018-03-30 18:06:57', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('53c2dfe4aa4f4823be2ac973bf1783f3', '卧龙区', 'wolongqu', 'wlq', '411300', '411303', '2018-03-30 18:06:57', '2018-04-14 22:18:12');
@@ -1264,7 +1263,6 @@ INSERT INTO `sp_basic_city` VALUES ('56b73b72d60e48e6968d8f4184d70db3', '延寿�
 INSERT INTO `sp_basic_city` VALUES ('56bbf112729945139fe003d712953305', '召陵区', 'zhaolingqu', 'zlq', '411100', '411104', '2018-03-30 18:06:57', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('56c8305efef34f21afa9a6097fb0bf12', '宾川县', 'binchuanxian', 'bcx', '532900', '532924', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('56f70aefe248485bbba3b6c18cc6623a', '荆州区', 'jingzhouqu', 'jzq', '421000', '421003', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('5705a358be2d45f2a6adcc019ed0ccec', '县', 'xian', 'x', '500000', '500200', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('571f23ad0d604152ad1622578730ae31', '永善县', 'yongshanxian', 'ysx', '530600', '530625', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('5738c33f43214d3aaaae6c091654d786', '南宫市', 'nangongshi', 'ngs', '130500', '130581', '2018-03-30 18:06:49', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('5739376ab0ea47fcadd30783c5a77435', '临猗县', 'linyixian', 'lyx', '140800', '140821', '2018-03-30 18:06:50', '2018-04-14 22:18:12');
@@ -1377,7 +1375,7 @@ INSERT INTO `sp_basic_city` VALUES ('5dbd5a0c3cdb4b649d350b5de6c1b203', '市辖�
 INSERT INTO `sp_basic_city` VALUES ('5dc342ac67aa442d89110bc63deeb054', '锦屏县', 'jinpingxian', 'jpx', '522600', '522628', '2018-03-30 18:07:01', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('5de4fcf2ce5f47d4a9c40080a42e674e', '隆子县', 'longzixian', 'lzx', '542200', '542231', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('5df63f068abe45d68098ef5b8d29e231', '兴安盟', 'xinganmeng', 'xam', '150000', '152200', '2018-03-30 18:06:51', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('5e008522d84447b7a0e776452b5ea691', '蓟县', 'jixian', 'jx', '120200', '120225', '2018-03-30 18:06:48', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('5e008522d84447b7a0e776452b5ea691', '蓟县', 'jixian', 'jx', '120100', '120225', '2018-03-30 18:06:48', '2018-04-19 18:18:19');
 INSERT INTO `sp_basic_city` VALUES ('5e0488ce797148779634837deca908c4', '苍南县', 'cangnanxian', 'cnx', '330300', '330327', '2018-03-30 18:06:54', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('5e071f3ca9794238b3baad54e84e6122', '太谷县', 'taiguxian', 'tgx', '140700', '140726', '2018-03-30 18:06:50', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('5e24bd68a20f41c6b7e5bcf02ac93bff', '宣恩县', 'xuanenxian', 'xex', '422800', '422825', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
@@ -1842,14 +1840,14 @@ INSERT INTO `sp_basic_city` VALUES ('810a1a7deb9f420982f530bc91ee1cfd', '赫山�
 INSERT INTO `sp_basic_city` VALUES ('812af34ad3cb470f89a64698f638cd4a', '隆德县', 'longdexian', 'ldx', '640400', '640423', '2018-03-30 18:07:04', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('815b94f32dd24691b19435fe09b37e9a', '荔城区', 'lichengqu', 'lcq', '350300', '350304', '2018-03-30 18:06:55', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('8162cc82b0dd4e2aa4eafc0a2c39546b', '隰县', 'xixian', 'xx', '141000', '141031', '2018-03-30 18:06:50', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('81ae6bb4e4b74854b33d1fc77f903657', '市辖区', 'shixiaqu', 'sxq', '110000', '110100', '2018-03-30 18:06:48', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('81ae6bb4e4b74854b33d1fc77f903657', '北京市', 'beijingshi', 'bjs', '110000', '110100', '2018-03-30 18:06:48', '2018-04-19 22:03:43');
 INSERT INTO `sp_basic_city` VALUES ('81af606fc5b94404bf85ef2811e000ea', '天镇县', 'tianzhenxian', 'tzx', '140200', '140222', '2018-03-30 18:06:50', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('81b61ec7a07746b3bb560b6dd8f642ca', '滨江区', 'binjiangqu', 'bjq', '330100', '330108', '2018-03-30 18:06:54', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('81c8f37b2c1b4ba2b4d77492319ac5bf', '闻喜县', 'wenxixian', 'wxx', '140800', '140823', '2018-03-30 18:06:50', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('81d03bdb7f934362852a6804e6e42648', '霞山区', 'xiashanqu', 'xsq', '440800', '440803', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('81d784aadc7b4ba494d8a5dbc768ef1d', '柳南区', 'liunanqu', 'lnq', '450200', '450204', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('81fed778d3aa4ee79d0da053ace203be', '雁峰区', 'yanfengqu', 'yfq', '430400', '430406', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('82058e39fde74e68859ce443c2bbdc7a', '宁河县', 'ninghexian', 'nhx', '120200', '120221', '2018-03-30 18:06:48', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('82058e39fde74e68859ce443c2bbdc7a', '宁河县', 'ninghexian', 'nhx', '120100', '120221', '2018-03-30 18:06:48', '2018-04-19 18:18:22');
 INSERT INTO `sp_basic_city` VALUES ('8221ab3b4e144d548965912a39dba365', '天元区', 'tianyuanqu', 'tyq', '430200', '430211', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('8226dc1509bd4459b1c453793a489221', '文山壮族苗族自治州', 'wenshanzhuangzumiaozuzizhizhou', 'wszzmzzzz', '530000', '532600', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('8259b202035b4e0e8ff7cf3a4264a468', '广州市', 'guangzhoushi', 'gzs', '440000', '440100', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
@@ -1912,7 +1910,7 @@ INSERT INTO `sp_basic_city` VALUES ('86b434fa6fc5423682ee8d21ba613ff3', '林州�
 INSERT INTO `sp_basic_city` VALUES ('86b99ca85e1c42d3b9d65d6444c56335', '隆安县', 'longanxian', 'lax', '450100', '450123', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('86c8c9f36c53416eb47cb2cc406f8436', '化州市', 'huazhoushi', 'hzs', '440900', '440982', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('86ca1e6ff31644f7947666bda7d83dc4', '市辖区', 'shixiaqu', 'sxq', '440500', '440501', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('86e1ac51936f4a05ad2125dd3419c141', '静海县', 'jinghaixian', 'jhx', '120200', '120223', '2018-03-30 18:06:48', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('86e1ac51936f4a05ad2125dd3419c141', '静海县', 'jinghaixian', 'jhx', '120100', '120223', '2018-03-30 18:06:48', '2018-04-19 18:18:25');
 INSERT INTO `sp_basic_city` VALUES ('86e4e2e347be43faaccc9a1d929e1730', '和田县', 'hetianxian', 'htx', '653200', '653221', '2018-03-30 18:07:04', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('86f8908dc7e540229fa4e44f07021aab', '临高县', 'lingaoxian', 'lgx', '469000', '469024', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('871827fc7bcb4008a5af0dc17b18cfe6', '定结县', 'dingjiexian', 'djx', '542300', '542332', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
@@ -1958,7 +1956,7 @@ INSERT INTO `sp_basic_city` VALUES ('89d50c5e68b34c929b21c73b445bb3f2', '伊通�
 INSERT INTO `sp_basic_city` VALUES ('89eb5364acff48a388d22c458bce3115', '市辖区', 'shixiaqu', 'sxq', '640200', '640201', '2018-03-30 18:07:04', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('8a39b6c5a5f24cb5b9c65dc5ec0a7d64', '沂源县', 'yiyuanxian', 'yyx', '370300', '370323', '2018-03-30 18:06:56', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('8a468a1830124b55a8ae92d4aa11fe28', '中山市', 'zhongshanshi', 'zss', '440000', '442000', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('8a74f7d0592c4d39aafe98096884d2ac', '市辖区', 'shixiaqu', 'sxq', '310000', '310100', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('8a74f7d0592c4d39aafe98096884d2ac', '上海市', 'shanghaishi', 'shs', '310000', '310100', '2018-03-30 18:06:53', '2018-04-19 22:04:19');
 INSERT INTO `sp_basic_city` VALUES ('8a85054a39e1494ca1f325149803a2da', '淄博市', 'ziboshi', 'zbs', '370000', '370300', '2018-03-30 18:06:56', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('8a852056d571430fa436ad3775e4aa77', '泰顺县', 'taishunxian', 'tsx', '330300', '330329', '2018-03-30 18:06:54', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('8a887c3a48ff41dda1aab39bbd05941c', '屏南县', 'pingnanxian', 'pnx', '350900', '350923', '2018-03-30 18:06:55', '2018-04-14 22:18:12');
@@ -2016,7 +2014,6 @@ INSERT INTO `sp_basic_city` VALUES ('8e1cee711e614c44ba6534ba0b45f696', '海曙�
 INSERT INTO `sp_basic_city` VALUES ('8e2173d91e05413d97a826a087b45983', '常山县', 'changshanxian', 'csx', '330800', '330822', '2018-03-30 18:06:54', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('8e2abd4bec9a419cb7c4011ffa80f5a9', '黄州区', 'huangzhouqu', 'hzq', '421100', '421102', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('8e513bf96c2a4160aa2ed5628b162d51', '郧县', 'yunxian', 'yx', '420300', '420321', '2018-03-30 18:06:57', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('8e52ddc9f2b7416bb09ca04efa85c940', '县', 'xian', 'x', '120000', '120200', '2018-03-30 18:06:48', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('8e7ea6c1d08d4b28a904fb48b9618665', '呼兰区', 'hulanqu', 'hlq', '230100', '230111', '2018-03-30 18:06:52', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('8e8b9a7a9a8f4d70a600be698c254ea9', '洛江区', 'luojiangqu', 'ljq', '350500', '350504', '2018-03-30 18:06:55', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('8e98780b9a534b49a3bd2aaf3ad86c0d', '铜鼓县', 'tongguxian', 'tgx', '360900', '360926', '2018-03-30 18:06:56', '2018-04-14 22:18:12');
@@ -2097,7 +2094,7 @@ INSERT INTO `sp_basic_city` VALUES ('949028452753401ab674dc2d26e1532a', '方城�
 INSERT INTO `sp_basic_city` VALUES ('949adfa2241040e6bd62c9dcecd3d979', '黔东南苗族侗族自治州', 'qiandongnanmiaozudongzuzizhizhou', 'qdnmzdzzzz', '520000', '522600', '2018-03-30 18:07:01', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('94a3ba5d126a40009300c0c56ec0e69a', '合肥市', 'hefeishi', 'hfs', '340000', '340100', '2018-03-30 18:06:54', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('94b0c9e06288406eb8cda4dd50c4008f', '港南区', 'gangnanqu', 'gnq', '450800', '450803', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('94d39ebad2d742189a4bf0a0b817ea68', '璧山县', 'bishanxian', 'bsx', '500200', '500227', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('94d39ebad2d742189a4bf0a0b817ea68', '璧山县', 'bishanxian', 'bsx', '500100', '500227', '2018-03-30 18:07:00', '2018-04-19 18:19:23');
 INSERT INTO `sp_basic_city` VALUES ('94d8ab3b279a4f7e8efc319893c0dfeb', '长顺县', 'changshunxian', 'csx', '522700', '522729', '2018-03-30 18:07:01', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('9500a767d4f8438cbee4830cc0b546ca', '滦县', 'luanxian', 'lx', '130200', '130223', '2018-03-30 18:06:49', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('95014907b95045a08e344b7ff8bbe0a5', '平武县', 'pingwuxian', 'pwx', '510700', '510727', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
@@ -2137,7 +2134,7 @@ INSERT INTO `sp_basic_city` VALUES ('973cdc5201d5485ba6360609861086ea', '蒙城�
 INSERT INTO `sp_basic_city` VALUES ('975619f84b6b4f599ced4ca0f20d4611', '筠连县', 'yunlianxian', 'ylx', '511500', '511527', '2018-03-30 18:07:01', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('97652d05e89443bdb9cdec1eee4ad8c9', '渭南市', 'weinanshi', 'wns', '610000', '610500', '2018-03-30 18:07:03', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('976b9a88c383408c8c2de74fea9ccfca', '榆社县', 'yushexian', 'ysx', '140700', '140721', '2018-03-30 18:06:50', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('977e1bb23a8c404583e0d88f148b598f', '彭水苗族土家族自治县', 'pengshuimiaozutujiazuzizhixian', 'psmztjzzzx', '500200', '500243', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('977e1bb23a8c404583e0d88f148b598f', '彭水苗族土家族自治县', 'pengshuimiaozutujiazuzizhixian', 'psmztjzzzx', '500100', '500243', '2018-03-30 18:07:00', '2018-04-19 18:19:23');
 INSERT INTO `sp_basic_city` VALUES ('978f59c6231b42ceb5139b47de898e4a', '玉州区', 'yuzhouqu', 'yzq', '450900', '450902', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('97b0e12a24964e58a4f848bd0323c1d8', '魏都区', 'weidouqu', 'wdq', '411000', '411002', '2018-03-30 18:06:57', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('97b3f0110a5347708ca420c7b92eace9', '钟祥市', 'zhongxiangshi', 'zxs', '420800', '420881', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
@@ -2230,7 +2227,7 @@ INSERT INTO `sp_basic_city` VALUES ('9e249472d5134dda9e363d1e52d60802', '松原�
 INSERT INTO `sp_basic_city` VALUES ('9e6ef315fc5548c884cc51d368757706', '市辖区', 'shixiaqu', 'sxq', '411400', '411401', '2018-03-30 18:06:57', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('9e79f2efa533459faeb1da198ddaf84a', '文成县', 'wenchengxian', 'wcx', '330300', '330328', '2018-03-30 18:06:54', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('9e925abd310a4f0a8505de6709efd1c5', '宁远县', 'ningyuanxian', 'nyx', '431100', '431126', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('9e932380cc1540fa94d10c9b68dd94d0', '市辖区', 'shixiaqu', 'sxq', '500000', '500100', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('9e932380cc1540fa94d10c9b68dd94d0', '重庆市', 'chongqingshi', 'cqs', '500000', '500100', '2018-03-30 18:07:00', '2018-04-19 22:04:38');
 INSERT INTO `sp_basic_city` VALUES ('9eb40e6d43684ce1b8d3adf8d495a3c9', '色达县', 'sedaxian', 'sdx', '513300', '513333', '2018-03-30 18:07:01', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('9ebe9b4bc36542ff99f150d0a92928e3', '阳江市', 'yangjiangshi', 'yjs', '440000', '441700', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('9ed04528aa7f459a884abe59fdd0bc0f', '乌兰察布市', 'wulanchabushi', 'wlcbs', '150000', '150900', '2018-03-30 18:06:51', '2018-04-14 22:18:12');
@@ -2246,11 +2243,11 @@ INSERT INTO `sp_basic_city` VALUES ('9fb374a4fc324ce3a7ba507c8cbebd2b', '和政�
 INSERT INTO `sp_basic_city` VALUES ('9fbe108290da4766a66aa0c7e427e76a', '番禺区', 'fanyuqu', 'fyq', '440100', '440113', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('9fc90e3988654647aa2e88b0cb7a325e', '中宁县', 'zhongningxian', 'znx', '640500', '640521', '2018-03-30 18:07:04', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('9fd9d06738b14aeeb835da9ed4610721', '定安县', 'dinganxian', 'dax', '469000', '469021', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('9fdb4f9e5787494b9fa70dde11b5c10f', '铜梁县', 'tongliangxian', 'tlx', '500200', '500224', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('9fdb4f9e5787494b9fa70dde11b5c10f', '铜梁县', 'tongliangxian', 'tlx', '500100', '500224', '2018-03-30 18:07:00', '2018-04-19 18:19:23');
 INSERT INTO `sp_basic_city` VALUES ('9fe01a8fcead4a83aed52e49b4a0c3e1', '市辖区', 'shixiaqu', 'sxq', '220700', '220701', '2018-03-30 18:06:52', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('9fe06045c3004b3cad609794440ff69d', '兰山区', 'lanshanqu', 'lsq', '371300', '371302', '2018-03-30 18:06:56', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('9fef7a88bb56490d969cdb8068a769f9', '来凤县', 'laifengxian', 'lfx', '422800', '422827', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('a02ea17b9ebe460a8e52c477caba81c5', '梁平县', 'liangpingxian', 'lpx', '500200', '500228', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('a02ea17b9ebe460a8e52c477caba81c5', '梁平县', 'liangpingxian', 'lpx', '500100', '500228', '2018-03-30 18:07:00', '2018-04-19 18:19:23');
 INSERT INTO `sp_basic_city` VALUES ('a02fc6b67344461385889165004ca7f2', '廉江市', 'lianjiangshi', 'ljs', '440800', '440881', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('a04b79e48be24916a1b2825ecdffa45f', '市辖区', 'shixiaqu', 'sxq', '410900', '410901', '2018-03-30 18:06:57', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('a059da47d1dd4ed0ad842c60cc816622', '东河区', 'donghequ', 'dhq', '150200', '150202', '2018-03-30 18:06:50', '2018-04-14 22:18:12');
@@ -2342,7 +2339,7 @@ INSERT INTO `sp_basic_city` VALUES ('a69623bd909f4653bfbc64f99cf9d6d6', '舟曲�
 INSERT INTO `sp_basic_city` VALUES ('a6a0ff52ee5148c2a41a37ffd3256660', '槐荫区', 'huaiyinqu', 'hyq', '370100', '370104', '2018-03-30 18:06:56', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('a6a21f18c07e4051b6d89048b77d2ebb', '崇州市', 'chongzhoushi', 'czs', '510100', '510184', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('a6b741c9cb20418c9be9ba41862a0c53', '织金县', 'zhijinxian', 'zjx', '522400', '522425', '2018-03-30 18:07:01', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('a6df1b66b6d5436784d71a8e0760c24c', '荣昌县', 'rongchangxian', 'rcx', '500200', '500226', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('a6df1b66b6d5436784d71a8e0760c24c', '荣昌县', 'rongchangxian', 'rcx', '500100', '500226', '2018-03-30 18:07:00', '2018-04-19 18:19:23');
 INSERT INTO `sp_basic_city` VALUES ('a6df87af5eaa41ba85afba54e3667610', '景东彝族自治县', 'jingdongyizuzizhixian', 'jdyzzzx', '530800', '530823', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('a6e5749d80774880b86e865755824868', '惠山区', 'huishanqu', 'hsq', '320200', '320206', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('a6f4935a0286432b896e2b5fb6777813', '嘉禾县', 'jiahexian', 'jhx', '431000', '431024', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
@@ -2789,7 +2786,7 @@ INSERT INTO `sp_basic_city` VALUES ('c6eb6dfc371541f591bf880909afcd44', '市辖�
 INSERT INTO `sp_basic_city` VALUES ('c6fb36a3ffe741d8842341c45cf308bf', '勃利县', 'bolixian', 'blx', '230900', '230921', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('c75caaf0c1314853891bb7c6ac4b9d35', '潮州市', 'chaozhoushi', 'czs', '440000', '445100', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('c77c472dac42423fbeb3b0d6022f93dd', '会泽县', 'huizexian', 'hzx', '530300', '530326', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('c7967938e7cf47729d0af1863148ee5b', '云阳县', 'yunyangxian', 'yyx', '500200', '500235', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('c7967938e7cf47729d0af1863148ee5b', '云阳县', 'yunyangxian', 'yyx', '500100', '500235', '2018-03-30 18:07:00', '2018-04-19 18:19:23');
 INSERT INTO `sp_basic_city` VALUES ('c7a095d688c84e8db976370210472d5a', '高台县', 'gaotaixian', 'gtx', '620700', '620724', '2018-03-30 18:07:03', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('c7a92651ca22437d8dba8963e90a2865', '海州区', 'haizhouqu', 'hzq', '320700', '320706', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('c7b044e9c1da4365a6568c327538ea6f', '东海县', 'donghaixian', 'dhx', '320700', '320722', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
@@ -2895,9 +2892,9 @@ INSERT INTO `sp_basic_city` VALUES ('cd8f6c6e26cc43c4956be4a85f599568', '龙井�
 INSERT INTO `sp_basic_city` VALUES ('cdba41cefa12489b829732f7a1845f21', '恭城瑶族自治县', 'gongchengyaozuzizhixian', 'gcyzzzx', '450300', '450332', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('cdbb88e30d174130b248568cf408257f', '凤泉区', 'fengquanqu', 'fqq', '410700', '410704', '2018-03-30 18:06:57', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('cdc1a8d5d0dd428ab631917c1bab1f7e', '旬阳县', 'xunyangxian', 'xyx', '610900', '610928', '2018-03-30 18:07:03', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('cdc40d0e31cd487ca7f735a27ba756ed', '大足县', 'dazuxian', 'dzx', '500200', '500225', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('cdc40d0e31cd487ca7f735a27ba756ed', '大足县', 'dazuxian', 'dzx', '500100', '500225', '2018-03-30 18:07:00', '2018-04-19 18:19:23');
 INSERT INTO `sp_basic_city` VALUES ('cdc6eee3f2964c1491717f9b37a32734', '临漳县', 'linzhangxian', 'lzx', '130400', '130423', '2018-03-30 18:06:49', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('cdce90dfcca642e78d07fb0875a2ed11', '垫江县', 'dianjiangxian', 'djx', '500200', '500231', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('cdce90dfcca642e78d07fb0875a2ed11', '垫江县', 'dianjiangxian', 'djx', '500100', '500231', '2018-03-30 18:07:00', '2018-04-19 18:19:23');
 INSERT INTO `sp_basic_city` VALUES ('cdd19d89d4664f7bb760cecaa69575a6', '岭东区', 'lingdongqu', 'ldq', '230500', '230503', '2018-03-30 18:06:52', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('cdea584aa34144ea8c9d4ee06ca0e63a', '裕民县', 'yuminxian', 'ymx', '654200', '654225', '2018-03-30 18:07:04', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('ce0079a13706424180b10348ebe15708', '市辖区', 'shixiaqu', 'sxq', '210900', '210901', '2018-03-30 18:06:52', '2018-04-14 22:18:12');
@@ -2938,7 +2935,6 @@ INSERT INTO `sp_basic_city` VALUES ('cfd4c4abfe95455ea222be93ac6cbea1', '永平�
 INSERT INTO `sp_basic_city` VALUES ('cfddf489e04445b0aa1c99c6297222cc', '峨边彝族自治县', 'ebianyizuzizhixian', 'ebyzzzx', '511100', '511132', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('cff896a3caeb4f43aff39c3e87786e70', '娄底市', 'loudishi', 'lds', '430000', '431300', '2018-03-30 18:06:58', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('d00c0547fd594a6599e2acdc5b7bdc77', '德格县', 'degexian', 'dgx', '513300', '513330', '2018-03-30 18:07:01', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('d01abddc0e33401982093d88da06bc21', '县', 'xian', 'x', '310000', '310200', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('d01c04d121bb4f42adb773d0e9ddceda', '合浦县', 'hepuxian', 'hpx', '450500', '450521', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('d02413384feb4ffe95c9c84f2670ca21', '旌阳区', 'jingyangqu', 'jyq', '510600', '510603', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('d030924a8a984eceb6fd33854e66b2ee', '都兰县', 'doulanxian', 'dlx', '632800', '632822', '2018-03-30 18:07:04', '2018-04-14 22:18:12');
@@ -3268,7 +3264,7 @@ INSERT INTO `sp_basic_city` VALUES ('e8357420f14441c5bd0172ece4035367', '铁锋�
 INSERT INTO `sp_basic_city` VALUES ('e86b4c8bc7af449eabf0549f793d59b6', '市辖区', 'shixiaqu', 'sxq', '450800', '450801', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('e87533b013c844efbce231c6b34e85a2', '义马市', 'yimashi', 'yms', '411200', '411281', '2018-03-30 18:06:57', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('e889a43825a145efbc24b38dfe02c53c', '平乐县', 'pinglexian', 'plx', '450300', '450330', '2018-03-30 18:06:59', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('e899c00b886c45b9af89101c5c7d9b2b', '武隆县', 'wulongxian', 'wlx', '500200', '500232', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('e899c00b886c45b9af89101c5c7d9b2b', '武隆县', 'wulongxian', 'wlx', '500100', '500232', '2018-03-30 18:07:00', '2018-04-19 18:19:23');
 INSERT INTO `sp_basic_city` VALUES ('e8b4ed1bfada4287b99313d149d93f7f', '城厢区', 'chengxiangqu', 'cxq', '350300', '350302', '2018-03-30 18:06:55', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('e8cfd9b6bf0b47768f78a0536f0535be', '滴道区', 'didaoqu', 'ddq', '230300', '230304', '2018-03-30 18:06:52', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('e8d1beb0fbd04ea8aee90c6862e621db', '乌马河区', 'wumahequ', 'wmhq', '230700', '230711', '2018-03-30 18:06:53', '2018-04-14 22:18:12');
@@ -3498,7 +3494,7 @@ INSERT INTO `sp_basic_city` VALUES ('fb13e2e4a0c04069a5f931268bd51926', '襄樊�
 INSERT INTO `sp_basic_city` VALUES ('fb14fe253189437b86d891385762b310', '龙里县', 'longlixian', 'llx', '522700', '522730', '2018-03-30 18:07:01', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('fb302ea682a54ddcb4f076e550933e7b', '达孜县', 'dazixian', 'dzx', '540100', '540126', '2018-03-30 18:07:02', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('fb32c61604bc4a0dbc1dd04123f50c0a', '市辖区', 'shixiaqu', 'sxq', '510300', '510301', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
-INSERT INTO `sp_basic_city` VALUES ('fb34d4e2a35344308945e604f531c345', '巫山县', 'wushanxian', 'wsx', '500200', '500237', '2018-03-30 18:07:00', '2018-04-14 22:18:12');
+INSERT INTO `sp_basic_city` VALUES ('fb34d4e2a35344308945e604f531c345', '巫山县', 'wushanxian', 'wsx', '500100', '500237', '2018-03-30 18:07:00', '2018-04-19 18:19:23');
 INSERT INTO `sp_basic_city` VALUES ('fb362ee486a04c3785ee1ea060f1e5b0', '西乌珠穆沁旗', 'xiwuzhumuqinqi', 'xwzmqq', '152500', '152526', '2018-03-30 18:06:51', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('fb3eee4aedde49a78de547daf4dcf66f', '德兴市', 'dexingshi', 'dxs', '361100', '361181', '2018-03-30 18:06:56', '2018-04-14 22:18:12');
 INSERT INTO `sp_basic_city` VALUES ('fb41580f57eb40a79128b5ef94bd5983', '乐安县', 'leanxian', 'lax', '361000', '361025', '2018-03-30 18:06:56', '2018-04-14 22:18:12');
@@ -3615,7 +3611,7 @@ CREATE TABLE `sp_company` (
 -- ----------------------------
 -- Records of sp_company
 -- ----------------------------
-INSERT INTO `sp_company` VALUES ('5060262265fc42809a19bb97cbcf7165', '测试', 'ceshi', '测试', '87da6e544a7c471db856bb1c4f855477', 'JGLX_QY', '123', '123', '123', '110000', '110100', '110101', '12', '11', '121', '1212', '2018-04-12 22:17:11', '2018-04-14 22:19:03');
+INSERT INTO `sp_company` VALUES ('5060262265fc42809a19bb97cbcf7165', '测试', 'ceshi', '测试', '87da6e544a7c471db856bb1c4f855477', 'JGLX_QY', '123', '123', '123', '120000', '120100', '120101', '12', '11', '121', '1212', '2018-04-12 22:17:11', '2018-04-19 19:17:44');
 INSERT INTO `sp_company` VALUES ('87da6e544a7c471db856bb1c4f855477', '趣施工', 'qushigong', '趣施工', '', 'JGLX_QY', '123456', '123456', '123456', '110000', '110100', '110101', '北京', '司仲夏', '18518436862', '', '2018-04-06 09:30:36', '2018-04-14 22:19:03');
 
 -- ----------------------------
@@ -3795,7 +3791,6 @@ CREATE TABLE `sp_order` (
   `customer_name` varchar(20) NOT NULL COMMENT '下单客户名称',
   `worker_id` char(32) NOT NULL COMMENT '劳务工人ID',
   `worker_name` varchar(20) NOT NULL COMMENT '接单工人名称',
-  `worker_head_pic` varchar(100) NOT NULL COMMENT '接单工人头像',
   `worker_age` int(11) NOT NULL COMMENT '接单工人年龄',
   `product_id` char(32) NOT NULL COMMENT '产品关联ID',
   `product_name` varchar(50) NOT NULL COMMENT '产品名称',
@@ -3808,19 +3803,30 @@ CREATE TABLE `sp_order` (
   `detail_list_url` varchar(100) NOT NULL COMMENT '清单文件链接',
   `expect_time` varchar(30) NOT NULL COMMENT '预计施工开始时间',
   `expect_days` int(11) NOT NULL COMMENT '预计施工天数',
+  `unit_day_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '人天单价',
   `order_cost` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '订单金额',
+  `update_cost_time` datetime NOT NULL COMMENT '更新定价时间（当confirm_cost_status为Y时，不允许修改）',
+  `confirm_cost_status` char(1) NOT NULL COMMENT '客户确认定价状态（Y:已确认，N:未确认，C:工人暂未填写）',
+  `confirm_cost_time` datetime NOT NULL COMMENT '确认金额时间',
   `deposit_cost` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '托管金额',
   `paid_cost` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '已支付金额',
+  `surplus_pay_cost` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '剩余支付余额',
+  `pending_pay_cost` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '待支付金额',
   `ser_survey_choice` char(1) NOT NULL COMMENT '勘测服务选择（Y:选择，N:未选择）',
   `ser_survey_status` char(1) NOT NULL COMMENT '勘测服务进展状态（Y:已完成，D:进行中，N:未开始）',
+  `ser_survey_update_time` datetime DEFAULT NULL COMMENT '勘测服务更新时间',
   `ser_check_choice` char(1) NOT NULL COMMENT '验货服务选择（Y:选择，N:未选择）',
   `ser_check_status` char(1) NOT NULL COMMENT '验货服务进展状态（Y:已完成，D:进行中，N:未开始）',
+  `ser_check_update_time` datetime DEFAULT NULL COMMENT '验货服务更新时间',
   `ser_construct_choice` char(1) NOT NULL COMMENT '施工服务选择（Y:选择，N:未选择）',
   `ser_construct_status` char(1) NOT NULL COMMENT '施工服务进展状态（Y:已完成，D:进行中，N:未开始）',
+  `ser_construct_update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '施工服务更新时间',
   `ser_train_choice` char(1) NOT NULL COMMENT '培训服务选择（Y:选择，N:未选择）',
   `ser_train_status` char(1) NOT NULL COMMENT '培训服务进展状态（Y:已完成，D:进行中，N:未开始）',
+  `ser_train_update_time` datetime DEFAULT NULL COMMENT '培训服务更新时间',
   `ser_accept_choice` char(1) NOT NULL COMMENT '验收服务选择（Y:选择，N:未选择）',
   `ser_accept_status` char(1) NOT NULL COMMENT '验收服务进展状态（Y:已完成，D:进行中，N:未开始）',
+  `ser_accept_update_time` datetime DEFAULT NULL COMMENT '验收服务更新时间',
   `release_status` char(1) NOT NULL COMMENT '下单发布状态（Y:已发布，N:暂存），一旦发布，状态不可修改',
   `release_time` datetime NOT NULL COMMENT '发布时间',
   `build_status` char(1) NOT NULL COMMENT '施工状态（Y:已完工，R:进行中，D:待施工）',
@@ -3834,7 +3840,7 @@ CREATE TABLE `sp_order` (
 -- ----------------------------
 -- Records of sp_order
 -- ----------------------------
-INSERT INTO `sp_order` VALUES ('3e4c28483d9d429db4120b0e6bcafa41', '', '112', 'b5a0d2e68e8f4629b66199be4945d250', 'D201801001011', 'd2b1e69a8a6045c1938f76d659b59a57', '', 'f6a33378b3cb48208912cffa6b5ff081', '', '', '0', '8124932afe6441f5adc8801eb3691088', '112', '1', '1', '1', '', '', '', '', '2018-04-12 23:18:22', '1', '1.00', '1.00', '0.00', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', '2018-04-16 23:07:28', 'R', 'Y', '1', '2018-04-12 23:18:41', '2018-04-16 23:08:16');
+INSERT INTO `sp_order` VALUES ('3e4c28483d9d429db4120b0e6bcafa41', '', '112', 'b5a0d2e68e8f4629b66199be4945d250', 'D201801001011', 'd2b1e69a8a6045c1938f76d659b59a57', '', 'b1a2b1b2134a41bea9c400f7dec0a830', '司仲夏', '22', '8124932afe6441f5adc8801eb3691088', '112', '1', '1', '1', '', '', '132', '', '2018-04-19', '11', '0.00', '1.00', '2018-04-18 21:46:29', '', '2018-04-18 21:46:32', '1.00', '0.00', '0.00', '0.00', 'Y', 'Y', '2018-04-19 22:37:56', 'Y', 'Y', '2018-04-18 21:46:40', 'Y', 'N', '2018-04-20 00:20:06', 'Y', 'N', '2018-04-18 21:46:46', 'Y', 'Y', '2018-04-19 14:55:10', 'Y', '2018-04-16 23:07:28', 'R', 'Y', '测试222', '2018-04-12 23:18:41', '2018-04-20 00:20:06');
 
 -- ----------------------------
 -- Table structure for sp_order_evaluate
@@ -3900,6 +3906,26 @@ CREATE TABLE `sp_order_pay` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for sp_order_pending_apply
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_order_pending_apply`;
+CREATE TABLE `sp_order_pending_apply` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `order_id` char(32) NOT NULL COMMENT '订单主键',
+  `worker_id` char(32) NOT NULL COMMENT '工人ID',
+  `customer_id` char(32) NOT NULL COMMENT '客户ID',
+  `apply_time` datetime NOT NULL COMMENT '申请时间',
+  `apply_money` decimal(10,2) NOT NULL COMMENT '申请金额',
+  `apply_status` char(1) NOT NULL COMMENT '申请状态（N:待确认，Y:已确认,未支付，D:已付款，C:已驳回）',
+  `handle_time` datetime DEFAULT NULL COMMENT '处理确认时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='劳务工人待付款申请';
+
+-- ----------------------------
+-- Records of sp_order_pending_apply
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for sp_order_schedule
 -- ----------------------------
 DROP TABLE IF EXISTS `sp_order_schedule`;
@@ -3922,6 +3948,7 @@ CREATE TABLE `sp_order_schedule` (
 -- ----------------------------
 -- Records of sp_order_schedule
 -- ----------------------------
+INSERT INTO `sp_order_schedule` VALUES ('1', '3e4c28483d9d429db4120b0e6bcafa41', '', 'KC', '1', 'D', 'shishsi', 'Y', '2018-04-19 20:27:20', '应该不错', '2018-04-19 20:27:42', '2018-04-19 22:51:33');
 
 -- ----------------------------
 -- Table structure for sp_order_schedule_pic
@@ -3998,6 +4025,7 @@ CREATE TABLE `sp_product` (
   `common_problem` text NOT NULL COMMENT '常见问题',
   `doc_url` varchar(200) NOT NULL COMMENT '文档访问链接',
   `manual_url` varchar(200) NOT NULL COMMENT '操作手册访问链接',
+  `cover_pic_url` varchar(100) NOT NULL COMMENT '产品封面图片',
   `apply_user_id` char(32) NOT NULL COMMENT '申请人ID',
   `show_status` char(1) NOT NULL COMMENT '上下架（展示）状态（Y:上架，N:下架，D:待发布）',
   `contacts` varchar(50) NOT NULL COMMENT '产品联系人',
@@ -4010,9 +4038,9 @@ CREATE TABLE `sp_product` (
 -- ----------------------------
 -- Records of sp_product
 -- ----------------------------
-INSERT INTO `sp_product` VALUES ('02f6470ef2344f78a8c2d628955ba604', 'aaa', '3ab73688cac2499391e1b501aeab03e3', 'f97b56a4deae4efaa6d17081b386fb6b', '87da6e544a7c471db856bb1c4f855477', 'aaaa', 'aa', 'aaa', 'aa', 'aaa', 'aaa', 'aaa', '/2018/04/11/cuaYkEoRZm4xk1ffCju.doc', '/2018/04/11/xjlF7WAjBoOIY2PnMZj.doc', '3e8657b0e9b84023a3c16af91e13e620', 'D', '1212112121', '18518436862', '2018-04-11 21:34:51', '2018-04-14 22:24:12');
-INSERT INTO `sp_product` VALUES ('5506277d22a44c8b9e3903c4cf9a7311', '测试产品', '3ab73688cac2499391e1b501aeab03e3', 'f97b56a4deae4efaa6d17081b386fb6b', '87da6e544a7c471db856bb1c4f855477', 'Model-0291', '描述', '组成', '事项', '安装', '维护', '问题', '/2018/04/06/vIt4CKrfmB4nrzxPZgE.doc', '/2018/04/06/Sogxa3CUwugQVLq5dKK.txt', '3e8657b0e9b84023a3c16af91e13e620', 'N', '司仲夏', '18518436861', '2018-04-06 11:38:03', '2018-04-14 22:24:12');
-INSERT INTO `sp_product` VALUES ('8124932afe6441f5adc8801eb3691088', '产品名称', '3ab73688cac2499391e1b501aeab03e3', '96adb22a2ca3498086df3224bf857751', '87da6e544a7c471db856bb1c4f855477', '111', '11', '11', '111', '111', '111', '11', '/2018/04/06/dVcNP4Eqp54s7HxmXIm.docx', '/2018/04/06/ywnLXJQo0JtsNairRRz.doc', '3e8657b0e9b84023a3c16af91e13e620', 'N', '司仲夏', '18518436862', '2018-04-06 15:09:27', '2018-04-14 22:24:12');
+INSERT INTO `sp_product` VALUES ('02f6470ef2344f78a8c2d628955ba604', 'aaa', '3ab73688cac2499391e1b501aeab03e3', 'f97b56a4deae4efaa6d17081b386fb6b', '87da6e544a7c471db856bb1c4f855477', 'aaaa', 'aa', 'aaa', 'aa', 'aaa', 'aaa', 'aaa', '/2018/04/11/cuaYkEoRZm4xk1ffCju.doc', '/2018/04/11/xjlF7WAjBoOIY2PnMZj.doc', '/2018/04/19/R1VxGFM5sdZd1WWSDRN.jpg', '3e8657b0e9b84023a3c16af91e13e620', 'D', '1212112121', '18518436862', '2018-04-11 21:34:51', '2018-04-14 22:24:12');
+INSERT INTO `sp_product` VALUES ('5506277d22a44c8b9e3903c4cf9a7311', '测试产品', '3ab73688cac2499391e1b501aeab03e3', 'f97b56a4deae4efaa6d17081b386fb6b', '87da6e544a7c471db856bb1c4f855477', 'Model-0291', '描述', '组成', '事项', '安装', '维护', '问题', '/2018/04/06/vIt4CKrfmB4nrzxPZgE.doc', '/2018/04/06/Sogxa3CUwugQVLq5dKK.txt', '/2018/04/19/ZR4OEcTxhihzzyKPPxA.jpg', '3e8657b0e9b84023a3c16af91e13e620', 'N', '司仲夏', '18518436861', '2018-04-06 11:38:03', '2018-04-14 22:24:12');
+INSERT INTO `sp_product` VALUES ('8124932afe6441f5adc8801eb3691088', '产品名称', '3ab73688cac2499391e1b501aeab03e3', '96adb22a2ca3498086df3224bf857751', '87da6e544a7c471db856bb1c4f855477', '111', '11', '11', '111', '111', '111', '11', '/2018/04/06/dVcNP4Eqp54s7HxmXIm.docx', '/2018/04/06/ywnLXJQo0JtsNairRRz.doc', '/2018/04/06/7C2eHBNpSrZeIv2c9S2.png', '3e8657b0e9b84023a3c16af91e13e620', 'N', '司仲夏', '18518436862', '2018-04-06 15:09:27', '2018-04-14 22:24:12');
 
 -- ----------------------------
 -- Table structure for sp_product_clue
@@ -4059,12 +4087,14 @@ CREATE TABLE `sp_product_image` (
 -- ----------------------------
 -- Records of sp_product_image
 -- ----------------------------
-INSERT INTO `sp_product_image` VALUES ('3c6a57bebed642899a71d8611edd97cd', '5506277d22a44c8b9e3903c4cf9a7311', '/2018/04/06/DYgo4rDOoECgTPFEUuB.jpg', 'Y', 'Y', '2018-04-06 21:17:28', '2018-04-06 21:17:28');
-INSERT INTO `sp_product_image` VALUES ('48e8ff99e33741cca53868b6325410b8', '8124932afe6441f5adc8801eb3691088', '/2018/04/06/Xiu797E5D5LsBHq3nxo.jpg', 'N', 'Y', '2018-04-06 20:46:50', '2018-04-06 21:16:14');
-INSERT INTO `sp_product_image` VALUES ('7ccec6044e284264b83110dfff8641dd', '02f6470ef2344f78a8c2d628955ba604', '/2018/04/11/ivclvNtmxUKCIAfuPM2.png', 'Y', 'Y', '2018-04-11 21:35:07', '2018-04-11 21:35:07');
-INSERT INTO `sp_product_image` VALUES ('9723ae47cfdb45f3b0b33ec47beac753', '8124932afe6441f5adc8801eb3691088', '/2018/04/06/7C2eHBNpSrZeIv2c9S2.png', 'Y', 'Y', '2018-04-06 20:44:46', '2018-04-06 21:16:14');
-INSERT INTO `sp_product_image` VALUES ('cc1471eef7f74614a17f0e526577ebaf', '8124932afe6441f5adc8801eb3691088', '/2018/04/06/gz8RWAnis4Qs9Yy5FBi.png', 'N', 'N', '2018-04-06 20:46:31', '2018-04-06 21:12:29');
-INSERT INTO `sp_product_image` VALUES ('cddf699a2059410e888f15549acca454', '8124932afe6441f5adc8801eb3691088', '/2018/04/06/Up6JWaAmYMRj7WJWt7e.png', 'N', 'Y', '2018-04-06 20:46:23', '2018-04-06 20:46:31');
+INSERT INTO `sp_product_image` VALUES ('3c6a57bebed642899a71d8611edd97cd', '5506277d22a44c8b9e3903c4cf9a7311', '/2018/04/06/DYgo4rDOoECgTPFEUuB.jpg', '', 'Y', '2018-04-06 21:17:28', '2018-04-06 21:17:28');
+INSERT INTO `sp_product_image` VALUES ('48e8ff99e33741cca53868b6325410b8', '8124932afe6441f5adc8801eb3691088', '/2018/04/06/Xiu797E5D5LsBHq3nxo.jpg', 'N', 'Y', '2018-04-06 20:46:50', '2018-04-19 15:06:41');
+INSERT INTO `sp_product_image` VALUES ('65335d5f695d4beebecf37e9458a77f5', '02f6470ef2344f78a8c2d628955ba604', '/2018/04/19/R1VxGFM5sdZd1WWSDRN.jpg', 'Y', 'Y', '2018-04-19 14:17:48', '2018-04-19 14:17:48');
+INSERT INTO `sp_product_image` VALUES ('7ccec6044e284264b83110dfff8641dd', '02f6470ef2344f78a8c2d628955ba604', '/2018/04/11/ivclvNtmxUKCIAfuPM2.png', '', 'Y', '2018-04-11 21:35:07', '2018-04-11 21:35:07');
+INSERT INTO `sp_product_image` VALUES ('9723ae47cfdb45f3b0b33ec47beac753', '8124932afe6441f5adc8801eb3691088', '/2018/04/06/7C2eHBNpSrZeIv2c9S2.png', 'Y', 'Y', '2018-04-06 20:44:46', '2018-04-19 15:06:41');
+INSERT INTO `sp_product_image` VALUES ('ba73deddc5d44554821abea4fcb3859e', '5506277d22a44c8b9e3903c4cf9a7311', '/2018/04/19/ZR4OEcTxhihzzyKPPxA.jpg', 'Y', 'Y', '2018-04-19 14:26:19', '2018-04-19 14:26:19');
+INSERT INTO `sp_product_image` VALUES ('cc1471eef7f74614a17f0e526577ebaf', '8124932afe6441f5adc8801eb3691088', '/2018/04/06/gz8RWAnis4Qs9Yy5FBi.png', '', 'N', '2018-04-06 20:46:31', '2018-04-06 21:12:29');
+INSERT INTO `sp_product_image` VALUES ('cddf699a2059410e888f15549acca454', '8124932afe6441f5adc8801eb3691088', '/2018/04/06/Up6JWaAmYMRj7WJWt7e.png', '', 'Y', '2018-04-06 20:46:23', '2018-04-06 20:46:31');
 
 -- ----------------------------
 -- Table structure for sp_product_kind
@@ -4169,7 +4199,7 @@ CREATE TABLE `sp_project` (
 -- Records of sp_project
 -- ----------------------------
 INSERT INTO `sp_project` VALUES ('d656d55e1b3f4640b5cf56d1642b9a6f', '112', '112', 'XMLX_JJ', '210000', '210700', '210711', '12121', '116.397428', '39.90923', '', '0', '87da6e544a7c471db856bb1c4f855477', '', '12', '1212', 'Y', '', '3e8657b0e9b84023a3c16af91e13e620', '2018-04-12 10:51:45', '2018-04-14 22:28:58');
-INSERT INTO `sp_project` VALUES ('de92d008ba9e4118930fca22335a128c', '121', '121', 'XMLX_QL', '110000', '110100', '110101', '121', '116.397428', '39.90923', '', '0', '87da6e544a7c471db856bb1c4f855477', '', '123', '12333', 'N', '', '3e8657b0e9b84023a3c16af91e13e620', '2018-04-12 22:24:55', '2018-04-15 16:00:32');
+INSERT INTO `sp_project` VALUES ('de92d008ba9e4118930fca22335a128c', '121', '121', 'XMLX_QL', '110000', '110100', '110101', '121', '116.766783', '39.965965', '', '0', '87da6e544a7c471db856bb1c4f855477', '', '123', '12333', 'N', '', '3e8657b0e9b84023a3c16af91e13e620', '2018-04-12 22:24:55', '2018-04-18 22:48:15');
 
 -- ----------------------------
 -- Table structure for sp_project_draw
@@ -4199,9 +4229,9 @@ CREATE TABLE `sp_project_work` (
   `work_no` varchar(20) NOT NULL COMMENT '操作流水号',
   `work_name` varchar(50) NOT NULL COMMENT '项目批次名称',
   `project_type` varchar(50) NOT NULL COMMENT '项目类别',
-  `provincial` varchar(20) NOT NULL COMMENT '省',
-  `city` varchar(20) NOT NULL COMMENT '市',
-  `county` varchar(20) NOT NULL COMMENT '区县',
+  `provincial` char(6) NOT NULL COMMENT '省',
+  `city` char(6) NOT NULL COMMENT '市',
+  `county` char(6) NOT NULL COMMENT '区县',
   `address` varchar(200) NOT NULL COMMENT '详细地址',
   `longitude` varchar(26) NOT NULL COMMENT '经度',
   `latitude` varchar(26) NOT NULL COMMENT '纬度',
@@ -4213,11 +4243,11 @@ CREATE TABLE `sp_project_work` (
   `deposit_cost_sum` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '托管金额汇总',
   `paid_cost_sum` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '已支付金额汇总',
   `unpaid_cost_sum` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '未支付金额汇总',
+  `arrearage_num` int(10) NOT NULL DEFAULT '0' COMMENT '待付款申请笔数',
   `unconfirmed_num` int(10) NOT NULL DEFAULT '0' COMMENT '未确认数量',
   `confirmed_num` int(10) NOT NULL DEFAULT '0' COMMENT '已确认数量',
   `uncomplete_num` int(10) NOT NULL DEFAULT '0' COMMENT '未完成数量',
   `complete_num` int(10) NOT NULL DEFAULT '0' COMMENT '已完成数量',
-  `arrearage_num` int(10) NOT NULL DEFAULT '0' COMMENT '未付款的订单',
   `work_description` varchar(200) NOT NULL COMMENT '工作项目描述',
   `customer_id` char(255) NOT NULL COMMENT '操作人客户id，关联user表id',
   `create_time` datetime NOT NULL COMMENT '创建时间',
@@ -4229,7 +4259,7 @@ CREATE TABLE `sp_project_work` (
 -- ----------------------------
 -- Records of sp_project_work
 -- ----------------------------
-INSERT INTO `sp_project_work` VALUES ('b5a0d2e68e8f4629b66199be4945d250', 'd656d55e1b3f4640b5cf56d1642b9a6f', 'WorkNo_112', '测试', 'XMLX_JJ', '210000', '210700', '210711', '12121', '116.397428', '39.90923', '400.00', '87da6e544a7c471db856bb1c4f855477', '趣施工', '2', '2', '12120.00', '12120.00', '0.00', '1', '1', '1', '0', '0', '描述', '21c8de2477374851a5f320b7df67d83e', '2018-04-15 12:53:33', '2018-04-16 10:06:50');
+INSERT INTO `sp_project_work` VALUES ('b5a0d2e68e8f4629b66199be4945d250', 'd656d55e1b3f4640b5cf56d1642b9a6f', 'WorkNo_112', '测试', 'XMLX_JJ', '210000', '210700', '210711', '12121', '116.397428', '39.90923', '400.00', '87da6e544a7c471db856bb1c4f855477', '趣施工', '2', '2', '12120.00', '12120.00', '0.00', '0', '1', '1', '1', '0', '描述', '21c8de2477374851a5f320b7df67d83e', '2018-04-15 12:53:33', '2018-04-16 10:06:50');
 
 -- ----------------------------
 -- Table structure for sp_role
@@ -4432,10 +4462,12 @@ INSERT INTO `sp_system_file` VALUES ('2ee46877dfe041c39b715899bf448d37', 'Pictur
 INSERT INTO `sp_system_file` VALUES ('2febb0c906c84c6d8586d5d06e803b5f', '9、设备管理.JPG', '/2018/04/10/rVhXimqXrDFpxwztKW9.jpg', 'image/jpeg (.jpg)', '194559', 'ProjectDrawing', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-14 22:33:26');
 INSERT INTO `sp_system_file` VALUES ('3119fb9aa66d496cabf1eb1e79467ae1', '万科北戴河终调.docx', '/2018/04/06/dVcNP4Eqp54s7HxmXIm.docx', '(.docx)', '29443', 'ProductDoc', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-14 22:33:26');
 INSERT INTO `sp_system_file` VALUES ('3edc6218daa54b74b7cf3bc1e7cb40ba', 'Picture_06_Snow.jpg', '/2018/04/06/Xiu797E5D5LsBHq3nxo.jpg', 'image/jpeg (.jpg)', '668436', 'ProductPic', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-14 22:33:26');
+INSERT INTO `sp_system_file` VALUES ('40bfa26c8e6e4696881b250d740ac2f2', 'IMG_5661.JPG', '/2018/04/19/R1VxGFM5sdZd1WWSDRN.jpg', 'image/jpeg (.jpg)', '28390', 'ProductPic', '3e8657b0e9b84023a3c16af91e13e620', '2018-04-19 14:17:41');
 INSERT INTO `sp_system_file` VALUES ('410deb0881ba43aa9f95874f3977352f', '组态画面-运行.JPG', '/2018/04/10/iEhfAGp0LAZzri0fi9D.jpg', 'image/jpeg (.jpg)', '116585', 'ProjectDrawing', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-14 22:33:26');
 INSERT INTO `sp_system_file` VALUES ('44819864f9b34d1cbc0d5b10960210ed', 'boncake可能遇到的技术问题.doc', '/2018/04/11/xjlF7WAjBoOIY2PnMZj.doc', '(.doc)', '10240', 'ProductOperationManual', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-14 22:33:26');
 INSERT INTO `sp_system_file` VALUES ('44e3d5d528964d7fa40ea050038404a0', '组态画面-报警.JPG', '/2018/04/10/9KNMuI2Ve0dO1n0gfyk.jpg', 'image/jpeg (.jpg)', '83467', 'ProjectDrawing', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-14 22:33:26');
 INSERT INTO `sp_system_file` VALUES ('49b99f5441ba40ad8dd9c47c1784d2ef', '组态画面-运行.JPG', '/2018/04/10/gFVBRiI0zX3cia6v1uq.jpg', 'image/jpeg (.jpg)', '116585', 'ProjectDrawing', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-14 22:33:26');
+INSERT INTO `sp_system_file` VALUES ('4aed387473544744ac0754af389a5279', 'IMG_5661.JPG', '/2018/04/19/ZR4OEcTxhihzzyKPPxA.jpg', 'image/jpeg (.jpg)', '28390', 'ProductPic', '3e8657b0e9b84023a3c16af91e13e620', '2018-04-19 14:26:15');
 INSERT INTO `sp_system_file` VALUES ('5503b99c17ea4201a3f7ff47b1996036', 'Picture_05_Stream.jpg', '/2018/04/04/i4DrkxjJTApGfuPKOQq.jpg', 'image/jpeg (.jpg)', '803134', 'ProductType', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-14 22:33:26');
 INSERT INTO `sp_system_file` VALUES ('6c469761eeb843d6ad63bfaea6e7d699', '日志字段名称.txt', '/2018/04/06/Sogxa3CUwugQVLq5dKK.txt', 'text/plain (.txt)', '4208', 'ProductOperationManual', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-14 22:33:26');
 INSERT INTO `sp_system_file` VALUES ('6c6f6d225af342b49a4caed5cc1b0b38', 'Picture_04_Crest.jpg', '/2018/04/04/flHkvKUOyPtlfJYneSR.jpg', 'image/jpeg (.jpg)', '544960', 'ProductKind', '3E8657B0E9B84023A3C16AF91E13E620', '2018-04-14 22:33:26');
@@ -4537,7 +4569,7 @@ CREATE TABLE `sp_system_user` (
 -- ----------------------------
 -- Records of sp_system_user
 -- ----------------------------
-INSERT INTO `sp_system_user` VALUES ('3e8657b0e9b84023a3c16af91e13e620', '司仲夏', 'sizhongxia', '18518436862', '2410042aea633697cff3e2e19a7dd726', '管理员', 'Y', '2017-12-27 11:29:22', '2018-03-30 16:36:17', '2018-04-16 19:33:17');
+INSERT INTO `sp_system_user` VALUES ('3e8657b0e9b84023a3c16af91e13e620', '司仲夏', 'sizhongxia', '18518436862', '2410042aea633697cff3e2e19a7dd726', '管理员', 'Y', '2017-12-27 11:29:22', '2018-03-30 16:36:17', '2018-04-19 21:37:46');
 INSERT INTO `sp_system_user` VALUES ('73d829e6bbac4486a171c95dda609fdf', 'ss', 'ss', '18518436863', '2410042aea633697cff3e2e19a7dd726', '无', 'N', '2018-03-30 12:14:59', '2018-03-30 16:31:55', '2018-03-30 12:14:59');
 INSERT INTO `sp_system_user` VALUES ('dd97288f1c5347629d15b84221892d9f', '1', '1', '1', '2410042aea633697cff3e2e19a7dd726', '1', 'N', '2018-03-14 16:31:22', '2018-03-29 20:24:42', '2018-03-14 16:43:41');
 
@@ -4582,7 +4614,8 @@ CREATE TABLE `sp_user` (
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `delete_flag` char(1) NOT NULL COMMENT '账号状态（Y:已移除，N:未移除）',
   `delete_time` datetime NOT NULL COMMENT '移除时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `phone_no` (`phone_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户基础信息表';
 
 -- ----------------------------
@@ -4591,14 +4624,14 @@ CREATE TABLE `sp_user` (
 INSERT INTO `sp_user` VALUES ('21c8de2477374851a5f320b7df67d83e', '司仲夏1', '', '18518436863', '', '1', '26', '410000', '411400', '411426', '车站镇李合楼村', 'Y', 'P', '2018-04-01 14:12:58', '2018-04-14 22:17:36', 'N', '2018-04-01 14:12:58');
 INSERT INTO `sp_user` VALUES ('2e32085c5e8a4b629546a84547b97e01', '12', '', '1', '', '1', '0', '450000', '450200', '', '', 'Y', 'P', '2018-04-10 17:06:52', '2018-04-10 17:06:52', 'N', '2018-04-10 17:06:52');
 INSERT INTO `sp_user` VALUES ('30fb9f90b8c744b7bf65d2ce1d49c13e', 'sss', '', '18518436862', '', '1', '0', '', '', '', '', 'Y', 'C', '2018-04-01 19:53:06', '2018-04-14 22:17:36', 'N', '2018-04-01 19:53:06');
-INSERT INTO `sp_user` VALUES ('5b0c97f9e157483e86e76b316f0be02f', '赵通', '', '1234567890', '', '1', '0', '', '', '', '', 'A', 'C', '2018-04-07 21:20:04', '2018-04-07 21:20:04', 'N', '2018-04-07 21:20:04');
+INSERT INTO `sp_user` VALUES ('5b0c97f9e157483e86e76b316f0be02f', '赵通', '', '12345678901', '', '1', '0', '', '', '', '', 'Y', 'C', '2018-04-07 21:20:04', '2018-04-19 23:25:47', 'N', '2018-04-07 21:20:04');
 INSERT INTO `sp_user` VALUES ('67a130a5073b4516838d19fa87c863c4', '12', '', 'q', '', '1', '0', '360000', '360700', '', '', 'Y', 'P', '2018-04-10 17:12:42', '2018-04-10 17:12:42', 'N', '2018-04-10 17:12:42');
-INSERT INTO `sp_user` VALUES ('68da8a1b0126413b9d19512bb4e522fe', 'as', '', '12345', '', '1', '0', '340000', '610900', '', '', 'Y', 'P', '2018-04-10 21:49:38', '2018-04-10 21:49:38', 'N', '2018-04-10 21:49:38');
-INSERT INTO `sp_user` VALUES ('7613898d90994c279744da176b34c5f2', '司仲夏更改姓名试试', '添加个头像', '16518436864', '', '1', '26', '110000', '110100', '110101', '北京朝阳兴隆家园', 'Y', 'C', '2018-04-01 19:54:05', '2018-04-14 22:17:36', 'N', '2018-04-01 19:54:05');
+INSERT INTO `sp_user` VALUES ('68da8a1b0126413b9d19512bb4e522fe', 'as', '', '123457', '', '1', '0', '340000', '610900', '', '', 'Y', 'P', '2018-04-10 21:49:38', '2018-04-19 23:25:28', 'N', '2018-04-10 21:49:38');
+INSERT INTO `sp_user` VALUES ('7613898d90994c279744da176b34c5f2', '司仲夏', '添加个头像', '16518436864', '', '1', '26', '110000', '110100', '110101', '北京朝阳兴隆家园', 'Y', 'C', '2018-04-01 19:54:05', '2018-04-17 10:24:33', 'N', '2018-04-01 19:54:05');
 INSERT INTO `sp_user` VALUES ('850c87045dea4519853393fc2c1b5585', '合伙', '', '1234567899', '', '1', '0', '', '', '', '', 'Y', 'P', '2018-04-09 23:08:21', '2018-04-09 23:08:21', 'N', '2018-04-09 23:08:21');
-INSERT INTO `sp_user` VALUES ('b1a2b1b2134a41bea9c400f7dec0a830', '司仲夏', '', '18518436811', '', '0', '22', '110000', '110200', '110229', '城市', 'Y', 'W', '2018-04-02 21:13:45', '2018-04-14 22:17:36', 'N', '2018-04-02 21:13:45');
+INSERT INTO `sp_user` VALUES ('b1a2b1b2134a41bea9c400f7dec0a830', '司仲夏', '', '18518436811', '', '0', '22', '120000', '120100', '120101', '城市', 'Y', 'W', '2018-04-02 21:13:45', '2018-04-19 19:18:10', 'N', '2018-04-02 21:13:45');
 INSERT INTO `sp_user` VALUES ('c0d9ed1d112d498394e476f463b31005', 'asffff', '', '12345', '', '1', '0', '360000', '360700', '', '', 'Y', 'P', '2018-04-10 21:49:54', '2018-04-10 21:49:54', 'N', '2018-04-10 21:49:54');
-INSERT INTO `sp_user` VALUES ('d2b1e69a8a6045c1938f76d659b59a57', '赵通', '', '1234567890', '', '1', '0', '', '', '', '', 'A', 'C', '2018-04-07 21:20:04', '2018-04-07 21:20:04', 'N', '2018-04-07 21:20:04');
+INSERT INTO `sp_user` VALUES ('d2b1e69a8a6045c1938f76d659b59a57', '赵通', '', '1234567890', '', '1', '0', '120000', '120100', '120101', '', 'N', 'C', '2018-04-07 21:20:04', '2018-04-19 23:26:46', 'N', '2018-04-07 21:20:04');
 INSERT INTO `sp_user` VALUES ('f3702867854d46b3a3f1e241522af003', 'aa', '', 'aa', '', '1', '0', '', '', '', '', 'Y', 'C', '2018-04-01 19:31:20', '2018-04-14 22:17:36', 'N', '2018-04-01 19:31:20');
 INSERT INTO `sp_user` VALUES ('f6a33378b3cb48208912cffa6b5ff081', '1234', '', '1234', '', '1', '0', '510000', '511300', '', '', 'Y', 'P', '2018-04-10 21:45:58', '2018-04-10 21:45:58', 'N', '2018-04-10 21:45:58');
 
@@ -4622,7 +4655,7 @@ CREATE TABLE `sp_user_customer` (
 -- Records of sp_user_customer
 -- ----------------------------
 INSERT INTO `sp_user_customer` VALUES ('3cdae02806384f4b8a711d1ac6f4bad0', '7613898d90994c279744da176b34c5f2', '87da6e544a7c471db856bb1c4f855477', 'HY_XXCY', '3.0', 'N', '2018-04-01 19:54:05', '2018-04-14 22:37:00');
-INSERT INTO `sp_user_customer` VALUES ('89c8ffa26d5948b09f80d9472d779aa5', 'd2b1e69a8a6045c1938f76d659b59a57', '87da6e544a7c471db856bb1c4f855477', '', '5.0', 'N', '2018-04-07 21:20:05', '2018-04-14 22:35:59');
+INSERT INTO `sp_user_customer` VALUES ('89c8ffa26d5948b09f80d9472d779aa5', 'd2b1e69a8a6045c1938f76d659b59a57', '87da6e544a7c471db856bb1c4f855477', 'HY_JZJC', '5.0', 'N', '2018-04-07 21:20:05', '2018-04-19 23:26:46');
 INSERT INTO `sp_user_customer` VALUES ('a4de6e3510164e5cb5989460736ed8d2', '5b0c97f9e157483e86e76b316f0be02f', '87da6e544a7c471db856bb1c4f855477', '', '5.0', 'N', '2018-04-07 21:20:04', '2018-04-14 22:35:59');
 
 -- ----------------------------
@@ -4682,6 +4715,7 @@ CREATE TABLE `sp_user_worker` (
   `worker_no` int(11) NOT NULL COMMENT '工号ID',
   `worker_type` varchar(50) NOT NULL COMMENT '工种（字典）',
   `grade_level` decimal(2,1) NOT NULL DEFAULT '3.5' COMMENT '用户评分',
+  `evaluate_times` int(11) NOT NULL DEFAULT '0' COMMENT '评论人数（次数）',
   `bond_status` char(1) NOT NULL COMMENT '施工保证金缴纳状态（Y:已缴纳，N:未缴纳）',
   `balance` decimal(10,2) NOT NULL COMMENT '余额',
   `remarks` varchar(500) NOT NULL COMMENT '描述',
@@ -4694,7 +4728,7 @@ CREATE TABLE `sp_user_worker` (
 -- ----------------------------
 -- Records of sp_user_worker
 -- ----------------------------
-INSERT INTO `sp_user_worker` VALUES ('98610eae96534f879ffef44511f991f8', 'b1a2b1b2134a41bea9c400f7dec0a830', '294151', '', '3.0', 'N', '0.00', '无', '2018-04-14 22:37:36', '2018-04-02 21:13:45', '2018-04-14 22:37:36');
+INSERT INTO `sp_user_worker` VALUES ('98610eae96534f879ffef44511f991f8', 'b1a2b1b2134a41bea9c400f7dec0a830', '294151', '', '3.0', '0', 'N', '0.00', '无', '2018-04-14 22:37:36', '2018-04-02 21:13:45', '2018-04-14 22:37:36');
 
 -- ----------------------------
 -- Table structure for sp_user_wxoauth
@@ -4728,6 +4762,7 @@ CREATE TABLE `sp_worker_aptitude` (
   `id` char(32) NOT NULL,
   `worker_id` char(32) NOT NULL COMMENT '工人ID',
   `product_id` char(32) NOT NULL COMMENT '学习产品关联ID',
+  `city` char(6) NOT NULL COMMENT '申请城市',
   `model` varchar(50) NOT NULL COMMENT '产品型号',
   `apply_info` varchar(200) NOT NULL COMMENT '申请说明',
   `apply_status` char(1) NOT NULL COMMENT '申请状态（Y:申请通过，N:申请驳回，D:待处理）',
@@ -4740,6 +4775,7 @@ CREATE TABLE `sp_worker_aptitude` (
 -- ----------------------------
 -- Records of sp_worker_aptitude
 -- ----------------------------
+INSERT INTO `sp_worker_aptitude` VALUES ('1', 'b1a2b1b2134a41bea9c400f7dec0a830', '8124932afe6441f5adc8801eb3691088', '110100', '存储', '测试申请', 'Y', '2018-04-19 17:13:48', '2018-04-19 23:17:54');
 
 -- ----------------------------
 -- Table structure for sp_worker_balance_log
@@ -4762,6 +4798,28 @@ CREATE TABLE `sp_worker_balance_log` (
 
 -- ----------------------------
 -- Records of sp_worker_balance_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sp_worker_bespeak
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_worker_bespeak`;
+CREATE TABLE `sp_worker_bespeak` (
+  `id` char(32) NOT NULL COMMENT '主键',
+  `worker_id` char(32) NOT NULL COMMENT '工人ID',
+  `project_id` char(32) NOT NULL COMMENT '项目ID',
+  `order_id` char(32) NOT NULL COMMENT '订单ID',
+  `construct_start_time` datetime NOT NULL COMMENT '施工开始时间',
+  `construct_end_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '预约施工接',
+  `construct_days` int(11) NOT NULL COMMENT '施工天数',
+  `bespeak_status` char(1) NOT NULL COMMENT '预约状态（Y:已接单，D:待确认，N:已取消）',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `handle_time` datetime NOT NULL COMMENT '处理时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='工人预约记录表';
+
+-- ----------------------------
+-- Records of sp_worker_bespeak
 -- ----------------------------
 
 -- ----------------------------
