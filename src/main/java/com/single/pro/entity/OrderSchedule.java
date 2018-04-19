@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-29
+ * @since 2018-04-19
  */
 @TableName("sp_order_schedule")
 public class OrderSchedule implements Serializable {
@@ -64,11 +64,6 @@ public class OrderSchedule implements Serializable {
      * 评语，客户
      */
 	private String comment;
-    /**
-     * 确认客户
-     */
-	@TableField("ack_customer_id")
-	private String ackCustomerId;
     /**
      * 创建时间
      */
@@ -161,14 +156,6 @@ public class OrderSchedule implements Serializable {
 		this.comment = comment;
 	}
 
-	public String getAckCustomerId() {
-		return ackCustomerId;
-	}
-
-	public void setAckCustomerId(String ackCustomerId) {
-		this.ackCustomerId = ackCustomerId;
-	}
-
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -198,7 +185,6 @@ public class OrderSchedule implements Serializable {
 			", ackStatus=" + ackStatus +
 			", ackTime=" + ackTime +
 			", comment=" + comment +
-			", ackCustomerId=" + ackCustomerId +
 			", createTime=" + createTime +
 			", updateTime=" + updateTime +
 			"}";

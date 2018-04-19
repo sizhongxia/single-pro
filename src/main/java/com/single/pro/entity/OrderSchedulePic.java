@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-29
+ * @since 2018-04-19
  */
 @TableName("sp_order_schedule_pic")
 public class OrderSchedulePic implements Serializable {

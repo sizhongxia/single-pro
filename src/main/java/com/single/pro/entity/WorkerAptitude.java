@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-03-29
+ * @since 2018-04-19
  */
 @TableName("sp_worker_aptitude")
 public class WorkerAptitude implements Serializable {
@@ -29,6 +29,10 @@ public class WorkerAptitude implements Serializable {
      */
 	@TableField("product_id")
 	private String productId;
+    /**
+     * 申请城市
+     */
+	private String city;
     /**
      * 产品型号
      */
@@ -79,6 +83,14 @@ public class WorkerAptitude implements Serializable {
 		this.productId = productId;
 	}
 
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
 	public String getModel() {
 		return model;
 	}
@@ -125,6 +137,7 @@ public class WorkerAptitude implements Serializable {
 			", id=" + id +
 			", workerId=" + workerId +
 			", productId=" + productId +
+			", city=" + city +
 			", model=" + model +
 			", applyInfo=" + applyInfo +
 			", applyStatus=" + applyStatus +

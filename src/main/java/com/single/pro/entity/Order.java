@@ -12,7 +12,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-04-15
+ * @since 2018-04-19
  */
 @TableName("sp_order")
 public class Order implements Serializable {
@@ -63,11 +63,6 @@ public class Order implements Serializable {
      */
 	@TableField("worker_name")
 	private String workerName;
-    /**
-     * 接单工人头像
-     */
-	@TableField("worker_head_pic")
-	private String workerHeadPic;
     /**
      * 接单工人年龄
      */
@@ -129,10 +124,30 @@ public class Order implements Serializable {
 	@TableField("expect_days")
 	private Integer expectDays;
     /**
+     * 人天单价
+     */
+	@TableField("unit_day_price")
+	private BigDecimal unitDayPrice;
+    /**
      * 订单金额
      */
 	@TableField("order_cost")
 	private BigDecimal orderCost;
+    /**
+     * 更新定价时间（当confirm_cost_status为Y时，不允许修改）
+     */
+	@TableField("update_cost_time")
+	private Date updateCostTime;
+    /**
+     * 客户确认定价状态（Y:已确认，N:未确认，C:工人暂未填写）
+     */
+	@TableField("confirm_cost_status")
+	private String confirmCostStatus;
+    /**
+     * 确认金额时间
+     */
+	@TableField("confirm_cost_time")
+	private Date confirmCostTime;
     /**
      * 托管金额
      */
@@ -144,6 +159,16 @@ public class Order implements Serializable {
 	@TableField("paid_cost")
 	private BigDecimal paidCost;
     /**
+     * 剩余支付余额
+     */
+	@TableField("surplus_pay_cost")
+	private BigDecimal surplusPayCost;
+    /**
+     * 待支付金额
+     */
+	@TableField("pending_pay_cost")
+	private BigDecimal pendingPayCost;
+    /**
      * 勘测服务选择（Y:选择，N:未选择）
      */
 	@TableField("ser_survey_choice")
@@ -153,6 +178,11 @@ public class Order implements Serializable {
      */
 	@TableField("ser_survey_status")
 	private String serSurveyStatus;
+    /**
+     * 勘测服务更新时间
+     */
+	@TableField("ser_survey_update_time")
+	private Date serSurveyUpdateTime;
     /**
      * 验货服务选择（Y:选择，N:未选择）
      */
@@ -164,6 +194,11 @@ public class Order implements Serializable {
 	@TableField("ser_check_status")
 	private String serCheckStatus;
     /**
+     * 验货服务更新时间
+     */
+	@TableField("ser_check_update_time")
+	private Date serCheckUpdateTime;
+    /**
      * 施工服务选择（Y:选择，N:未选择）
      */
 	@TableField("ser_construct_choice")
@@ -173,6 +208,11 @@ public class Order implements Serializable {
      */
 	@TableField("ser_construct_status")
 	private String serConstructStatus;
+    /**
+     * 施工服务更新时间
+     */
+	@TableField("ser_construct_update_time")
+	private Date serConstructUpdateTime;
     /**
      * 培训服务选择（Y:选择，N:未选择）
      */
@@ -184,6 +224,11 @@ public class Order implements Serializable {
 	@TableField("ser_train_status")
 	private String serTrainStatus;
     /**
+     * 培训服务更新时间
+     */
+	@TableField("ser_train_update_time")
+	private Date serTrainUpdateTime;
+    /**
      * 验收服务选择（Y:选择，N:未选择）
      */
 	@TableField("ser_accept_choice")
@@ -193,6 +238,11 @@ public class Order implements Serializable {
      */
 	@TableField("ser_accept_status")
 	private String serAcceptStatus;
+    /**
+     * 验收服务更新时间
+     */
+	@TableField("ser_accept_update_time")
+	private Date serAcceptUpdateTime;
     /**
      * 下单发布状态（Y:已发布，N:暂存），一旦发布，状态不可修改
      */
@@ -301,14 +351,6 @@ public class Order implements Serializable {
 		this.workerName = workerName;
 	}
 
-	public String getWorkerHeadPic() {
-		return workerHeadPic;
-	}
-
-	public void setWorkerHeadPic(String workerHeadPic) {
-		this.workerHeadPic = workerHeadPic;
-	}
-
 	public Integer getWorkerAge() {
 		return workerAge;
 	}
@@ -405,12 +447,44 @@ public class Order implements Serializable {
 		this.expectDays = expectDays;
 	}
 
+	public BigDecimal getUnitDayPrice() {
+		return unitDayPrice;
+	}
+
+	public void setUnitDayPrice(BigDecimal unitDayPrice) {
+		this.unitDayPrice = unitDayPrice;
+	}
+
 	public BigDecimal getOrderCost() {
 		return orderCost;
 	}
 
 	public void setOrderCost(BigDecimal orderCost) {
 		this.orderCost = orderCost;
+	}
+
+	public Date getUpdateCostTime() {
+		return updateCostTime;
+	}
+
+	public void setUpdateCostTime(Date updateCostTime) {
+		this.updateCostTime = updateCostTime;
+	}
+
+	public String getConfirmCostStatus() {
+		return confirmCostStatus;
+	}
+
+	public void setConfirmCostStatus(String confirmCostStatus) {
+		this.confirmCostStatus = confirmCostStatus;
+	}
+
+	public Date getConfirmCostTime() {
+		return confirmCostTime;
+	}
+
+	public void setConfirmCostTime(Date confirmCostTime) {
+		this.confirmCostTime = confirmCostTime;
 	}
 
 	public BigDecimal getDepositCost() {
@@ -429,6 +503,22 @@ public class Order implements Serializable {
 		this.paidCost = paidCost;
 	}
 
+	public BigDecimal getSurplusPayCost() {
+		return surplusPayCost;
+	}
+
+	public void setSurplusPayCost(BigDecimal surplusPayCost) {
+		this.surplusPayCost = surplusPayCost;
+	}
+
+	public BigDecimal getPendingPayCost() {
+		return pendingPayCost;
+	}
+
+	public void setPendingPayCost(BigDecimal pendingPayCost) {
+		this.pendingPayCost = pendingPayCost;
+	}
+
 	public String getSerSurveyChoice() {
 		return serSurveyChoice;
 	}
@@ -443,6 +533,14 @@ public class Order implements Serializable {
 
 	public void setSerSurveyStatus(String serSurveyStatus) {
 		this.serSurveyStatus = serSurveyStatus;
+	}
+
+	public Date getSerSurveyUpdateTime() {
+		return serSurveyUpdateTime;
+	}
+
+	public void setSerSurveyUpdateTime(Date serSurveyUpdateTime) {
+		this.serSurveyUpdateTime = serSurveyUpdateTime;
 	}
 
 	public String getSerCheckChoice() {
@@ -461,6 +559,14 @@ public class Order implements Serializable {
 		this.serCheckStatus = serCheckStatus;
 	}
 
+	public Date getSerCheckUpdateTime() {
+		return serCheckUpdateTime;
+	}
+
+	public void setSerCheckUpdateTime(Date serCheckUpdateTime) {
+		this.serCheckUpdateTime = serCheckUpdateTime;
+	}
+
 	public String getSerConstructChoice() {
 		return serConstructChoice;
 	}
@@ -475,6 +581,14 @@ public class Order implements Serializable {
 
 	public void setSerConstructStatus(String serConstructStatus) {
 		this.serConstructStatus = serConstructStatus;
+	}
+
+	public Date getSerConstructUpdateTime() {
+		return serConstructUpdateTime;
+	}
+
+	public void setSerConstructUpdateTime(Date serConstructUpdateTime) {
+		this.serConstructUpdateTime = serConstructUpdateTime;
 	}
 
 	public String getSerTrainChoice() {
@@ -493,6 +607,14 @@ public class Order implements Serializable {
 		this.serTrainStatus = serTrainStatus;
 	}
 
+	public Date getSerTrainUpdateTime() {
+		return serTrainUpdateTime;
+	}
+
+	public void setSerTrainUpdateTime(Date serTrainUpdateTime) {
+		this.serTrainUpdateTime = serTrainUpdateTime;
+	}
+
 	public String getSerAcceptChoice() {
 		return serAcceptChoice;
 	}
@@ -507,6 +629,14 @@ public class Order implements Serializable {
 
 	public void setSerAcceptStatus(String serAcceptStatus) {
 		this.serAcceptStatus = serAcceptStatus;
+	}
+
+	public Date getSerAcceptUpdateTime() {
+		return serAcceptUpdateTime;
+	}
+
+	public void setSerAcceptUpdateTime(Date serAcceptUpdateTime) {
+		this.serAcceptUpdateTime = serAcceptUpdateTime;
 	}
 
 	public String getReleaseStatus() {
@@ -577,7 +707,6 @@ public class Order implements Serializable {
 			", customerName=" + customerName +
 			", workerId=" + workerId +
 			", workerName=" + workerName +
-			", workerHeadPic=" + workerHeadPic +
 			", workerAge=" + workerAge +
 			", productId=" + productId +
 			", productName=" + productName +
@@ -590,19 +719,30 @@ public class Order implements Serializable {
 			", detailListUrl=" + detailListUrl +
 			", expectTime=" + expectTime +
 			", expectDays=" + expectDays +
+			", unitDayPrice=" + unitDayPrice +
 			", orderCost=" + orderCost +
+			", updateCostTime=" + updateCostTime +
+			", confirmCostStatus=" + confirmCostStatus +
+			", confirmCostTime=" + confirmCostTime +
 			", depositCost=" + depositCost +
 			", paidCost=" + paidCost +
+			", surplusPayCost=" + surplusPayCost +
+			", pendingPayCost=" + pendingPayCost +
 			", serSurveyChoice=" + serSurveyChoice +
 			", serSurveyStatus=" + serSurveyStatus +
+			", serSurveyUpdateTime=" + serSurveyUpdateTime +
 			", serCheckChoice=" + serCheckChoice +
 			", serCheckStatus=" + serCheckStatus +
+			", serCheckUpdateTime=" + serCheckUpdateTime +
 			", serConstructChoice=" + serConstructChoice +
 			", serConstructStatus=" + serConstructStatus +
+			", serConstructUpdateTime=" + serConstructUpdateTime +
 			", serTrainChoice=" + serTrainChoice +
 			", serTrainStatus=" + serTrainStatus +
+			", serTrainUpdateTime=" + serTrainUpdateTime +
 			", serAcceptChoice=" + serAcceptChoice +
 			", serAcceptStatus=" + serAcceptStatus +
+			", serAcceptUpdateTime=" + serAcceptUpdateTime +
 			", releaseStatus=" + releaseStatus +
 			", releaseTime=" + releaseTime +
 			", buildStatus=" + buildStatus +

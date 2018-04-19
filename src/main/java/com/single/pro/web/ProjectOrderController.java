@@ -27,10 +27,12 @@ import com.single.pro.entity.Order;
 import com.single.pro.entity.Project;
 import com.single.pro.entity.ProjectWork;
 import com.single.pro.entity.User;
+import com.single.pro.entity.UserWorker;
 import com.single.pro.service.OrderService;
 import com.single.pro.service.ProjectService;
 import com.single.pro.service.ProjectWorkService;
 import com.single.pro.service.UserService;
+import com.single.pro.service.UserWorkerService;
 import com.xiaoleilu.hutool.date.DateUtil;
 
 @Controller
@@ -47,6 +49,8 @@ public class ProjectOrderController extends BaseController {
 	ProjectService projectService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	UserWorkerService userWorkerService;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -248,27 +252,113 @@ public class ProjectOrderController extends BaseController {
 			}
 			mav.addObject("worker", workerUser);
 		}
-		mav.setViewName("project/order/detail");
-		
-		
-		Map<String, Object> _map = new HashMap<>();
-		_map .put("survey", "Y".equals(order.getSerSurveyChoice()) ? "success" : "default");
-		_map.put("surveyStatus", order.getSerSurveyStatus());
-		_map.put("check", "Y".equals(order.getSerCheckChoice()) ? "success" : "default");
-		_map.put("checkStatus", order.getSerCheckStatus());
-		_map.put("construct", "Y".equals(order.getSerConstructChoice()) ? "success" : "default");
-		_map.put("constructStatus", order.getSerConstructStatus());
-		_map.put("train", "Y".equals(order.getSerTrainChoice()) ? "success" : "default");
-		_map.put("trainStatus", order.getSerTrainStatus());
-		_map.put("accept", "Y".equals(order.getSerAcceptChoice()) ? "success" : "default");
-		_map.put("acceptStatus", order.getSerAcceptStatus());
-		mav.addObject("orderSer", _map);
-		
+
+		project.setType(baseDataCacheUtil.getDictItemName(project.getType()));
+		projectWork.setProvincial(baseDataCacheUtil.getCityName(projectWork.getProvincial()));
+		projectWork.setCity(baseDataCacheUtil.getCityName(projectWork.getCity()));
+		projectWork.setCounty(baseDataCacheUtil.getCityName(projectWork.getCounty()));
+
+		Map<String, Object> orderSer = new HashMap<>();
+		orderSer.put("survey", "Y".equals(order.getSerSurveyChoice()) ? "success" : "default");
+		orderSer.put("surveyStatus", order.getSerSurveyStatus());
+		orderSer.put("check", "Y".equals(order.getSerCheckChoice()) ? "success" : "default");
+		orderSer.put("checkStatus", order.getSerCheckStatus());
+		orderSer.put("construct", "Y".equals(order.getSerConstructChoice()) ? "success" : "default");
+		orderSer.put("constructStatus", order.getSerConstructStatus());
+		orderSer.put("train", "Y".equals(order.getSerTrainChoice()) ? "success" : "default");
+		orderSer.put("trainStatus", order.getSerTrainStatus());
+		orderSer.put("accept", "Y".equals(order.getSerAcceptChoice()) ? "success" : "default");
+		orderSer.put("acceptStatus", order.getSerAcceptStatus());
+		mav.addObject("orderSer", orderSer);
+
+		order.setReleaseStatus(getReleaseStatusText(order.getReleaseStatus()));
+		order.setBuildStatus(getBuildStatusText(order.getBuildStatus()));
+		order.setOrderStatus(getOrderStatusText(order.getOrderStatus()));
+
 		mav.addObject("order", order);
 		mav.addObject("project", project);
 		mav.addObject("projectWork", projectWork);
 		mav.addObject("customer", customerUser);
+		mav.setViewName("project/order/detail");
 		return mav;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/edit" }, method = { RequestMethod.GET })
+	public ModelAndView edit(HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("error/error");
+
+		String id = request.getParameter("id");
+		if (StringUtils.isBlank(id)) {
+			mav.addObject("msg", "参数“id”丢失");
+			return mav;
+		}
+		Order order = orderService.selectById(id);
+		if (order == null) {
+			mav.addObject("msg", "通过参数 id:" + id + " 未找到有效的订单信息");
+			return mav;
+		}
+
+		Integer workerNo = 0;
+		if (StringUtils.isNotBlank(order.getWorkerId())) {
+			User workerUser = userService.selectById(order.getWorkerId());
+			if (workerUser == null || !"W".equals(workerUser.getUserType())) {
+				order.setWorkerId("");
+				order.setWorkerName("");
+				order.setWorkerAge(0);
+				orderService.updateById(order);
+				mav.addObject("msg", "无效劳务工人信息，并已清除劳务工人信息！");
+				return mav;
+			}
+			Wrapper<UserWorker> workerWrapper = new EntityWrapper<>();
+			workerWrapper.eq("user_id", workerUser.getId());
+			UserWorker worker = userWorkerService.selectOne(workerWrapper);
+			if (worker == null) {
+				order.setWorkerId("");
+				order.setWorkerName("");
+				order.setWorkerAge(0);
+				orderService.updateById(order);
+				mav.addObject("msg", "无效劳务工人信息，并已清除劳务工人信息！");
+				return mav;
+			}
+			workerNo = worker.getWorkerNo();
+		}
+
+		if (workerNo == null || workerNo.intValue() < 1) {
+			mav.addObject("workerNo", "");
+		} else {
+			mav.addObject("workerNo", workerNo);
+		}
+
+		mav.addObject("surveyChoice", "Y".equals(order.getSerSurveyChoice()) ? "true" : "");
+		mav.addObject("checkChoice", "Y".equals(order.getSerCheckChoice()) ? "true" : "");
+		mav.addObject("constructChoice", "Y".equals(order.getSerConstructChoice()) ? "true" : "");
+		mav.addObject("trainChoice", "Y".equals(order.getSerTrainChoice()) ? "true" : "");
+		mav.addObject("acceptChoice", "Y".equals(order.getSerAcceptChoice()) ? "true" : "");
+
+		mav.addObject("order", order);
+		mav.addObject("csrf", baseDataCacheUtil.setPageCsrf("project_order_edit"));
+
+		mav.setViewName("project/order/edit");
+		return mav;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = { "/workers" }, method = { RequestMethod.GET, RequestMethod.POST })
+	public List<Map<String, Object>> workers(HttpServletRequest request) throws Exception {
+
+		String query = request.getParameter("query");
+		String limit = request.getParameter("limit");
+		Integer limitNum = new Integer(limit);
+		List<Map<String, Object>> list = new ArrayList<>();
+		for (int i = 0; i < limitNum; i++) {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("label", query);
+			data.put("value", limit);
+			list.add(data);
+		}
+		return list;
 	}
 
 }

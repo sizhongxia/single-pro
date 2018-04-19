@@ -21,6 +21,7 @@
         <result column="common_problem" property="commonProblem" />
         <result column="doc_url" property="docUrl" />
         <result column="manual_url" property="manualUrl" />
+        <result column="cover_pic_url" property="coverPicUrl" />
         <result column="apply_user_id" property="applyUserId" />
         <result column="show_status" property="showStatus" />
         <result column="contacts" property="contacts" />

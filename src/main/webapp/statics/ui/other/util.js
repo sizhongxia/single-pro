@@ -25,6 +25,17 @@ window.post = function(url, data, sucCallback, errCallback) {
     });
 }
 
+window.laydateInit = function(elem, callback) {
+	laydate.render({
+	  	elem: elem,
+		range: false,
+		theme: '#393D49',
+		done: function(value, date, endDate){
+			callback && callback(value);
+	  	}
+	});
+}
+
 window.laydateRender = function(elem, callback) {
 	laydate.render({
 	  	elem: elem,

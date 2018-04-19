@@ -181,6 +181,7 @@ public class JDBCRealm extends AuthorizingRealm {
 		}
 		session.setAttribute(USER_ROLE_APP_AUTH_KEY, roleApps);
 		session.setAttribute(USER_ROLE_MENU_AUTH_KEY, menuIds);
+		session.setAttribute("userId", user.getId());
 
 		return new SimpleAuthenticationInfo(user, password.toCharArray(), getName());
 	}

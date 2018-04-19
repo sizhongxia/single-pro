@@ -22,6 +22,7 @@
 			p.common_problem as commonProblem,
 			p.doc_url as docUrl,
 			p.manual_url as manualUrl,
+			p.cover_pic_url as coverPicUrl,
 			p.show_status as showStatus,
 			p.contacts,
 			p.contact_tel as contactTel,

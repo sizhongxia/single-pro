@@ -47,6 +47,22 @@
                   	<label class="control-label item">客户：</label> ${order.customerName!}
                   </div>
                   <div class="col-xs-12" style="border-bottom: 1px solid #EEE;margin-bottom: 12px;padding-bottom: 4px;">
+                      <label class="control-label">劳务工人 Worker</label>
+                  </div>
+                  <#if order.workerId != "">
+	                  <div class="col-xs-6">
+	                  	<label class="control-label item">姓名：</label> ${order.workerName!}
+	                  </div>
+	                  <div class="col-xs-6">
+	                  	<label class="control-label item">工人年龄：</label>${order.workerAge!}
+	                  </div>
+	              <#else>
+	                  <div class="col-xs-6">
+	                  	<label class="control-label item">劳务工人：</label>
+	                  	<span>暂未分配</span>
+	                  </div>
+                  </#if>
+                  <div class="col-xs-12" style="border-bottom: 1px solid #EEE;margin-bottom: 12px;padding-bottom: 4px;">
                       <label class="control-label">位置 Position</label>
                   </div>
                   <div class="col-xs-6">
@@ -115,6 +131,21 @@
 					  <span class="label label-${orderSer.construct!}"><#if orderSer.constructStatus=="Y"><img alt="" src="${rc.contextPath}/statics/images/confirm.png"> </#if>施工</span>
 					  <span class="label label-${orderSer.train!}"><#if orderSer.trainStatus=="Y"><img alt="" src="${rc.contextPath}/statics/images/confirm.png"> </#if>培训</span>
 					  <span class="label label-${orderSer.accept!}"><#if orderSer.acceptStatus=="Y"><img alt="" src="${rc.contextPath}/statics/images/confirm.png"> </#if>验收</span>
+                  </div>
+                  <div class="col-xs-12" style="border-bottom: 1px solid #EEE;margin-bottom: 12px;padding-bottom: 4px;">
+                      <label class="control-label">施工时间 Time</label>
+                  </div>
+                  <div class="col-xs-6">
+                  	<label class="control-label item">开始时间：</label>${order.expectTime!}
+                  </div>
+                  <div class="col-xs-6">
+                  	<label class="control-label item">天数：</label>${order.expectDays!}
+                  </div>
+                  <div class="col-xs-12" style="border-bottom: 1px solid #EEE;margin-bottom: 12px;padding-bottom: 4px;">
+                      <label class="control-label">备注 Remark</label>
+                  </div>
+                  <div class="col-xs-12">
+                  	<label class="control-label item">订单备注：</label>${order.remarks!}
                   </div>
                   <div style="clear: both;"></div>
               </div>

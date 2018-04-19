@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-04-15
+ * @since 2018-04-19
  */
 public interface OrderPayDao extends BaseMapper<OrderPay> {
 

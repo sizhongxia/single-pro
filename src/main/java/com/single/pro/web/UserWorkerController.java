@@ -28,17 +28,25 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.single.pro.cache.BaseDataCacheUtil;
+import com.single.pro.entity.Company;
+import com.single.pro.entity.Product;
 import com.single.pro.entity.User;
 import com.single.pro.entity.UserWorker;
 import com.single.pro.entity.UserWxoauth;
+import com.single.pro.entity.WorkerAptitude;
 import com.single.pro.model.UserWorkerModel;
 import com.single.pro.model.WorkerAptitudeModel;
+import com.single.pro.service.CompanyService;
+import com.single.pro.service.ProductService;
 import com.single.pro.service.UserService;
 import com.single.pro.service.UserWorkerService;
 import com.single.pro.service.UserWxoauthService;
+import com.single.pro.service.WorkerAptitudeService;
 import com.single.pro.service.custom.UserWorkerCustomService;
+import com.single.pro.service.custom.WorkerAptitudeCustomService;
 import com.single.pro.util.AdvanceFilterUtil;
 import com.single.pro.util.IdUtil;
+import com.xiaoleilu.hutool.date.DateUtil;
 import com.xiaoleilu.hutool.util.RandomUtil;
 
 @Controller
@@ -52,7 +60,15 @@ public class UserWorkerController extends BaseController {
 	@Autowired
 	UserWorkerService userWorkerService;
 	@Autowired
+	WorkerAptitudeService workerAptitudeService;
+	@Autowired
+	WorkerAptitudeCustomService workerAptitudeCustomService;
+	@Autowired
 	UserWxoauthService userWxoauthService;
+	@Autowired
+	ProductService productService;
+	@Autowired
+	CompanyService companyService;
 	@Autowired
 	BaseDataCacheUtil baseDataCacheUtil;
 
@@ -167,7 +183,7 @@ public class UserWorkerController extends BaseController {
 		ModelAndView mav = new ModelAndView("user/worker/changeAreaform");
 		return mav;
 	}
-	
+
 	@RequiresAuthentication
 	@RequestMapping(value = { "/wechatDetailForm" }, method = { RequestMethod.GET })
 	public ModelAndView wechatDetailForm(HttpServletRequest request) {
@@ -176,35 +192,103 @@ public class UserWorkerController extends BaseController {
 	}
 
 	@RequiresAuthentication
-	@RequestMapping(value = { "/aptitudeForm" }, method = { RequestMethod.GET })
-	public ModelAndView aptitudeForm(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("user/worker/aptitudeForm");
-		List<WorkerAptitudeModel> list = new ArrayList<>();
+	@RequestMapping(value = { "/aptitudeIfream" }, method = { RequestMethod.GET })
+	public ModelAndView aptitudeIfream(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("user/worker/aptitudeIfream");
+		mav.addObject("id", request.getParameter("id"));
+		mav.addObject("ifreamId", System.currentTimeMillis());
+		return mav;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/aptitude" }, method = { RequestMethod.GET })
+	public ModelAndView aptitude(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("user/worker/aptitude");
 
 		String id = request.getParameter("id");
 		User user = userService.selectById(id);
 		if (user == null) {
-			mav.addObject("list", list);
-			return mav;
-		}
-
-		Wrapper<UserWorker> wrapper = new EntityWrapper<>();
-		wrapper.eq("user_id", user.getId());
-		UserWorker userWorker = userWorkerService.selectOne(wrapper);
-		if (userWorker == null) {
-			mav.addObject("list", list);
+			mav.addObject("list", new ArrayList<>());
 			return mav;
 		}
 
 		Map<String, Object> param = new HashMap<>();
-		param.put("workerId", userWorker.getId());
-		list = userWorkerCustomService.findWorkerAptitudes(param);
+		param.put("workerId", user.getId());
+		List<WorkerAptitudeModel> list = workerAptitudeCustomService.findWorkerAptitudes(param);
 		if (list == null) {
-			list = new ArrayList<>();
+			mav.addObject("list", new ArrayList<>());
+			return mav;
 		}
 
-		mav.addObject("list", list);
+		List<Map<String, Object>> mapList = new ArrayList<>();
+		Map<String, Object> itemMap = null;
+		for (WorkerAptitudeModel item : list) {
+			itemMap = new HashMap<>();
+			itemMap.put("id", item.getId());
+			itemMap.put("productName", item.getProductName());
+			itemMap.put("productKind", baseDataCacheUtil.getProductKindNameById(item.getKindId()));
+			itemMap.put("productType", baseDataCacheUtil.getProductTypeNameById(item.getTypeId()));
+			itemMap.put("city", baseDataCacheUtil.getCityName(item.getCity()));
+			itemMap.put("applyStatus", getWorkerAptitudeApplyStatusTxt(item.getApplyStatus()));
+			itemMap.put("applyTime", DateUtil.format(item.getApplyTime(), "yyyy-MM-dd"));
+			mapList.add(itemMap);
+		}
+
+		mav.addObject("list", mapList);
 		return mav;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/aptitudeDetail" }, method = { RequestMethod.GET })
+	public ModelAndView aptitudeDetail(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("error/error");
+
+		String id = request.getParameter("id");
+		if (StringUtils.isBlank(id)) {
+			mav.addObject("msg", "参数“id”丢失");
+			return mav;
+		}
+		WorkerAptitude workerAptitude = workerAptitudeService.selectById(id);
+		if (workerAptitude == null) {
+			mav.addObject("msg", "无效的参数“id：" + id + "”");
+			return mav;
+		}
+
+		Product product = productService.selectById(workerAptitude.getProductId());
+		if (product == null) {
+			mav.addObject("msg", "无效的产品信息“productId：" + workerAptitude.getProductId() + "”");
+			return mav;
+		}
+
+		Company company = companyService.selectById(product.getCompanyId());
+		if (company == null) {
+			mav.addObject("msg", "无效的产品厂商“companyId：" + product.getCompanyId() + "”");
+			return mav;
+		}
+
+		mav.addObject("productName", product.getName());
+		mav.addObject("productKind", baseDataCacheUtil.getProductKindNameById(product.getKindId()));
+		mav.addObject("productType", baseDataCacheUtil.getProductTypeNameById(product.getTypeId()));
+		mav.addObject("productModel", product.getModel());
+		mav.addObject("companyName", company.getName());
+		mav.addObject("city", baseDataCacheUtil.getCityName(workerAptitude.getCity()));
+		mav.addObject("applyStatus", getWorkerAptitudeApplyStatusTxt(workerAptitude.getApplyStatus()));
+		mav.addObject("applyTime", DateUtil.format(workerAptitude.getApplyTime(), "yyyy-MM-dd"));
+		mav.addObject("applyInfo", workerAptitude.getApplyInfo());
+
+		mav.setViewName("user/worker/aptitudeDetail");
+		return mav;
+	}
+
+	private String getWorkerAptitudeApplyStatusTxt(String applyStatus) {
+		if ("Y".equals(applyStatus)) {
+			return "申请通过";
+		} else if ("N".equals(applyStatus)) {
+			return "申请驳回";
+		} else if ("D".equals(applyStatus)) {
+			return "待处理";
+		}
+		return "-";
 	}
 
 	/***
@@ -242,6 +326,7 @@ public class UserWorkerController extends BaseController {
 		map.put("remarks", userWorker.getRemarks());
 		return map;
 	}
+
 	@ResponseBody
 	@RequiresAuthentication
 	@RequestMapping(value = "/wechatDetail")
@@ -293,30 +378,40 @@ public class UserWorkerController extends BaseController {
 		return map;
 	}
 
-	@ResponseBody
-	@RequiresAuthentication
-	@RequestMapping(value = "/aptitude")
-	public Map<String, Object> aptitude(HttpServletRequest request) {
-		String id = request.getParameter("id");
-		User user = userService.selectById(id);
-		Map<String, Object> map = new HashMap<>();
-		if (user == null) {
-			return map;
-		}
-
-		Wrapper<UserWorker> wrapper = new EntityWrapper<>();
-		wrapper.eq("user_id", user.getId());
-		UserWorker userWorker = userWorkerService.selectOne(wrapper);
-
-		if (userWorker == null) {
-			return map;
-		}
-
-		map.put("id", user.getId());
-		map.put("userName", user.getUserName());
-
-		return map;
-	}
+	// /**
+	// * 用户资质
+	// *
+	// * @param request
+	// * @return
+	// */
+	// @ResponseBody
+	// @RequiresAuthentication
+	// @RequestMapping(value = "/aptitude")
+	// public Map<String, Object> aptitude(HttpServletRequest request) {
+	// String id = request.getParameter("id");
+	// User user = userService.selectById(id);
+	// Map<String, Object> map = new HashMap<>();
+	// if (user == null) {
+	// return map;
+	// }
+	//
+	//// Wrapper<UserWorker> wrapper = new EntityWrapper<>();
+	//// wrapper.eq("user_id", user.getId());
+	//// UserWorker userWorker = userWorkerService.selectOne(wrapper);
+	////
+	//// if (userWorker == null) {
+	//// return map;
+	//// }
+	//
+	// map.put("userName", user.getUserName());
+	//
+	// Map<String, Object> params = new HashMap<>();
+	// params.put("workerId", user.getId());
+	// workerAptitudeCustomService.findWorkerAptitudes(params );
+	//
+	//
+	// return map;
+	// }
 
 	/***
 	 * 保存客户

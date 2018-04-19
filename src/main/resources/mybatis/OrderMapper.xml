@@ -16,7 +16,6 @@
         <result column="customer_name" property="customerName" />
         <result column="worker_id" property="workerId" />
         <result column="worker_name" property="workerName" />
-        <result column="worker_head_pic" property="workerHeadPic" />
         <result column="worker_age" property="workerAge" />
         <result column="product_id" property="productId" />
         <result column="product_name" property="productName" />
@@ -29,19 +28,30 @@
         <result column="detail_list_url" property="detailListUrl" />
         <result column="expect_time" property="expectTime" />
         <result column="expect_days" property="expectDays" />
+        <result column="unit_day_price" property="unitDayPrice" />
         <result column="order_cost" property="orderCost" />
+        <result column="update_cost_time" property="updateCostTime" />
+        <result column="confirm_cost_status" property="confirmCostStatus" />
+        <result column="confirm_cost_time" property="confirmCostTime" />
         <result column="deposit_cost" property="depositCost" />
         <result column="paid_cost" property="paidCost" />
+        <result column="surplus_pay_cost" property="surplusPayCost" />
+        <result column="pending_pay_cost" property="pendingPayCost" />
         <result column="ser_survey_choice" property="serSurveyChoice" />
         <result column="ser_survey_status" property="serSurveyStatus" />
+        <result column="ser_survey_update_time" property="serSurveyUpdateTime" />
         <result column="ser_check_choice" property="serCheckChoice" />
         <result column="ser_check_status" property="serCheckStatus" />
+        <result column="ser_check_update_time" property="serCheckUpdateTime" />
         <result column="ser_construct_choice" property="serConstructChoice" />
         <result column="ser_construct_status" property="serConstructStatus" />
+        <result column="ser_construct_update_time" property="serConstructUpdateTime" />
         <result column="ser_train_choice" property="serTrainChoice" />
         <result column="ser_train_status" property="serTrainStatus" />
+        <result column="ser_train_update_time" property="serTrainUpdateTime" />
         <result column="ser_accept_choice" property="serAcceptChoice" />
         <result column="ser_accept_status" property="serAcceptStatus" />
+        <result column="ser_accept_update_time" property="serAcceptUpdateTime" />
         <result column="release_status" property="releaseStatus" />
         <result column="release_time" property="releaseTime" />
         <result column="build_status" property="buildStatus" />

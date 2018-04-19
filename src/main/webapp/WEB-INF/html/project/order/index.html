@@ -112,7 +112,7 @@
                     </div>
                     <div class="card-content">
                     	<div class="table-responsive" style="min-height: .01%; overflow-x: auto;">
-                        <table class="table table-hover" style="width: 1840px;max-width: 1840px;">
+                        <table class="table table-hover" style="width: 1840px;max-width: 1760px;">
                             <thead class="text-primary">
                             	<tr>
 	                                <th width="65" class="text-center">序号</th>
@@ -143,7 +143,7 @@
                                 <tr v-for="(item, index) in list">
                                     <td class="text-center">{{ (searchParam.page - 1) * searchParam.rows + index+1 }}</td>
                                     <td>{{ item.projectName }}</td>
-                                    <td class="text-center">{{ item.orderNo }}</td>
+                                    <td class="text-center"><a href="javascript:;" @click="detail(item.id)">{{ item.orderNo }}</a></td>
                                     <td class="text-center">{{ item.releaseStatus }}</td>
                                     <td class="text-center">{{ item.releaseTime }}</td>
                                     <td class="text-center">{{ item.orderCost }}</td>
@@ -157,6 +157,7 @@
                                     <td class="text-center">{{ item.createTime }}</td>
                                     <td class="text-center">
                                     	<a href="javascript:;" @click="detail(item.id)">详细</a>
+                                    	<a href="javascript:;" @click="edit(item.id)">修改</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -251,6 +252,9 @@
 			    },
 			    detail: function(id) {
 			    	openLayer('订单详情', '${rc.contextPath}/project/order/detail?id=' + id, true);
+			    },
+			    edit: function(id) {
+			    	openLayer('修改订单', '${rc.contextPath}/project/order/edit?id=' + id, true);
 			    },
 			    moreSearch: function() {
 			    	var _this = this;

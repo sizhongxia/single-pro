@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -18,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.single.pro.entity.BasicCity;
 import com.single.pro.entity.DictionaryItem;
 import com.single.pro.entity.DictionaryType;
@@ -74,24 +77,6 @@ public class BaseDataCacheUtil implements InitializingBean {
 		return cacheUtil.get("single:cache:csrf:" + SecurityUtils.getSubject().getSession(true).getId() + ":" + page);
 	}
 
-	public System getSystemInfo() {
-		System system = getCacheSystemInfo();
-		if (system == null) {
-			initSystemInfo();
-			return getCacheSystemInfo();
-		}
-		return system;
-	}
-
-	public List<SystemApp> getSystemApps() {
-		List<SystemApp> systemApps = getCacheSystemApps();
-		if (systemApps == null) {
-			initSystemApps();
-			return getCacheSystemApps();
-		}
-		return systemApps;
-	}
-
 	public SystemApp getSystemAppById(String id) {
 		List<SystemApp> systemApps = getSystemApps();
 		if (systemApps == null) {
@@ -133,8 +118,10 @@ public class BaseDataCacheUtil implements InitializingBean {
 
 	public List<DictionaryItemModel> getDictItems(String typeCode) {
 		List<DictionaryItemModel> itemModels = new ArrayList<>();
+		if (StringUtils.isBlank(typeCode)) {
+			return itemModels;
+		}
 		List<DictionaryItem> items = null;
-
 		String res = cacheUtil.hget("single:cache:system:dict:type", typeCode);
 		if (res != null) {
 			items = JSON.parseArray(res, DictionaryItem.class);
@@ -154,6 +141,9 @@ public class BaseDataCacheUtil implements InitializingBean {
 	}
 
 	public String getDictItemName(String code) {
+		if (StringUtils.isBlank(code)) {
+			return "";
+		}
 		DictionaryItem item = null;
 		String res = cacheUtil.hget("single:cache:system:dict:item", code);
 		if (res != null) {
@@ -166,6 +156,9 @@ public class BaseDataCacheUtil implements InitializingBean {
 	}
 
 	public CityModel getCityModel(String code) {
+		if (StringUtils.isBlank(code)) {
+			return null;
+		}
 		String res = cacheUtil.hget("single:cache:system:city", code);
 		if (res != null) {
 			return JSON.parseObject(res, CityModel.class);
@@ -181,18 +174,10 @@ public class BaseDataCacheUtil implements InitializingBean {
 		return "";
 	}
 
-	public List<ProductKind> getProductKinds() {
-		Map<String, String> res = cacheUtil.hgetAll("single:cache:system:product:kind");
-		List<ProductKind> pks = new ArrayList<>();
-		if (res != null && !res.isEmpty()) {
-			for (Map.Entry<String, String> r : res.entrySet()) {
-				pks.add(JSON.parseObject(r.getValue(), ProductKind.class));
-			}
-		}
-		return pks;
-	}
-
 	public ProductKind getProductKindById(String id) {
+		if (StringUtils.isBlank(id)) {
+			return null;
+		}
 		String res = cacheUtil.hget("single:cache:system:product:kind", id);
 		if (res != null) {
 			return JSON.parseObject(res, ProductKind.class);
@@ -203,23 +188,15 @@ public class BaseDataCacheUtil implements InitializingBean {
 	public String getProductKindNameById(String id) {
 		ProductKind productKind = getProductKindById(id);
 		if (productKind == null) {
-			return null;
+			return "";
 		}
 		return productKind.getName();
 	}
 
-	public List<ProductType> getProductTypes() {
-		Map<String, String> res = cacheUtil.hgetAll("single:cache:system:product:type");
-		List<ProductType> pts = new ArrayList<>();
-		if (res != null && !res.isEmpty()) {
-			for (Map.Entry<String, String> r : res.entrySet()) {
-				pts.add(JSON.parseObject(r.getValue(), ProductType.class));
-			}
-		}
-		return pts;
-	}
-
 	public ProductType getProductTypeById(String id) {
+		if (StringUtils.isBlank(id)) {
+			return null;
+		}
 		String res = cacheUtil.hget("single:cache:system:product:type", id);
 		if (res != null) {
 			return JSON.parseObject(res, ProductType.class);
@@ -230,7 +207,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 	public String getProductTypeNameById(String id) {
 		ProductType productType = getProductTypeById(id);
 		if (productType == null) {
-			return null;
+			return "";
 		}
 		return productType.getName();
 	}
@@ -261,36 +238,27 @@ public class BaseDataCacheUtil implements InitializingBean {
 		cacheUtil.publish("update_single_pro_cache", type);
 	}
 
-	private System getCacheSystemInfo() {
-		String res = cacheUtil.get("single:cache:system:info");
-		if (res != null) {
-			return JSON.parseObject(res, System.class);
-		}
-		return null;
-	}
-
-	private List<SystemApp> getCacheSystemApps() {
-		String res = cacheUtil.get("single:cache:system:apps");
-		if (res != null) {
-			return JSON.parseArray(res, SystemApp.class);
-		}
-		return null;
-	}
-
 	// 初始化应用信息
-	private void initSystemInfo() {
+	public System getSystemInfo() {
+		System system = null;
 		if (!cacheUtil.exists("single:cache:system:info")) {
 			Wrapper<System> wrapper = new EntityWrapper<System>();
-			System system = systemService.selectOne(wrapper);
+			system = systemService.selectOne(wrapper);
 			if (system == null) {
 				throw new RuntimeException("请先配置系统应用基本信息");
 			}
 			system.setLogoUrl(RealHostReplace.getResUrl(system.getLogoUrl()));
 			cacheUtil.set("single:cache:system:info", JSON.toJSONString(system, false));
+		} else {
+			String res = cacheUtil.get("single:cache:system:info");
+			if (res != null) {
+				system = JSON.parseObject(res, System.class);
+			}
 		}
+		return system;
 	}
 
-	private void initSystemApps() {
+	public List<SystemApp> getSystemApps() {
 		if (!cacheUtil.exists("single:cache:system:apps")) {
 			Wrapper<SystemApp> wrapper = new EntityWrapper<>();
 			wrapper.orderBy("sort_no", true);
@@ -299,7 +267,14 @@ public class BaseDataCacheUtil implements InitializingBean {
 				throw new RuntimeException("无系统应用");
 			}
 			cacheUtil.set("single:cache:system:apps", JSON.toJSONString(apps, false));
+			return apps;
+		} else {
+			String res = cacheUtil.get("single:cache:system:apps");
+			if (res != null) {
+				return JSON.parseArray(res, SystemApp.class);
+			}
 		}
+		return null;
 	}
 
 	private void loadDictItems() {
@@ -330,20 +305,30 @@ public class BaseDataCacheUtil implements InitializingBean {
 	private void loadCityDatas() {
 		if (!cacheUtil.exists("single:cache:system:city")) {
 			Wrapper<BasicCity> wrapper = new EntityWrapper<>();
-			List<BasicCity> cities = basicCityService.selectList(wrapper);
-			CityModel cm = null;
-			for (BasicCity bc : cities) {
-				cm = new CityModel();
-				cm.setCode(bc.getCode());
-				cm.setName(bc.getName());
-				cm.setPinyin(bc.getPinyin());
-				cm.setJianpin(bc.getJianpin());
-				cacheUtil.hset("single:cache:system:city", cm.getCode(), JSON.toJSONString(cm, false));
+			int page = 1;
+			while (true) {
+				PageHelper.startPage(page, 200);
+				List<BasicCity> cities = basicCityService.selectList(wrapper);
+				PageInfo<BasicCity> pageInfo = new PageInfo<BasicCity>(cities);
+				if (pageInfo.getList() == null || pageInfo.getList().isEmpty()) {
+					break;
+				} else {
+					page++;
+				}
+				CityModel cm = null;
+				for (BasicCity bc : pageInfo.getList()) {
+					cm = new CityModel();
+					cm.setCode(bc.getCode());
+					cm.setName(bc.getName());
+					cm.setPinyin(bc.getPinyin());
+					cm.setJianpin(bc.getJianpin());
+					cacheUtil.hset("single:cache:system:city", cm.getCode(), JSON.toJSONString(cm, false));
+				}
 			}
 		}
 	}
 
-	private void loadProductKindDatas() {
+	public List<ProductKind> getProductKinds() {
 		if (!cacheUtil.exists("single:cache:system:product:kind")) {
 			Wrapper<ProductKind> wrapper = new EntityWrapper<>();
 			wrapper.eq("status", "Y");
@@ -354,11 +339,21 @@ public class BaseDataCacheUtil implements InitializingBean {
 					cacheUtil.hset("single:cache:system:product:kind", productKind.getId(),
 							JSON.toJSONString(productKind, false));
 				}
+				return productKinds;
+			}
+		} else {
+			Map<String, String> res = cacheUtil.hgetAll("single:cache:system:product:kind");
+			List<ProductKind> productKinds = new ArrayList<>();
+			if (res != null && !res.isEmpty()) {
+				for (Map.Entry<String, String> r : res.entrySet()) {
+					productKinds.add(JSON.parseObject(r.getValue(), ProductKind.class));
+				}
 			}
 		}
+		return null;
 	}
 
-	private void loadProductTypeDatas() {
+	public List<ProductType> getProductTypes() {
 		if (!cacheUtil.exists("single:cache:system:product:type")) {
 			Wrapper<ProductType> wrapper = new EntityWrapper<>();
 			wrapper.eq("status", "Y");
@@ -369,8 +364,19 @@ public class BaseDataCacheUtil implements InitializingBean {
 					cacheUtil.hset("single:cache:system:product:type", productType.getId(),
 							JSON.toJSONString(productType, false));
 				}
+				return productTypes;
 			}
+		} else {
+			Map<String, String> res = cacheUtil.hgetAll("single:cache:system:product:type");
+			List<ProductType> productTypes = new ArrayList<>();
+			if (res != null && !res.isEmpty()) {
+				for (Map.Entry<String, String> r : res.entrySet()) {
+					productTypes.add(JSON.parseObject(r.getValue(), ProductType.class));
+				}
+			}
+			return productTypes;
 		}
+		return null;
 	}
 
 	// 类初始化时加载执行
@@ -392,17 +398,17 @@ public class BaseDataCacheUtil implements InitializingBean {
 
 	private void initCacheData() {
 		logger.info("init system info cache data...");
-		initSystemInfo();
+		getSystemInfo();
 		logger.info("init system apps cache data...");
-		initSystemApps();
+		getSystemApps();
 		logger.info("init dict cache data...");
 		loadDictItems();
 		logger.info("init city cache data...");
 		loadCityDatas();
 		logger.info("init product kind cache data...");
-		loadProductKindDatas();
+		getProductKinds();
 		logger.info("init product type cache data...");
-		loadProductTypeDatas();
+		getProductTypes();
 	}
 
 	private void reInitCacheData(String type) {
@@ -410,12 +416,12 @@ public class BaseDataCacheUtil implements InitializingBean {
 			logger.info("clear system info cache data...");
 			cacheUtil.del("single:cache:system:info");
 			logger.info("init system info cache data...");
-			initSystemInfo();
+			getSystemInfo();
 		} else if ("system:apps".equals(type)) {
 			logger.info("clear system apps cache data...");
 			cacheUtil.del("single:cache:system:apps");
 			logger.info("init system apps cache data...");
-			initSystemApps();
+			getSystemApps();
 		} else if ("dict".equals(type)) {
 			logger.info("clear dict type cache data...");
 			cacheUtil.del("single:cache:system:dict:type");
@@ -432,12 +438,12 @@ public class BaseDataCacheUtil implements InitializingBean {
 			logger.info("clear product kind cache data...");
 			cacheUtil.del("single:cache:system:product:kind");
 			logger.info("init product kind cache data...");
-			loadProductKindDatas();
+			getProductKinds();
 		} else if ("product:type".equals(type)) {
 			logger.info("clear product type cache data...");
 			cacheUtil.del("single:cache:system:product:type");
 			logger.info("init product type cache data...");
-			loadProductTypeDatas();
+			getProductTypes();
 		} else {
 			logger.error("通过类型：" + type + " 未找到缓存信息！");
 		}

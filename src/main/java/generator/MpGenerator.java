@@ -23,7 +23,7 @@ public class MpGenerator {
 		gc.setBaseResultMap(true);// XML ResultMap
 		gc.setBaseColumnList(false);// XML columList
 		gc.setAuthor("SiZhongxia");
-		
+
 		gc.setOpen(false);
 
 		// 自定义文件命名，注意 %s 会自动填充表实体属性！
@@ -35,25 +35,25 @@ public class MpGenerator {
 
 		// 数据源配置
 		DataSourceConfig dsc = new DataSourceConfig();
-		//IdType.UUID;
+		// IdType.UUID;
 		dsc.setTypeConvert(new MySqlTypeConvert() {
 			@Override
 			public DbColumnType processTypeConvert(String fieldType) {
 				return super.processTypeConvert(fieldType);
 			}
 		});
-		
+
 		dsc.setDriverName("com.mysql.jdbc.Driver");
-		dsc.setUsername("root");
-		dsc.setPassword("123456");
-		dsc.setUrl("jdbc:mysql://127.0.0.1:3306/single_pro_db_v2?characterEncoding=utf8");
+		dsc.setUsername("sp_root");
+		dsc.setPassword("qwertyuiop");
+		dsc.setUrl("jdbc:mysql://120.25.192.56:3306/single_pro_db_v2?characterEncoding=utf8");
 		mpg.setDataSource(dsc);
 
 		// 策略配置
 		StrategyConfig strategy = new StrategyConfig();
 		strategy.setTablePrefix(new String[] { "sp_" });// 此处可以修改为您的表前缀
 		strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-		strategy.setInclude(new String[] { "sp_project_work" }); // 需要生成的表
+		strategy.setInclude(new String[] { "sp_product_image" }); // 需要生成的表
 		// 自定义实体，公共字段
 		strategy.setSuperEntityColumns(new String[] {});
 		mpg.setStrategy(strategy);
@@ -67,7 +67,7 @@ public class MpGenerator {
 		pc.setServiceImpl("com.single.pro.service.impl");
 		pc.setXml("mybatis.xml");
 		pc.setController(null);
-		
+
 		mpg.setPackageInfo(pc);
 
 		// 执行生成

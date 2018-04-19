@@ -29,6 +29,10 @@ public class ProductModel implements Serializable {
 	 */
 	private String model;
 	/**
+	 * 产品图片
+	 */
+	private String coverPicUrl;
+	/**
 	 * 产品描述
 	 */
 	private String describe;
@@ -154,6 +158,14 @@ public class ProductModel implements Serializable {
 
 	public void setModel(String model) {
 		this.model = model;
+	}
+
+	public String getCoverPicUrl() {
+		return coverPicUrl;
+	}
+
+	public void setCoverPicUrl(String coverPicUrl) {
+		this.coverPicUrl = coverPicUrl;
 	}
 
 	public String getDescribe() {

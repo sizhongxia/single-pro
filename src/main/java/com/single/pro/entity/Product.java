@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-04-06
+ * @since 2018-04-19
  */
 @TableName("sp_product")
 public class Product implements Serializable {
@@ -80,6 +80,11 @@ public class Product implements Serializable {
      */
 	@TableField("manual_url")
 	private String manualUrl;
+    /**
+     * 产品封面图片
+     */
+	@TableField("cover_pic_url")
+	private String coverPicUrl;
     /**
      * 申请人ID
      */
@@ -223,6 +228,14 @@ public class Product implements Serializable {
 		this.manualUrl = manualUrl;
 	}
 
+	public String getCoverPicUrl() {
+		return coverPicUrl;
+	}
+
+	public void setCoverPicUrl(String coverPicUrl) {
+		this.coverPicUrl = coverPicUrl;
+	}
+
 	public String getApplyUserId() {
 		return applyUserId;
 	}
@@ -288,6 +301,7 @@ public class Product implements Serializable {
 			", commonProblem=" + commonProblem +
 			", docUrl=" + docUrl +
 			", manualUrl=" + manualUrl +
+			", coverPicUrl=" + coverPicUrl +
 			", applyUserId=" + applyUserId +
 			", showStatus=" + showStatus +
 			", contacts=" + contacts +

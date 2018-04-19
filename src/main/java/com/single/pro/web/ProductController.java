@@ -124,11 +124,24 @@ public class ProductController extends BaseController {
 				item.put("c.mechanism_type", baseDataCacheUtil.getDictItemName(product.getCompanyMechanismType()));
 				item.put("p.model", product.getModel());
 				item.put("p.describe", product.getDescribe());
-				item.put("p.doc_url", RealHostReplace.getResUrl(product.getDocUrl()));
-				item.put("p.manual_url", RealHostReplace.getResUrl(product.getManualUrl()));
+				if(StringUtils.isNotBlank(product.getDocUrl())) {
+					item.put("p.doc_url", RealHostReplace.getResUrl(product.getDocUrl()));
+				} else {
+					item.put("p.doc_url", "");
+				}
+				if(StringUtils.isNotBlank(product.getManualUrl())) {
+					item.put("p.manual_url", RealHostReplace.getResUrl(product.getManualUrl()));
+				} else {
+					item.put("p.manual_url", "");
+				}
 				item.put("p.show_status", product.getShowStatus());
 				item.put("p.contacts", product.getContacts());
 				item.put("p.contact_tel", product.getContactTel());
+				if(StringUtils.isNotBlank(product.getCoverPicUrl())) {
+					item.put("p.coverPicUrl", RealHostReplace.getResUrl(product.getCoverPicUrl()));
+				} else {
+					item.put("p.coverPicUrl", "");
+				}
 				item.put("p.create_time", dateFormat.format(product.getCreateTime()));
 				item.put("p.update_time", dateFormat.format(product.getUpdateTime()));
 				productList.add(item);
@@ -555,8 +568,11 @@ public class ProductController extends BaseController {
 		boolean change = false;
 		if (productImage == null) {
 			isCover = "Y";
+			change = true;
+			product.setCoverPicUrl(picUrl);
 		} else {
 			if ("Y".equals(isCover)) {
+				product.setCoverPicUrl(picUrl);
 				productImage.setIsCover("N");
 				productImage.setUpdateTime(now);
 				change = true;
@@ -572,16 +588,23 @@ public class ProductController extends BaseController {
 		entity.setCreateTime(now);
 		entity.setUpdateTime(now);
 
-		if (productImageService.insert(entity)) {
-			if (change) {
+		if (!productImageService.insert(entity)) {
+			res.put("message", "未知错误1");
+			return res;
+		}
+
+		if (change) {
+			if (!productService.updateById(product)) {
+				res.put("message", "未知错误3");
+				return res;
+			}
+
+			if (productImage != null) {
 				if (!productImageService.updateById(productImage)) {
 					res.put("message", "未知错误2");
 					return res;
 				}
 			}
-		} else {
-			res.put("message", "未知错误1");
-			return res;
 		}
 
 		res.put("statusCode", 200);
@@ -609,6 +632,11 @@ public class ProductController extends BaseController {
 			res.put("message", "无效的参数");
 			return res;
 		}
+		Product product = productService.selectById(productImage.getProductId());
+		if (product == null) {
+			res.put("message", "无效的产品参数");
+			return res;
+		}
 
 		Wrapper<ProductImage> wrapper = new EntityWrapper<>();
 		wrapper.eq("product_id", productImage.getProductId());
@@ -619,16 +647,24 @@ public class ProductController extends BaseController {
 
 		productImage.setIsCover("Y");
 		productImage.setUpdateTime(now);
-		if (productImageService.updateById(productImage)) {
+		if (!productImageService.updateById(productImage)) {
+			res.put("message", "未知错误1");
+			return res;
+		}
+
+		product.setCoverPicUrl(productImage.getPath());
+		if (!productService.updateById(product)) {
+			res.put("message", "未知错误2");
+			return res;
+		}
+
+		if (productImageDeault != null) {
 			productImageDeault.setIsCover("N");
 			productImageDeault.setUpdateTime(now);
 			if (!productImageService.updateById(productImageDeault)) {
-				res.put("message", "未知错误2");
+				res.put("message", "未知错误3");
 				return res;
 			}
-		} else {
-			res.put("message", "未知错误1");
-			return res;
 		}
 
 		res.put("statusCode", 200);

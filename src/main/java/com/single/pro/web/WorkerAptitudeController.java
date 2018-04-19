@@ -98,16 +98,6 @@ public class WorkerAptitudeController extends BaseController {
 				item = new HashMap<>();
 				item.put("wa.id", workerAptitudeModel.getId());
 				item.put("wa.worker_id", workerAptitudeModel.getWorkerId());
-				item.put("u.user_name", workerAptitudeModel.getUserName());
-				String provinceCode = workerAptitudeModel.getProvince();
-				item.put("u.province", provinceCode);
-				item.put("provinceName", "");
-				if (StringUtils.isNotBlank(provinceCode)) {
-					String provinceName = baseDataCacheUtil.getCityName(provinceCode);
-					if (StringUtils.isNotBlank(provinceName)) {
-						item.put("provinceName", provinceName);
-					}
-				}
 				String cityCode = workerAptitudeModel.getCity();
 				item.put("u.city", cityCode);
 				item.put("cityName", "");
@@ -137,12 +127,11 @@ public class WorkerAptitudeController extends BaseController {
 						item.put("type_name", typeName);
 					}
 				}
-				item.put("wa.model", workerAptitudeModel.getModel());
+				item.put("wa.model", workerAptitudeModel.getProductModel());
 				item.put("wa.apply_info", workerAptitudeModel.getApplyInfo());
 				item.put("wa.apply_status", workerAptitudeModel.getApplyStatus());
 
 				item.put("wa.apply_time", dateFormat.format(workerAptitudeModel.getApplyTime()));
-				item.put("wa.update_time", dateFormat.format(workerAptitudeModel.getUpdateTime()));
 				systemRoleList.add(item);
 			}
 

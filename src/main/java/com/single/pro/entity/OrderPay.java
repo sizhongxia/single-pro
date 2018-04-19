@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-04-15
+ * @since 2018-04-19
  */
 @TableName("sp_order_pay")
 public class OrderPay implements Serializable {

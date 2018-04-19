@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-04-06
+ * @since 2018-04-19
  */
 @TableName("sp_product_image")
 public class ProductImage implements Serializable {

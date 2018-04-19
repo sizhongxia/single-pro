@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-04-06
+ * @since 2018-04-19
  */
 @Service
 public class ProductImageServiceImpl extends ServiceImpl<ProductImageDao, ProductImage> implements ProductImageService {

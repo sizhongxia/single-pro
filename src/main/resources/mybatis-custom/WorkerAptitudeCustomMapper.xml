@@ -4,32 +4,34 @@
 
 	<select id="findWorkerAptitudes" parameterType="java.util.Map" resultType="com.single.pro.model.WorkerAptitudeModel">
 		select 
-			wa.id,
-			wa.worker_id as workerId,
-			u.user_name as userName,
-			u.province,
-			u.city,
-			wa.product_id as productId,
+			a.id as id,
+			a.worker_id as workerId,
+			a.city as city,
+			a.apply_status as applyStatus,
+			a.apply_info as applyInfo,
+			a.apply_time as applyTime,
+			p.`id` as productId,
 			p.`name` as productName,
 			p.kind_id as kindId,
 			p.type_id as typeId,
-			wa.model,
-			wa.apply_info as applyInfo,
-			wa.apply_status as applyStatus,
-			wa.apply_time as applyTime,
-			wa.update_time as updateTime
-			
-			from ((sp_worker_aptitude wa
-				left join sp_user_worker uw on wa.worker_id=uw.id)
-				left join sp_user u on uw.user_id=u.id)
-				left join sp_product p on wa.product_id=p.id
-		<if test="searchParams != null">
+			c.`name` as companyName,
+			p.cover_pic_url as coverPicUrl,
+			p.model as productModel
+		 from 
+			(sp_worker_aptitude a 
+			left join sp_product p on a.product_id = p.id)
+			left join sp_company c on p.company_id = c.id
 			<where>
-				<foreach collection="searchParams" item="item" separator="and">
-					<![CDATA[ ${item.field} ${item.operator} #{item.value} ]]>
-				</foreach>
+					<if test="workerId != null">
+						and a.worker_id = #{workerId}
+					</if>
+					<if test="kindId != null">
+						and p.kind_id = #{kindId}
+					</if>
+					<if test="typeId != null">
+						and p.kind_id = #{typeId}
+					</if>
 			</where>
-		</if>
-			order by ${orderByClause}
+			order by a.apply_time desc
 	</select>
 </mapper>
