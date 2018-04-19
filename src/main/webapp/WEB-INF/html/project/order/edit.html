@@ -163,21 +163,19 @@
       			laydateInit('#etime', function(value) {
       				_this.order.expectTime = value;
       			});
-      			
-      			
-   				  $('#selectWorkerInput').autocompleter({
-   				        highlightMatches: true,
-   				        source: '${rc.contextPath}/project/order/workers',
-   				        template: '{{ label }} <span>({{ value }})</span>',
-   				        hint: true,
-   				        empty: false,
-   				        limit: 5,
-   				        callback: function (value, index, selected) {
-   				            if (selected) {
-   				               console.info(selected);
-   				            }
-   				        }
-   				    });
+			  	$('#selectWorkerInput').autocompleter({
+			        highlightMatches: true,
+			        source: '${rc.contextPath}/project/order/workers',
+			        template: '({{ value }}){{ label }} <span>(手机号:{{ phoneNo }}，评级:{{ gradeLevel }}星)</span>',
+			        hint: true,
+			        empty: false,
+			        limit: 5,
+			        callback: function (value, index, selected) {
+			            if (selected) {
+			               _this.order.workerNo = selected.value
+			            }
+			        }
+			    });
       			
       		}
 		})

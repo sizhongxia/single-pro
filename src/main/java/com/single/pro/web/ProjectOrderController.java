@@ -28,11 +28,13 @@ import com.single.pro.entity.Project;
 import com.single.pro.entity.ProjectWork;
 import com.single.pro.entity.User;
 import com.single.pro.entity.UserWorker;
+import com.single.pro.model.WorkerAptitudeUserModel;
 import com.single.pro.service.OrderService;
 import com.single.pro.service.ProjectService;
 import com.single.pro.service.ProjectWorkService;
 import com.single.pro.service.UserService;
 import com.single.pro.service.UserWorkerService;
+import com.single.pro.service.custom.WorkerAptitudeCustomService;
 import com.xiaoleilu.hutool.date.DateUtil;
 
 @Controller
@@ -51,6 +53,8 @@ public class ProjectOrderController extends BaseController {
 	UserService userService;
 	@Autowired
 	UserWorkerService userWorkerService;
+	@Autowired
+	WorkerAptitudeCustomService workerAptitudeCustomService;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -347,18 +351,181 @@ public class ProjectOrderController extends BaseController {
 	@RequiresAuthentication
 	@RequestMapping(value = { "/workers" }, method = { RequestMethod.GET, RequestMethod.POST })
 	public List<Map<String, Object>> workers(HttpServletRequest request) throws Exception {
-
-		String query = request.getParameter("query");
-		String limit = request.getParameter("limit");
-		Integer limitNum = new Integer(limit);
 		List<Map<String, Object>> list = new ArrayList<>();
-		for (int i = 0; i < limitNum; i++) {
-			Map<String, Object> data = new HashMap<String, Object>();
-			data.put("label", query);
-			data.put("value", limit);
-			list.add(data);
+		String query = request.getParameter("query");
+		if (StringUtils.isBlank(query)) {
+			return list;
+		}
+		String limit = request.getParameter("limit");
+		Integer limitNum = NumberUtils.toInt(limit, 10);
+
+		Map<String, Object> params = new HashMap<>();
+		params.put("workerNo", query);
+		params.put("offset", limitNum);
+		List<WorkerAptitudeUserModel> workers = workerAptitudeCustomService.selectValidWorker(params);
+		if (workers == null || workers.isEmpty()) {
+			return list;
+		}
+		Map<String, Object> item = null;
+		for (WorkerAptitudeUserModel user : workers) {
+			item = new HashMap<>();
+			item.put("label", user.getUserName());
+			item.put("value", user.getWorkerNo());
+			item.put("phoneNo", user.getPhoneNo());
+			item.put("age", user.getAge());
+			item.put("gradeLevel", user.getGradeLevel());
+			item.put("evaluateTimes", user.getEvaluateTimes());
+			list.add(item);
 		}
 		return list;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/update")
+	public Map<String, Object> update(HttpServletRequest request) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String csrf = request.getParameter("csrf");
+		if (StringUtils.isBlank(csrf)) {
+			res.put("message", "无效的表单，E:01，请刷新页面后重试");
+			return res;
+		}
+		String _csrf = baseDataCacheUtil.getPageCsrf("project_order_edit");
+		if (_csrf == null) {
+			res.put("message", "表单已失效，请刷新页面后重试");
+			return res;
+		}
+		if (!csrf.equals(_csrf)) {
+			res.put("message", "表单已失效，你可能在其他页面已打开该页面");
+			return res;
+		}
+
+		String id = request.getParameter("id");
+		if (StringUtils.isBlank(id)) {
+			res.put("message", "未传入订单记录ID");
+			return res;
+		}
+
+		String workerNo = request.getParameter("workerNo");
+		if (StringUtils.isNotBlank(workerNo) && !NumberUtils.isDigits(workerNo)) {
+			res.put("message", "工人编号格式不正确");
+			return res;
+		}
+
+		String productNum = request.getParameter("productNum");
+		if (StringUtils.isBlank(productNum)) {
+			res.put("message", "请输入产品数量描述");
+			return res;
+		}
+
+		String surveyChoice = request.getParameter("surveyChoice");
+		if (StringUtils.isBlank(surveyChoice)) {
+			surveyChoice = "false";
+		}
+		boolean surveyChoiceFlag = new Boolean(surveyChoice);
+
+		String checkChoice = request.getParameter("checkChoice");
+		if (StringUtils.isBlank(checkChoice)) {
+			checkChoice = "false";
+		}
+		boolean checkChoiceFlag = new Boolean(checkChoice);
+
+		String constructChoice = request.getParameter("constructChoice");
+		if (StringUtils.isBlank(constructChoice)) {
+			constructChoice = "false";
+		}
+		boolean constructChoiceFlag = new Boolean(constructChoice);
+		if (!constructChoiceFlag) {
+			res.put("message", "施工服务为必选项");
+			return res;
+		}
+
+		String trainChoice = request.getParameter("trainChoice");
+		if (StringUtils.isBlank(trainChoice)) {
+			trainChoice = "false";
+		}
+		boolean trainChoiceFlag = new Boolean(trainChoice);
+		if (!trainChoiceFlag) {
+			res.put("message", "培训服务为必选项");
+			return res;
+		}
+
+		String acceptChoice = request.getParameter("acceptChoice");
+		if (StringUtils.isBlank(acceptChoice)) {
+			acceptChoice = "false";
+		}
+		boolean acceptChoiceFlag = new Boolean(acceptChoice);
+		if (!acceptChoiceFlag) {
+			res.put("message", "验收服务为必选项");
+			return res;
+		}
+
+		String expectTime = request.getParameter("expectTime");
+		if (StringUtils.isBlank(expectTime)) {
+			res.put("message", "请选择一个施工开始时间");
+			return res;
+		}
+
+		String expectDays = request.getParameter("expectDays");
+		if (!NumberUtils.isDigits(expectDays)) {
+			res.put("message", "请输入施工天数");
+			return res;
+		}
+
+		String remarks = request.getParameter("remarks");
+		if (StringUtils.isBlank(remarks)) {
+			remarks = "";
+		}
+
+		Order order = orderService.selectById(id);
+		if (order == null) {
+			res.put("message", "无效的订单ID");
+			return res;
+		}
+
+		if (NumberUtils.isDigits(workerNo)) {
+			Wrapper<UserWorker> wrapper = new EntityWrapper<>();
+			wrapper.eq("worker_no", new Integer(workerNo));
+			UserWorker userWorker = userWorkerService.selectOne(wrapper);
+			if (userWorker == null) {
+				res.put("message", "无效的工人编号");
+				return res;
+			}
+			User user = userService.selectById(userWorker.getUserId());
+			if (user == null) {
+				res.put("message", "无效的用户信息");
+				return res;
+			}
+			order.setWorkerId(user.getId());
+			order.setWorkerAge(user.getAge());
+			order.setWorkerName(user.getUserName());
+		} else {
+			order.setWorkerId("");
+			order.setWorkerAge(0);
+			order.setWorkerName("");
+		}
+
+		order.setProductNum(productNum);
+		order.setSerSurveyChoice(surveyChoiceFlag ? "Y" : "N");
+		order.setSerCheckChoice(checkChoiceFlag ? "Y" : "N");
+		order.setSerConstructChoice(constructChoiceFlag ? "Y" : "N");
+		order.setSerTrainChoice(trainChoiceFlag ? "Y" : "N");
+		order.setSerAcceptChoice(acceptChoiceFlag ? "Y" : "N");
+		order.setExpectTime(expectTime);
+		order.setExpectDays(new Integer(expectDays));
+		order.setRemarks(remarks);
+
+		if (!orderService.updateById(order)) {
+			res.put("message", "未知错误01");
+			return res;
+		}
+
+		res.put("statusCode", 200);
+		res.put("message", "更新成功");
+		return res;
 	}
 
 }

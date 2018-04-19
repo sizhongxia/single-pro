@@ -53,4 +53,36 @@
 			</where>
 			order by a.apply_time desc
 	</select>
+	
+	
+	<select id="selectValidWorker" parameterType="java.util.Map" resultType="com.single.pro.model.WorkerAptitudeUserModel">
+		select 
+			wa.worker_id as workerId, 
+			u.user_name as userName,
+			u.age as age,
+			u.gender as gender,
+			u.phone_no as phoneNo,
+			uw.worker_no as workerNo,
+			uw.grade_level as gradeLevel,
+			uw.evaluate_times as evaluateTimes
+		 from 
+			(sp_worker_aptitude wa left join sp_user u on wa.worker_id = u.id)
+				left join sp_user_worker uw on uw.user_id = u.id
+			
+			<where>
+				<if test="city != null">
+					and wa.city = #{city}
+				</if>
+				<if test="productId != null">
+					and wa.product_id = #{productId}
+				</if>
+				<if test="workerNo != null">
+					and uw.worker_no like concat('%', #{workerNo}, '%')
+				</if>
+			</where>
+			
+			group by wa.worker_id
+			limit 0, ${offset}
+	</select>
+	
 </mapper>
