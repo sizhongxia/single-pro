@@ -10,8 +10,8 @@
 	        <table data-toggle="topjui-edatagrid"
 	               data-options="id:'userCustomerTg',
 			            rownumbers: !0,
-			            pagination: !1,
-			            pageSize: 0,
+				   	    pagination: !0,
+			            pageSize: 10,
 			            editable: !1,
 				   	    singleSelect: !0,
 			            checkOnSelect: !0,
@@ -45,6 +45,15 @@
 		                            return '<div>禁用</div>';
 		                        } else {
 		                            return '<div>无效</div>';
+		                        }
+		                    }"></th>
+				        <th data-options="field:'delete_flag',title:'移除状态',formatter:function(value,row,index){
+		                        if (value == 'Y') {
+		                            return '<div>已移除</div>';
+		                        } else if (value == 'N') {
+		                            return '<div>正常</div>';
+		                        } else {
+		                            return '<div>-</div>';
 		                        }
 		                    }"></th>
 				        <th data-options="field:'regist_time',title:'注册时间'"></th>
@@ -144,6 +153,20 @@
 	           	   href: remoteHost + '/user/customer/wechatDetailForm',
 	               url: remoteHost + '/user/customer/wechatDetail?id={id}'
 	       }">微信账户</a>
+	   
+	    <a href="javascript:void(0)"
+	       data-toggle="topjui-menubutton"
+	       data-options="method: 'openDialog',
+	      		extend: '#userCustomerTg-toolbar',
+	            iconCls: 'fa fa-id-card',
+	       		btnCls: 'topjui-btn-normal',
+	            dialog: {
+	               title: '身份证认证',
+		           width: 720,
+		           height: 450,
+	           	   href: remoteHost + '/user/identityCardIfream?userId={id}',
+	               url: remoteHost + '/user/worker/detail?id={id}'
+	       }">身份证认证</a>
 	    
 	       <a href="javascript:void(0)"
 	       data-toggle="topjui-menubutton"

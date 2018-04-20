@@ -145,6 +145,7 @@ public class UserWorkerController extends BaseController {
 				item.put("bond_status", userWorker.getBondStatus());
 
 				item.put("account_status", userWorker.getAccountStatus());
+				item.put("delete_flag", userWorker.getDeleteFlag());
 				item.put("regist_time", df.format(userWorker.getRegistTime()));
 				item.put("update_time", df.format(userWorker.getUpdateTime()));
 				systemUserList.add(item);
@@ -322,6 +323,7 @@ public class UserWorkerController extends BaseController {
 		map.put("phoneNo", user.getPhoneNo());
 		map.put("addressDetail", user.getAddressDetail());
 		map.put("accountStatus", user.getAccountStatus());
+		map.put("deleteFlag", user.getDeleteFlag());
 		map.put("workerId", userWorker.getId());
 		map.put("remarks", userWorker.getRemarks());
 		return map;
@@ -449,11 +451,10 @@ public class UserWorkerController extends BaseController {
 		user.setAddressDetail("");
 		user.setAccountStatus("Y");
 		user.setUserType("W");
-		Date now = new Date();
-		user.setRegistTime(now);
-		user.setUpdateTime(now);
+		user.setRegistTime(DateUtil.date());
+		user.setUpdateTime(DateUtil.date());
 		user.setDeleteFlag("N");
-		user.setDeleteTime(now);
+		user.setDeleteTime(DateUtil.date());
 
 		if (!userService.insert(user)) {
 			res.put("message", "未知错误");
@@ -480,8 +481,8 @@ public class UserWorkerController extends BaseController {
 		userWorker.setGradeLevel(new BigDecimal(3));
 		userWorker.setRemarks("");
 		userWorker.setLastOrderTime(null);
-		userWorker.setCreateTime(now);
-		userWorker.setUpdateTime(now);
+		userWorker.setCreateTime(DateUtil.date());
+		userWorker.setUpdateTime(DateUtil.date());
 
 		if (!userWorkerService.insert(userWorker)) {
 			res.put("message", "未知错误");
@@ -535,8 +536,12 @@ public class UserWorkerController extends BaseController {
 
 		user.setAddressDetail(request.getParameter("addressDetail"));
 		user.setAccountStatus(request.getParameter("accountStatus"));
-		Date now = new Date();
-		user.setUpdateTime(now);
+		String deleteFlag = request.getParameter("deleteFlag");
+		user.setDeleteFlag(deleteFlag);
+		if ("Y".equals(deleteFlag)) {
+			user.setDeleteTime(DateUtil.date());
+		}
+		user.setUpdateTime(DateUtil.date());
 
 		if (!userService.updateById(user)) {
 			res.put("message", "未知错误");
@@ -553,7 +558,7 @@ public class UserWorkerController extends BaseController {
 			remarks = "";
 		}
 		userWorker.setRemarks(remarks);
-		userWorker.setUpdateTime(now);
+		userWorker.setUpdateTime(DateUtil.date());
 
 		if (!userWorkerService.updateById(userWorker)) {
 			res.put("message", "未知错误");

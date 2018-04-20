@@ -26,17 +26,22 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.single.pro.cache.BaseDataCacheUtil;
 import com.single.pro.entity.Role;
 import com.single.pro.entity.SystemUser;
 import com.single.pro.entity.SystemUserRole;
+import com.single.pro.entity.UserIdentityCard;
 import com.single.pro.model.SystemUserModel;
 import com.single.pro.service.RoleService;
 import com.single.pro.service.SystemUserRoleService;
 import com.single.pro.service.SystemUserService;
+import com.single.pro.service.UserIdentityCardService;
 import com.single.pro.service.custom.SystemUserCustomService;
+import com.single.pro.storage.RealHostReplace;
 import com.single.pro.util.AdvanceFilterUtil;
 import com.single.pro.util.IdUtil;
 import com.single.pro.util.Md5Util;
+import com.xiaoleilu.hutool.date.DateUtil;
 
 @Controller
 @RequestMapping("user")
@@ -50,6 +55,10 @@ public class UserController extends BaseController {
 	RoleService roleService;
 	@Autowired
 	SystemUserRoleService systemUserRoleService;
+	@Autowired
+	UserIdentityCardService userIdentityCardService;
+	@Autowired
+	BaseDataCacheUtil baseDataCacheUtil;
 
 	@RequiresAuthentication
 	@RequestMapping(value = { "/index" }, method = { RequestMethod.GET })
@@ -87,7 +96,7 @@ public class UserController extends BaseController {
 
 		Set<String> exclusionFields = new HashSet<>();
 		exclusionFields.add("role_names");
-		params = AdvanceFilterUtil.initSerachParams(advanceFilter, exclusionFields , "su.", params);
+		params = AdvanceFilterUtil.initSerachParams(advanceFilter, exclusionFields, "su.", params);
 
 		PageHelper.startPage(new Integer(pageStr), new Integer(rowsStr));
 		List<SystemUserModel> users = systemUserCustomService.findSystemUsersWithRole(params);
@@ -410,6 +419,104 @@ public class UserController extends BaseController {
 		}
 
 		res.put("statusCode", 200);
+		return res;
+	}
+
+	// 用户身份证信息
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/identityCardIfream" }, method = { RequestMethod.GET })
+	public ModelAndView identityCardIfream(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("user/identityCardIfream");
+		mav.addObject("userId", request.getParameter("userId"));
+		mav.addObject("ifreamId", System.currentTimeMillis());
+		return mav;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = { "/identityCard" }, method = { RequestMethod.GET })
+	public ModelAndView identityCard(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("user/identityCard");
+		String userId = request.getParameter("userId");
+		if (StringUtils.isBlank(userId)) {
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "参数“userId”丢失");
+			return mav;
+		}
+		Wrapper<UserIdentityCard> wrapper = new EntityWrapper<>();
+		wrapper.eq("user_id", userId);
+		UserIdentityCard userIdentityCard = userIdentityCardService.selectOne(wrapper);
+		if (userIdentityCard == null) {
+			mav = new ModelAndView("error/error");
+			mav.addObject("msg", "暂无认证申请");
+			return mav;
+		}
+		mav.addObject("id", userIdentityCard.getId());
+		mav.addObject("identityCardNo", userIdentityCard.getIdentityCard());
+		mav.addObject("frontPic", RealHostReplace.getResUrl(userIdentityCard.getIdentityCardFrontPic()));
+		mav.addObject("backPic", RealHostReplace.getResUrl(userIdentityCard.getIdentityCardBackPic()));
+		mav.addObject("uploadTime", DateUtil.format(userIdentityCard.getUploadTime(), "yyyy-MM-dd"));
+		if (!"D".equals(userIdentityCard.getAuditState()) && userIdentityCard.getAuditTime() != null) {
+			mav.addObject("auditTime", DateUtil.format(userIdentityCard.getAuditTime(), "yyyy-MM-dd"));
+		} else {
+			mav.addObject("auditTime", "");
+		}
+		mav.addObject("status", userIdentityCard.getAuditState());
+		mav.addObject("csrf", baseDataCacheUtil.setPageCsrf("user_identity_card"));
+		return mav;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/identityHandle")
+	public Map<String, Object> identityHandle(HttpServletRequest request) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String csrf = request.getParameter("csrf");
+		if (StringUtils.isBlank(csrf)) {
+			res.put("message", "无效的表单，E:01，请刷新页面后重试");
+			return res;
+		}
+		String _csrf = baseDataCacheUtil.getPageCsrf("user_identity_card");
+		if (_csrf == null) {
+			res.put("message", "表单已失效，请刷新页面后重试");
+			return res;
+		}
+		if (!csrf.equals(_csrf)) {
+			res.put("message", "表单已失效，你可能在其他页面已打开该页面");
+			return res;
+		}
+
+		String id = request.getParameter("id");
+		if (StringUtils.isBlank(id)) {
+			res.put("message", "未传入记录ID");
+			return res;
+		}
+
+		String status = request.getParameter("status");
+		if (StringUtils.isBlank(status)) {
+			res.put("message", "请选择一个类型");
+			return res;
+		}
+
+		UserIdentityCard userIdentityCard = userIdentityCardService.selectById(id);
+		if (userIdentityCard == null) {
+			res.put("message", "无效的记录ID");
+			return res;
+		}
+
+		userIdentityCard.setAuditState(status);
+		userIdentityCard.setAuditTime(DateUtil.date());
+
+		if (!userIdentityCardService.updateById(userIdentityCard)) {
+			res.put("message", "未知错误");
+			return res;
+		}
+
+		res.put("statusCode", 200);
+		res.put("message", "处理成功");
 		return res;
 	}
 

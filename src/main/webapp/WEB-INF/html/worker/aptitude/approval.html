@@ -114,8 +114,7 @@ label.item {
 				<div class="col-xs-6">
 					<div class="form-group">
 						<label class="control-label">状态 <span style="color: red">*</span></label>
-						<select v-model="aptitude.applyStatus" class="form-control"
-							v-bind:disabled="isAble">
+						<select v-model="aptitude.applyStatus" class="form-control" v-bind:disabled="isAble">
 							<option value="D">待处理</option>
 							<option value="Y">申请通过</option>
 							<option value="N">申请驳回</option>

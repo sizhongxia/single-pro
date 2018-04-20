@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+	<!-- TopJUI框架样式 -->
+	<link type="text/css" href="${rc.contextPath}/statics/ui/topjui/css/topjui.core.min.css?v=1.1" rel="stylesheet">
+	<link type="text/css" href="${rc.contextPath}/statics/ui/topjui/themes/default/topjui.black.css?v=2.3" rel="stylesheet"/>
+    <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/bootstrap.min.css" rel="stylesheet" />
+    <link type="text/css" href="${rc.contextPath}/statics/ui/other/matrial/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
+    <link type="text/css" href="${rc.contextPath}/statics/ui/static/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link type="text/css" href="${rc.contextPath}/statics/ui/other/pager/pager.css?v=1.0" rel="stylesheet" />
+    <style type="text/css">
+    	html, body {padding: 0;margin: 0;background: #fff;}
+    	.content {width: 718px;height: auto;background: #fff;overflow: auto;}
+    	.category {padding: 12px;}
+    	.text-primary {color: #2c3b41;}
+    	.container-fluid {padding: 0;margin: 0;}
+    	.form-group {margin-top: 0;margin-bottom: 0px;}
+    	.form-group label.control-label{color:#484848;margin: 0px 0px 0px 6px;}
+    	.form-control, .form-group .form-control {padding: 0px 6px;font-size: 12px;}
+    	.m-style .active {background: #2c3b41;border-color: #2c3b41;}
+    	.m-style a:hover {background: #2c3b41;border-color: #2c3b41;}
+    	.layui-layer-setwin .layui-layer-close1 {background-position: 0px 0px;cursor: pointer;}
+    	.form-group .form-control{width: 100% !important;}
+    	.search-btn {height: 30px;line-height: 6px;margin-top: 22px;background-color: #2c3b41 !important;}
+    </style>
+</head>
+<body>
+    <div class="wrapper" id="app">
+        <div class="content">
+        	<div class="category">
+                  <div class="col-xs-12" style="border-bottom: 1px solid #EEE;margin-bottom: 12px;padding-bottom: 4px;">
+                      <label class="control-label">身份证 IdentityCard</label>
+                  </div>
+                  <div class="col-xs-6">
+                  	<label class="control-label item">证件号码：</label> ${identityCardNo!}
+                  </div>
+                  <div class="col-xs-6">
+                  	<label class="control-label item">上传时间：</label> ${uploadTime!}
+                  </div>
+                  <div class="col-xs-5 col-xs-offset-1" style="height: 160px;margin-top: 12px;">
+                  	<img style="width:100%;height: 100%" src="${frontPic!}"/>
+                  </div>
+                  <div class="col-xs-5" style="height: 160px;margin-top: 12px;">
+                  	<img style="width:100%;height: 100%" src="${backPic!}"/>
+                  </div>
+                  <div class="col-xs-12" style="border-bottom: 1px solid #EEE;margin-bottom: 12px;padding-bottom: 4px;">
+                      <label class="control-label">审核状态 Status</label>
+                  </div>
+                   <div class="col-xs-6">
+                       <div class="form-group">
+                           <label class="control-label">状态</label>
+                           <select v-model="identity.status" class="form-control" v-bind:disabled="!editFlg">
+                           		<option v-for="item in statuss" v-bind:value="item.value">{{ item.name }}</option>
+                           </select>
+                       </div>
+                   </div>
+                   <div class="col-xs-6">
+                       <div class="form-group">
+                           <label class="control-label">处理时间</label>
+                           <input class="form-control" readonly="readonly" value="${auditTime!}"/>
+                       </div>
+                   </div>
+                   <div class="col-xs-12" v-if="editFlg" style="text-align: center;">
+                       <button type="submit" class="btn btn-success search-btn" @click="submit">保存</button>
+                   </div>
+                   <div style="clear: both;"></div>
+             </div>
+        </div>
+    </div>
+</body>
+<!--   Core JS Files   -->
+<script src="${rc.contextPath}/statics/ui/other/matrial/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/matrial/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/matrial/js/material.min.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/layer/layer.min.js" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/util.js?v=1.0" type="text/javascript"></script>
+<script src="${rc.contextPath}/statics/ui/other/vue.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+	$(function(){
+		
+		new Vue({
+   	    	el: '#app',
+   	     	data: {
+   	     		editFlg: true,
+   	     		statuss: [
+   	     			{name:'审核通过', value:'Y'},
+   	     			{name:'审核未通过', value:'N'},
+   	     			{name:'审核中', value:'D'}
+   	     		],
+	   	     	identity: {
+	   	     		id: '${id!}',
+		   	     	status: '${status!}',
+		   	     	csrf: '${csrf!}'
+	   	     	}
+   	     	},
+      		methods: {
+      			submit: function(page) {
+      				var _this = this;
+          			let loading = _this.loading();
+          			new Promise(function (resolve, reject) {
+          				post('${rc.contextPath}/user/identityHandle', _this.identity, resolve, reject);
+          			}).then(function(data){
+          				layer.msg(data.message);
+          				if(data.statusCode == 200) {
+          					window.location.reload();
+          				}
+	          			_this.closeLoading(loading);
+          			}).catch(function (reason) {
+	          			_this.closeLoading(loading);
+          			});
+			    },
+			    loading: function() {
+			    	return layer.load(0, {shade: [0.1, '#EEE']});
+			    },
+			    closeLoading: function(index) {
+			    	layer.close(index);
+			    }
+      		},
+      		mounted: function () {
+      			var _this = this;
+      			setTimeout(function() {
+      				if(_this.identity.status == 'Y' || _this.identity.status == 'N') {
+          				_this.editFlg = false;
+          			}
+      			});
+      		}
+		})
+	})
+
+</script>
+</html>

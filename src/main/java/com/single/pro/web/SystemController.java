@@ -120,7 +120,7 @@ public class SystemController extends BaseController {
 			return res;
 		}
 		// 更新通知
-		baseDataCacheUtil.updateCachePublish("system:apps");
+		baseDataCacheUtil.updateCachePublish("system:info");
 		res.put("statusCode", 200);
 		res.put("message", "更新成功");
 		return res;

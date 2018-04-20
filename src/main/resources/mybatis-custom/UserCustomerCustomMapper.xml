@@ -17,6 +17,7 @@
 			u.`county` as county,
 			u.`address_detail` as addressDetail,
 			u.`account_status` as accountStatus,
+			u.`delete_flag` as deleteFlag,
 			u.`user_type` as userType,
 			u.`regist_time` as registTime,
 			u.`update_time` as updateTime,

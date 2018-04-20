@@ -12,7 +12,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author SiZhongxia
- * @since 2018-04-19
+ * @since 2018-04-20
  */
 @TableName("sp_order")
 public class Order implements Serializable {
@@ -259,10 +259,15 @@ public class Order implements Serializable {
 	@TableField("build_status")
 	private String buildStatus;
     /**
-     * 订单状态（Y:已完成，D:已接单，N:已取消，W:待工人确认，P:待平台确认）
+     * 订单状态（Y:已完成，D:已接单，W:待工人确认，P:待平台确认）
      */
 	@TableField("order_status")
 	private String orderStatus;
+    /**
+     * 取消状态（D:取消申请中，Y:已取消，Z:正常状态）
+     */
+	@TableField("cancle_status")
+	private String cancleStatus;
     /**
      * 备注说明
      */
@@ -671,6 +676,14 @@ public class Order implements Serializable {
 		this.orderStatus = orderStatus;
 	}
 
+	public String getCancleStatus() {
+		return cancleStatus;
+	}
+
+	public void setCancleStatus(String cancleStatus) {
+		this.cancleStatus = cancleStatus;
+	}
+
 	public String getRemarks() {
 		return remarks;
 	}
@@ -747,6 +760,7 @@ public class Order implements Serializable {
 			", releaseTime=" + releaseTime +
 			", buildStatus=" + buildStatus +
 			", orderStatus=" + orderStatus +
+			", cancleStatus=" + cancleStatus +
 			", remarks=" + remarks +
 			", createTime=" + createTime +
 			", updateTime=" + updateTime +

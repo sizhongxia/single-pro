@@ -74,7 +74,6 @@
                                     	<option value="">全部</option>
                                     	<option value="Y">已完成</option>
                                     	<option value="D">已接单</option>
-                                    	<option value="N">已取消</option>
                                     	<option value="W">待工人确认</option>
                                     	<option value="P">待平台确认</option>
                                     </select>
@@ -88,6 +87,17 @@
                                     	<option value="Y">已完工</option>
                                     	<option value="R">进行中</option>
                                     	<option value="D">待施工</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-xs-5" v-show="searchMore">
+                                <div class="form-group">
+                                    <label class="control-label">取消状态</label>
+                                    <select v-model="searchParam.cancleStatus" class="form-control">
+                                    	<option value="">全部</option>
+                                    	<option value="Z">正常</option>
+                                    	<option value="Y">已取消</option>
+                                    	<option value="D">取消申请中</option>
                                     </select>
                                 </div>
                             </div>
@@ -125,6 +135,7 @@
 	                                <th width="105" class="text-center">已支付金额</th>
 	                                <th width="85" class="text-center">订单状态</th>
 	                                <th width="85" class="text-center">施工状态</th>
+	                                <th width="85" class="text-center">取消状态</th>
 	                                <th width="125" class="text-center">产品名称</th>
 	                                <th width="105" class="text-center">产品型号</th>
 	                                <th width="135" class="text-center">产品厂家</th>
@@ -151,6 +162,7 @@
                                     <td class="text-center">{{ item.paidCost }}</td>
                                     <td class="text-center">{{ item.orderStatus }}</td>
                                     <td class="text-center">{{ item.buildStatus }}</td>
+                                    <td class="text-center">{{ item.cancleStatus }}</td>
                                     <td>{{ item.productName }}</td>
                                     <td class="text-center">{{ item.productModel }}</td>
                                     <td>{{ item.productCompany }}</td>
@@ -203,6 +215,7 @@
    	   	 		 	releaseStatus: '',
    	     			orderStatus: '',
    	     			buildStatus: '',
+   	     			cancleStatus: '',
    	     			rtime: '',
    	     			ctime: '',
    	     			page: 1,
@@ -225,6 +238,7 @@
           					releaseStatus: _this.searchParam.releaseStatus,
 							orderStatus: _this.searchParam.orderStatus,
 							buildStatus: _this.searchParam.buildStatus,
+							cancleStatus: _this.searchParam.cancleStatus,
           					rtime: _this.searchParam.rtime,
 							ctime: _this.searchParam.ctime,
 							page: page,

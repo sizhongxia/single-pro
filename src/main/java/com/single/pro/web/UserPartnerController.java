@@ -37,6 +37,7 @@ import com.single.pro.service.UserWxoauthService;
 import com.single.pro.service.custom.UserPartnerCustomService;
 import com.single.pro.util.AdvanceFilterUtil;
 import com.single.pro.util.IdUtil;
+import com.xiaoleilu.hutool.date.DateUtil;
 
 @Controller
 @RequestMapping("user/partner")
@@ -124,6 +125,7 @@ public class UserPartnerController extends BaseController {
 				item.put("apply_time", df.format(userPartner.getApplyTime()));
 				item.put("apply_reason", userPartner.getApplyReason());
 				item.put("account_status", userPartner.getAccountStatus());
+				item.put("delete_flag", userPartner.getDeleteFlag());
 				item.put("regist_time", df.format(userPartner.getRegistTime()));
 				item.put("update_time", df.format(userPartner.getUpdateTime()));
 				systemUserList.add(item);
@@ -169,11 +171,48 @@ public class UserPartnerController extends BaseController {
 		ModelAndView mav = new ModelAndView("user/partner/applyDetailForm");
 		return mav;
 	}
-	
+
 	@RequiresAuthentication
 	@RequestMapping(value = { "/wechatDetailForm" }, method = { RequestMethod.GET })
 	public ModelAndView wechatDetailForm(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("user/partner/wechatDetailForm");
+		return mav;
+	}
+
+	@RequiresAuthentication
+	@RequestMapping(value = "/enableStatusForm")
+	public ModelAndView enableStatusForm(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("user/partner/enableStatusForm");
+
+		String id = request.getParameter("id");
+		if (StringUtils.isBlank(id)) {
+			mav = new ModelAndView("error/topjui-error");
+			mav.addObject("msg", "参数“id”丢失");
+			return mav;
+		}
+		User user = userService.selectById(id);
+		Map<String, Object> map = new HashMap<>();
+		if (user == null) {
+			mav = new ModelAndView("error/topjui-error");
+			mav.addObject("msg", "无效的参数“id”");
+			return mav;
+		}
+
+		Wrapper<UserPartner> wrapper = new EntityWrapper<>();
+		wrapper.eq("user_id", user.getId());
+		UserPartner userPartner = userPartnerService.selectOne(wrapper);
+
+		if (userPartner == null) {
+			mav = new ModelAndView("error/topjui-error");
+			mav.addObject("msg", "无效的用户");
+			return mav;
+		}
+
+		map.put("id", user.getId());
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		map.put("applyTime", df.format(userPartner.getApplyTime()));
+		map.put("applyReason", userPartner.getApplyReason());
+
 		return mav;
 	}
 
@@ -208,6 +247,7 @@ public class UserPartnerController extends BaseController {
 		map.put("phoneNo", user.getPhoneNo());
 		map.put("addressDetail", user.getAddressDetail());
 		map.put("accountStatus", user.getAccountStatus());
+		map.put("deleteFlag", user.getDeleteFlag());
 		map.put("partnerId", userPartner.getId());
 		map.put("isPlatform", userPartner.getIsPlatform());
 		return map;
@@ -287,7 +327,7 @@ public class UserPartnerController extends BaseController {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		map.put("applyTime", df.format(userPartner.getApplyTime()));
 		map.put("applyReason", userPartner.getApplyReason());
-
+		map.put("applyStatus", userPartner.getApplyStatus());
 		return map;
 	}
 
@@ -327,11 +367,10 @@ public class UserPartnerController extends BaseController {
 		user.setAddressDetail("");
 		user.setAccountStatus("Y");
 		user.setUserType("P");
-		Date now = new Date();
-		user.setRegistTime(now);
-		user.setUpdateTime(now);
+		user.setRegistTime(DateUtil.date());
+		user.setUpdateTime(DateUtil.date());
 		user.setDeleteFlag("N");
-		user.setDeleteTime(now);
+		user.setDeleteTime(DateUtil.date());
 
 		if (!userService.insert(user)) {
 			res.put("message", "未知错误");
@@ -343,10 +382,10 @@ public class UserPartnerController extends BaseController {
 		userPartner.setUserId(user.getId());
 		userPartner.setIsPlatform(request.getParameter("isPlatform"));
 		userPartner.setApplyReason(request.getParameter("applyReason"));
-		userPartner.setApplyTime(now);
+		userPartner.setApplyTime(DateUtil.date());
 		userPartner.setApplyStatus("D");
-		userPartner.setCreateTime(now);
-		userPartner.setUpdateTime(now);
+		userPartner.setCreateTime(DateUtil.date());
+		userPartner.setUpdateTime(DateUtil.date());
 
 		if (!userPartnerService.insert(userPartner)) {
 			res.put("message", "未知错误");
@@ -400,8 +439,12 @@ public class UserPartnerController extends BaseController {
 
 		user.setAddressDetail(request.getParameter("addressDetail"));
 		user.setAccountStatus(request.getParameter("accountStatus"));
-		Date now = new Date();
-		user.setUpdateTime(now);
+		String deleteFlag = request.getParameter("deleteFlag");
+		user.setDeleteFlag(deleteFlag);
+		if ("Y".equals(deleteFlag)) {
+			user.setDeleteTime(DateUtil.date());
+		}
+		user.setUpdateTime(DateUtil.date());
 
 		if (!userService.updateById(user)) {
 			res.put("message", "未知错误");
@@ -414,7 +457,7 @@ public class UserPartnerController extends BaseController {
 			return res;
 		}
 		userPartner.setIsPlatform(request.getParameter("isPlatform"));
-		userPartner.setUpdateTime(now);
+		userPartner.setUpdateTime(DateUtil.date());
 
 		if (!userPartnerService.updateById(userPartner)) {
 			res.put("message", "未知错误");
@@ -454,6 +497,55 @@ public class UserPartnerController extends BaseController {
 		user.setUpdateTime(new Date());
 
 		if (!userService.updateById(user)) {
+			res.put("message", "未知错误");
+			return res;
+		}
+
+		res.put("statusCode", 200);
+		res.put("message", "更新成功");
+		return res;
+	}
+
+	@ResponseBody
+	@RequiresAuthentication
+	@RequestMapping(value = "/apllyHandle")
+	public Map<String, Object> apllyHandle(HttpServletRequest request) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("title", "操作提示");
+		res.put("statusCode", 300);
+
+		String id = request.getParameter("id");
+
+		if (StringUtils.isBlank(id)) {
+			res.put("message", "无效的参数");
+			return res;
+		}
+
+		String applyStatus = request.getParameter("applyStatus");
+		if (StringUtils.isBlank(applyStatus)) {
+			res.put("message", "请选择一个申请状态");
+			return res;
+		}
+
+		User user = userService.selectById(id);
+		if (user == null) {
+			res.put("message", "无效的参数01");
+			return res;
+		}
+
+		Wrapper<UserPartner> wrapper = new EntityWrapper<>();
+		wrapper.eq("user_id", user.getId());
+		UserPartner userPartner = userPartnerService.selectOne(wrapper);
+
+		if (userPartner == null) {
+			res.put("message", "无效的参数02");
+			return res;
+		}
+
+		userPartner.setApplyStatus(applyStatus);
+		userPartner.setUpdateTime(new Date());
+
+		if (!userPartnerService.updateById(userPartner)) {
 			res.put("message", "未知错误");
 			return res;
 		}

@@ -40,6 +40,7 @@ import com.single.pro.service.UserWxoauthService;
 import com.single.pro.service.custom.UserCustomerCustomService;
 import com.single.pro.util.AdvanceFilterUtil;
 import com.single.pro.util.IdUtil;
+import com.xiaoleilu.hutool.date.DateUtil;
 
 @Controller
 @RequestMapping("user/customer")
@@ -136,6 +137,7 @@ public class UserCustomerController extends BaseController {
 				item.put("bond_status", userCustomer.getBondStatus());
 
 				item.put("account_status", userCustomer.getAccountStatus());
+				item.put("delete_flag", userCustomer.getDeleteFlag());
 				item.put("regist_time", df.format(userCustomer.getRegistTime()));
 				item.put("update_time", df.format(userCustomer.getUpdateTime()));
 				rows.add(item);
@@ -220,6 +222,7 @@ public class UserCustomerController extends BaseController {
 		map.put("phoneNo", user.getPhoneNo());
 		map.put("addressDetail", user.getAddressDetail());
 		map.put("accountStatus", user.getAccountStatus());
+		map.put("deleteFlag", user.getDeleteFlag());
 		map.put("partnerId", userCustomer.getId());
 		return map;
 	}
@@ -356,11 +359,10 @@ public class UserCustomerController extends BaseController {
 		user.setAddressDetail("");
 		user.setAccountStatus("Y");
 		user.setUserType("C");
-		Date now = new Date();
-		user.setRegistTime(now);
-		user.setUpdateTime(now);
+		user.setRegistTime(DateUtil.date());
+		user.setUpdateTime(DateUtil.date());
 		user.setDeleteFlag("N");
-		user.setDeleteTime(now);
+		user.setDeleteTime(DateUtil.date());
 
 		if (!userService.insert(user)) {
 			res.put("message", "未知错误");
@@ -374,8 +376,8 @@ public class UserCustomerController extends BaseController {
 		userCustomer.setCompanyId(request.getParameter("groupId"));
 		userCustomer.setBondStatus("N");
 		userCustomer.setIndustry(request.getParameter("industry"));
-		userCustomer.setCreateTime(now);
-		userCustomer.setUpdateTime(now);
+		userCustomer.setCreateTime(DateUtil.date());
+		userCustomer.setUpdateTime(DateUtil.date());
 
 		if (!userCustomerService.insert(userCustomer)) {
 			res.put("message", "未知错误");
@@ -429,8 +431,12 @@ public class UserCustomerController extends BaseController {
 
 		user.setAddressDetail(request.getParameter("addressDetail"));
 		user.setAccountStatus(request.getParameter("accountStatus"));
-		Date now = new Date();
-		user.setUpdateTime(now);
+		String deleteFlag = request.getParameter("deleteFlag");
+		user.setDeleteFlag(deleteFlag);
+		if ("Y".equals(deleteFlag)) {
+			user.setDeleteTime(DateUtil.date());
+		}
+		user.setUpdateTime(DateUtil.date());
 
 		if (!userService.updateById(user)) {
 			res.put("message", "未知错误");

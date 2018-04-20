@@ -18,6 +18,7 @@ public class UserModel implements Serializable {
 	private String county;
 	private String addressDetail;
 	private String accountStatus;
+	private String deleteFlag;
 	private String userType;
 	private Date registTime;
 	private Date updateTime;
@@ -116,6 +117,14 @@ public class UserModel implements Serializable {
 
 	public void setAccountStatus(String accountStatus) {
 		this.accountStatus = accountStatus;
+	}
+
+	public String getDeleteFlag() {
+		return deleteFlag;
+	}
+
+	public void setDeleteFlag(String deleteFlag) {
+		this.deleteFlag = deleteFlag;
 	}
 
 	public String getUserType() {

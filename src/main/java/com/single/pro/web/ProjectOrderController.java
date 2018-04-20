@@ -107,6 +107,10 @@ public class ProjectOrderController extends BaseController {
 		if (StringUtils.isNotBlank(buildStatus)) {
 			wrapper.eq("build_status", buildStatus.trim());
 		}
+		String cancleStatus = request.getParameter("cancleStatus");
+		if (StringUtils.isNotBlank(cancleStatus)) {
+			wrapper.eq("cancle_status", cancleStatus.trim());
+		}
 		String rtime = request.getParameter("rtime");
 		if (StringUtils.isNotBlank(rtime)) {
 			String[] rtimes = rtime.split(" - ");
@@ -156,6 +160,7 @@ public class ProjectOrderController extends BaseController {
 				_map.put("releaseStatus", getReleaseStatusText(item.getReleaseStatus()));
 				_map.put("orderStatus", getOrderStatusText(item.getOrderStatus()));
 				_map.put("buildStatus", getBuildStatusText(item.getBuildStatus()));
+				_map.put("cancleStatus", getCancleStatusText(item.getCancleStatus()));
 
 				if ("Y".equals(item.getReleaseStatus())) {
 					_map.put("releaseTime", DateUtil.format(item.getReleaseTime(), "yyyy-MM-dd HH:mm:ss"));
@@ -211,6 +216,19 @@ public class ProjectOrderController extends BaseController {
 			return "待工人确认";
 		case "P":
 			return "待平台确认";
+		default:
+			return "-";
+		}
+	}
+
+	private String getCancleStatusText(String status) {
+		switch (status) {
+		case "Y":
+			return "已取消";
+		case "D":
+			return "取消申请中";
+		case "Z":
+			return "正常";
 		default:
 			return "-";
 		}
