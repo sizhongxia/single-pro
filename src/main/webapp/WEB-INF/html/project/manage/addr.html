@@ -142,12 +142,7 @@
           				post('${rc.contextPath}/basic/city/cities', {}, resolve, reject);
           			}).then(function(data){
           				_this.provincials = data;
-          				setTimeout(function(){
-          					if(_this.provincial) {
-          						_this.loadCitys();
-        	          			_this.closeLoading(loading);
-          					}
-          				}, 20)
+	          			_this.closeLoading(loading);
           			}).catch(function (reason) {
 	          			_this.closeLoading(loading);
           			});
@@ -161,12 +156,7 @@
           				}, resolve, reject);
           			}).then(function(data){
           				_this.citys = data;
-          				setTimeout(function(){
-          					if(_this.city) {
-              					_this.loadCountys();
-        	          			_this.closeLoading(loading);
-          					}
-          				}, 20)
+	          			_this.closeLoading(loading);
           			}).catch(function (reason) {
 	          			_this.closeLoading(loading);
           			});
@@ -220,11 +210,55 @@
       		},
       		watch:{
 				provincial: {
-					handler: 'loadCitys'
+					handler: function() {
+						var _this = this;
+				    	var loading = _this.loading();
+				    	new Promise(function (resolve, reject) {
+	          				post('${rc.contextPath}/basic/city/cities', {
+	          					pcode: _this.provincial
+	          				}, resolve, reject);
+	          			}).then(function(data){
+	          				_this.citys = data;
+	          				_this.city = data[0].code;
+		          			_this.closeLoading(loading);
+	          			}).catch(function (reason) {
+		          			_this.closeLoading(loading);
+	          			});
+					}
 				},
 				city: {
-					handler: 'loadCountys'
+					handler: function() {
+						var _this = this;
+				    	var loading = _this.loading();
+				    	new Promise(function (resolve, reject) {
+	          				post('${rc.contextPath}/basic/city/cities', {
+	          					pcode: _this.city
+	          				}, resolve, reject);
+	          			}).then(function(data){
+	          				_this.countys = data;
+	          				_this.county = data[0].code;
+		          			_this.closeLoading(loading);
+	          			}).catch(function (reason) {
+		          			_this.closeLoading(loading);
+	          			});
+					}
 				},
+    			county: {
+    				handler: function() {
+          				var _this = this;
+    			    	var provincial = _this.provincials.find(item => item.code === _this.provincial);
+          				var addr = provincial.name;
+          				var city = _this.citys.find(item => item.code === _this.city);
+          				if(city.name != provincial.name) {
+          					addr += city.name;
+          				}
+          				var county = _this.countys.find(item => item.code === _this.county);
+          				if(county.name != '市辖区') {
+          					addr += county.name;
+          				}
+          				_this.address = addr;
+    			    }
+    			},
    			   	longitude: {
     			    handler: 'changeLngLat'
    			    },
@@ -239,6 +273,8 @@
       			var _this = this;
       			
       			_this.loadProvincials();
+      			_this.loadCitys();
+      			_this.loadCountys();
 
       			var lng = _this.longitude == '0'? '116.397428' : _this.longitude;
       			var lat = _this.latitude == '0'? '39.90923' : _this.latitude;

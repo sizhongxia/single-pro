@@ -145,8 +145,6 @@ public class ProjectManageController extends BaseController {
 		switch (status) {
 		case "Y":
 			return "上线";
-		case "D":
-			return "待发布";
 		case "N":
 			return "下线";
 		default:
@@ -572,6 +570,7 @@ public class ProjectManageController extends BaseController {
 		project.setLatitude(latitude);
 		project.setCompanyId(companyId);
 		project.setBranchCompanyId(branchCompanyId);
+		project.setStatus("Y");
 		project.setRemarks(remarks);
 		Subject subject = SecurityUtils.getSubject();
 		SystemUser user = (SystemUser) subject.getPrincipal();

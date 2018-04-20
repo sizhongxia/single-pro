@@ -285,13 +285,8 @@
           				post('${rc.contextPath}/basic/city/cities', {}, resolve, reject);
           			}).then(function(data){
           				_this.provincials = data;
-          				setTimeout(function(){
-          					_this.provincial = data[0].code;
-	          				setTimeout(function(){
-		          				_this.loadCitys();
-	              				_this.closeLoading(loading);
-	          				}, 20)
-          				}, 20)
+      					_this.provincial = data[0].code;
+          				_this.closeLoading(loading);
           			}).catch(function (reason) {
           				_this.closeLoading(loading);
           			});
@@ -305,13 +300,8 @@
           				}, resolve, reject);
           			}).then(function(data){
           				_this.citys = data;
-          				setTimeout(function(){
-              				_this.city = data[0].code;
-	          				setTimeout(function(){
-	              				_this.loadCountys();
-	              				_this.closeLoading(loading);
-	          				}, 20)
-          				}, 20)
+          				_this.city = data[0].code;
+          				_this.closeLoading(loading);
           			}).catch(function (reason) {
           				_this.closeLoading(loading);
           			});
@@ -325,13 +315,25 @@
           				}, resolve, reject);
           			}).then(function(data){
           				_this.countys = data;
-          				setTimeout(function(){
-              				_this.county = data[0].code;
-              				_this.closeLoading(loading);
-          				}, 20)
+          				_this.county = data[0].code;
+          				_this.closeLoading(loading);
           			}).catch(function (reason) {
           				_this.closeLoading(loading);
           			});
+			    },
+			    initAddress: function() {
+      				var _this = this;
+			    	var provincial = _this.provincials.find(item => item.code === _this.provincial);
+      				var addr = provincial.name;
+      				var city = _this.citys.find(item => item.code === _this.city);
+      				if(city.name != provincial.name) {
+      					addr += city.name;
+      				}
+      				var county = _this.countys.find(item => item.code === _this.county);
+      				if(county.name != '市辖区') {
+      					addr += county.name;
+      				}
+      				_this.address = addr;
 			    },
 			    loadCompanies: function() {
 			    	var _this = this;
@@ -340,8 +342,8 @@
           				post('${rc.contextPath}/company/companies', {}, resolve, reject);
           			}).then(function(data){
           				_this.companies = data;
+          				_this.companyId = data[0].groupId;
           				setTimeout(function(){
-              				_this.companyId = data[0].groupId;
               				_this.closeLoading(loading);
           				}, 20)
           			}).catch(function (reason) {
@@ -387,6 +389,9 @@
     			},
     			city: {
     				handler: 'loadCountys'
+    			},
+    			county: {
+    				handler: 'initAddress'
     			},
     			companyId: {
     				handler: 'loadBranchCompanies'
