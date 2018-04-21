@@ -307,7 +307,7 @@ public class BaseDataCacheUtil implements InitializingBean {
 			Wrapper<BasicCity> wrapper = new EntityWrapper<>();
 			int page = 1;
 			while (true) {
-				PageHelper.startPage(page, 200);
+				PageHelper.startPage(page, 1000);
 				List<BasicCity> cities = basicCityService.selectList(wrapper);
 				PageInfo<BasicCity> pageInfo = new PageInfo<BasicCity>(cities);
 				if (pageInfo.getList() == null || pageInfo.getList().isEmpty()) {
@@ -389,7 +389,8 @@ public class BaseDataCacheUtil implements InitializingBean {
 				cacheUtil.subscribe(new JedisPubSub() {
 					@Override
 					public void onMessage(String channel, String message) {
-						reInitCacheData(message);
+						if ("update_single_pro_cache".equals(channel) && StringUtils.isNotBlank(message))
+							reInitCacheData(message);
 					}
 				}, "update_single_pro_cache");
 			}
