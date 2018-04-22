@@ -15,6 +15,7 @@
         <result column="apply_money" property="applyMoney" />
         <result column="apply_status" property="applyStatus" />
         <result column="handle_time" property="handleTime" />
+        <result column="remarks" property="remarks" />
     </resultMap>
 
 </mapper>
