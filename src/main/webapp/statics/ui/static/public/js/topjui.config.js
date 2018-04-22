@@ -1,11 +1,4 @@
-/**
- * 配置文件说明
- * @type {string}
- * topJUI.language: 消息提示框的中文提示，可根据情况调整
- *
- */
-var remoteHost = "http://127.0.0.1:8901";
-
+var remoteHost = "http://admin.ihavevip.com";
 var myConfig = {
     config: {
         pkName: 'id', //数据表主键名
